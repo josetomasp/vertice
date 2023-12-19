@@ -1,0 +1,143 @@
+<!--
+  You might be wondering why there are useless divs and widths on things.  Two words: Internet Explorer
+-->
+<mat-card class="sticky">
+<div
+  fxLayout="row"
+  fxLayoutAlign="space-between center"
+  fxLayoutAlign.sm="start start"
+>
+  <div>
+    <button
+      mat-stroked-button
+      id="auth-information-actions-authQueue-button"
+      class="info-button"
+      (click)="goToAuthorizationQueue()"
+    >
+      GO TO AUTHORIZATION QUEUE
+    </button>
+  </div>
+
+  <div style="width: 705px">
+    <div
+      *ngIf="isAuthorizeMode()"
+      fxLayout="row wrap"
+      fxLayoutAlign="end start"
+    >
+      <div style="margin-right: 140px">
+        <div
+          id="auth-information-actions-all-option-label"
+          class="overhead-label"
+        >
+          ACTION (ALL)
+        </div>
+
+        <mat-radio-group [formControl]="actionChoicesControl">
+          <mat-radio-button
+            [value]="AuthApprovalState.Approve"
+            (click)="chooseApprove()"
+            class="radio-spacing"
+            id="auth-information-actions-all-option-approve"
+            >Approve All
+          </mat-radio-button>
+          <mat-radio-button
+            [value]="AuthApprovalState.Deny"
+            class="radio-spacing"
+            id="auth-information-actions-all-option-deny"
+          >
+            <healthe-customer-configs-label
+              defaultText="Deny"
+              elementName="deny"
+              [forcedCapitalization]="false"
+            ></healthe-customer-configs-label>
+            All
+          </mat-radio-button>
+
+          <mat-radio-button
+            [value]="AuthApprovalState.Pending"
+            class="radio-spacing"
+            id="auth-information-actions-all-option-pend"
+            >Pend All
+          </mat-radio-button>
+        </mat-radio-group>
+        <mat-error
+          *ngIf="actionChoicesControl.invalid && actionChoicesControl.touched"
+          style="margin-top: 3px;margin-left: 15px;"
+        >
+          Select an action
+        </mat-error>
+      </div>
+
+      <div
+        [ngClass]="{ hiddenSelect: actionReasonSelectSet.selectLabel === '' }"
+        style="margin-right: 50px; min-height: 60px"
+      >
+        <div id="auth-information-actions-select-label" class="overhead-label">
+          {{ actionReasonSelectSet.selectLabel | uppercase }} (ALL)
+        </div>
+        <mat-select
+          [formControl]="approvalReasonControl"
+          [matTooltip]="approvalReasonControl.value"
+          [placeholder]="actionReasonSelectSet.selectPlaceholder"
+          id="auth-information-actions-select"
+          style="min-width: 200px;"
+        >
+          <mat-option
+            *ngFor="
+              let reason of actionReasonSelectSet.selectReasons;
+              let i = index
+            "
+            [value]="reason"
+            id="auth-information-actions-select-option-{{i}}"
+            >{{ reason }}</mat-option
+          >
+        </mat-select>
+        <mat-error
+          *ngIf="approvalReasonControl.invalid && approvalReasonControl.touched"
+          style="margin-top: 3px;margin-left: 15px;"
+        >
+          {{ actionReasonSelectSet.errorMessage }}
+        </mat-error>
+      </div>
+
+      <button
+        mat-flat-button
+        class="success-button"
+        style="margin-top: 20px"
+        id="auth-information-actions-submit-button"
+        [disabled]="!isSubmitEnabled"
+        (click)="submit()"
+      >
+        SUBMIT
+      </button>
+    </div>
+    <div
+      *ngIf="!isAuthorizeMode()"
+      fxLayout="row wrap"
+      fxLayoutAlign="end start"
+      fxLayoutGap="20px"
+    >
+      <button
+        mat-flat-button
+        class="danger-button"
+        style="margin-top: 20px"
+        id="auth-information-actions-cancel-button"
+        (click)="cancelReferralClicked()"
+      >
+        CANCEL THIS REFERRAL
+      </button>
+
+      <button
+        *ngIf="!isCancelOnly"
+        mat-flat-button
+        class="success-button"
+        style="margin-top: 20px"
+        id="auth-information-actions-modify-button"
+        (click)="modifyReferralClicked()"
+      >
+        SUBMIT
+      </button>
+    </div>
+  </div>
+</div>
+</mat-card>

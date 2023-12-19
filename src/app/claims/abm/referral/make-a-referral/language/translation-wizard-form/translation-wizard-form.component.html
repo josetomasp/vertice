@@ -1,0 +1,77 @@
+<div [formGroup]="stepForm">
+  <div fxLayout="row wrap" fxLayoutGap="30px">
+    <div>
+      <span class="overhead-label" id="translation-wizard-driverLanguage-label"
+        >LANGUAGE NEEDED<span class="required-text">*</span></span
+      >
+      <mat-form-field>
+        <mat-select
+          healtheSelect
+          placeholder="Choose language"
+          [formControl]="stepForm.get('language')"
+          id="translation-wizard-driverLanguage-select"
+        >
+          <mat-option
+            *ngFor="
+              let language of (languages$ | async);
+              index as $languageIndex
+            "
+            id="translation-wizard-language-option-{{$languageIndex}}"
+            [value]="language"
+            >{{ language }}</mat-option
+          >
+        </mat-select>
+      </mat-form-field>
+    </div>
+  </div>
+  <div class="spacersmall"></div>
+  <healthe-specific-date-form-array
+    [selectedService]="LANGUAGE_ARCH_TYPE"
+    [config]="specificDateConfig"
+    [selectedService]="LANGUAGE_ARCH_TYPE"
+    [formArray]="schedulingForm"
+  ></healthe-specific-date-form-array>
+  <div class="spacermedium"></div>
+  <div fxLayout="row wrap" fxLayoutGap="30px">
+    <div>
+      <span class="overhead-label" id="translate-wizard-rushServiceNeeded-label"
+        >RUSH SERVICE (NEEDED WITHIN 24 HOURS)?</span
+      >
+      <mat-radio-group
+        fxLayout="row"
+        fxLayoutGap="15px"
+        [formControl]="stepForm.get('rushServiceNeeded')"
+      >
+        <mat-radio-button
+          *ngFor="let option of booleanRadioValues"
+          id="translate-wizard-rushServiceNeeded-option-{{option.label}}"
+          [value]="option.value"
+          >{{ option.label }}</mat-radio-button
+        >
+      </mat-radio-group>
+    </div>
+    <div>
+      <span class="overhead-label" id="translate-wizard-paidAsExpense-label"
+        >WILL THIS BE PAID AS EXPENSE?
+        <fa-icon
+          [icon]="faInfoCircle"
+          class="translate-icons"
+          matTooltip="Only select yes if this service is not related to medical and needs to be paid off the claim as expense related"
+        >
+        </fa-icon>
+      </span>
+      <mat-radio-group
+        fxLayout="row"
+        fxLayoutGap="15px"
+        [formControl]="stepForm.get('paidAsExpense')"
+      >
+        <mat-radio-button
+          *ngFor="let option of booleanRadioValues"
+          id="translate-wizard-paidAsExpense-option-{{option.label}}"
+          [value]="option.value"
+          >{{ option.label }}</mat-radio-button
+        >
+      </mat-radio-group>
+    </div>
+  </div>
+</div>

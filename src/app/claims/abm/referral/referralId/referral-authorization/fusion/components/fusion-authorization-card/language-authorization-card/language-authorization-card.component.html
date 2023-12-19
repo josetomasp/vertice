@@ -1,0 +1,65 @@
+<mat-card>
+  <div healtheFormValidationExtractor [parentPath]="parentPath" [formGroup]="fusionAuthorizationFormGroup">
+    <div class="authorization--card--inset">
+      <header
+        class="authorization--card--inset--header"
+        fxLayout="row"
+        fxLayoutAlign="space-between"
+      >
+        <h3 class="text-primary">
+          <fa-icon
+            [icon]="faUsers"
+            class="authorization--card--inset--header_icon"
+          ></fa-icon>
+          {{ authorization?.authorizationUnderReview?.categoryDesc }}
+        </h3>
+        <button
+          [disabled]="detailNoteFormControl.disabled"
+          mat-stroked-button
+          class="secondary-button"
+          (click)="
+          viewNotes(
+            authorization?.authorizationUnderReview?.noteList,
+            authorization
+          )
+        "
+        >
+          <fa-icon [icon]="faStickyNote" style="padding-right: 5px"></fa-icon>
+          VIEW/EDIT NOTES
+        </button>
+      </header>
+      <healthe-reasons-banner
+        [reasons]="authorization?.reasonsReviewNeeded || []"
+      ></healthe-reasons-banner>
+      <healthe-action-form
+        [fusionAuth]="authorization"
+        [index]="$index"
+        [fusionAuthorizationReasons$]="fusionAuthorizationReasons$"
+        [formGroup]="actionFormGroup"
+      ></healthe-action-form>
+      <healthe-fusion-narrative-text
+        [fusionAuth]="authorization"
+        [narrativeTextFormGroup]="narrativeTextFormGroup"
+        [authNarrativeConfig]="authNarrativeConfig"
+      ></healthe-fusion-narrative-text>
+    </div>
+    <div class="spacersmall"></div>
+    <div
+      class="authorization--card--expansion--wrapper"
+      *ngIf="
+      authorization?.authorizationUnderReview?.locations &&
+      authorization?.authorizationUnderReview?.locations.length > 0
+    "
+    >
+      <healthe-interpretation-details-editor
+        [locations]="authorization?.authorizationUnderReview?.locations"
+        [authChanges]="authorization?.authorizationChangeSummary"
+        [authIndex]="$index"
+        [locationDetailsFormGroup]="locationDetailsFormGroup"
+        [categoryDesc]="authorization?.authorizationUnderReview?.categoryDesc"
+        [minInput]="minDetailsInput"
+      ></healthe-interpretation-details-editor>
+      <div class="spacersmall"></div>
+    </div>
+  </div>
+</mat-card>

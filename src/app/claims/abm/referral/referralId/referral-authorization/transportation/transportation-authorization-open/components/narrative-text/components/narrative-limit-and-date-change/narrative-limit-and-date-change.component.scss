@@ -1,0 +1,30 @@
+.datePickerLimitDateChange {
+  width: 160px;
+  margin-right: 5px;
+  margin-left: 0;
+  margin-top: 10px;
+}
+
+.textAlignmentLimitDateChange {
+  white-space: normal;
+  margin-right: 5px;
+  margin-top: 10px;
+}
+
+.quantityInputLimitDateChange {
+  margin-top: 10px;
+  width: 80px;
+  margin-right: 5px;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+::ng-deep.mat-form-field,
+::ng-deep.mat-form-field .mat-form-field-wrapper,
+::ng-deep.mat-form-field .mat-form-field-wrapper .mat-form-field-flex {
+  height: initial;
+}

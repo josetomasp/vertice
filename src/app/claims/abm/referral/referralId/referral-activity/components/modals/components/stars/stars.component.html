@@ -1,0 +1,7 @@
+<div fxLayout="row" fxLayoutGap="15px" fxLayoutAlign="start start">
+  <fa-icon
+    *ngFor="let star of starMap"
+    [icon]="star.icon"
+    [ngStyle]="{ color: star.color }"
+  ></fa-icon>
+</div>

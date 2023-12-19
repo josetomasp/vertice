@@ -1,0 +1,311 @@
+<div
+  fxLayout="row wrap"
+  fxLayoutAlign="start center"
+  [formGroup]="formGroup"
+  *ngIf="authNarrativeMode !== 'PostSubmit'"
+  style="margin-top: 10px;"
+>
+  <div class="textAlignment" id="narrative-new-open-auth-startText">
+    You {{ narrativeTextItem.actionDescriptor }}
+  </div>
+  <div
+    *ngIf="unlimitedMode === true"
+    class="textAlignment"
+    style="margin-right: 5px"
+  >
+    <b id="narrative-new-open-auth-unlimitedText">unlimited</b>
+  </div>
+  <div *ngIf="unlimitedMode === false" class="quantityInput">
+    <mat-form-field>
+      <input
+        matInput
+        formControlName="{{authNarrativeConfig.quantity.controlName}}"
+        healtheFormValidationExtractor
+        formLabel="Interpretation Appointments Quantity"
+        type="number"
+        min="{{this.authNarrativeConfig.quantity.min}}"
+        id="narrative-new-open-auth-quantity-input"
+      />
+      <mat-error
+        *ngIf="
+          this.formGroup.controls[
+            authNarrativeConfig.quantity.controlName
+          ].hasError('tripsOrUnlimited')
+        "
+        >Value entered must be greater than zero</mat-error
+      >
+
+      <mat-error
+        *ngIf="
+          this.formGroup.controls[
+            authNarrativeConfig.quantity.controlName
+          ].hasError('min')
+        "
+        id="narrative-new-min-error"
+      >
+        Value entered cannot be less than
+        {{ this.authNarrativeConfig.quantity.min }}</mat-error
+      >
+
+      <mat-error
+        *ngIf="
+          this.formGroup.controls[
+            authNarrativeConfig.quantity.controlName
+          ].hasError('required')
+        "
+        id="narrative-new-required-error"
+      >
+        You must enter a value not less than
+        {{ this.authNarrativeConfig.quantity.min }}</mat-error
+      >
+    </mat-form-field>
+  </div>
+
+  <!-- Date Range Mode -->
+  <ng-container *ngIf="!singleDateMode">
+    <div class="textAlignment" id="narrative-new-open-auth-descriptorText">
+      <strong>{{ narrativeTextItem.quantityDescriptor }}</strong>
+    </div>
+    <div class="textAlignment" id="narrative-new-open-auth-descriptorText-1">
+      in a date range from
+    </div>
+    <div class="datePicker">
+      <mat-form-field class="show-one-error">
+        <healthe-datepicker
+          formControlName="{{authNarrativeConfig.startDate.controlName}}"
+          healtheFormValidationExtractor
+          formLabel="New Open Auth Start Date"
+          id="narrative-new-open-auth-startDate"
+          [disabled]="
+            authNarrativeModeState !== AuthNarrativeModeEnum.EditNarrative ||
+            formGroup.controls[authNarrativeConfig.startDate.controlName]
+              .disabled
+          "
+        ></healthe-datepicker>
+
+        <mat-error
+          id="narrative-new-open-auth-startDate-error-startDateMustBeBeforeEndDate"
+          *ngIf="
+            formGroup.controls[
+              authNarrativeConfig.startDate.controlName
+            ].hasError('startDateMustBeBeforeEndDate') ||
+            formGroup.controls[
+              authNarrativeConfig.startDate.controlName
+            ].hasError('invalidDateRange')
+          "
+          >Start date must be earlier than the end date
+        </mat-error>
+
+        <mat-error
+          id="narrative-new-open-auth-startDate-error-required"
+          *ngIf="
+            formGroup.controls[
+              authNarrativeConfig.startDate.controlName
+            ].hasError('required')
+          "
+          >Please enter a valid date
+        </mat-error>
+        <mat-error
+          id="narrative-new-open-auth-startDate-error-fromDateEqualsEndDate"
+          *ngIf="
+            formGroup.controls[
+              authNarrativeConfig.startDate.controlName
+            ].hasError('fromDateEqualsEndDate')
+          "
+          >Start date must not be equal to the end date
+        </mat-error>
+      </mat-form-field>
+    </div>
+    <div class="textAlignment" id="narrative-new-open-auth-andText">to</div>
+    <div class="datePicker">
+      <mat-form-field class="show-one-error">
+        <healthe-datepicker
+          formControlName="{{authNarrativeConfig.endDate.controlName}}"
+          healtheFormValidationExtractor
+          formLabel="New Open Auth End Date"
+          id="narrative-new-open-auth-endDate"
+          [disabled]="
+            authNarrativeModeState !== AuthNarrativeModeEnum.EditNarrative ||
+            formGroup.controls[authNarrativeConfig.endDate.controlName].disabled
+          "
+        ></healthe-datepicker>
+
+        <mat-error
+          id="narrative-new-open-auth-endDate-error-startDateMustBeBeforeEndDate"
+          *ngIf="
+            formGroup.controls[
+              authNarrativeConfig.endDate.controlName
+            ].hasError('startDateMustBeBeforeEndDate') ||
+            formGroup.controls[
+              authNarrativeConfig.endDate.controlName
+            ].hasError('invalidDateRange')
+          "
+          >End Date cannot be before Start Date
+        </mat-error>
+        <mat-error
+          id="narrative-new-open-auth-endDate-error-endDateMustBeInFuture"
+          *ngIf="
+            formGroup.controls[
+              authNarrativeConfig.endDate.controlName
+            ].hasError('endDateMustBeInFuture')
+          "
+          >End date must be a future date
+        </mat-error>
+        <mat-error
+          id="narrative-new-open-auth-endDate-error-required"
+          *ngIf="
+            formGroup.controls[
+              authNarrativeConfig.endDate.controlName
+            ].hasError('required')
+          "
+          >Please enter a valid date
+        </mat-error>
+        <mat-error
+          id="narrative-new-open-auth-endDate-error-fromDateEqualsEndDate"
+          *ngIf="
+            formGroup.controls[
+              authNarrativeConfig.endDate.controlName
+            ].hasError('fromDateEqualsEndDate')
+          "
+          >Start date must not be equal to the end date
+        </mat-error>
+        <mat-error
+          id="narrative-new-open-auth-endDate-error-dateMustBeEqualsOrGreaterThan"
+          *ngIf="
+            formGroup.controls[
+              authNarrativeConfig.endDate.controlName
+            ].hasError('dateMustBeEqualsOrGreaterThan')
+          "
+          >Need to change the date to be equal or in the future of
+          {{ authNarrativeConfig.endDate.equalGreaterThan }}
+        </mat-error>
+      </mat-form-field>
+    </div>
+  </ng-container>
+
+  <!-- Single Date Mode -->
+  <ng-container *ngIf="singleDateMode">
+    <div class="textAlignment" id="narrative-new-open-auth-descriptorText">
+      <strong>{{ narrativeTextItem.quantityDescriptor }}</strong>
+    </div>
+    <div
+      *ngIf="isAnticipated"
+      class="textAlignment"
+      id="narrative-new-open-auth-isAnticipated"
+    >
+      on an estimated date of
+    </div>
+    <div
+      *ngIf="!isAnticipated"
+      class="textAlignment"
+      id="narrative-new-open-auth-noAnticipated"
+    >
+      on a date of
+    </div>
+    <div
+      class="datePicker"
+      *ngIf="authNarrativeConfig.serviceDate.useFormControl"
+    >
+      <mat-form-field class="show-one-error">
+        <healthe-datepicker
+          formControlName="{{authNarrativeConfig.serviceDate.controlName}}"
+          healtheFormValidationExtractor
+          formLabel="New Open Auth Service Date"
+          id="narrative-new-open-auth-serviceDate"
+          [disabled]="
+            authNarrativeModeState !== AuthNarrativeModeEnum.EditNarrative ||
+            authNarrativeConfig.serviceDate.isDisabled
+          "
+        ></healthe-datepicker>
+        <mat-error
+          id="narrative-new-open-auth-serviceDate-error-required"
+          *ngIf="
+            formGroup.controls[
+              authNarrativeConfig.serviceDate.controlName
+            ].hasError('required')
+          "
+          >Please enter a valid date
+        </mat-error>
+      </mat-form-field>
+    </div>
+    <div
+      class="textAlignment"
+      id="narrative-new-open-auth-serviceDateText"
+      *ngIf="!authNarrativeConfig.serviceDate.useFormControl"
+    >
+      {{ getFormattedDate(authNarrativeConfig.serviceDate.controlName) }}
+    </div>
+  </ng-container>
+</div>
+<!-- Post Submit -->
+<div
+  fxLayout="row wrap"
+  fxLayoutAlign="start center"
+  [formGroup]="formGroup"
+  *ngIf="authNarrativeMode === 'PostSubmit'"
+>
+  <div class="textAlignment" id="narrative-new-open-auth-startText_post-submit">
+    You have {{ getFormattedAction() }}
+  </div>
+  <div
+    *ngIf="unlimitedMode === true"
+    class="textAlignment"
+    style="margin-right: 5px; margin-left: -5px"
+  >
+    <b id="narrative-new-open-auth-unlimitedText_post-submit">unlimited</b>
+  </div>
+  <div *ngIf="unlimitedMode === false" class="textAlignment">
+    <b id="narrative-new-open-auth-quantity_post-submit">
+      {{ formGroup.get(authNarrativeConfig.quantity.controlName).value }}
+    </b>
+  </div>
+
+  <!-- Date Range -->
+  <ng-container *ngIf="!singleDateMode">
+    <div
+      class="textAlignment"
+      id="narrative-new-open-auth-descriptorText_post-submit"
+    >
+      <strong>{{ narrativeTextItem.quantityDescriptor }}</strong> in a date
+      range from
+    </div>
+
+    <b id="narrative-new-open-auth-startDate_post-submit" class="textAlignment">
+      {{ getFormattedDate(authNarrativeConfig.startDate.controlName) }}
+    </b>
+    <div class="textAlignment" id="narrative-new-open-auth-andText_post-submit">
+      to
+    </div>
+    <b class="textAlignment" id="narrative-new-open-auth-endDate_post-submit">{{
+      getFormattedDate(authNarrativeConfig.endDate.controlName)
+    }}</b>
+  </ng-container>
+
+  <!-- Single Date -->
+  <ng-container *ngIf="singleDateMode">
+    <div
+      class="textAlignment"
+      id="narrative-new-open-auth-descriptorText_post-submit"
+    >
+      <strong>{{ narrativeTextItem.quantityDescriptor }}</strong>
+    </div>
+    <div
+      *ngIf="isAnticipated"
+      class="textAlignment"
+      id="narrative-new-open-auth-isAnticipated_post-submit"
+    >
+      on an estimated date of
+    </div>
+    <div
+      *ngIf="!isAnticipated"
+      class="textAlignment"
+      id="narrative-new-open-auth-noAnticipated_post-submit"
+    >
+      on a date of
+    </div>
+
+    <b id="narrative-new-open-auth-startDate_post-submit" class="textAlignment">
+      {{ getFormattedDate(authNarrativeConfig.serviceDate.controlName) }}
+    </b>
+  </ng-container>
+</div>

@@ -1,0 +1,159 @@
+@import 'variables';
+
+.drug-link {
+  color: $teal;
+  text-decoration: underline;
+  font-size: 18px;
+}
+
+.compound-icon {
+  font-size: 22px;
+  margin-right: 5px;
+  vertical-align: middle;
+}
+
+.compound-link {
+  color: $orange;
+  text-decoration: underline;
+  font-size: 18px;
+}
+
+.float-right {
+  margin-left: auto;
+  order: 2;
+}
+
+.mme-info-view-link {
+  font-size: 9px;
+  min-width: auto !important;
+  margin-left: 5px;
+}
+
+.mme-info {
+  background-color: $white;
+  color: $red;
+  border: 2px solid $red;
+  font-weight: bold;
+  padding: 2px 20px;
+  margin-top: -5px;
+}
+
+.approved-btn {
+  background-color: $white;
+  border: 2px solid $green;
+  padding: 5px 10px;
+  color: $green;
+  display: inline-block;
+}
+
+.denied-btn {
+  background-color: $white;
+  border: 2px solid $danger;
+  padding: 5px 10px;
+  color: $danger;
+  display: inline-block;
+}
+
+.fa-ban,
+.fa-check {
+  font-weight: 600;
+}
+
+.pended-btn {
+  background-color: $white;
+  border: 2px solid $primary;
+  padding: 5px 10px;
+  color: $primary;
+  display: inline-block;
+}
+
+.action-date {
+  font-style: italic;
+  display: inline-block;
+  margin-left: 10px;
+}
+
+.review-btn {
+  background-color: $white;
+  border: 2px solid $secondary;
+  padding: 5px 10px;
+  color: $secondary;
+
+  &[disabled] {
+    background-color: transparent;
+    border: 2px solid $gray-200;
+    color: $gray-200;
+  }
+}
+
+.denial-reasons {
+  & .mat-select {
+    width: 80%;
+  }
+}
+
+.radio-spacing {
+  margin-right: 15px;
+}
+
+.overhead-label,
+::ng-deep .auth-actions-banner-wrapper .mat-radio-label-content {
+  color: $gray-200 !important;
+}
+
+::ng-deep .auth-actions-banner-wrapper .mat-radio-outer-circle {
+  opacity: 1 !important;
+}
+
+.approval-period-container {
+  min-height: 58px;
+}
+
+.approval-period-container healthe-single-date-picker-control {
+  width: 260px;
+}
+
+.approval-period-container mat-radio-group {
+  width: auto;
+}
+
+.info-action-title {
+  font-size: 18px;
+  line-height: 20px;
+  font-weight: bold;
+}
+
+.gray-wrapper {
+  border-radius: 2px 2px 0 0;
+  background-color: $gray-600;
+  padding: 20px 20px;
+  color: $gray-200;
+}
+
+.text-warning {
+  color: $warning;
+}
+
+.reason-select-block {
+  margin-right: 67px;
+
+  &-width {
+    min-width: 155px;
+  }
+}
+
+.lomnSent {
+  margin-bottom: 10px;
+  font-style: italic;
+}
+
+.oneTimeLabel {
+  font-weight: 600;
+}
+
+.text-required {
+  font-size: 20px;
+  font-weight: 600;
+  position: absolute;
+  margin-left: 3px;
+}

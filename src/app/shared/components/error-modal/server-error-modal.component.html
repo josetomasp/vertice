@@ -1,0 +1,39 @@
+<div fxLayout='column' fxLayoutAlign='space-between'>
+  <h1 mat-dialog-title fxLayoutAlign='space-between center'>Server Error
+    <button mat-icon-button mat-dialog-close>
+      <fa-icon
+        class='modal-close-widget'
+        [icon]='faTimes'
+        id='error-modal-close-x'
+      ></fa-icon>
+    </button>
+  </h1>
+  <mat-dialog-content>
+    <div fxLayout='column' fxLayoutAlign='center center'
+         fxLayoutGap='10px'>
+      <fa-icon
+        class='text-danger'
+        [icon]='faExclamationTriangle'
+        size='4x'
+      ></fa-icon>
+      <div>The server has returned an error and is not able to process your
+        request.
+        <br />If this issue persists please contact Healthesystems for
+        assistance.
+      </div>
+      <div *ngFor='let errorMessage of errorMessages; let index = index'
+           id='error-modal-error-message-{{index}}'
+           style='font-style: italic'>{{errorMessage}}</div>
+    </div>
+  </mat-dialog-content>
+  <mat-dialog-actions fxLayoutAlign='center'>
+    <button
+      class='primary-button'
+      mat-flat-button
+      mat-dialog-close
+      id='error-modal-close-button'
+    >
+      CLOSE
+    </button>
+  </mat-dialog-actions>
+</div>

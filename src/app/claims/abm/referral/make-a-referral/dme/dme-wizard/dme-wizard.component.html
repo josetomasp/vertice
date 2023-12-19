@@ -1,0 +1,76 @@
+<div *ngIf="isServiceSuccessfullySubmitted$ | async">
+  <healthe-confirmation-banner [alertType]="alertType.SUCCESS"
+                               [showCloseButton]="false"
+                               [idSufix]="serviceName"
+                               title="You have successfully submitted this service referral"
+                               [isVisible]="true"></healthe-confirmation-banner>
+  <div style="padding: 0 20px 0 20px;">
+    <healthe-dme-review
+      [id]="MAKE_A_REFERRAL_SECTION_ID + serviceName"
+      [inReferralReviewMode]="true"
+    ></healthe-dme-review>
+    <div class="spacersmall"></div>
+    <mat-divider></mat-divider>
+    <div class="spacersmall"></div>
+    <div
+      style="display: flex; flex-flow: row nowrap; justify-content: flex-end">
+      <button
+        mat-flat-button
+        class="primary-button"
+        [id]="'referral-review-copyToClipboard-button-' + serviceName"
+        (click)="copyToClipboard()"
+      >
+        COPY REFERRAL TO CLIPBOARD
+      </button>
+    </div>
+  </div>
+</div>
+
+<ng-container *ngIf="!(isServiceSuccessfullySubmitted$ | async)">
+  <mat-horizontal-stepper
+    (selectionChange)="onStepChange($event)"
+    healtheStepState
+  >
+    <mat-step *ngFor="let step of subServiceSteps; let i = index">
+      <healthe-stepper-step-label
+        *matStepLabel
+        [step]="step"
+        [serviceName]="wizardStepConfig.serviceName"
+        [labelClass]="step.labelClass"
+        [iconClass]="step.iconClass"
+      ></healthe-stepper-step-label>
+      <ng-container [ngSwitch]="step.name">
+        <!-- Equipment -->
+        <healthe-dme-equipment
+          *ngSwitchCase="equipmentStepName"
+        ></healthe-dme-equipment>
+        <healthe-dme-vendors-wizard-form
+          *ngSwitchCase="wizardStepConfig.vendorsName"
+        ></healthe-dme-vendors-wizard-form>
+        <healthe-dme-documents
+          *ngSwitchCase="wizardStepConfig.documentsName"
+        ></healthe-dme-documents>
+        <healthe-dme-review
+          [stepperCompleted]="stepperCompleted"
+          *ngSwitchCase="wizardStepConfig.reviewName"
+        ></healthe-dme-review>
+      </ng-container>
+    </mat-step>
+  </mat-horizontal-stepper>
+  <div class="spacersmall"></div>
+  <mat-divider
+    class="section-divider"
+    style="position: absolute; border-top-width: 2px; left: 20px; right: 20px; width: auto;"
+  ></mat-divider>
+  <div class="spacersmall"></div>
+  <healthe-step-advancer
+    [previousDisabled]="isPrevDisabled"
+    (continue)="continue()"
+    (previous)="previous()"
+    [showContinueButton]="!showCloseButton()"
+    [showSubmitButton]="showCloseButton()"
+    (submitButtonEvent)="submit()"
+    (saveAsDraftEvent)="saveReferralAsDraft()"
+    [disableSubmitButton]="isSubmitDisabled()"
+  ></healthe-step-advancer>
+</ng-container>

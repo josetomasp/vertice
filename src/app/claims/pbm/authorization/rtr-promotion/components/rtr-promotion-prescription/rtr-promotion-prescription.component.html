@@ -1,0 +1,175 @@
+<div
+  *ngIf="null != parentFormGroup"
+  class="gray-box"
+  healtheFormValidationExtractor
+  [formGroup]="parentFormGroup"
+  [parentPath]="parentPath"
+>
+  <a
+    mat-button
+    *ngIf="authorizationLineItem.compound || authorizationLineItem.drugGPI?.toLowerCase().includes('unknown') === false"
+    [class]="authorizationLineItem.compound ? 'compound-link' : 'drug-link'"
+    id="rtr-promotion-drugDisplayName-link-{{ index }}"
+    (click)="openDrugOrCompoundModal()"
+  >
+    <fa-icon
+      *ngIf="authorizationLineItem.compound"
+      class="compound-icon"
+      [icon]="faExclamationCircle"
+    >
+    </fa-icon>
+    {{
+      authorizationLineItem.compound
+        ? 'Compound'
+        : index + 1 + '. ' + authorizationLineItem.drugDisplayName
+    }}
+  </a>
+  <div
+    *ngIf="authorizationLineItem.drugGPI?.toLowerCase().includes('unknown') === true">{{index + 1 + '. ' + authorizationLineItem.drugDisplayName}}</div>
+
+  <div class="spacersmall"></div>
+  <div
+    fxLayout="row"
+    fxLayoutAlign="start start"
+    fxLayoutGap="30px"
+    class="banner-wrapper"
+  >
+    <div *ngIf="allowPromoteChoice || allowDiscardChoice">
+      <div
+        class="overhead-label"
+        id="rtr-promotion-createEpaq-label-{{ index }}"
+      >
+        Create POS? <span class="danger">*</span>
+      </div>
+
+      <mat-radio-group
+        formControlName="CreateEpaq"
+        formLabel="Create POS"
+        healtheFormValidationExtractor
+      >
+        <mat-radio-button
+          *ngIf="allowPromoteChoice"
+          [value]="'PROMOTE'"
+          id="rtr-promotion-createEpaq-radioButton-yes-{{ index }}"
+          style="margin-right: 15px"
+          >Yes
+        </mat-radio-button>
+        <mat-radio-button
+          *ngIf="allowDiscardChoice"
+          [value]="'DISCARD'"
+          id="rtr-promotion-createEpaq-radioButton-no-{{ index }}"
+          >Discard
+        </mat-radio-button>
+      </mat-radio-group>
+      <div
+        *ngIf="
+          parentFormGroup.controls['CreateEpaq'].touched &&
+          parentFormGroup.controls['CreateEpaq'].invalid
+        "
+        class="mat-error"
+        style="margin-top: 5px;margin-left: 10px;"
+      >
+        Please make a selection
+      </div>
+    </div>
+    <div *ngIf="'DISCARD' === parentFormGroup.controls['CreateEpaq'].value">
+      <div
+        class="overhead-label"
+        id="rtr-promotion-discard-select-label-{{ index }}"
+      >
+        DISCARD REASON
+      </div>
+      <mat-form-field style="width: 200px; margin-right: 35px">
+        <mat-select
+          placeholder="Select a reason"
+          healtheFormValidationExtractor
+          formLabel="Discard"
+          formControlName="discardReasons"
+          [matTooltip]="parentFormGroup.controls['discardReasons'].value"
+          id="rtr-promotion-discard-select-{{ index }}"
+        >
+          <mat-option
+            *ngFor="let option of discardReasons; let i = index"
+            id="rtr-promotion-discard-select-option-{{ index }}-{{ i }}"
+            [value]="option"
+            >{{ option }}</mat-option
+          >
+        </mat-select>
+        <mat-error>Please select a discard reason </mat-error>
+      </mat-form-field>
+    </div>
+    <div>
+      <div
+        class="overhead-label"
+        id="rtr-promotion-rejectCode-label-{{ index }}"
+      >
+        REJECT CODES
+      </div>
+      <div id="rtr-promotion-rejectCode-{{ index }}">
+        {{ authorizationLineItem.rejectCodes }}
+      </div>
+    </div>
+
+    <div
+      *ngIf="
+        'DISCARD' === parentFormGroup.controls['CreateEpaq'].value &&
+        'OTHER' === parentFormGroup.controls['discardReasons'].value
+      "
+    >
+      <div
+        class="overhead-label"
+        id="rtr-promotion-discard-otherReason-label-{{ index }}"
+      >
+        OTHER REASON <span class="danger">*</span>
+      </div>
+      <mat-form-field style="width: 200px;">
+        <input
+          matInput
+          style="color: black !important;"
+          formLabel="Other Reason"
+          formControlName="otherReason"
+          healtheFormValidationExtractor
+          placeholder="Enter reject reason here"
+          id="rtr-promotion-discard-otherReason-{{ index }}"
+        />
+        <mat-error
+          >Please enter the reject reason within the text box
+        </mat-error>
+      </mat-form-field>
+    </div>
+  </div>
+</div>
+
+<mat-card   *ngIf="null != parentFormGroup"
+            healtheFormValidationExtractor
+            [formGroup]="parentFormGroup"
+            [parentPath]="parentPath">
+  <mat-card-content>
+    <healthe-prescriber-information-lookup
+      [readonly]="false"
+      formGroupName="prescriberInfoFG"
+      healtheFormValidationExtractor
+      [formLabel]=" authorizationLineItem.compound
+        ? 'Compound'
+        : index + 1 + '. ' + authorizationLineItem.drugDisplayName"
+      [fieldValues]="prescriberInformationLookupInitialValues"
+      [index]="index"
+    ></healthe-prescriber-information-lookup>
+    <div class="spacersmall"></div>
+
+    <healthe-prescription-details
+      id="rtr-promotion-prescription-details-{{ index }}"
+      [componentConfig]="prescriberBuilderConfig"
+    ></healthe-prescription-details>
+
+    <healthe-pbm-auth-notes
+      id="rtr-promotion-pbm-auth-notes-{{ index }}"
+      [notes]="authorizationLineItem.notes"
+      [notesConfig]="prescriptionNotesConfig"
+      [index]="index"
+      (addNote)="addNoteToPrescription($event)"
+      [parentFormGroup]="parentFormGroup"
+      noteFormControlName="note"
+    ></healthe-pbm-auth-notes>
+  </mat-card-content>
+</mat-card>

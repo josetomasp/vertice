@@ -1,0 +1,57 @@
+<div class="claimsSearch-wrapper">
+  <!-- Header -->
+  <div
+    fxLayout="row"
+    fxLayoutAlign="space-between center"
+    fxLayout.lt-sm="column"
+    fxLayoutGap.lt-ms="20px"
+  >
+    <h1
+      *ngIf="router.url === '/claims/claimSearch'"
+      id="claimSearch-title"
+      style="font-weight: normal;	font-size: 28px;	line-height: 32px;"
+    >
+      Claim Search
+    </h1>
+    <h1
+      *ngIf="router.url === '/claims/riskQueue'"
+      id="claimSearch-title"
+      style="font-weight: normal;	font-size: 28px;	line-height: 32px;"
+    >
+      Risk Queue
+    </h1>
+    <healthe-user-menu id="userMenu"></healthe-user-menu>
+  </div>
+  <div class="spacertiny"></div>
+  <!-- Filter Box -->
+  <claim-search-filter-box #claimSearchFilterBox></claim-search-filter-box>
+  <div class="spacersmall"></div>
+  <div fxLayout="row">
+    <!-- Filter Summary -->
+    <div fxFlex="1 1 auto">
+      <label
+        *ngIf="(filterSummary$ | async)"
+        class="label"
+        id="filterSummary-title"
+        style="padding-right: 10px;"
+      >SEARCH FILTERS:</label
+      >
+      <span
+        class="standard-text"
+        id="filterSummary-summary"
+        style="font-weight: 500; font-size: 13px;"
+      >{{ filterSummary$ | async }}</span
+      >
+    </div>
+    <healthe-search-results-count
+      [resultsCount]="(claimSearchResults$ | async).length"
+      resultsCountLimitErrorThreshold="100"
+    ></healthe-search-results-count>
+  </div>
+  <div class="spacersmall"></div>
+  <!-- Result Card List -->
+  <div class="claim-results-table">
+    <healthe-result-table
+      (exportEvent)="claimSearchFilterBox.doSearchExport($event)"></healthe-result-table>
+  </div>
+</div>

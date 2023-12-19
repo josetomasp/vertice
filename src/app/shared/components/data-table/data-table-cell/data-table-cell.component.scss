@@ -1,0 +1,11 @@
+@import 'variables';
+
+.cell-underline {
+  color: $secondary;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.cell-padding {
+  padding-right: 4px;
+}

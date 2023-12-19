@@ -1,0 +1,393 @@
+<div
+  fxLayout="row wrap"
+  fxLayoutAlign="start center"
+  [formGroup]="formGroup"
+  *ngIf="authNarrativeMode !== 'PostSubmit'"
+>
+  <div
+    class="textAlignmentLimitDateChange"
+    id="narrative-limit-and-date-change-startText"
+  >
+    You {{ narrativeTextItem.actionDescriptor }} an additional
+  </div>
+
+  <div class="quantityInputLimitDateChange">
+    <mat-form-field *ngIf="!authNarrativeConfig.quantity.useFormControl">
+      <input
+        matInput
+        [formControl]="tripsInputFC"
+        min="0"
+        type="number"
+        id="narrative-limit-and-date-change-trips-input"
+      />
+      <mat-error *ngIf="tripsInputFC.hasError('greaterThanZero')"
+        >Value entered must be greater than zero
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field *ngIf="authNarrativeConfig.quantity.useFormControl">
+      <input
+        matInput
+        [formControl]="
+          this.formGroup.controls[this.authNarrativeConfig.quantity.controlName]
+        "
+        min="{{authNarrativeConfig.quantity.min}}"
+        type="number"
+        id="narrative-limit-and-date-change-input"
+      />
+      <mat-error
+        *ngIf="
+          this.formGroup.controls[
+            authNarrativeConfig.quantity.controlName
+          ].hasError('min')
+        "
+        id="narrative-limit-and-date-change-min-error"
+      >
+        Value entered cannot be less than
+        {{ this.authNarrativeConfig.quantity.min }}</mat-error
+      >
+    </mat-form-field>
+  </div>
+
+  <!-- Date Range Mode -->
+  <ng-container
+    *ngIf="!singleDateMode"
+    fxLayout="row"
+    fxLayoutAlign="start center"
+  >
+    <div
+      class="textAlignmentLimitDateChange"
+      id="narrative-date-range-change-startText--{{i}}"
+      *ngFor="
+        let word of narrativeTextItem.quantityDescriptor.split(' ');
+        let i = index;
+        let last = last
+      "
+    >
+      <b>{{ word }}</b
+      ><span *ngIf="last">,</span>
+    </div>
+    <div
+      class="textAlignmentLimitDateChange"
+      id="narrative-limit-and-date-change-endText-1"
+    >
+      for a total of
+    </div>
+    <div
+      class="textAlignmentLimitDateChange"
+      id="narrative-limit-and-date-change-endText-2"
+    >
+      <b> {{ newTotalDisplay }}</b>
+    </div>
+    <div
+      class="textAlignmentLimitDateChange"
+      id="narrative-date-range-change-startText-3-{{i}}"
+      *ngFor="
+        let word of narrativeTextItem.quantityDescriptor.split(' ');
+        let i = index
+      "
+    >
+      <b>{{ word }}</b>
+    </div>
+    <div
+      class="textAlignmentLimitDateChange"
+      id="narrative-limit-and-date-change-endText-4"
+    >
+      in a date range from
+    </div>
+    <div class="datePickerLimitDateChange">
+      <mat-form-field class="show-one-error">
+        <healthe-datepicker
+          [formControlName]="authNarrativeConfig.startDate.controlName"
+          id="narrative-limit-and-date-change-startDate"
+          [disabled]="
+            authNarrativeModeState !== AuthNarrativeModeEnum.EditNarrative ||
+            authNarrativeConfig.startDate.isDisabled ||
+            formGroup.controls[authNarrativeConfig.startDate.controlName]
+              .disabled
+          "
+        ></healthe-datepicker>
+
+        <mat-error
+          id="narrative-limit-and-date-change-startDate-error-startDateMustBeBeforeEndDate"
+          *ngIf="
+            formGroup.controls[
+              authNarrativeConfig.startDate.controlName
+            ].hasError('startDateMustBeBeforeEndDate') ||
+            formGroup.controls[
+              authNarrativeConfig.startDate.controlName
+            ].hasError('invalidDateRange')
+          "
+          >Start date must be earlier than the end date
+        </mat-error>
+
+        <mat-error
+          id="narrative-limit-and-date-change-startDate-error-required"
+          *ngIf="
+            formGroup.controls[
+              authNarrativeConfig.startDate.controlName
+            ].hasError('required')
+          "
+          >Please enter a valid date
+        </mat-error>
+        <mat-error
+          id="narrative-limit-and-date-change-startDate-error-fromDateEqualsEndDate"
+          *ngIf="
+            formGroup.controls[
+              authNarrativeConfig.startDate.controlName
+            ].hasError('fromDateEqualsEndDate')
+          "
+          >Start date must not be equal to the end date
+        </mat-error>
+      </mat-form-field>
+    </div>
+
+    <div
+      class="textAlignmentLimitDateChange"
+      id="narrative-limit-and-date-change-andText"
+    >
+      to
+    </div>
+    <div class="datePickerLimitDateChange">
+      <mat-form-field class="show-one-error">
+        <healthe-datepicker
+          [formControlName]="authNarrativeConfig.endDate.controlName"
+          id="narrative-limit-and-date-change-endDate"
+          [disabled]="
+            authNarrativeModeState !== AuthNarrativeModeEnum.EditNarrative ||
+            authNarrativeConfig.endDate.isDisabled ||
+            formGroup.controls[authNarrativeConfig.endDate.controlName].disabled
+          "
+        ></healthe-datepicker>
+
+        <mat-error
+          id="narrative-limit-and-date-change-endDate-error-startDateMustBeBeforeEndDate"
+          *ngIf="
+            formGroup.controls[
+              authNarrativeConfig.endDate.controlName
+            ].hasError('startDateMustBeBeforeEndDate') ||
+            formGroup.controls[
+              authNarrativeConfig.endDate.controlName
+            ].hasError('invalidDateRange')
+          "
+          >Start date must be earlier than the end date
+        </mat-error>
+        <mat-error
+          id="narrative-limit-and-date-change-endDate-error-endDateMustBeInFuture"
+          *ngIf="
+            formGroup.controls[
+              authNarrativeConfig.endDate.controlName
+            ].hasError('endDateMustBeInFuture')
+          "
+          >End date must be a future date
+        </mat-error>
+        <mat-error
+          id="narrative-limit-and-date-change-endDate-error-required"
+          *ngIf="
+            formGroup.controls[
+              authNarrativeConfig.endDate.controlName
+            ].hasError('required')
+          "
+          >Please enter a valid date
+        </mat-error>
+        <mat-error
+          id="narrative-limit-and-date-change-endDate-error-fromDateEqualsEndDate"
+          *ngIf="
+            formGroup.controls[
+              authNarrativeConfig.endDate.controlName
+            ].hasError('fromDateEqualsEndDate')
+          "
+          >Start date must not be equal to the end date
+        </mat-error>
+        <mat-error
+          id="narrative-new-open-auth-endDate-error-dateMustBeEqualsOrGreaterThan"
+          *ngIf="
+            formGroup.controls[
+              authNarrativeConfig.endDate.controlName
+            ].hasError('dateMustBeEqualsOrGreaterThan')
+          "
+          >Need to change the date to be equal or in the future of
+          {{ authNarrativeConfig.endDate.equalGreaterThan }}
+        </mat-error>
+      </mat-form-field>
+    </div>
+  </ng-container>
+
+  <!-- Single Date Mode -->
+  <ng-container *ngIf="singleDateMode">
+    <div
+      class="textAlignmentLimitDateChange"
+      id="narrative-limit-and-date-auth-descriptorText--{{i}}"
+      *ngFor="
+        let word of narrativeTextItem.quantityDescriptor.split(' ');
+        let i = index
+      "
+    >
+      <b>{{ word }}</b>
+    </div>
+    <div
+      *ngIf="isAnticipated"
+      class="textAlignmentLimitDateChange"
+      id="narrative-limit-and-date-auth-isAnticipated"
+    >
+      on an estimated date of
+    </div>
+    <div
+      *ngIf="!isAnticipated"
+      class="textAlignmentLimitDateChange"
+      id="narrative-limit-and-date-auth-noAnticipated"
+    >
+      on a date of
+    </div>
+    <div
+      class="datePickerLimitDateChange"
+      *ngIf="authNarrativeConfig.serviceDate.useFormControl"
+    >
+      <mat-form-field class="show-one-error">
+        <healthe-datepicker
+          [formControlName]="authNarrativeConfig.serviceDate.controlName"
+          id="narrative-limit-and-date-auth-serviceDate"
+          [disabled]="
+            authNarrativeModeState !== AuthNarrativeModeEnum.EditNarrative ||
+            authNarrativeConfig.serviceDate.isDisabled
+          "
+        ></healthe-datepicker>
+        <mat-error
+          id="narrative-limit-and-date-auth-serviceDate-error-required"
+          *ngIf="
+            formGroup.controls[
+              authNarrativeConfig.serviceDate.controlName
+            ].hasError('required')
+          "
+          >Please enter a valid date
+        </mat-error>
+      </mat-form-field>
+    </div>
+    <div
+      class="textAlignmentLimitDateChange"
+      id="narrative-limit-and-date-auth-serviceDateText"
+      *ngIf="!authNarrativeConfig.serviceDate.useFormControl"
+    >
+      {{ getFormattedDate(authNarrativeConfig.serviceDate.controlName) }}
+    </div>
+  </ng-container>
+</div>
+<!-- Post Submit -->
+<div
+  fxLayout="row wrap"
+  fxLayoutAlign="start start"
+  [formGroup]="formGroup"
+  *ngIf="authNarrativeMode == 'PostSubmit'"
+>
+  <div
+    class="textAlignmentLimitDateChange"
+    style="margin-right: 10px;"
+    id="narrative-limit-and-date-change-startText_post-submit"
+  >
+    You have {{ getFormattedAction() }} an additional
+  </div>
+  <b
+    class="textAlignmentLimitDateChange"
+    id="narrative-limit-and-date-change-trips-input_post-submit"
+    >{{ tripsInputFC.value }}</b
+  >
+
+  <!-- Date Range -->
+  <ng-container
+    *ngIf="!singleDateMode"
+    fxLayout="row"
+    fxLayoutAlign="start center"
+  >
+    <div
+      class="textAlignmentLimitDateChange"
+      id="narrative-date-range-change-startText--{{i}}"
+      *ngFor="
+        let word of narrativeTextItem.quantityDescriptor.split(' ');
+        let i = index;
+        let last = last
+      "
+    >
+      <b>{{ word }}</b
+      ><span *ngIf="last">,</span>
+    </div>
+    <div
+      class="textAlignmentLimitDateChange"
+      id="narrative-limit-and-date-change-endText-1"
+    >
+      for a total of
+    </div>
+    <div
+      class="textAlignmentLimitDateChange"
+      id="narrative-limit-and-date-change-endText-2"
+    >
+      <b> {{ newTotalDisplay }}</b>
+    </div>
+    <div
+      class="textAlignmentLimitDateChange"
+      id="narrative-date-range-change-startText-3-{{i}}"
+      *ngFor="
+        let word of narrativeTextItem.quantityDescriptor.split(' ');
+        let i = index
+      "
+    >
+      <b>{{ word }}</b>
+    </div>
+    <div
+      class="textAlignmentLimitDateChange"
+      id="narrative-limit-and-date-change-endText-4"
+    >
+      in a date range from
+    </div>
+    <b
+      class="textAlignmentLimitDateChange"
+      id="narrative-limit-and-date-change-startDate_post-submit"
+      >{{ getFormattedDate(authNarrativeConfig.startDate.controlName) }}</b
+    >
+
+    <div
+      class="textAlignmentLimitDateChange"
+      id="narrative-limit-and-date-change-andText_post-submit"
+    >
+      to
+    </div>
+    <b
+      class="textAlignmentLimitDateChange"
+      id="narrative-limit-and-date-change-endDate_post-submit"
+      >{{ getFormattedDate(authNarrativeConfig.endDate.controlName) }}</b
+    >
+  </ng-container>
+
+  <!-- Single Date -->
+  <ng-container *ngIf="singleDateMode">
+    <div
+      class="textAlignmentLimitDateChange"
+      id="narrative-limit-and-date-auth-descriptorText_post-submit--{{i}}"
+      *ngFor="
+        let word of narrativeTextItem.quantityDescriptor.split(' ');
+        let i = index
+      "
+    >
+      <b>{{ word }}</b>
+    </div>
+    <div
+      *ngIf="isAnticipated"
+      class="textAlignmentLimitDateChange"
+      id="narrative-limit-and-date-auth-isAnticipated_post-submit"
+    >
+      on an estimated date of
+    </div>
+    <div
+      *ngIf="!isAnticipated"
+      class="textAlignmentLimitDateChange"
+      id="narrative-limit-and-date-auth-noAnticipated_post-submit"
+    >
+      on a date of
+    </div>
+
+    <b
+      id="narrative-limit-and-date-auth-startDate_post-submit"
+      class="textAlignmentLimitDateChange"
+    >
+      {{ getFormattedDate(authNarrativeConfig.serviceDate.controlName) }}
+    </b>
+  </ng-container>
+</div>

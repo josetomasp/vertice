@@ -1,0 +1,247 @@
+<div class="main-nav-wrapper">
+  <healthe-header-bar title="Authorization Status Queue"></healthe-header-bar>
+
+  <div class="spacersmall"></div>
+  <mat-card>
+    <mat-card-content fxLayout="row" fxLayoutAlign="space-between center">
+      <a mat-button (click)="refreshQueue()" id="cscAuthStatusRefreshButton"
+        ><fa-icon
+          style="position: relative;left: -5px;"
+          [icon]="faSyncAlt"
+        ></fa-icon
+        >Refresh Queue</a
+      >
+      <div fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="20px">
+        <button
+          mat-stroked-button
+          class="secondary-button"
+          (click)="addNewAuth()"
+          id="cscAuthAddNewAuthButton"
+        >
+          + ADD NEW AUTH
+        </button>
+        <button
+          mat-flat-button
+          class="primary-button"
+          (click)="goToPosAuthSearch()"
+        >
+          POS AUTHORIZATION SEARCH
+        </button>
+        <button
+          mat-flat-button
+          class="primary-button"
+          (click)="goToRealtimeRejectsQueue()"
+          id="cscAuthSearchButton"
+        >
+          REAL TIME REJECTS QUEUE
+        </button>
+        <button
+          mat-flat-button
+          class="primary-button"
+          (click)="goToAddFirstFill()"
+          id="cscAuthAddFirstFillButton"
+        >
+          ADD FIRST FILL
+        </button>
+      </div>
+    </mat-card-content></mat-card
+  >
+
+  <div *ngIf="retrievalErrors?.length > 0" class="spacersmall"></div>
+  <healthe-error-banner
+    *ngIf="retrievalErrors?.length > 0"
+    [errorMessages]="retrievalErrors"
+    bannerTitle="Data Retrieval Error"
+  ></healthe-error-banner>
+  <div class="spacersmall"></div>
+
+  <mat-card class="tab-card">
+    <mat-card-title style="height: 46px;">
+      <mat-tab-group
+        #authStatusTabGroup
+        (selectedTabChange)="changeTab($event)"
+        class="secondary-tab"
+        style="height: 46px;"
+      >
+        <mat-tab id="AuthRequired-PatientWaiting-tab">
+          <ng-template mat-tab-label>
+            Auth Required-Patient Waiting
+            <span
+              class="tag activity"
+              id="AuthRequired-PatientWaiting-tab-bubble"
+              matTooltip="This number represents the number of Auth Required Patient Waiting"
+            >
+              {{ authStatusData.authRequiredPatientWaiting?.length }}
+            </span>
+          </ng-template>
+        </mat-tab>
+
+        <mat-tab id="AuthRequired-tab">
+          <ng-template mat-tab-label>
+            Auth Required
+            <span
+              class="tag activity"
+              id="AuthRequired-tab-bubble"
+              matTooltip="This number represents the number of Auth Required"
+            >
+              {{ authStatusData.authRequired?.length }}
+            </span>
+          </ng-template>
+        </mat-tab>
+
+        <mat-tab id="Ready-for-Call-Approved-tab">
+          <ng-template mat-tab-label>
+            Ready for Call-Approved
+            <span
+              class="tag activity"
+              id="Ready-for-Call-Approved-tab-bubble"
+              matTooltip="This number represents the number of Ready for Call-Approved"
+            >
+              {{ authStatusData.readyForCallApproved?.length }}
+            </span>
+          </ng-template>
+        </mat-tab>
+
+        <mat-tab id="Ready-for-Call-Denied-tab">
+          <ng-template mat-tab-label>
+            Ready for Call-Denied
+            <span
+              class="tag activity"
+              id="Ready-for-Call-Denied-tab-bubble"
+              matTooltip="This number represents the number of Ready for Call-Denied"
+            >
+              {{ authStatusData.readyForCallDenied?.length }}
+            </span>
+          </ng-template>
+        </mat-tab>
+        <mat-tab id="Completed-tab">
+          <ng-template mat-tab-label>
+            Completed
+            <span
+              class="tag activity"
+              id="Completed-tab-bubble"
+              matTooltip="This number represents the number of Completed"
+            >
+              {{ authStatusData.completed?.length }}
+            </span>
+          </ng-template>
+        </mat-tab>
+      </mat-tab-group>
+    </mat-card-title>
+  </mat-card>
+  <div class="spacersmall"></div>
+  <mat-card>
+    <mat-card-title
+      ><div fxLayout="row" fxLayoutAlign="space-between start">
+        <span id="cscAuthStatusTabTitle-{{tableTitle}}">{{ tableTitle }}</span>
+        <div fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="20px">
+          <div>
+            <div
+              class="overhead-label"
+              id="cscAuthStatusQueue-pharmacy-select-label"
+            >
+              PHARMACY TYPE
+            </div>
+            <mat-form-field style="width: 200px;">
+              <mat-select
+                [formControl]="pharmacyTypeOptionsFC"
+                id="cscAuthStatusQueue-pharmacy-select"
+              >
+                <mat-option
+                  *ngFor="let option of pharmacyTypeOptions"
+                  id="pharmacy-option-{{option}}"
+                  [value]="option"
+                  >{{ option }}</mat-option
+                >
+              </mat-select>
+            </mat-form-field>
+          </div>
+
+          <div>
+            <div
+              class="overhead-label"
+              id="tableCard-header-columnPicker-label"
+            >
+              COLUMNS
+            </div>
+            <mat-form-field style="width: 50px;">
+              <fa-icon
+                [icon]="faThList"
+                style="position: absolute; left: 15px; top:9px; font-size: 18px;"
+              ></fa-icon>
+              <mat-select
+                style="width: 35px;"
+                [ngModel]="tableColumnList"
+                multiple
+                id="columnPicker"
+                [panelClass]="'column-panel-size'"
+                #columnSelect
+              >
+                <mat-select-trigger></mat-select-trigger>
+                <div style="height: 300px; overflow-y:scroll">
+                  <healthe-select-all-option
+                    id="columnPicker-select-all"
+                    [select]="columnSelect"
+                    >All columns
+                  </healthe-select-all-option>
+
+                  <mat-divider></mat-divider>
+                  <mat-option
+                    *ngFor="let option of columnDropdownList"
+                    value="{{option.value}}"
+                    [id]="'columnPicker-' + option.value"
+                    >{{ option.label }}</mat-option
+                  >
+                </div>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </div>
+      </div>
+    </mat-card-title>
+    <mat-card-content>
+      <div class="spacermedium"></div>
+      <div fxLayout="row" fxLayoutAlign="end center">
+        <button
+          mat-flat-button
+          style="width: 120px;"
+          id="tableCard-header-exportButton"
+          class="primary-button"
+          (click)="setOpenUntilClose(exportMenu)"
+          [mat-menu-trigger-for]="exportMenu"
+        >
+          EXPORT
+          <fa-icon
+            class="inline-right-icon"
+            [icon]="exportMenuIcon"
+          ></fa-icon>
+        </button>
+        <mat-menu #exportMenu [overlapTrigger]="false" yPosition="below">
+          <button
+            *ngFor="let exportOption of exportDropdownOptions"
+            mat-menu-item
+            [id]="'tableCard-header-exportOptions-' + exportOption"
+            (click)="doExport(exportOption)"
+          >
+            {{ exportOption }}
+          </button>
+        </mat-menu>
+      </div>
+      <div class="spacersmall"></div>
+      <healthe-data-table
+        [displayedColumnNames]="tableColumnList"
+        [resultsColumnsConfig]="masterColumnConfig"
+        [resultsDefaultSort]="resultsDefaultSort"
+        [resultsData]="
+          authStatusData
+            | dataResolver: selectedTabIndex:pharmacyTypeOptionsFC.value
+        "
+        [isResultLoading]="isResultLoading"
+        [pageSize]="pageSize"
+        [pageSizeOptions]="[50, 100, 200]"
+        (pageSizeChanged)="pageSizeChanges($event)"
+      >
+      </healthe-data-table>
+    </mat-card-content>
+  </mat-card>
+</div>

@@ -1,0 +1,61 @@
+@import 'variables';
+
+.mat-card-shadow {
+  margin: 10px;
+  padding: 10px;
+  box-shadow: 0 0 8px 0 rgb(52 58 64 / 26%) !important;
+}
+
+.section-title {
+  color: $primary;
+  font-size: 16px;
+}
+
+.radio-input {
+  margin-top: 8px;
+}
+
+:host::ng-deep.mat-checkbox-layout {
+  white-space: normal !important;
+}
+:host::ng-deep.mat-checkbox-inner-container {
+  margin-top: 3px;
+}
+
+.enableLongMatErrors {
+  margin-top: 5px;
+  white-space: normal;
+}
+
+.loading-spinner-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1;
+  background: rgba(255, 255, 255, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.successful-send {
+  color: $success;
+}
+
+.failed-send {
+  color: $danger;
+}
+.healthe-mobile-invite-modal__messages {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-flow: column nowrap;
+}
+.healthe-mobile-invite-modal__actions {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: flex-end;
+  gap: 20px;
+}

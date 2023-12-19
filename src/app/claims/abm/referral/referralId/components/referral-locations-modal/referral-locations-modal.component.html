@@ -1,0 +1,83 @@
+<div fxLayout="row" fxLayoutAlign="space-between center" mat-dialog-title>
+  <span id="referralIcdCodesModal--title">Referral Locations - Language</span>
+  <button
+    mat-icon-button
+    mat-dialog-close
+    id="referralIcdCodesModal--header-closeButton"
+  >
+    <i class="fal fa-times modal-close-widget"></i>
+  </button>
+</div>
+
+<div style="height: 30vh;" mat-dialog-content>
+  <div
+    fxLayout="row"
+    fxLayoutAlign="start end"
+    fxLayoutGap="20px"
+    style="margin-bottom: 7px"
+  >
+    <div
+      fxLayout="column"
+      style="float: left; width: 40%;"
+      class="standard-text"
+      fxLayoutGap="6px"
+    >
+      <span fxLayout="row">DATE RANGE (S)</span>
+    </div>
+    <div
+      fxLayout="column"
+      style="float: left; width: 60%;"
+      class="standard-text"
+      fxLayoutGap="6px"
+    >
+      <span fxLayout="row">SERVICES</span>
+    </div>
+  </div>
+  <div *ngFor="let header of referralLocationData.locationHeaders">
+    <div
+      fxLayout="row"
+      fxLayoutAlign="start end"
+      fxLayoutGap="20px"
+      style="margin-bottom: 7px"
+      class="standard-text"
+    >
+      <div fxLayout="column" style="float: left; width: 40%;" fxLayoutGap="6px">
+        <span fxLayout="row"
+          >{{ header.dateRangeFrom }} - {{ header.dateRangeTo }}</span
+        >
+      </div>
+      <div fxLayout="column" style="float: left; width: 60%;" fxLayoutGap="6px">
+        <span fxLayout="row">{{ header.service }}</span>
+      </div>
+    </div>
+  </div>
+  <div fxLayout="row" fxLayoutAlign="start end" fxLayoutGap="20px">
+    <healthe-data-table
+      [displayedColumnNames]="columnNames"
+      [resultsColumnsConfig]="resultsColumnsConfig"
+      [resultsData]="referralLocationData.locationDetails"
+      [isResultLoading]="isResultLoading"
+      [showPaginator]="false"
+      [pageSize]="
+        referralLocationData.locationDetails != null ||
+        referralLocationData.locationDetails.length > 0
+          ? referralLocationData.locationDetails.length - 1
+          : 0
+      "
+    >
+    </healthe-data-table>
+  </div>
+
+  <div mat-dialog-actions fxLayout="column" fxLayoutAlign="start end">
+    <div fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="20px">
+      <button
+        id="bottomSave-button"
+        class="primary-button actionButton"
+        mat-button
+        mat-dialog-close
+      >
+        CLOSE
+      </button>
+    </div>
+  </div>
+</div>

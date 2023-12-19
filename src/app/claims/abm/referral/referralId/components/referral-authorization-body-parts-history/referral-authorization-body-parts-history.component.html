@@ -1,0 +1,31 @@
+<aside
+  style="padding-top: 35px"
+  *ngIf="
+    bodyParts.length > 0 &&
+    (archeType === DxArchetype || archeType === PmArchetype)
+  "
+>
+  <section fxLayout="column">
+    <label
+      id="referral-authorization-bodyParts-history-label"
+      class="overhead-label"
+      >BODY PARTS</label
+    >
+    <div fxLayout="row">
+      <span
+        class="ellipsis-text"
+        id="referral-authorization-bodyParts-history-list"
+        style="font-size: 14px; font-weight: 500; padding-left: 4px;"
+      >
+        {{ bodyPartsCsv }}
+      </span>
+      <a
+        id="referral-authorization-bodyParts-history-viewAllButton"
+        mat-button
+        style="min-width: 20px;"
+        (click)="openViewAllModal()"
+        >View all</a
+      >
+    </div>
+  </section>
+</aside>

@@ -1,0 +1,141 @@
+<ng-container [formGroup]="parentFormGroup">
+  <div fxFlex="1 1 auto" class="form-group-control-container">
+    <span
+      class="overhead-label"
+      id="wizard-specific-date-hhDynamicDateSwitch-label-{{index}}"
+      >DATE RANGE OR SINGLE DATE?
+    </span>
+    <mat-radio-group
+      class="form-group--radio-group"
+      formControlName="dynamicDateMode"
+      #dateModeRadioGroup="matRadioGroup"
+    >
+      <mat-radio-button
+        #dateRangeRadioButton="matRadioButton"
+        (click)="dateModeChange($event, dateRangeRadioButton.value)"
+        (keydown)="dateModeChange($event, dateRangeRadioButton.value)"
+        [value]="'dateRange'"
+        >Date Range</mat-radio-button
+      >
+      <mat-radio-button
+        #singleDateRadioButton="matRadioButton"
+        (click)="dateModeChange($event, singleDateRadioButton.value)"
+        (keydown)="dateModeChange($event, singleDateRadioButton.value)"
+        [value]="'singleDate'"
+        >Single Date</mat-radio-button
+      >
+    </mat-radio-group>
+  </div>
+
+  <div
+    fxFlex="1 1 auto"
+    class="form-group-control-container"
+    *ngIf="dynamicDateMode.value === 'dateRange'"
+  >
+    <span
+      class="overhead-label"
+      id="wizard-specific-date-hhDynamicSwitch-startDate-label-{{index}}"
+    >
+      START DATE <span class="required-text">*</span>
+    </span>
+    <mat-form-field class="show-one-error">
+      <healthe-datepicker
+        formControlName="startDate"
+        class="form-group--datePicker_full-width"
+        id="wizard-specific-date-hhDynamicSwitch-startDate-input-{{index}}"
+      ></healthe-datepicker>
+      <mat-error
+        *ngIf="parentFormGroup.get('startDate').hasError('invalidDateRange')"
+      >
+        End Date cannot be before Start Date
+      </mat-error>
+      <mat-error
+        id="wizard-specific-dates-hhDynamicSwitch-startDate-error-{{index}}"
+        *ngIf="parentFormGroup.get('startDate').hasError('required')"
+      >
+        Enter a start date
+      </mat-error>
+    </mat-form-field>
+  </div>
+
+  <div
+    fxFlex="1 1 auto"
+    class="form-group-control-container"
+    *ngIf="dynamicDateMode.value === 'dateRange'"
+  >
+    <span
+      class="overhead-label"
+      id="wizard-specific-date-hhDynamicSwitch-endDate-label-{{index}}"
+    >
+      END DATE <span class="required-text">*</span>
+    </span>
+    <mat-form-field class="show-one-error">
+      <healthe-datepicker
+        class="form-group--datePicker_full-width"
+        formControlName="endDate"
+        id="wizard-specific-date-hhDynamicSwitch-endDate-input-{{index}}"
+      ></healthe-datepicker>
+      <mat-error
+        *ngIf="parentFormGroup.get('endDate').hasError('invalidDateRange')"
+      >
+        End Date cannot be before Start Date
+      </mat-error>
+      <mat-error
+        id="wizard-specific-dates-hhDynamicSwitch-endDate-error-{{index}}"
+        *ngIf="parentFormGroup.get('endDate').hasError('required')"
+      >
+        Enter an end date
+      </mat-error>
+    </mat-form-field>
+  </div>
+  <div
+    fxFlex="1 1 auto"
+    class="form-group-control-container"
+    *ngIf="dynamicDateMode.value === 'dateRange'"
+  >
+    <span
+      class="overhead-label"
+      id="wizard-specific-date-hhDynamicSwitch-numberOfVisits-label-{{index}}"
+    >
+      NUMBER OF VISITS
+    </span>
+    <mat-form-field>
+      <input
+        type="number"
+        min="1"
+        matInput
+        placeholder="Enter Quantity"
+        formControlName="numberOfVisits"
+      />
+      <mat-error
+        id="wizard-specific-dates-hhDynamicSwitch-numberOfVisits-error-{{index}}"
+      >
+        Enter a number of visits
+      </mat-error>
+    </mat-form-field>
+  </div>
+  <div
+    fxFlex="2 2 auto"
+    class="form-group-control-container"
+    *ngIf="dynamicDateMode.value === 'singleDate'"
+  >
+    <span
+      class="overhead-label"
+      id="wizard-specific-date-hhDynamicSwitch-scheduleDate-label-{{index}}"
+    >
+      APPOINTMENT DATE <span class="required-text">*</span>
+    </span>
+    <mat-form-field class="show-one-error">
+      <healthe-datepicker
+        formControlName="appointmentDate"
+        class="form-group--datePicker_full-width"
+        id="wizard-specific-date-dynamicSwitch-scheduleDate-input-{{index}}"
+      ></healthe-datepicker>
+      <mat-error
+        id="wizard-specific-dates-dynamicSwitch-appointmentDate-error-{{index}}"
+      >
+        Enter an appointment date
+      </mat-error>
+    </mat-form-field>
+  </div>
+</ng-container>

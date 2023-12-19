@@ -1,0 +1,7 @@
+@import 'variables';
+
+:host ::ng-deep {
+  text {
+    fill: $gray-400;
+  }
+}

@@ -1,0 +1,45 @@
+@import 'variables';
+
+:host.ng-invalid {
+  input {
+    border-color: $danger;
+  }
+}
+
+.healthe-autocomplete-panel {
+  background-color: white;
+  box-shadow: 2px 3px 16px 0 rgb(52 58 64 / 41%);
+  border-radius: 4px;
+  &_virtual-scroll-viewport {
+    height: var(--panel-height);
+    width: 350px;
+  }
+  ::-webkit-scrollbar-thumb {
+    min-height: 36px;
+    min-width: 12px;
+  }
+}
+input {
+  font-family: 'Libre Franklin', Helvetica, sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: $gray-900;
+
+  box-sizing: border-box;
+
+  height: 36px;
+
+  transition: border-color 100ms ease-in-out;
+
+  outline: none;
+  border: 1px rgba(52, 58, 64, 0.3) solid;
+  border-radius: 2px;
+
+  padding-left: 16px;
+  padding-right: 16px;
+
+  &:focus,
+  &:hover {
+    border-color: $secondary;
+  }
+}

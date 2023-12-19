@@ -1,0 +1,92 @@
+<mat-paginator
+  *ngIf="showPaginator"
+  id="dataTable-topPaginator"
+  [pageSize]="pageSize"
+  [pageSizeOptions]="pageSizeOptions"
+  #topPaginator
+  showFirstLastButtons="true"
+>
+</mat-paginator>
+<table
+  *ngIf='tableDataSource'
+  mat-table
+  [dataSource]="tableDataSource"
+  matSort
+  #matSort="matSort"
+  (matSortChange)="tableDataSource?.primaryPaginator.firstPage()"
+>
+  <ng-container
+    *ngFor="
+      let columnConfig of resultsColumnsConfig;
+      let i = index;
+      trackBy: trackByMethod
+    "
+    [matColumnDef]="columnConfig.name"
+  >
+    <th
+      id="dataTable-results-{{columnConfig.name}}ColumnHeader"
+      mat-header-cell
+      *matHeaderCellDef
+      [disabled]="!columnConfig.comparator"
+      [mat-sort-header]="columnConfig.name"
+      [ngStyle]="
+        safeObjectMerge(columnConfig.styles, columnConfig.headerStyles)
+      "
+    >
+      {{ columnConfig.label }}
+    </th>
+    <td
+      mat-cell
+      style="text-overflow: clip !important;"
+      [ngStyle]="safeObjectMerge(columnConfig.styles, columnConfig.cellStyles)"
+      *matCellDef="let resultRow; let rowIndex = index"
+    >
+      <healthe-data-table-cell
+        [resultsColumnsConfig]="columnConfig"
+        [rowData]="resultRow"
+        [rowIndex]="rowIndex"
+      ></healthe-data-table-cell>
+    </td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="displayedColumnNames; sticky: true"></tr>
+  <tr
+    mat-row
+    [hidden]="isResultLoading"
+    *matRowDef="let row; columns: displayedColumnNames"
+  ></tr>
+</table>
+
+<mat-card *ngIf="isResultLoading || tableDataSource?.filteredData?.length == 0">
+  <div id="dataTable-noData" fxLayout="column" fxLayoutAlign="center center">
+    <div
+      id="dataTable-loadingDataSpinner"
+      *ngIf="isResultLoading"
+      fxLayout="column"
+      fxLayoutAlign="center center"
+    >
+      <mat-spinner diameter="55"></mat-spinner>
+      <h2>Loading results...</h2>
+    </div>
+
+    <ng-container
+      *ngIf="!isResultLoading && tableDataSource.filteredData.length == 0"
+    >
+      <img alt="No Data Indicator" src="assets/img/NoDataIcon.svg" />
+      <p
+        *ngIf="tableDataSource.filteredData.length == 0"
+        class="standard-text"
+        id="dataTable-noDataForQuery"
+      >
+        {{ noDataForQueryVerbiage }}
+      </p>
+    </ng-container>
+  </div>
+</mat-card>
+
+<mat-paginator
+  *ngIf="showPaginator"
+  id="dataTable-bottomPaginator"
+  #bottomPaginator
+  showFirstLastButtons="true"
+></mat-paginator>

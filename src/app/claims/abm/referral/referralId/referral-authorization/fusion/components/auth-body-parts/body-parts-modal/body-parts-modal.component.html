@@ -1,0 +1,65 @@
+<div fxLayout="row" fxLayoutAlign="space-between center" mat-dialog-title>
+  <h1 id="addBodyParts--title">Add Body Part(s)</h1>
+  <button
+    mat-icon-button
+    mat-dialog-close
+    id="addBodyParts--header-closeButton"
+  >
+    <i class="fal fa-times modal-close-widget"></i>
+  </button>
+</div>
+<div mat-dialog-content>
+  <div fxFlex="1 1 auto" class="form-group-control-container ">
+    <span>
+      Check the body part(s) you would like to add to this authorization
+    </span>
+
+    <div class="spacersmall"></div>
+    <span class="overhead-label"
+      >BODY PART(S)<span class="required-text" *ngIf="required">*</span></span
+    >
+    <mat-form-field class="add-body-parts show-one-error">
+      <mat-select
+        multiple
+        placeholder="Please select body part(s)"
+        healtheSelect
+        [formControl]="form.get('bodyParts')"
+        id="body-parts-multiselect-modal"
+      >
+        <mat-optgroup label="Select Body Parts">
+          <mat-option
+            *ngFor="let option of (bodyParts$ | async); index as $optionIndex"
+            [value]="option.value"
+            id="body-parts-multioption-{{option}}-{{$optionIndex}}"
+            >{{ option.label }}</mat-option
+          >
+        </mat-optgroup>
+      </mat-select>
+      <mat-error id="body-parts-multiselect-modal-error">
+        Please select at least one body parts
+      </mat-error>
+    </mat-form-field>
+  </div>
+</div>
+<div
+  mat-dialog-actions
+  fxLayout="row"
+  fxLayoutAlign="end center"
+  fxLayoutGap="15px"
+>
+  <button
+    class="info-button mat-stroked-button mat-button-base"
+    mat-dialog-close
+    fxFlex="0 0 auto"
+  >
+    CANCEL
+  </button>
+  <button
+    class="primary-button"
+    mat-flat-button
+    fxFlex="0 0 auto"
+    (click)="addSelectedBodyParts()"
+  >
+    SAVE
+  </button>
+</div>

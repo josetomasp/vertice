@@ -1,0 +1,59 @@
+<div fxLayout="row wrap" fxLayoutAlign="space-between center">
+  <span
+    class="sectionLabel"
+    id="wizard-specific-dates-trip-information-label"
+    >{{ config.formTitle }}</span
+  >
+  <button
+    *ngIf="!config.hideAddLocationButton"
+    mat-stroked-button
+    class="secondary-button"
+    id="wizard-specific-dates-addLocation-button"
+    (click)="showAddLocationModal()"
+  >
+    <fa-icon [icon]="faPlus" class="fa-lg inline-left-icon"></fa-icon>
+    {{ config.addLocationButtonLabel || '' }}
+  </button>
+</div>
+<div class="spacertiny"></div>
+<healthe-specific-trip-information
+  *ngFor="
+    let formGroup of formArray.controls;
+    index as $controlIndex;
+    trackBy: trackByFn
+  "
+  [formGroup]="formGroup"
+  [controlConfigs]="config.controls"
+  [actionConfig]="config.actionConfig"
+  [serviceActionType]="config.serviceActionType"
+  [stepName]="config.stepName"
+  [index]="$controlIndex"
+  [disableDeleteButton]="formArray.length <= 1"
+  [selectedService]="selectedService"
+  [currentStepIndex]="currentStepIndex"
+  (duplicateFormGroup)="duplicateFormGroup($event)"
+  (deleteFormGroup)="deleteItem($event)"
+  (addFormGroup)="addFormGroup($event)"
+></healthe-specific-trip-information>
+<div fxLayout="row wrap" fxLayoutAlign="start center" fxLayoutGap="20px">
+  <button
+    mat-stroked-button
+    class="secondary-button"
+    (click)="addFormGroup(formArray.controls.length)"
+    id="wizard-specific-dates-addDate-button"
+  >
+    <fa-icon [icon]="faPlus" class="fa-lg inline-left-icon"></fa-icon>
+    {{ config.addDateButtonLabel }}
+  </button>
+  <button
+    mat-flat-button
+    class="primary-button"
+    (click)="makeRoundTrip()"
+    id="wizard-specific-dates-make-round-trip-button"
+    *ngIf="this.config.roundTripConfig"
+    [disabled]="makeRoundTripDisabled()"
+  >
+    <fa-icon [icon]="faSync" class="fa-lg inline-left-icon"></fa-icon>
+    MAKE ROUND TRIP
+  </button>
+</div>

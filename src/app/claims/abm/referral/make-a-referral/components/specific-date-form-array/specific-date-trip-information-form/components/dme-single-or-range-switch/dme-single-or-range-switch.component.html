@@ -1,0 +1,185 @@
+<ng-container [formGroup]="parentFormGroup">
+  <div
+    fxFlex="1 1 250px"
+    class="form-group-control-container hcpcAndProductRadioButtons"
+  >
+    <span
+      class="overhead-label"
+      id="wizard-specific-date-dmeDynamicDateSwitch-label-{{index}}"
+      >DATE RANGE OR SINGLE DATE?
+    </span>
+    <mat-radio-group
+      class="form-group--radio-group"
+      formControlName="dynamicDateMode"
+      #dateModeRadioGroup="matRadioGroup"
+    >
+      <mat-radio-button
+        #dateRangeRadioButton="matRadioButton"
+        (click)="dateModeChange($event, dateRangeRadioButton.value)"
+        (keydown)="dateModeChange($event, dateRangeRadioButton.value)"
+        [value]="'dateRange'"
+        >Date Range</mat-radio-button
+      >
+      <mat-radio-button
+        #singleDateRadioButton="matRadioButton"
+        (click)="dateModeChange($event, singleDateRadioButton.value)"
+        (keydown)="dateModeChange($event, singleDateRadioButton.value)"
+        [value]="'singleDate'"
+        >Single Date</mat-radio-button
+      >
+    </mat-radio-group>
+  </div>
+
+  <div
+    fxFlex="1 1 auto"
+    class="form-group-control-container"
+    *ngIf="dynamicDateMode.value === 'dateRange'"
+  >
+    <span
+      class="overhead-label"
+      id="wizard-specific-date-dmeDynamicSwitch-startDate-label-{{index}}"
+    >
+      START DATE <span class="required-text">*</span>
+    </span>
+    <mat-form-field class="show-one-error">
+      <healthe-datepicker
+        formControlName="startDate"
+        class="form-group--datePicker_full-width"
+        id="wizard-specific-date-dmeDynamicSwitch-startDate-input-{{index}}"
+      ></healthe-datepicker>
+      <mat-error
+        *ngIf="parentFormGroup.get('startDate').hasError('invalidDateRange')"
+      >
+        End Date cannot be before Start Date
+      </mat-error>
+      <mat-error
+        id="wizard-specific-dates-dmeDynamicSwitch-startDate-error-{{index}}"
+        *ngIf="parentFormGroup.get('startDate').hasError('required')"
+      >
+        Enter a start date
+      </mat-error>
+    </mat-form-field>
+  </div>
+
+  <div
+    fxFlex="1 1 auto"
+    class="form-group-control-container"
+    *ngIf="dynamicDateMode.value === 'dateRange'"
+  >
+    <span
+      class="overhead-label"
+      id="wizard-specific-date-dmeDynamicSwitch-endDate-label-{{index}}"
+    >
+      END DATE <span class="required-text">*</span>
+    </span>
+    <mat-form-field class="show-one-error">
+      <healthe-datepicker
+        class="form-group--datePicker_full-width"
+        formControlName="endDate"
+        id="wizard-specific-date-dmeDynamicSwitch-endDate-input-{{index}}"
+      ></healthe-datepicker>
+      <mat-error
+        *ngIf="parentFormGroup.get('endDate').hasError('invalidDateRange')"
+      >
+        End Date cannot be before Start Date
+      </mat-error>
+      <mat-error
+        id="wizard-specific-dates-dmeDynamicSwitch-endDate-error-{{index}}"
+        *ngIf="parentFormGroup.get('endDate').hasError('required')"
+      >
+        Enter an end date
+      </mat-error>
+    </mat-form-field>
+  </div>
+  <div
+    fxFlex="1 1 auto"
+    class="form-group-control-container"
+    *ngIf="dynamicDateMode.value === 'singleDate'"
+  >
+    <span
+      class="overhead-label"
+      id="wizard-specific-date-dmeDynamicSwitch-deliveryDate-label-{{index}}"
+    >
+      DELIVERY DATE <span class="required-text">*</span>
+    </span>
+    <mat-form-field class="show-one-error">
+      <healthe-datepicker
+        formControlName="deliveryDate"
+        class="form-group--datePicker_full-width"
+        id="wizard-specific-date-dynamicSwitch-deliveryDate-input-{{index}}"
+      ></healthe-datepicker>
+      <mat-error
+        id="wizard-specific-dates-dynamicSwitch-deliveryDate-error-{{index}}"
+      >
+        Enter a delivery date
+      </mat-error>
+    </mat-form-field>
+  </div>
+
+  <div fxFlex="1 1 auto" class="form-group-control-container">
+    <span
+      class="overhead-label"
+      id="wizard-specific-date-dmeDynamicSwitch-deliveryAddress-{{index}}"
+      >DELIVERY ADDRESS <span class="required-text">*</span></span
+    >
+    <mat-form-field class="show-one-error">
+      <mat-select
+        [placeholder]="'Select a delivery address'"
+        healtheSelect
+        formControlName="deliveryAddress"
+        id="wizard-specific-dates-dmeDynamicSwitch-location-select-{{index}}"
+        #locationSelect
+        [compareWith]="compareLocations"
+      >
+        <mat-option
+          *ngFor="
+            let location of (locationOptions$ | async);
+            index as $fromAddressIndex
+          "
+          [value]="location.value"
+          id="wizard-specific-dates-deliveryAddress-option-{{$fromAddressIndex}}"
+          >{{ location.label }}</mat-option
+        >
+
+        <mat-option
+          value="test"
+          (click)="_showAddLocationModal(locationSelect)"
+        >
+          <span id="wizard-specific-dates-addLocation-deliveryAddress-button">
+            Add Location
+          </span>
+        </mat-option>
+      </mat-select>
+      <mat-error>Select a delivery address</mat-error>
+    </mat-form-field>
+  </div>
+  <div fxFlex="1 1 100px" class="form-group-control-container">
+    <span
+      class="overhead-label"
+      id="wizard-specific-date-dmeDynamicSwitch-qty-{{index}}"
+      >QTY <span class="required-text">*</span></span
+    >
+    <mat-form-field class="show-one-error">
+      <input
+        type="number"
+        min="1"
+        class=""
+        formControlName="quantity"
+        matInput
+      />
+      <mat-error>Enter a quantity</mat-error>
+    </mat-form-field>
+  </div>
+  <div fxFlex="1 1 100px" class="form-group-control-container">
+    <span
+      class="overhead-label"
+      id="wizard-specific-date-dmeDynamicSwitch-rental-label-{{index}}"
+      >Rental?</span
+    >
+    <mat-checkbox
+      id="wizard-specific-date-dmeDynamicSwitch-rental-{{index}}"
+      formControlName="rental"
+    >
+    </mat-checkbox>
+  </div>
+</ng-container>

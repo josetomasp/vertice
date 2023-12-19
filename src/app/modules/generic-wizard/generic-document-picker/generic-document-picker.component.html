@@ -1,0 +1,110 @@
+<table mat-table style="min-width: 500px" [dataSource]="tableDataSource">
+  <ng-container matColumnDef="fileName">
+    <th
+      mat-header-cell
+      id="documents-header-name"
+      class="healthe-table-cell tableHeader"
+      *matHeaderCellDef
+      style="width: 200px;"
+    >
+      FILE NAME
+    </th>
+    <td
+      mat-cell
+      class="healthe-table-cell"
+      [id]="'documents-cell-name-' + i"
+      *matCellDef="let data; let i = index"
+    >
+      <span [matTooltip]="data.fileName">
+        {{ i + 1 }}. {{ data.fileName }}</span
+      >
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="submitDate">
+    <th
+      mat-header-cell
+      id="documents-header-submitDate"
+      class="healthe-table-cell tableHeader"
+      *matHeaderCellDef
+      style="width: 35px;"
+    >
+      DATE ATTACHED
+    </th>
+    <td
+      mat-cell
+      class="healthe-table-cell"
+      [id]="'documents-cell-submitDate-' + i"
+      *matCellDef="let data; let i = index"
+    >
+      <span [matTooltip]="data.submitDate">{{ data.submitDate }}</span>
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="delete">
+    <th
+      mat-header-cell
+      id="documents-header-delete"
+      class="healthe-table-cell tableHeader"
+      *matHeaderCellDef
+      style="width: 20px;"
+    ></th>
+    <td
+      mat-cell
+      class="healthe-table-cell"
+      [id]="'documents-cell-delete-' + i"
+      *matCellDef="let data; let i = index"
+    >
+      <a
+        mat-button
+        [id]="'documents-cell-delete-button-' + i"
+        class="text-secondary"
+        (click)="confirmDelete(i)"
+      >
+        <fa-icon [icon]="faTrashAlt" size="lg"></fa-icon>
+      </a>
+    </td>
+  </ng-container>
+
+  <tr
+    mat-header-row
+    style="height: 50px !important;"
+    *matHeaderRowDef="tableColumns"
+  ></tr>
+  <tr mat-row *matRowDef="let row; columns: tableColumns; let i = index"></tr>
+</table>
+
+<ng-container *ngIf="!this.documents || this.documents.length === 0">
+  <p
+    class="standard-text"
+    style="text-align:center"
+    id="serviceScheduled-no-data"
+  >
+    No documents available
+  </p></ng-container
+>
+
+<div class="spacersmall"></div>
+<a
+  *ngIf="!hideUploadDocumentsButton"
+  class="ALink"
+  id="uploadDocuments-button"
+  (click)="launchDocumentInput()"
+>
+  <i class="far fa-plus"></i> Upload document(s)
+</a>
+<input
+  type="file"
+  multiple
+  #hiddenNativeFileInput
+  style="display: none"
+  id="documents-upload-input-button"
+  (change)="handleFileInput($event)"
+/>
+
+<ng-container *ngIf="invalidDocumentsList?.length > 0">
+  <div class="document-picker__invalid-documents">
+    Unable to attach files that are larger than {{ maximumFileSizeInMb - 1 }}MB
+    <p *ngFor="let documentName of invalidDocumentsList">{{ documentName }}</p>
+  </div>
+</ng-container>

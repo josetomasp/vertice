@@ -1,0 +1,107 @@
+<ng-container [formGroup]="parentFormGroup">
+  <div
+    fxFlex="1 1 250px"
+    class="form-group-control-container hcpcAndProductRadioButtons"
+  >
+    <span
+      class="overhead-label"
+      id="wizard-specific-date-dmeHcpcOrProductType-label-{{index}}"
+      >SELECT PRODUCT BY?
+    </span>
+    <mat-radio-group
+      class="form-group--radio-group"
+      formControlName="productSelectionMode"
+    >
+      <mat-radio-button
+        #categoryRadioButton="matRadioButton"
+        (click)="productSelectionModeChange($event, 'category')"
+        (keydown)="productSelectionModeChange($event, 'category')"
+        [value]="'category'"
+        >Category</mat-radio-button
+      >
+      <mat-radio-button
+        #hcpcRadioButton="matRadioButton"
+        (click)="productSelectionModeChange($event, 'hcpc')"
+        (keydown)="productSelectionModeChange($event, 'hcpc')"
+        [value]="'hcpc'"
+        >HCPC Code</mat-radio-button
+      >
+    </mat-radio-group>
+  </div>
+
+  <div
+    fxFlex="1 1 auto"
+    class="form-group-control-container"
+    *ngIf="productSelectionMode.value === 'category'"
+  >
+    <span
+      class="overhead-label"
+      id="wizard-specific-date-dmeDynamicSwitch-productCategory-label-{{index}}"
+      >PRODUCT CATEGORY<span class="required-text">*</span>
+    </span>
+    <mat-form-field class="show-one-error">
+      <mat-select
+        healtheSelect
+        formControlName="category"
+        placeholder="Select a category"
+        [compareWith]="categoryCompare"
+      >
+        <mat-option
+          *ngFor="let option of (categories$ | async)"
+          [value]="option"
+          >{{ option.label }}</mat-option
+        >
+      </mat-select>
+      <mat-error>Select a category</mat-error>
+    </mat-form-field>
+  </div>
+  <div
+    fxFlex="1 1 auto"
+    class="form-group-control-container"
+    *ngIf="productSelectionMode.value === 'category'"
+  >
+    <span
+      class="overhead-label"
+      id="wizard-specific-date-dmeDynamicSwitch-product-label-{{index}}"
+      >PRODUCT<span class="required-text">*</span>
+    </span>
+    <mat-form-field class="show-one-error">
+      <mat-select
+        matTooltip="You must select a category before selecting a product"
+        [matTooltipDisabled]="category.value"
+        healtheSelect
+        formControlName="product"
+        placeholder="Select a product"
+        [compareWith]="productCompare"
+        ><mat-option
+          *ngFor="let option of (products$ | async)"
+          [value]="option.value"
+          >{{ option.label }}</mat-option
+        ></mat-select
+      >
+      <mat-error
+        id="wizard-specific-date-dmeDynamicSwitch-product-error-other-{{index}}"
+        *ngIf="parentFormGroup.controls['product'].hasError('notesRequired')"
+        >Notes are required when 'Other' is selected
+      </mat-error>
+      <mat-error>Select a product</mat-error>
+    </mat-form-field>
+  </div>
+
+  <div
+    fxFlex="1 1 100px"
+    fxFlexAlign="start"
+    class="form-group-control-container"
+    *ngIf="productSelectionMode.value === 'hcpc'"
+  >
+    <span
+      class="overhead-label"
+      id="wizard-specific-date-dmeDynamicSwitch-hcpc-label-{{index}}"
+      >HCPC <span class="required-text">*</span></span
+    >
+    <mat-form-field class="show-one-error">
+      <input type="text" formControlName="hcpc" matInput />
+      <mat-error>Enter a HCPC</mat-error>
+    </mat-form-field>
+  </div>
+</ng-container>

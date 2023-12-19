@@ -1,0 +1,109 @@
+<div
+  fxLayout="row"
+  class="title-container"
+  fxLayoutAlign="space-between center"
+  mat-dialog-title
+>
+  <span id="active-referrals-modal-title"
+    >Active {{ serviceType }} Authorizations</span
+  >
+  <button
+    mat-icon-button
+    mat-dialog-close
+    id="active-referrals-modal-header-widget"
+  >
+    <i class="fal fa-times modal-close-widget"></i>
+  </button>
+</div>
+
+<div matDialogContent class="active-referral-table-container">
+  <table mat-table [dataSource]="dataSource" matSort #matSort="matSort">
+    <ng-container
+      *ngFor="let column of masterColumnList"
+      [matColumnDef]="column.name"
+    >
+      <th
+        mat-header-cell
+        *matHeaderCellDef
+        mat-sort-header
+        [id]="
+          'active-referrals-results-table-' + column.name + '-column-header'
+        "
+        [ngStyle]="column.headerStyles"
+      >
+        {{ column.label | uppercase }}
+      </th>
+
+      <td
+        mat-cell
+        #tableData
+        *matCellDef="let data; let rowIndex = index"
+        [id]="
+          'active-referrals-resultsTable-' +
+          column.name +
+          '-column-value' +
+          '-' +
+          rowIndex
+        "
+        [ngStyle]="column.cellStyles"
+        [matTooltip]="data[column.name]"
+        class="column-word-wrap"
+      >
+        <ng-container [ngSwitch]="column.name">
+          <ng-container *ngSwitchCase="'referralId'">
+            <ng-container>
+              <a
+                [id]="
+                  'active-referrals-resultsTable-' +
+                  column.name +
+                  '-column-value' +
+                  '-' +
+                  rowIndex
+                "
+                (click)="goToLink(data['url'])"
+                style="cursor: pointer"
+              >
+                {{ data[column.name] }}
+              </a>
+            </ng-container>
+          </ng-container>
+
+          <ng-container *ngSwitchCase="'extendButton'">
+            <button
+              mat-flat-button
+              class="primary-button pm-extend-button"
+              *ngIf="data['showExtendButton']"
+              (click)="extendReferral(data['referralId'])"
+            >
+              EXTEND
+            </button>
+          </ng-container>
+
+          <ng-container *ngSwitchDefault>
+            {{ data[column.name] }}
+          </ng-container>
+        </ng-container>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayColumns; sticky: true"></tr>
+    <tr
+      mat-row
+      style="display: table-row"
+      *matRowDef="let row; columns: displayColumns"
+    ></tr>
+  </table>
+</div>
+
+<mat-dialog-actions class="button-container">
+  <div fxLayout="row" fxLayoutGap="20px" style="margin-right: 20px;">
+    <button
+      mat-flat-button
+      class="primary-button"
+      id="uiLib-smallBasicModalSave"
+      (click)="close()"
+    >
+      Close
+    </button>
+  </div>
+</mat-dialog-actions>

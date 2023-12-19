@@ -1,0 +1,46 @@
+<!-- Deny Action Form -->
+<div
+  [formGroup]="formGroup"
+  *ngIf="formGroup.get('action').value === actionOption.denyIndefinitely"
+>
+  <div fxLayout="row">
+    <div *ngIf="showDenialReasons" class="reason-select-block">
+      <div class="overhead-label">
+        PRIMARY DENIAL REASON <span class="text-required">*</span>
+      </div>
+      <mat-select
+        healtheFormValidationExtractor
+        formControlName="primaryDenialReason"
+        placeholder="Select Denial Explanation"
+        class="reason-select-block-width"
+        [attr.data-index]="index"
+      >
+        <mat-option
+          *ngFor="let reason of (primaryDenialReasons$ | async)"
+          [value]="reason.value"
+          >{{ reason.label }}</mat-option
+        >
+      </mat-select>
+    </div>
+    <div
+      *ngIf="showSecondDenialReason && showDenialReasons"
+      class="reason-select-block"
+    >
+      <span class="overhead-label" id="secondary-denial-reason-label--{{index}}"
+        >SECONDARY DENIAL REASON</span
+      >
+      <mat-select
+        formControlName="secondaryDenialReason"
+        placeholder="Select Denial Explanation"
+        class="reason-select-block-width"
+        [attr.data-index]="index"
+      >
+        <mat-option
+          *ngFor="let reason of (secondaryDenialReasons$ | async)"
+          [value]="reason.value"
+          >{{ reason.label }}</mat-option
+        >
+      </mat-select>
+    </div>
+  </div>
+</div>

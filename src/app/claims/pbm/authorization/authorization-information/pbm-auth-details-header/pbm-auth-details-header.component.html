@@ -1,0 +1,50 @@
+<div fxLayout="row" fxLayoutAlign="space-between">
+  <div id="auth-info-header-title">Authorization Details</div>
+  <div fxLayout="row" fxLayoutGap="20px">
+    <button
+      mat-flat-button
+      class="primary-button"
+      id="auth-info-header-claimLevelInterventionsButton"
+      [mat-menu-trigger-for]="claimLevelInterventionMenu"
+    >
+      CLAIM-LEVEL INTERVENTIONS
+      <span class="menuClosed">
+        <fa-icon [icon]="faChevronDown" class="inline-right-icon"></fa-icon>
+      </span>
+      <span class="menuOpen">
+        <fa-icon [icon]="faChevronUp" class="inline-right-icon"></fa-icon>
+      </span>
+    </button>
+    <button
+      mat-stroked-button
+      class="secondary-button"
+      id="auth-info-header-sendEmailButton"
+      (click)="sendEmail()"
+    >
+      SEND EMAIL
+    </button>
+    <button
+      mat-stroked-button
+      class="secondary-button"
+      id="auth-info-header-reassignToAnotherClaimButton"
+      (click)="onReassignClaim()"
+    >
+      REASSIGN TO ANOTHER CLAIM
+    </button>
+  </div>
+</div>
+
+<mat-menu
+  #claimLevelInterventionMenu
+  [overlapTrigger]="false"
+  yPosition="below"
+>
+  <button
+    *ngFor="let option of screenData.claimLevelInterventionOptions"
+    mat-menu-item
+    [id]="'auth-info-header-claimLevelInterventionOption-' + option.optionText"
+    (click)="doClaimLevelIntervention(option)"
+  >
+    {{ option.optionText }}
+  </button>
+</mat-menu>

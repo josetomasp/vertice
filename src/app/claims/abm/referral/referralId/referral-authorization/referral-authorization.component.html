@@ -1,0 +1,134 @@
+<!-- Not using the healthe-alert-banner because it doesn't allow an icon -->
+<div class="spacersmall" *ngIf="(isLockedClaim$ | async)"></div>
+<healthe-locked-claim-banner
+  *ngIf="(isLockedClaim$ | async)"
+></healthe-locked-claim-banner>
+<div class="spacersmall" *ngIf="showLockAndDisable"></div>
+<healthe-locked-referral-banner
+  *ngIf="showLockAndDisable"
+  [lockedMessage]="
+    isLockedReferral ? isLockedReferral.message.replace('currently ', '') : ''
+  "
+>
+</healthe-locked-referral-banner>
+
+<healthe-no-pending-authorizations
+  *ngIf="
+    !referralAuthorizationSet &&
+    !isLoading &&
+    !!(referralAuthorizationAction$ | async) &&
+    (fusionReferralAuthorizations$ | async).length === 0
+  "
+></healthe-no-pending-authorizations>
+
+<ng-container *ngIf="isLoaded">
+  <div class="spacersmall"></div>
+
+  <healthe-authorization-important-note
+    [abmClaimStatus$]="abmClaimStatus$"
+  ></healthe-authorization-important-note>
+
+  <healthe-error-banner
+    *ngIf="submitStatus !== 409"
+    [errorMessages]="submitErrors"
+    bannerTitle="The authorization submission has failed with the following errors. Please try again or contact Healthesystems for assistance."
+  ></healthe-error-banner>
+
+  <healthe-error-card
+    [expanded]="true"
+    *ngIf="submitClickedBefore && (formValidationExtractorService.errorMessages$ | async)?.length > 0
+  "
+  >
+    <fa-icon
+      style="
+      align-self: center;
+      color: white;
+      font-size: 18px;
+      padding-right: 8px;
+    "
+      [icon]="faExclamationTriangle"
+    >
+    </fa-icon>
+    <header><h2 style="color: white">Validation Errors</h2></header>
+    <content>
+      <ul>
+        <li *ngFor="let error of displayValidationErrors">
+          <a mat-button (click)="goToElement(error.for)">{{ error.message }}</a>
+        </li>
+      </ul>
+    </content>
+  </healthe-error-card>
+
+  <ng-container [ngSwitch]="referralArchetype$ | async">
+    <healthe-transportation-authorization
+      *ngSwitchCase="referralAuthorizationArchetype.Transportation"
+      [referralAuthorizationSet]="referralAuthorizationSet"
+      [referralAuthorizationAction]="referralAuthorizationActionSubject$ | async"
+    ></healthe-transportation-authorization>
+    <healthe-language-auth-info
+      *ngSwitchCase="referralAuthorizationArchetype.Language"
+      [authorizations$]="fusionReferralAuthorizations$"
+      [rush$]="isFusionAuthorizationRush$"
+      [notes$]="fusionAuthorizationNotes$"
+      [documents$]="fusionDocuments$"
+      [fusionAuthorizationReasons$]="fusionAuthorizationReasons$"
+      [fusionFormArray]="fusionFormArray"
+      [abmLanguageAuthorizationFormGroup]= "abmLanguageAuthorizationFormGroup"
+      [abmFusionFormGroup] = "abmFusionFormGroup"
+      (relaySubmitClickedBeforeEvent)="setSubmittedClickedBefore($event)"
+    ></healthe-language-auth-info>
+    <healthe-diagnostics-auth-info
+      *ngSwitchCase="referralAuthorizationArchetype.Diagnostics"
+      [authorizations$]="fusionReferralAuthorizations$"
+      [fusionAuthorizationReasons$]="fusionAuthorizationReasons$"
+      [rush$]="isFusionAuthorizationRush$"
+      [notes$]="fusionAuthorizationNotes$"
+      [documents$]="fusionDocuments$"
+      [formArray]="fusionFormArray"
+    ></healthe-diagnostics-auth-info>
+    <healthe-physical-medicine-auth-info
+      *ngSwitchCase="referralAuthorizationArchetype.PhysicalMedicine"
+      [authorizations$]="fusionReferralAuthorizations$"
+      [fusionAuthorizationReasons$]="fusionAuthorizationReasons$"
+      [rush$]="isFusionAuthorizationRush$"
+      [notes$]="fusionAuthorizationNotes$"
+      [documents$]="fusionDocuments$"
+      [formArray]="fusionFormArray"
+    ></healthe-physical-medicine-auth-info>
+    <healthe-home-health-authorization-information
+      *ngSwitchCase="referralAuthorizationArchetype.HomeHealth"
+      [authorizations$]="fusionReferralAuthorizations$"
+      [fusionAuthorizationReasons$]="fusionAuthorizationReasons$"
+      [rush$]="isFusionAuthorizationRush$"
+      [notes$]="fusionAuthorizationNotes$"
+      [documents$]="fusionDocuments$"
+      [formArray]="fusionFormArray"
+    ></healthe-home-health-authorization-information>
+    <healthe-dme-auth-info
+      *ngSwitchCase="referralAuthorizationArchetype.Dme"
+      [authorizations$]="fusionReferralAuthorizations$"
+      [documents$]="fusionDocuments$"
+      [clinicalAlerts]="fusionClinicalAlerts$ | async"
+      [fusionAuthorizationReasons$]="fusionAuthorizationReasons$"
+      [notes$]="fusionAuthorizationNotes$"
+      [rush$]="isFusionAuthorizationRush$"
+      [formArray]="fusionFormArray"
+    ></healthe-dme-auth-info>
+
+    <div *ngSwitchDefault>
+      {{ referralArchetype$ | async }} referral not compatible
+    </div>
+  </ng-container>
+</ng-container>
+<ng-container *ngIf="isLoading || !(referralAuthorizationAction$ | async)">
+  <div class="spacerlarge"></div>
+  <div fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="35px">
+    <mat-spinner
+      [diameter]="55"
+      id="AuthorizatioInformation-loadingResultsSpinner"
+    ></mat-spinner>
+    <h2 id="AuthorizatioInformation-loadingResultsMessage">
+      Loading Authorization Items...
+    </h2>
+  </div>
+</ng-container>

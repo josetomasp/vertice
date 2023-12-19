@@ -1,0 +1,44 @@
+<div fxFlexLayout="row" fxLayoutAlign="space-between" class="modalContent">
+  <span class="modal-header" id="referral-results-modal-title">{{
+    modalData['title']
+  }}</span
+  ><button mat-icon-button mat-dialog-close id="referral-results-modal-closeX">
+    <i class="fal fa-times modal-close-widget"></i>
+  </button>
+</div>
+<mat-divider></mat-divider>
+<div fxFlexLayout="column" class="modalContent">
+  <div class="modalSectionTitle" id="referral-results-modal-overviewHeader">
+    Authorization Overview
+  </div>
+  <div style="max-height: 488px; overflow-y: scroll">
+    <healthe-authorization-overview
+      [stage]="modalData['stage']"
+      [modalType]="modalData['modalType']"
+      [overviewData]="modalData.overview"
+    ></healthe-authorization-overview>
+    <ng-container [ngSwitch]="modalData['modalType']">
+      <healthe-ground-trips-information
+        *ngSwitchCase="TransportationModalType.GROUND_SERVICE"
+        [stage]="modalData['stage']"
+        [itineraryData]="modalData['itineraryData']"
+      ></healthe-ground-trips-information>
+      <healthe-flight-trips-information
+        *ngSwitchCase="TransportationModalType.FLIGHT_SERVICE"
+        [stage]="modalData['stage']"
+        [itineraryData]="modalData['itineraryData']"
+      ></healthe-flight-trips-information>
+      <healthe-lodging-stays-information
+        *ngSwitchCase="TransportationModalType.LODGING_SERVICE"
+        [stage]="modalData['stage']"
+        [itineraryData]="modalData['itineraryData']"
+      ></healthe-lodging-stays-information>
+    </ng-container>
+  </div>
+  <div class="spacersmall"></div>
+  <healthe-authorization-actions-bar
+    [stage]="modalData['stage']"
+    [dateOfService]="modalData.overview['dateOfService']"
+    [vendorCode]="modalData['vendorCode']"
+  ></healthe-authorization-actions-bar>
+</div>

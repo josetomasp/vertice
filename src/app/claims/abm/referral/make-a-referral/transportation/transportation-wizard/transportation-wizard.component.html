@@ -1,0 +1,107 @@
+<div *ngIf="isServiceSuccessfullySubmitted$ | async">
+  <healthe-confirmation-banner [alertType]="alertType.SUCCESS"
+                               [showCloseButton]="false"
+                               [idSufix]="serviceName"
+                               title="You have successfully submitted this service referral"
+                               [isVisible]="true"></healthe-confirmation-banner>
+  <div style="padding: 0 20px 0 20px;">
+    <healthe-transportation-review-wizard
+      [id]="MAKE_A_REFERRAL_SECTION_ID + serviceName"
+      [usingReturnedFormState]="true"
+    ></healthe-transportation-review-wizard>
+    <div class="spacersmall"></div>
+    <mat-divider></mat-divider>
+    <div class="spacersmall"></div>
+    <div
+      style="display: flex; flex-flow: row nowrap; justify-content: flex-end">
+      <button
+        mat-flat-button
+        class="primary-button"
+        [id]="'referral-review-copyToClipboard-button-' + serviceName"
+        (click)="copyToClipboard()"
+      >
+        COPY REFERRAL TO CLIPBOARD
+      </button>
+    </div>
+  </div>
+</div>
+
+
+<ng-container *ngIf="!(isServiceSuccessfullySubmitted$ | async)">
+  <mat-horizontal-stepper
+    healtheStepState
+    [style.display]="
+    (isReferralOptionsLoaded$ | async) && (isTransportationTypesLoaded$ | async)
+      ? ''
+      : 'none'
+  "
+  >
+    <mat-step *ngFor="let step of subServiceSteps; let i = index">
+      <healthe-stepper-step-label
+        *matStepLabel
+        [step]="step"
+        [serviceName]="wizardStepConfig.serviceName"
+        [labelClass]="step.labelClass"
+        [iconClass]="step.iconClass"
+      ></healthe-stepper-step-label>
+      <ng-container [ngSwitch]="step.name">
+        <healthe-sedan-wizard-form
+          *ngSwitchCase="sedanStepName"
+        ></healthe-sedan-wizard-form>
+        <healthe-wheelchair-support-wizard-form
+          *ngSwitchCase="wheelchairStepName"
+        ></healthe-wheelchair-support-wizard-form>
+        <healthe-flight-wizard-form
+          *ngSwitchCase="flightStepName"
+        ></healthe-flight-wizard-form>
+        <healthe-lodging-wizard-form
+          *ngSwitchCase="lodgingStepName"
+        ></healthe-lodging-wizard-form>
+        <healthe-other-wizard-form
+          *ngSwitchCase="otherStepName"
+        ></healthe-other-wizard-form>
+        <healthe-transportation-vendors-wizard-form
+          *ngSwitchCase="vendorsName"
+          (vendorsForm)="currentVendorsForm($event)"
+        ></healthe-transportation-vendors-wizard-form>
+        <healthe-transportation-documents-wizard-form
+          *ngSwitchCase="documentsName"
+        ></healthe-transportation-documents-wizard-form>
+        <healthe-transportation-review-wizard
+          [stepperCompleted]="stepperCompleted"
+          *ngSwitchCase="reviewName"
+        ></healthe-transportation-review-wizard>
+      </ng-container>
+    </mat-step>
+  </mat-horizontal-stepper>
+  <div
+    id="transportationMARLoadingDataSpinner"
+    *ngIf="
+    !(
+      (isReferralOptionsLoaded$ | async) &&
+      (isTransportationTypesLoaded$ | async)
+    )
+  "
+    class="healthe-table--centered-container"
+    fxLayout="column"
+    fxLayoutAlign="center center"
+  >
+    <mat-spinner [diameter]="55"></mat-spinner>
+    <h2>Loading options...</h2>
+  </div>
+  <div class="spacersmall"></div>
+  <mat-divider
+    class="section-divider"
+    style="position: absolute; border-top-width: 2px; left: 20px; right: 20px; width: auto;"
+  ></mat-divider>
+  <div class="spacersmall"></div>
+  <healthe-step-advancer
+    (continue)="continue()"
+    (previous)="previous()"
+    [showContinueButton]="!showCloseButton()"
+    [showSubmitButton]="showCloseButton()"
+    (submitButtonEvent)="submit()"
+    (saveAsDraftEvent)="saveReferralAsDraft()"
+    [disableSubmitButton]="isSubmitDisabled()"
+  ></healthe-step-advancer>
+</ng-container>

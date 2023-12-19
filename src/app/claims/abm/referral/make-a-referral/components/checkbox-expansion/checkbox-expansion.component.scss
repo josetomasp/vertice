@@ -1,0 +1,19 @@
+::ng-deep {
+  mat-expansion-panel.mat-expansion-panel:not(.healthe-expansion--grey-header)
+    mat-expansion-panel-header
+    > *:hover,
+  mat-expansion-panel.mat-expansion-panel:not(.healthe-expansion--grey-header)
+    mat-expansion-panel-header.mat-expansion-panel-header
+    > *:hover {
+    background-color: unset;
+  }
+
+  mat-checkbox .mat-checkbox-layout .mat-checkbox-label,
+  mat-checkbox .mat-checkbox-layout .mat-checkbox-label .standard-text {
+    white-space: pre-wrap;
+  }
+}
+
+div > div:not(:first-child) {
+  margin-top: 15px;
+}

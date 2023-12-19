@@ -1,0 +1,72 @@
+<div class="sectionLabel" id="referralNotes--title">Notes</div>
+<div *ngFor="let note of (getReferralNotes$ | async); let index = index">
+  <div
+    fxLayout="column"
+    [fxLayoutAlign]="
+      'start ' +
+      (note.noteOrigination === NoteOriginator.VENDOR ? 'start' : 'end')
+    "
+  >
+    <div class="overhead-label" fxLayout="row" fxLayoutGap="6px">
+      <span
+        [id]="
+          'referralNotes--' + note.noteOrigination + '-userCreated-' + index
+        "
+        >{{ note.userCreated }}</span
+      >
+      <span
+        [id]="
+          'referralNotes--' + note.noteOrigination + '-dateCreated-' + index
+        "
+        >{{ note.dateCreated }}</span
+      >
+
+      <span
+        [id]="
+          'referralNotes--' + note.noteOrigination + '-timeCreated-' + index
+        "
+        >{{ note.timeCreated }}</span
+      >
+    </div>
+    <div
+      class="standard-text"
+      style="max-width: 50%"
+      [id]="'referralNotes--' + note.noteOrigination + '-note-' + index"
+    >
+      {{ note.note }}
+    </div>
+  </div>
+  <div class="spacersmall"></div>
+</div>
+<div class="spacertiny"></div>
+<textarea
+  *ngIf="!isSavingNote"
+  matInput
+  [formControl]="noteFormControl"
+  placeholder=" Enter Note Description"
+  style="width: 99%; height: 61px; resize: none"
+  id="referralNotes--AddNoteTextarea"
+  #noteTextArea
+></textarea>
+<div
+  *ngIf="isSavingNote"
+  fxLayout="column"
+  fxLayoutAlign="center center"
+  fxLayoutGap="25px"
+>
+  <mat-spinner [diameter]="35"></mat-spinner>
+  <div>Saving Note ...</div>
+</div>
+
+<div class="spacersmall"></div>
+<div fxLayoutAlign="end" *ngIf="showSubmitButton">
+  <button
+    class="secondary-button"
+    [disabled]="isInvalid()"
+    mat-stroked-button
+    (click)="addNoteEvent.next($event)"
+    id="referralNotes--addNoteButton"
+  >
+    ADD NOTE
+  </button>
+</div>

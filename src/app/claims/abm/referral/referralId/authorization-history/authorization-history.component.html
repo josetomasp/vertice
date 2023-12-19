@@ -1,0 +1,41 @@
+<div class="spacersmall"></div>
+<div class="authorization-history-container">
+  <mat-card healtheServerErrorOverlayAnchor>
+    <div *ngIf="(isLoaded$ | async)" style="min-height: 50vh">
+      <mat-card-header fxLayout="row" fxLayoutAlign="start center">
+        <h3 mat-card-title>Authorization History</h3>
+        <div fxFlex="1 1 auto"></div>
+        <button mat-stroked-button class="secondary-button"
+                (click)="toggleAll()">
+          {{ getToggleActionName() }} ALL
+        </button>
+      </mat-card-header>
+      <div class="spacersmall"></div>
+      <mat-card-content>
+        <healthe-auth-history-group-table
+          *ngFor="let historyGroup of (authorizationHistoryGroups$ | async)"
+          [columnDefinitions]="columnDefinitions$ | async"
+          [historyGroup]="historyGroup"
+          (viewReasonsClick)="openReasonsModal($event)"
+        ></healthe-auth-history-group-table>
+      </mat-card-content>
+    </div>
+    <div *ngIf="!(isLoaded$ | async)">
+      <mat-card-content>
+        <ng-container *ngIf="(isLoading$ | async)">
+          <div class="spacersmall"></div>
+          <div fxLayout="column" fxLayoutAlign="center center"
+               fxLayoutGap="35px">
+            <mat-spinner
+              [diameter]="55"
+              id="authorization-history--loading-spinner"
+            ></mat-spinner>
+            <h2 id="authorization-history--loading-verbiage">
+              Loading Authorization History...
+            </h2>
+          </div>
+        </ng-container>
+      </mat-card-content>
+    </div>
+  </mat-card>
+</div>

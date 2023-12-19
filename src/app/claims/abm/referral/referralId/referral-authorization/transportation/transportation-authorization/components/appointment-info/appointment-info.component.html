@@ -1,0 +1,46 @@
+<div fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="35px">
+  <div class="appointment-info--box-width">
+    <div
+      class="overhead-label"
+      id="authRelatedAppointments-apptDateTime-label-{{ sectionName }}"
+    >
+      APPT. DATE & TIME
+    </div>
+    <div id="authRelatedAppointments-apptDate-{{ sectionName }}">
+      {{ appointmentData.appointmentDate }}
+    </div>
+    <div id="authRelatedAppointments-apptTime-{{ sectionName }}">
+      {{ appointmentData.appointmentTime }}
+    </div>
+  </div>
+
+  <div class="appointment-info--box-width">
+    <div
+      class="overhead-label"
+      id="authRelatedAppointments-type-label-{{ sectionName }}"
+    >
+      APPOINTMENT TYPE
+    </div>
+    <div
+      id="authRelatedAppointments-type-{{ sectionName }}"
+      [matTooltip]="appointmentData.appointmentType"
+    >
+      {{ appointmentData.appointmentType }}
+    </div>
+  </div>
+
+  <div class="appointment-info--box-width">
+    <div
+      class="overhead-label"
+      id="authRelatedAppointments-apptDateTime-doctorNameSpecialty-{{ sectionName }}"
+    >
+      DOCTOR NAME & SPECIALTY
+    </div>
+    <div
+      id="authRelatedAppointments-doctorNameSpecialty-{{ sectionName }}"
+      [matTooltip]="appointmentData.doctorNameAndSpecialty"
+    >
+      {{ appointmentData.doctorNameAndSpecialty }}
+    </div>
+  </div>
+</div>

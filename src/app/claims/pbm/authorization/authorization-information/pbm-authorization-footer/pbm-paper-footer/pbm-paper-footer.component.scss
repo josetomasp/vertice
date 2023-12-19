@@ -1,0 +1,19 @@
+.paperFooter {
+  position: sticky;
+  bottom: 0;
+  box-shadow: 0 0 5px 0 rgb(52 58 64 / 26%) !important;
+  .paperFooterActionRadioGroup {
+    width: 100%;
+  }
+  .denialReasonSelect {
+    padding-right: 35px;
+  }
+  .radio-spacing {
+    margin-right: 15px;
+  }
+
+  .actionComponentContainer,
+  button {
+    margin-top: 10px;
+  }
+}

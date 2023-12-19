@@ -1,0 +1,95 @@
+<div fxLayout="row" fxLayoutAlign="space-between center" mat-dialog-title>
+  <span id="referralSchedulingModal--title">{{ modalData.attempt }}</span>
+  <button
+    mat-icon-button
+    mat-dialog-close
+    id="referralSchedulingModal--header-closeButton"
+  >
+    <i class="fal fa-times modal-close-widget"></i>
+  </button>
+</div>
+
+<div mat-dialog-content>
+  <div style="height: 521px;">
+    <div class="sectionLabel" id="referralSchedulingModal-overview">
+      Overview
+    </div>
+    <div class="spacertiny"></div>
+    <div
+      fxLayout="row wrap"
+      fxLayoutAlign="space-between start"
+      fxLayoutGap="35px grid"
+    >
+      <div>
+        <div id="contactName-label" class="overhead-label">CONTACT</div>
+        <div id="contactName-value" class="standard-text">
+          <span> {{ modalData.contactName }}</span>
+        </div>
+      </div>
+
+      <div>
+        <div id="date-label" class="overhead-label">DATE</div>
+        <div id="date-value" class="standard-text">
+          <span> {{ modalData.date }}</span>
+        </div>
+      </div>
+
+      <div>
+        <div id="time-label" class="overhead-label">TIME</div>
+        <div id="time-value" class="standard-text">
+          <span> {{ modalData.time }}</span>
+        </div>
+      </div>
+
+      <div>
+        <div id="time-label" class="overhead-label">CONTACT METHOD</div>
+        <div id="time-value" class="standard-text">
+          <span> {{ modalData.contactMethod }}</span>
+        </div>
+      </div>
+    </div>
+    <div class="spacersmall"></div>
+    <div
+      fxLayout="row wrap"
+      fxLayoutAlign="space-between start"
+      fxLayoutGap="35px grid"
+    >
+      <div>
+        <div id="time-label" class="overhead-label">CONTACT TYPE</div>
+        <div id="time-value" class="standard-text">
+          <span> {{ modalData.contactType }}</span>
+        </div>
+      </div>
+
+      <div>
+        <div id="time-label" class="overhead-label">CONTACT ATTEMPT NOTE</div>
+        <div id="time-value" class="standard-text">
+          <span> {{ modalData.contactAttemptNote }}</span>
+        </div>
+      </div>
+    </div>
+    <div class="spacermedium"></div>
+    <div><healthe-referral-notes-widget></healthe-referral-notes-widget></div>
+  </div>
+</div>
+
+<div mat-dialog-actions fxLayout="row" fxLayoutAlign="space-between center">
+  <button
+    id="bottomClose-button"
+    class="info-button"
+    mat-stroked-button
+    (click)="closeModal()"
+  >
+    CLOSE
+  </button>
+  <div fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="20px">
+    <button
+      id="createIncidentReport-button"
+      mat-button
+      class="primary-button actionButton"
+      (click)="createIncidentReport()"
+    >
+      CREATE INCIDENT REPORT
+    </button>
+  </div>
+</div>

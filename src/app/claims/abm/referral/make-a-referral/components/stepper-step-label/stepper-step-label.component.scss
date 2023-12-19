@@ -1,0 +1,22 @@
+@import 'variables';
+
+.step {
+  &--valid {
+    color: $success;
+  }
+  &--invalid {
+    color: $danger;
+  }
+  &--selected {
+    color: $primary;
+  }
+
+  &--default {
+    color: $dark-grey;
+  }
+
+  &__icon {
+    padding-left: 5px;
+    font-size: 14px;
+  }
+}

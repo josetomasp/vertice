@@ -1,0 +1,204 @@
+<div #healtheErrorCardScrollElement></div>
+<healthe-error-card
+  [expanded]="true"
+  *ngIf="submitClickedOnce && (fVES.errorMessages$ | async)?.length > 0"
+>
+  <fa-icon
+    style="align-self: center; color:white; font-size: 18px; padding-right: 8px"
+    [icon]="faExclamationTriangle"
+  ></fa-icon>
+  <header><h2 style="color: white">Validation Errors</h2></header>
+  <content>
+    <ul>
+      <li *ngFor="let error of (fVES.errorMessages$ | async)">
+        <a mat-button (click)="goToElement(error.for)">{{ error.message }}</a>
+      </li>
+    </ul>
+  </content>
+</healthe-error-card>
+<healthe-non-actionable-user-banner *ngIf='userHasNoActions'>
+</healthe-non-actionable-user-banner>
+<div class="spacertiny"></div>
+<mat-card [formGroup]="formGroup">
+  <mat-card-content>
+    <div *ngIf="isLoading" fxLayout="column" fxLayoutAlign="start center">
+      <mat-spinner [diameter]="55"></mat-spinner>
+      <h2 id="rtr-promotion-loadingResults">Loading results...</h2>
+    </div>
+    <div
+      fxLayout="column"
+      fxLayoutAlign="start start"
+      fxLayoutGap="20px"
+      *ngIf="!isLoading"
+    >
+      <div>
+        <h3 id="rtr-promotion-pharmacyInfo">Pharmacy Information</h3>
+        <div class="spacersmall"></div>
+        <div fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="40px">
+          <div>
+            <div class="overhead-label" id="rtr-promotion-pharmacy-label">
+              PHARMACY
+            </div>
+            <div>
+              <a
+                style="cursor: pointer"
+                (click)="
+                  showPharamacyModal(
+                    authorizationDetails.authorizationDetailsHeader.pharmacy
+                      .nabp
+                  )
+                "
+                id="rtr-promotion-pharmacy-link"
+                >{{
+                  authorizationDetails.authorizationDetailsHeader.pharmacy
+                    .displayText
+                }}</a
+              >
+            </div>
+          </div>
+          <div>
+            <div class="overhead-label" id="rtr-promotion-callerNumber-label">
+              Caller Number
+            </div>
+            <div id="rtr-promotion-callerNumber">
+              <mat-form-field>
+                <input
+                  matInput
+                  formControlName="callerNumber"
+                  healtheFormValidationExtractor
+                  formLabel="Caller Number"
+                  type="text"
+                  mask="(000) 000-0000"
+                  id="rtr-promotion-callerNumber-input"
+                />
+                <mat-error
+                  *ngIf="
+                    formGroup.get('callerNumber').hasError('invalidPhoneNumber')
+                  "
+                  >Please enter a valid phone number: Ex. (xxx) xxx-xxxx
+                </mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+
+          <div>
+            <div class="overhead-label" id="rtr-promotion-callerName-label">
+              CALLER NAME
+            </div>
+            <div>
+              <input
+                matInput
+                formControlName="callerName"
+                id="rtr-promotion-callerName-input"
+              />
+            </div>
+          </div>
+
+          <div>
+            <div
+              class="overhead-label"
+              id="rtr-promotion-pharmacyTimeZone-label"
+            >
+              PHARMACY TIME ZONE
+            </div>
+            <div id="rtr-promotion-pharmacyTimeZone">
+              {{
+                authorizationDetails.authorizationDetailsHeader.pharmacy
+                  .timezone
+              }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <healthe-pbm-auth-notes
+        id="rtr-promotion-internalNotes"
+        [notes]="authorizationDetailsNotes$ | async"
+        [title]="'Healthe CSC Internal Notes'"
+        [notesConfig]="prescriptionNotesConfig"
+        index="internalNote"
+        (addNote)="saveInternalNote($event)"
+        style="width: 100%"
+        [parentFormGroup]="formGroup"
+        noteFormControlName="note"
+      ></healthe-pbm-auth-notes>
+
+      <h3 id="rtr-promotion-prescriptions-label">Prescriptions</h3>
+      <ng-container
+        formArrayName="prescriptions"
+        *ngFor="let control of formArray.controls; index as $index"
+      >
+        <!-- authorizationDetails.authorizationLineItems -->
+        <healthe-rtr-promotion-prescription
+          id="rtr-promotion-prescription-{{ $index }}"
+          style="width: 100%"
+          (createEPAQValueChange)="createEPAQValueChange()"
+          [discardReasons]="authorizationDetails.authorizationDiscardReasons"
+          [authorizationLineItem]="
+            authorizationDetails.authorizationLineItems[$index]
+          "
+          [index]="$index"
+          [formGroupName]="$index"
+          [formLabel]="
+            authorizationDetails.authorizationLineItems[$index].drugDisplayName
+          "
+          healtheFormValidationExtractor
+          [decodedAuthId]="decodedAuthId"
+          [userName]="userName"
+        ></healthe-rtr-promotion-prescription>
+        <div
+          *ngIf="
+            authorizationDetails.authorizationLineItems.length - 1 > $index
+          "
+          class="spacersmall"
+        ></div>
+      </ng-container>
+    </div>
+  </mat-card-content>
+</mat-card>
+<div class="spacersmall"></div>
+<mat-card style="position: sticky; bottom: 0;">
+  <mat-card-content>
+    <div fxLayout="row" fxLayoutAlign="space-between start">
+      <button
+        mat-flat-button
+        class="info-button"
+        (click)="goBack()"
+        id="rtr-promotion-goBack-button"
+      >
+        GO BACK
+      </button>
+      <div fxLayout="row" fxLayoutAlign="end start" fxLayoutGap="35px">
+        <div>
+          <div class="overhead-label" id="rtr-promotion-injuredWorkerWaiting">
+            INJURED WORKER WAITING AT PHARMACY?
+          </div>
+          <mat-radio-group
+            [formControl]="formGroup.controls['injuredWorkerWaiting']"
+          >
+            <mat-radio-button
+              [value]="true"
+              style="margin-right: 20px;"
+              id="rtr-promotion-injuredWorkerWaiting-yes-button"
+              >Yes
+            </mat-radio-button>
+            <mat-radio-button
+              [value]="false"
+              id="rtr-promotion-injuredWorkerWaiting-no-button"
+              >No
+            </mat-radio-button>
+          </mat-radio-group>
+        </div>
+        <button
+          mat-flat-button
+          id="rtr-promotion-submit-button"
+          class="success-button"
+          (click)="submit()"
+        >
+          SAVE & SUBMIT
+        </button>
+      </div>
+    </div>
+  </mat-card-content>
+</mat-card>
+<div class="spacersmall"></div>

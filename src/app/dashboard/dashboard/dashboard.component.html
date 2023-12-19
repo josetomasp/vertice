@@ -1,0 +1,89 @@
+<div class="dashboard-wrapper" style="margin: 20px;">
+  <div
+    class="dashboard-header"
+    fxLayout="row"
+    fxLayoutAlign="space-between center"
+    fxLayout.lt-md="column"
+    fxLayoutGap.lt-md="35px"
+  >
+    <h1
+      id="dashboard-title"
+      style="font-weight: normal;	font-size: 28px;	line-height: 32px;"
+    >
+      Dashboard
+    </h1>
+    <healthe-user-menu id="userMenu"></healthe-user-menu>
+  </div>
+
+  <mat-card
+    *healtheRemoveElementIfTrue="
+      componentGroupName;
+      elementName: 'quickLinksCard'
+    "
+  >
+    <mat-card-header>
+      <mat-card-title>Quick Links</mat-card-title>
+    </mat-card-header>
+    <mat-card-content
+      fxLayout="row wrap"
+      fxLayoutGap="60px"
+      class="quickLink-row-padding"
+    >
+      <ng-container *ngFor="let quickLink of quickLinks">
+        <div
+          *healtheRemoveElementIfTrue="
+            componentGroupName;
+            elementName: quickLink.elementName
+          "
+          fxLayout="column"
+          fxLayoutGap="20px"
+          class="quickLink"
+          (click)="navigateForQuicklink(quickLink.route)"
+          id="dashboardQuicklink-{{quickLink.label}}-clickableArea"
+        >
+          <mat-card fxLayoutAlign="center center"
+            ><img
+              alt="{{quickLink.elementName}} - {{quickLink.route}}"
+              [src]="quickLink.icon"
+              id="dashboardQuicklink-{{quickLink.label}}-icon"
+          /></mat-card>
+          <a mat-button id="dashboardQuicklink-{{quickLink.label}}-label">
+            {{ quickLink.label }}
+          </a>
+        </div>
+      </ng-container>
+    </mat-card-content>
+  </mat-card>
+
+  <div
+    fxLayout="row"
+    fxLayoutGap="20px"
+    fxLayoutAlign="space-between"
+    style="margin-top: 20px; margin-bottom: 70px"
+  >
+    <healthe-pending-authorizations-graph
+      *healtheRemoveElementIfTrue="
+        componentGroupName;
+        elementName: 'pending-authorizations-graph'
+      "
+      fxFlex="1 1 0"
+    ></healthe-pending-authorizations-graph>
+
+    <healthe-risk-graph
+      *healtheRemoveElementIfTrue="
+        componentGroupName;
+        elementName: riskGraphElementName
+      "
+      fxFlex="1 1 0"
+      #riskGraph
+      [currentMetrics$]="currentMetrics$"
+      [currentSeries$]="currentSeries$"
+      [isLoading$]="isGraphLoading$"
+      [riskGraphType]="currentGraph$ | async"
+      (metricClicked)="goToClaimSearch($event)"
+      (ageRangeChange)="fetchRiskGraphData($event)"
+      (dataPointClicked)="dataPointClicked($event)"
+      (riskTypeChanged)="riskGraphTypeChanged($event)"
+    ></healthe-risk-graph>
+  </div>
+</div>

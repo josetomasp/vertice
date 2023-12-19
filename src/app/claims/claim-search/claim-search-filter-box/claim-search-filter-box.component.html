@@ -1,0 +1,282 @@
+<mat-card
+  [formGroup]="claimsSearchFormGroup"
+  fxLayout="column"
+  fxLayoutGap="18px"
+>
+  <div fxLayout="row" fxLayoutAlign="space-between" fxLayoutGap="20px">
+    <span id="filterBoxSummary"
+    >Fill out claim number or any other combination of fields to search.</span
+    >
+  </div>
+  <div>
+    <div fxLayout="row wrap" fxLayoutGap="30px grid">
+      <div fxFlex="19%" fxFlex.xs="100%" fxFlex.sm="50%" fxFlex.md="33.333%">
+        <div
+          for="claimNumber-input"
+          id="claimNumber-label"
+          class="overhead-label"
+        >
+          CLAIM NUMBER
+        </div>
+        <mat-form-field>
+          <input
+            id="claimNumber-input"
+            (keyup.enter)="search()"
+            formControlName="claimNumber"
+            matInput
+            placeholder="Enter Claim"
+            type="text"
+          />
+        </mat-form-field>
+      </div>
+      <div fxFlex="19%" fxFlex.xs="100%" fxFlex.sm="50%" fxFlex.md="33.333%">
+        <div
+          for="claimantLastName-input"
+          id="claimantLastName-label"
+          class="overhead-label"
+        >
+          <healthe-customer-configs-label
+            defaultText="Claimant Last Name"
+            elementName="claimantLastName"
+          ></healthe-customer-configs-label>
+        </div>
+        <mat-form-field>
+          <input
+            (keyup.enter)="search()"
+            id="claimantLastName-input"
+            formControlName="claimantLastName"
+            matInput
+            placeholder="Claimant Last Name"
+            type="text"
+          />
+        </mat-form-field>
+      </div>
+      <div
+        *healtheRemoveElementIfTrue="
+          componentGroupName;
+          elementName: 'claimantFirstName'
+        "
+        fxFlex="19%"
+        fxFlex.xs="100%"
+        fxFlex.sm="50%"
+        fxFlex.md="33.333%"
+      >
+        <div
+          for="claimantFirstName-input"
+          id="claimantFirstName-label"
+          class="overhead-label"
+        >
+          <healthe-customer-configs-label
+            defaultText="CLAIMANT FIRST NAME"
+            elementName="claimantFirstName"
+          ></healthe-customer-configs-label>
+        </div>
+        <mat-form-field>
+          <input
+            (keyup.enter)="search()"
+            id="claimantFirstName-input"
+            formControlName="claimantFirstName"
+            matInput
+            placeholder="Claimant First Name"
+            type="text"
+            healtheDisableElementIfTrue
+            componentGroupName="claim-search-filter-box"
+            elementName="claimantFirstName"
+          />
+        </mat-form-field>
+      </div>
+      <div
+        *healtheRemoveElementIfTrue="
+          componentGroupName;
+          elementName: 'assignedAdjuster'
+        "
+        fxFlex="19%"
+        fxFlex.xs="100%"
+        fxFlex.sm="50%"
+        fxFlex.md="50%"
+      >
+        <div
+          for="assignedAdjuster-input"
+          id="assignedAdjuster-label"
+          class="overhead-label"
+        >
+          ASSIGNED ADJUSTER
+        </div>
+        <mat-form-field>
+          <mat-select
+            id="assignedAdjuster-input"
+            formControlName="assignedAdjuster"
+            healtheSelect
+            #assignedAdjusterSelect
+            matTooltipPosition="above"
+            [matTooltip]="assignedAdjusterSelect.value"
+            placeholder="Select Assigned Adjuster"
+          >
+            <mat-option [value]="'All'">All Adjusters</mat-option>
+            <mat-option
+              [matTooltip]="option"
+              matTooltipPosition="after"
+              *ngFor="let option of (assignedAdjusterOptions$ | async)"
+              [value]="option"
+            ><span>{{ option }}</span></mat-option
+            >
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div
+        fxFlex="auto"
+        fxLayout="row"
+        fxLayoutAlign="end end"
+        fxLayoutGap="20px"
+        class="button-container"
+      >
+        <button
+          (click)="search()"
+          id="claimSearch-submitButton"
+          class="primary-button"
+          mat-flat-button
+        >
+          SEARCH
+        </button>
+        <button
+          (click)="reset()"
+          id="claimSearch-resetButton"
+          class="secondary-button"
+          mat-stroked-button
+          healtheDisableElementIfTrue
+          componentGroupName="claim-search-filter-box"
+          elementName="resetButton"
+        >
+          RESET
+        </button>
+      </div>
+    </div>
+  </div>
+  <div fxLayout="row" fxLayoutAlign="end">
+    <a id="advancedFiltersButton" (click)="advancedFilters.toggle()" mat-button>
+      Advanced Search
+      <i
+        style="padding-left: 10px"
+        [ngClass]="
+          advancedFilters.expanded ? 'fas fa-chevron-up' : 'fas fa-chevron-down'
+        "
+        id="activityView-tableCard-header-advancedFilterPanelTrigger-chevron"
+      ></i>
+    </a>
+  </div>
+  <mat-expansion-panel #advancedFilters class="integral-expansion">
+    <div fxLayoutAlign="start end" fxLayout="row wrap" fxLayoutGap="30px grid">
+      <div fxFlex="33%" fxFlex.xs="100%" fxFlex.sm="100%" fxFlex.md="50%">
+        <div class="overhead-label" id="dateRange-overheadLabel">
+          Injury Date Range
+        </div>
+        <div class="mat-form-field-wrapper">
+          <healthe-daterange
+            id="dateOfInjury-input"
+            [options]="datePickerOptions"
+            [triggerIcon]="faCalendarAlt"
+            (submit)="search()"
+            [hasSubmit]="false"
+            formControlName="dateOfInjury"
+          >
+          </healthe-daterange>
+        </div>
+      </div>
+      <div
+        *healtheRemoveElementIfTrue="
+          componentGroupName;
+          elementName: 'riskLevel'
+        "
+        fxFlex="23%"
+        fxFlex.xs="100%"
+        fxFlex.sm="50%"
+        fxFlex.md="50%"
+      >
+        <div for="riskLevel-input" id="riskLevel-label" class="overhead-label">
+          RISK LEVEL
+        </div>
+        <mat-form-field>
+          <mat-select
+            id="riskLevel-input"
+            formControlName="riskLevel"
+            healtheSelect
+            #riskLevelSelect
+            [matTooltipPosition]="'above'"
+            [matTooltip]="riskLevelSelect.value"
+            placeholder="Select Risk Level"
+            healtheDisableElementIfTrue
+            componentGroupName="claim-search-filter-box"
+            elementName="riskLevel"
+          >
+            <mat-option [value]="'All'">All</mat-option>
+            <mat-option
+              *ngFor="let option of (riskLevelOptions$ | async)"
+              [value]="option"
+            >{{ option }}</mat-option
+            >
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div
+        *healtheRemoveElementIfTrue="
+          componentGroupName;
+          elementName: 'riskCategory'
+        "
+        fxFlex="22%"
+        fxFlex.xs="100%"
+        fxFlex.sm="50%"
+        fxFlex.md="50%"
+      >
+        <div
+          for="riskCategory-input"
+          id="riskCategory-label"
+          class="overhead-label"
+        >
+          RISK CATEGORY
+        </div>
+        <mat-form-field>
+          <mat-select
+            id="riskCategory-input"
+            formControlName="riskCategory"
+            healtheSelect
+            placeholder="Select Risk Category"
+          >
+            <mat-option [value]="'All'">All</mat-option>
+            <mat-option
+              *ngFor="let option of (riskCategoryOptions$ | async)"
+              [value]="option"
+            >{{ option }}</mat-option
+            >
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div fxFlex="22%" fxFlex.xs="100%" fxFlex.sm="100%" fxFlex.md="50%">
+        <div
+          for="stateOfVenue-input"
+          id="stateOfVenue-label"
+          class="overhead-label"
+        >
+          <healthe-customer-configs-label
+            defaultText="Benefit State"
+            elementName="stateOfVenue"
+          ></healthe-customer-configs-label>
+        </div>
+        <mat-form-field>
+          <mat-select
+            id="stateOfVenue-input"
+            formControlName="stateOfVenue"
+            healtheSelect
+            placeholder="Select State of Venue"
+          >
+            <mat-option [value]="'All'">All</mat-option>
+            <mat-option
+              *ngFor="let option of (stateOfVenueOptions$ | async)"
+              [value]="option"
+            >{{ option }}</mat-option
+            >
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </div>
+  </mat-expansion-panel>
+</mat-card>

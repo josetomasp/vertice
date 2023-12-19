@@ -1,0 +1,39 @@
+@import 'variables';
+
+.summaryBox {
+  background-color: $gray-50;
+  padding: 20px;
+}
+
+.addressList {
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+}
+
+.actionButton {
+  color: $white;
+  font-size: 11px;
+  font-weight: bold;
+  letter-spacing: 0.25px;
+  line-height: 14px;
+  text-align: center;
+}
+
+.mat-dialog-title {
+  height: 64px;
+}
+
+.mat-dialog-content {
+  padding-left: 20px;
+  padding-right: 20px;
+  overflow-x: hidden;
+}
+
+.mat-dialog-actions {
+  margin: 10px 20px;
+}
+
+.view-auth-banner {
+  margin: 20px;
+}

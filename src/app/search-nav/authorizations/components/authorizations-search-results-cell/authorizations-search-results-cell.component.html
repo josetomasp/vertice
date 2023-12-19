@@ -1,0 +1,59 @@
+<div
+  *ngIf="
+    (!resultsColumnsConfig.clickEvent && !resultsColumnsConfig.linkProp) ||
+    (resultsColumnsConfig.linkCondition &&
+      !resultsColumnsConfig.linkCondition(rowData))
+  "
+  class="standard-text ellipsis-text"
+  [matTooltip]="label"
+  [ngStyle]="resultsColumnsConfig.cellStyles"
+  [ngClass]="resultsColumnsConfig.cellClasses"
+>
+  {{ label }}
+  <ng-container
+    *ngIf="
+      resultsColumnsConfig.informationIcon != null &&
+      resultsColumnsConfig.informationIcon(rowData) as informationIcon
+    "
+  >
+    <fa-icon
+      *ngIf="
+        informationIcon.tooltipMessage && informationIcon.position === 'label'
+      "
+      class="information-icon"
+      [ngStyle]="informationIcon?.ngStyle"
+      [icon]="faExclamationCircle"
+      [matTooltip]="informationIcon.tooltipMessage"
+    ></fa-icon>
+  </ng-container>
+</div>
+<!-- This anchor tag utilizes the (click) or (auxclick) event to use the configured click Subject -->
+<a
+  *ngIf="
+    resultsColumnsConfig.clickEvent &&
+    rowData[resultsColumnsConfig.name] !== '' &&
+    (!resultsColumnsConfig.linkCondition ||
+      (resultsColumnsConfig.linkCondition &&
+        resultsColumnsConfig.linkCondition(rowData)))
+  "
+  href="javascript:void(0);"
+  (auxclick)="auxClick($event)"
+  (click)="resultsColumnsConfig.clickEvent.next(rowData)"
+  [matTooltip]="label"
+  class="cell-underline"
+  [ngStyle]="resultsColumnsConfig.cellStyles"
+  [ngClass]="resultsColumnsConfig.cellClasses"
+  >{{ label }}</a
+>
+<!-- This anchor tag utilizes a regular href path and won't fail when the resultsColumnsConfig.clickEvent was left null -->
+<a
+  *ngIf="
+    resultsColumnsConfig.linkProp && rowData[resultsColumnsConfig.linkProp]
+  "
+  [href]="rowData[resultsColumnsConfig.linkProp]"
+  [matTooltip]="label"
+  class="cell-underline"
+  [ngStyle]="resultsColumnsConfig.cellStyles"
+  [ngClass]="resultsColumnsConfig.cellClasses"
+  >{{ label }}</a
+>

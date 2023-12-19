@@ -1,0 +1,49 @@
+<div class='healthe-header'>
+  <div class='healthe-header__action-group'>
+    <div class='healthe-header__title-group'>
+      <h3
+        class='healthe-header__title-group__service-display-name unselectable'
+      >
+        {{ serviceDisplayName }}
+      </h3>
+      <h4
+        [ngClass]="{
+          'healthe-header__title-group__section-status_not-started':
+            sectionStatus == GenericStepperStatus.NotStarted,
+          'healthe-header__title-group__section-status_in-progress':
+            sectionStatus == GenericStepperStatus.InProgress,
+          'healthe-header__title-group__section-status_submitted':
+            sectionStatus == GenericStepperStatus.Submitted,
+          'healthe-header__title-group__section-status_error':
+            sectionStatus == GenericStepperStatus.Error
+        }"
+        class='healthe-header__title-group__section-status unselectable'
+      >
+        {{ sectionStatus }}
+      </h4>
+    </div>
+    <h5 *ngIf='referralOnly' class='healthe-header__title-group__referral-only'>
+      Referral-only
+    </h5>
+  </div>
+  <div
+    class='healthe-header__action-group healthe-header__action-group__center'
+  >
+    <button
+      (click)='delete.emit()'
+      class='healthe-header__action-group__remove'
+      mat-icon-button
+    >
+      <fa-icon [icon]='faTrashAlt'></fa-icon>
+    </button>
+    <button
+      class='primary-button'
+      (click)='$event.stopPropagation(); toggleExpanded.emit()'
+      mat-flat-button
+    >
+      {{ expansionToggleLabel }}
+      <fa-icon class='healthe-header__action-group__expand-chevron'
+               [icon]='expanded ?  faChevronUp : faChevronDown'></fa-icon>
+    </button>
+  </div>
+</div>

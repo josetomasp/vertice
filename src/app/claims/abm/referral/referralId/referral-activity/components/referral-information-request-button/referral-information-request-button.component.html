@@ -1,0 +1,9 @@
+<button
+  mat-button
+  class="primary-button actionButton"
+  #requestButton
+  [disabled]="requestInformationButtonDisabled"
+  id="requestReferralInformationButton_{{referralInformationRequest.requestType}}"
+>
+  {{ buttonText | uppercase }}
+</button>

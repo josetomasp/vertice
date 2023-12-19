@@ -1,0 +1,19 @@
+@import 'variables';
+
+.locationText {
+  color: $secondary;
+}
+
+::ng-deep.narrativeCheckBox .mat-checkbox-frame {
+  border-color: $secondary !important;
+}
+::ng-deep
+  div.narrativeCheckBox
+  > mat-checkbox
+  > label
+  > div
+  > div.mat-checkbox-background
+  > svg
+  > path {
+  stroke: $secondary !important;
+}

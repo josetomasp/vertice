@@ -1,0 +1,18 @@
+<healthe-header-bar
+  *ngFor="let claimNumber of [decodedClaimNumber$ | async]"
+  [title]="'Claim #' + claimNumber"
+  [link]="claimViewLink$ | async"
+  gapSize="20"
+>
+  <div *healtheRemoveElementIfTrue="'banner'; elementName: 'riskWidget'">
+    <healthe-risk-level-indicator
+      *ngIf="(riskLevelNumber$ | async) !== 0"
+      [riskLevel]="riskLevel$ | async"
+      [riskLevelNumber]="riskLevelNumber$ | async"
+      [claimNumber]="claimNumber"
+      [uppyDownyEnabled]="false"
+    ></healthe-risk-level-indicator>
+  </div>
+  <div class="header-separator"></div>
+  <span class="header-bar-title">{{ serviceType$ | async }} Authorization</span>
+</healthe-header-bar>

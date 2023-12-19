@@ -1,0 +1,140 @@
+<div class="spacersmall"></div>
+<mat-card>
+  <mat-card-title> All Contact Attempts </mat-card-title>
+  <button
+    mat-flat-button
+    class="primary-button"
+    [routerLink]="['../activity/grid']"
+  >
+    BACK TO REFERRAL ACTIVITY VIEW
+  </button>
+
+  <mat-card-content>
+    <table mat-table matSort [dataSource]="allContactAttempts$ | async">
+      <ng-container matColumnDef="vendor">
+        <th
+          mat-header-cell
+          mat-sort-header
+          id="all-contact-attempts--header-vendor"
+          class="healthe-table-cell tableHeader"
+          *matHeaderCellDef
+          style="width: 75px;"
+        >
+          CONTACT NAME
+        </th>
+        <td
+          mat-cell
+          class="healthe-table-cell"
+          [id]="'all-contact-attempts-cell-name-' + i"
+          *matCellDef="let data; let i = index"
+          [matTooltip]="data.vendor"
+        >
+          {{ data.vendor }}
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="contactType">
+        <th
+          mat-header-cell
+          mat-sort-header
+          id="all-contact-attempts--header-contactType"
+          class="healthe-table-cell"
+          *matHeaderCellDef
+          style="width: 75px;"
+        >
+          CONTACT TYPE
+        </th>
+        <td
+          mat-cell
+          class="healthe-table-cell"
+          [id]="'all-contact-attempts-cell-name-' + i"
+          *matCellDef="let data; let i = index"
+        >
+          {{ data.contactType }}
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="isContactSuccessful">
+        <th
+          mat-header-cell
+          mat-sort-header
+          id="all-contact-attempts--header-isContactSuccessful"
+          class="healthe-table-cell"
+          *matHeaderCellDef
+          style="width: 75px;"
+        >
+          CONTACT SUCCESSFUL?
+        </th>
+        <td
+          mat-cell
+          class="healthe-table-cell"
+          [id]="'all-contact-attempts-cell-name-' + i"
+          *matCellDef="let data; let i = index"
+        >
+          {{ data.isContactSuccessful }}
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="notes">
+        <th
+          mat-header-cell
+          id="all-contact-attempts--header-notes"
+          class="healthe-table-cell"
+          *matHeaderCellDef
+          style="width: 75px;"
+        >
+          NOTES
+        </th>
+        <td
+          mat-cell
+          class="healthe-table-cell notes-table-cell"
+          [id]="'all-contact-attempts-cell-name-' + i"
+          *matCellDef="let data; let i = index"
+        >
+          {{ data.notes }}
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="dateTime">
+        <th
+          mat-header-cell
+          mat-sort-header
+          id="all-contact-attempts--header-dateTime"
+          class="healthe-table-cell"
+          *matHeaderCellDef
+          style="width: 75px;"
+        >
+          DATE & TIME
+        </th>
+        <td
+          mat-cell
+          class="healthe-table-cell"
+          [id]="'all-contact-attempts-cell-name-' + i"
+          *matCellDef="let data; let i = index"
+        >
+          {{ data.dateTime }}
+        </td>
+      </ng-container>
+
+      <tr
+        mat-header-row
+        style="height: 50px !important;"
+        *matHeaderRowDef="tableColumns"
+      ></tr>
+      <tr
+        mat-row
+        *matRowDef="let row; columns: tableColumns; let i = index"
+      ></tr>
+    </table>
+
+    <mat-paginator
+      id="table-paginator"
+      [pageSize]="25"
+      [pageSizeOptions]="[25, 50]"
+    ></mat-paginator>
+  </mat-card-content>
+  <mat-card-content
+    *ngIf="(isLoading$ | async)"
+    fxLayout="column"
+    fxLayoutAlign="center center"
+  >
+    <mat-spinner [diameter]="55"></mat-spinner>
+    <div class="spacersmall"></div>
+  </mat-card-content>
+</mat-card>

@@ -1,0 +1,48 @@
+td.mat-cell,
+td.mat-footer-cell,
+th.mat-header-cell {
+  padding: 0 8px 0 8px;
+}
+
+.auth-table {
+  &_header {
+    //padding: 0 16px 0 16px !important;
+  }
+
+  &_cell {
+    word-break: initial;
+    padding: 4px !important;
+    white-space: pre-wrap !important;
+  }
+
+  &--numberOfAppointments {
+    &_header {
+    }
+    &_cell {
+      word-break: initial;
+      white-space: pre-wrap;
+    }
+  }
+  &--cumulativeNumberOfAppointments {
+    &_header {
+    }
+  }
+  &--reasonReviewIsNeeded {
+    &_header {
+    }
+  }
+  &--authorizedDates {
+    &_header {
+      text-align: center;
+    }
+    &_cell {
+      word-break: initial;
+      white-space: pre-wrap;
+    }
+  }
+}
+
+.authorization-history-container .fatal-server-error--backdrop {
+  height: 45vh;
+  margin: 15px;
+}

@@ -1,0 +1,27 @@
+@import 'variables';
+
+$list-left-margin: 10px;
+$list-item-top-bottom-margins: 8px;
+
+.reports-wrapper {
+  margin: 22px 20px 20px 20px;
+  width: calc(100% - 55px);
+
+  .report-name {
+    font-size: 12px;
+    font-weight: 600;
+    margin-left: $list-left-margin;
+  }
+
+  .report-item {
+    margin-top: $list-item-top-bottom-margins;
+    margin-bottom: $list-item-top-bottom-margins;
+    margin-left: $list-left-margin;
+  }
+
+  .new-report {
+    font-size: 12px;
+    font-weight: 700;
+    color: $green;
+  }
+}

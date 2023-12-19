@@ -1,0 +1,15 @@
+::ng-deep .cdk-overlay-container .cdk-overlay-pane .long-virtual-scroll::-webkit-scrollbar-thumb {
+    min-height: 35px;
+}
+
+::ng-deep .cdk-overlay-container .cdk-overlay-pane .long-virtual-scroll.mat-select-panel {
+  min-height: 500px;
+
+  cdk-virtual-scroll-viewport {
+    min-height: 500px;
+
+    .cdk-virtual-scroll-content-wrapper {
+      min-height: 500px;
+    }
+  }
+}

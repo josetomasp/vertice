@@ -1,0 +1,19 @@
+<div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="10px">
+  <div>You are adding</div>
+
+  <mat-form-field style="width: 80px">
+    <input
+      matInput
+      [formControl]="tripsInputFC"
+      min="0"
+      type="number"
+      id="narrative-additional-quantity-trips-input"
+    />
+  </mat-form-field>
+
+  <div>
+    additional <b>{{ narrativeTextItem.quantityDescriptor }}</b
+    >, for a total of
+    <b>{{ newTotalDisplay }} {{ narrativeTextItem.quantityDescriptor }}.</b>
+  </div>
+</div>

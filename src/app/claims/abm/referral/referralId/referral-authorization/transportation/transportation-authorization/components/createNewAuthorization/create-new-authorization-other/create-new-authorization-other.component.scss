@@ -1,0 +1,8 @@
+@import 'variables';
+.title {
+  color: $primary;
+}
+
+::ng-deep fa-icon.ieSvgFix > svg {
+  width: 28px;
+}

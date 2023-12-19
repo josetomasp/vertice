@@ -1,0 +1,22 @@
+@import 'variables';
+
+.mat-card-content {
+  padding-left: 8px;
+  padding-right: 8px;
+}
+
+.service-selected-requirement-text {
+  font-style: italic;
+  padding-right: 20px;
+  color: $gray-400;
+}
+
+.selection-list {
+  display: flex;
+  flex-flow: column wrap;
+  gap: 20px;
+  justify-content: flex-start;
+  align-items: flex-start;
+  max-height: 350px;
+  width: fit-content;
+}

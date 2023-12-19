@@ -1,0 +1,68 @@
+<ng-container *ngIf="(errors$ | async).length > 0">
+  <healthe-mar-submit-error-banner
+    [errors$]="errors$"
+    [partialFail]="partialFail$ | async"
+  ></healthe-mar-submit-error-banner>
+
+  <ng-container *ngIf="(partialFail$ | async)">
+    <healthe-retry-banner
+      [errorsLength]="(errors$ | async).length"
+    ></healthe-retry-banner>
+  </ng-container>
+</ng-container>
+
+<mat-card>
+  <mat-card-header>
+    <div fxLayout="column" fxLayoutAlign="start start" style="width: 100%">
+      <div
+        fxLayout="row"
+        fxLayoutAlign="space-between start"
+        style="width: 100%"
+      >
+        <h2 style="margin: 0;">Referral Submitted</h2>
+        <button
+          mat-flat-button
+          class="primary-button"
+          id="referral-review-copyToClipboard-button"
+          (click)="copyToClipboard()"
+        >
+          COPY REFERRAL TO CLIPBOARD
+        </button>
+      </div>
+    </div>
+  </mat-card-header>
+  <mat-card-content>
+    <ng-container *ngIf="(showSuccessBanner$ | async)">
+      <healthe-confirmation-banner
+        style="width: 100%;"
+        [id]="'create-a-referral-review-success'"
+        [alertType]="alertType.SUCCESS"
+        [title]="'You have successfully submitted this referral.'"
+        [isVisible]="true"
+      ></healthe-confirmation-banner>
+    </ng-container>
+
+    <div [id]="MAKE_A_REFERRAL_SECTION_ID">
+      <ng-container *ngFor="let service of (successfulServices$ | async)">
+        <healthe-make-a-referral-review-section
+          [service]="service"
+        ></healthe-make-a-referral-review-section>
+      </ng-container>
+    </div>
+  </mat-card-content>
+  <mat-card-actions
+    fxLayout="row"
+    fxLayoutAlign="end start"
+    fxLayoutGap="20px"
+    style="padding: 20px"
+  >
+    <button
+      mat-flat-button
+      class="primary-button"
+      id="referral-review-makeAnotherReferral"
+      (click)="makeAnotherReferral()"
+    >
+      MAKE ANOTHER REFERRAL
+    </button>
+  </mat-card-actions>
+</mat-card>

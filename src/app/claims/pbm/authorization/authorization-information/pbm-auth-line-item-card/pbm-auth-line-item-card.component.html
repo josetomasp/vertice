@@ -1,0 +1,53 @@
+<mat-card
+  class="outer-mat-card"
+  healtheFormValidationExtractor
+  [formGroup]="parentFormGroup"
+  [parentPath]="parentPath"
+>
+  <healthe-authorization-actions-banner
+    *ngIf="actionCardConfig?.actionFormConfig"
+    id="{{ index }}-auth-info-infoAndActionsBanner-value"
+    [pbmInfoAndActionsData]="actionCardConfig.actionFormConfig"
+    [actionLabel]="actionLabel"
+    [showDenialReasons]="showDenialReasons"
+    [showSecondDenialReason]="showSecondDenialReason"
+    [denialReasons]="denialReasons"
+    [lineItem]="lineItem"
+    [formGroup]="parentFormGroup"
+    [index]="index"
+    [userIsInternal]="userIsInternal"
+    [mode]="mode"
+    [authorizationDetails]="authorizationDetails"
+    (priorAuthErrors)="priorAuthErrors($event)"
+    (saveLineItemDecision)="saveLineItemDecision($event)"
+    (submittedClickedBefore)="submittedClickedBefore.emit($event)"
+  >
+  </healthe-authorization-actions-banner>
+
+  <div class="inner-mat-card">
+    <healthe-alert-info-banner
+      [clinicalAlerts]="lineItem.alerts"
+      [typeOfAlert]="drugType"
+      [initialStateOpened]="true"
+    >
+    </healthe-alert-info-banner>
+
+    <healthe-reasons-banner [reasons]="reasons"></healthe-reasons-banner>
+
+    <healthe-prescription-details
+      [componentConfig]="actionCardConfig.prescriberFormConfig"
+    ></healthe-prescription-details>
+
+    <ng-container *ngIf="notesConfig && notesConfig.inLineNotes">
+      <healthe-pbm-auth-notes
+        #prescriptionNotes
+        [notesConfig]="notesConfig"
+        [notes]="lineItem.notes"
+        [index]="index"
+        (addNote)="addNoteToPrescription($event, lineItem)"
+        [parentFormGroup]="parentFormGroup"
+        noteFormControlName="note"
+      ></healthe-pbm-auth-notes>
+    </ng-container>
+  </div>
+</mat-card>

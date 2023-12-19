@@ -1,0 +1,32 @@
+@import 'variables';
+
+.single-date-presets-list {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+.single-date-presets-list li {
+  border-radius: 2px;
+  margin: 5px 0 5px 0;
+  padding: 4%;
+  cursor: pointer;
+  color: $secondary;
+  user-select: none;
+  background: $gray-100;
+}
+
+.single-date-presets-list li:hover {
+  border-radius: 2px;
+  background: $secondary;
+  color: $white;
+}
+
+.rectangle-1641 {
+  height: 35.78px;
+  width: 210px;
+  opacity: 0.05;
+  border-radius: 2px;
+  background-color: $gray-900;
+  box-shadow: 2px 3px 16px 0 transparentize($gray-800, 0.2);
+}

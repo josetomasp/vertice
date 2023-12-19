@@ -1,0 +1,235 @@
+<div fxLayout="row" fxLayoutAlign="space-between center" mat-dialog-title>
+  <span id="drug-productName-value">{{ drugObject.itemName }}</span>
+  <button mat-icon-button mat-dialog-close id="drugLookupModal--header-widget">
+    <i class="fal fa-times modal-close-widget"></i>
+  </button>
+</div>
+
+<mat-dialog-content class="drug-info-container mb-0">
+  <div class="drug-primary-info-container">
+    <div fxLayout="row" fxLayoutGap="32px" style="margin-bottom: 35px;">
+      <div fxFlex="1 1 100%">
+        <div fxLayout="row" fxLayoutGap="32px">
+          <div fxFlex="1 1 calc(25%-32px)">
+            <div class="overhead-label drug-label" id="drug-ndc-label">NDC</div>
+            <div class="mb-0 drug-param" id="drug-ndc-value">
+              {{ drugObject.ndc }}
+            </div>
+          </div>
+          <div fxFlex="1 1 calc(37.5%-32px)">
+            <div
+              class="overhead-label"
+              id="drug-gpiReference-nameWithPronunciation-label"
+            >
+              Generic Pronunciation <fa-icon
+              class="text-secondary"
+              [icon]="faInfo"
+              matTooltip="Some drugs may display a generic name before the generic drug is available."
+            ></fa-icon>
+            </div>
+            <div
+              class="mb-0 drug-param"
+              id="drug-gpiReference-nameWithPronunciation-value"
+            >
+              {{ drugObject.gpiReference.nameWithPronunciation }}
+            </div>
+          </div>
+          <div fxFlex="1 1 calc(37.5%-32px)">
+            <div class="overhead-label" id="drug-multiSource-label">
+              Brand/Generic
+              <fa-icon
+                class="text-secondary"
+                [icon]="faInfo"
+                matTooltip="Authorized generics or single-source generics may show “No generic available” because there are no alternate generics available on the market."
+              ></fa-icon>
+            </div>
+            <div class="mb-0 drug-param" id="drug-multiSource-value">
+              {{ drugObject.multiSource }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div fxLayout="row" fxLayoutGap="32px">
+      <div fxFlex="1 1 100%">
+        <div fxLayout="row" fxLayoutGap="32px">
+          <div fxFlex="1 1 calc(25%-32px)">
+            <div class="overhead-label" id="drug-rxOtcCode-label">
+              Over the counter
+            </div>
+            <div class="mb-0 drug-param" id="drug-rxOtcCode-value">
+              {{ drugObject.rxOtcCode }}
+            </div>
+          </div>
+          <div fxFlex="1 1 calc(25%-32px)">
+            <div class="overhead-label" id="drug-routeOfAdministration-label">
+              Route
+            </div>
+            <div class="mb-0 drug-param" id="drug-routeOfAdministration-value">
+              {{ drugObject.routeOfAdministration }}
+            </div>
+          </div>
+          <div fxFlex="1 1 calc(25%-32px)">
+            <div class="overhead-label" id="drug-dosageForm-label">Form</div>
+            <div class="mb-0 drug-param" id="drug-dosageForm-value">
+              {{ drugObject.dosageForm }}
+            </div>
+          </div>
+          <div fxFlex="1 1 calc(25%-32px)">
+            <div class="overhead-label" id="drug-strength-label">Strength</div>
+
+            <div class="mb-0 drug-param" id="drug-strength-value">
+              {{ drugObject.strength + (drugObject.strengthUnit || '') }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div fxLayout="row" fxLayoutGap="32px" style="margin-bottom: 35px;">
+    <div fxFlex="1 1 100%">
+      <div fxLayout="row" fxLayoutGap="32px">
+        <div fxFlex="1 1 calc(25%-32px)">
+          <div class="overhead-label" id="drug-displayName-label">
+            Medication Detail
+          </div>
+          <div class="mb-0 drug-param" id="drug-displayName-value">
+            {{ drugObject.displayName }}
+          </div>
+        </div>
+        <div fxFlex="1 1 calc(25%-32px)">
+          <div class="overhead-label" id="drug-ahfsTherapeuticClass-label">
+            Therapeutic Class
+          </div>
+          <div class="mb-0 drug-param" id="drug-ahfsTherapeuticClass-value">
+            {{ drugObject.ahfsTherapeuticClass }}
+          </div>
+        </div>
+
+        <div fxFlex="1 1 calc(25%-32px)">
+          <div class="overhead-label" id="drug-deaClass-label">
+            Federal Dea Class
+          </div>
+          <div class="mb-0 drug-param" id="drug-deaClass-value">
+            {{ drugObject.deaClass }}
+          </div>
+        </div>
+        <div fxFlex="1 1 calc(25%-32px)">
+          <div class="overhead-label" id="drug-repackInd-label">Repack</div>
+
+          <div class="mb-0 drug-param" id="drug-repackInd-value">
+            {{
+              drugObject.repackInd === 'N'
+                ? 'No'
+                : drugObject.repackInd === 'Y'
+                ? 'Yes'
+                : drugObject.repackInd
+            }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div fxLayout="row" fxLayoutGap="32px" style="margin-bottom: 35px;">
+    <div fxFlex="1 1 100%">
+      <div fxLayout="row" fxLayoutGap="32px">
+        <div fxFlex="1 1 calc(25%-32px)">
+          <div class="overhead-label" id="drug-awpcost-label">AWP Cost</div>
+          <div class="mb-0 drug-param" id="drug-awpcost-value">
+            {{ drugObject.awpCost }}
+          </div>
+        </div>
+        <div fxFlex="1 1 calc(25%-32px)">
+          <div class="overhead-label" id="drug-unitCost-label">
+            AWP Unit Cost
+          </div>
+          <div class="mb-0 drug-param" id="drug-unitCost-value">
+            {{ drugObject.unitCost }}
+          </div>
+        </div>
+        <div fxFlex="1 1 calc(25%-32px)">
+          <div class="overhead-label" id="drug-awppackagePrice-label">
+            AWP Package Price
+          </div>
+          <div class="mb-0 drug-param" id="drug-awppackagePrice-value">
+            {{ drugObject.awpPackagePrice }}
+          </div>
+        </div>
+        <div fxFlex="1 1 calc(25%-32px)">
+          <div class="overhead-label" id="drug-packSize-label">
+            Package Size
+          </div>
+
+          <div class="mb-0 drug-param" id="drug-packSize-value">
+            {{ drugObject.packSize }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div fxLayout="row" fxLayoutGap="32px" style="margin-bottom: 35px;">
+    <div fxFlex="1 1 100%">
+      <div fxLayout="row " fxLayoutGap="32px">
+        <div fxFlex="1 1 calc(50%-32px)" *ngIf="(userIsInternal$ | async)">
+          <div class="overhead-label" id="drug-repackInd-label">GPI</div>
+          <div class="mb-0 drug-param" id="drug-repackInd-value">
+            {{ drugObject.gpi }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div fxLayout="row" fxLayoutGap="32px" style="margin-bottom: 35px;">
+    <div fxFlex="1 1 100%">
+      <div fxLayout="row" fxLayoutGap="32px">
+        <div fxFlex="1 1 100%">
+          <div
+            class="overhead-label"
+            id="drug-gpiReference-fdaApprovedUses-label"
+          >
+            FDA Approved Uses
+          </div>
+          <div
+            class="mb-0 drug-param"
+            id="drug-gpiReference-fdaApprovedUses-value"
+          >
+            {{ drugObject.gpiReference.fdaApprovedUses }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div fxLayout="row" fxLayoutGap="32px">
+    <div fxFlex="1 1 100%">
+      <p class="mt-0 disclaimer-note" id="drug-disclaimer-note">
+        The data provided above is provided by Medispan and is for informational
+        purposes only. Every effort has been made to provide accurate
+        information but no warranty or guarantee is made to that effect.
+        Healthesystems is not liable for any direct, indirect, consequential,
+        special, exemplary, or other damages arising from the use or misuse of
+        this information. This information may not be used, reproduced or
+        disclosed to other parties without written permission from
+        Healthesystems. Healthesystems Medispan version only stores four
+        iterations of AWP price changes. Older dates of service may not
+        represent the most accurate AWP applicable for the date of service. The
+        AWP displayed in these scenarios will be the oldest AWP on file.
+      </p>
+    </div>
+  </div>
+</mat-dialog-content>
+
+<mat-dialog-actions
+  style="padding: 0; margin-bottom: 20px; justify-content: flex-end;"
+>
+  <div fxLayout="row" fxLayoutGap="20px" style="margin-right: 20px;">
+    <button
+      mat-flat-button
+      class="primary-button"
+      id="uiLib-smallBasicModalSave"
+      (click)="close()"
+    >
+      Close
+    </button>
+  </div>
+</mat-dialog-actions>

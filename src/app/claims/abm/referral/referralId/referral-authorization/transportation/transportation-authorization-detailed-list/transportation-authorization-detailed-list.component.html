@@ -1,0 +1,73 @@
+<div>
+  <div fxLayout="row" fxLayoutAlign="space-between top">
+    <h3 id="auth-information-transportation-header-title" style="margin: 0">
+      Itinerary
+    </h3>
+  </div>
+  <div id="auth-information-transportation-subheader-note" class="text-subtext">
+    {{ subHeaderNote }}
+  </div>
+  <div class="spacersmall"></div>
+  <button
+    type="button"
+    mat-flat-button
+    class="secondary-button"
+    id="auth-information-transportation-addTransportation-button"
+    (click)="addTransportation()"
+  >
+    <fa-icon
+      [icon]="faCarAlt"
+      style="margin-right: 10px; font-size: 22px"
+      id="auth-information-transportation-addTransportation-button-icon"
+    ></fa-icon>
+    ADD TRANSPORTATION
+  </button>
+
+  <div *ngFor="let authItem of authData; let i = index" class="inset-card">
+    <healthe-authorization-actions
+      [referralAuthorizationItem]="authItem"
+      [idIndex]="i"
+      [referralAuthorizationType]="DetailedReferralAuthorizationType"
+    ></healthe-authorization-actions>
+    <ng-container [ngSwitch]="authItem.authData.authorizationTypeCode">
+      <healthe-transportation-authorization-detailed-flight
+        *ngSwitchCase="ReferralAuthorizationTypeCode.DETAILED_FLIGHT"
+        [referralAuthorizationItem]="authItem"
+        [idIndex]="i"
+      ></healthe-transportation-authorization-detailed-flight>
+
+      <healthe-transportation-authorization-detailed-lodging
+        *ngSwitchCase="ReferralAuthorizationTypeCode.DETAILED_LODGING"
+        [referralAuthorizationItem]="authItem"
+        [idIndex]="i"
+      ></healthe-transportation-authorization-detailed-lodging>
+
+      <healthe-transportation-authorization-detailed-sedan
+        *ngSwitchCase="ReferralAuthorizationTypeCode.DETAILED_SEDAN"
+        [referralAuthorizationItem]="authItem"
+        [timeDropdownValues]="timeDropdownValues"
+        [idIndex]="i"
+      ></healthe-transportation-authorization-detailed-sedan>
+
+      <healthe-transportation-authorization-detailed-wheelchair
+        *ngSwitchCase="ReferralAuthorizationTypeCode.DETAILED_WHEELCHAIR"
+        [referralAuthorizationItem]="authItem"
+        [timeDropdownValues]="timeDropdownValues"
+        [idIndex]="i"
+      ></healthe-transportation-authorization-detailed-wheelchair>
+
+      <healthe-transportation-authorization-detailed-other
+        *ngSwitchCase="ReferralAuthorizationTypeCode.DETAILED_OTHER"
+        [referralAuthorizationItem]="authItem"
+        [transportationTypes$]="transportationTypes$"
+        [timeDropdownValues]="timeDropdownValues"
+        [idIndex]="i"
+      ></healthe-transportation-authorization-detailed-other>
+
+      <div *ngSwitchDefault>
+        Unknown type: {{ authItem.authData.authorizationTypeCode }}
+      </div>
+    </ng-container>
+    <div class="spacersmall"></div>
+  </div>
+</div>

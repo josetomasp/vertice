@@ -1,0 +1,68 @@
+<div fxLayout="column" fxLayoutAlign="center center">
+  <p
+    id="transportation-selection-message1"
+    class="text-primary text-bold unselectable"
+  >
+    What transportation services would you like to request?
+  </p>
+  <!-- Transportation types -->
+  <div
+    [formGroup]="transportationTypeFormGroup"
+    fxLayout="row wrap"
+    fxLayoutAlign="space-around space-around "
+    style="width: 65%;"
+  >
+    <mat-card
+      (click)="toggleCheckboxAndUpdateForm(transportationType.name)"
+      *ngFor="let transportationType of transportationTypes"
+      [healtheTooltipAdvancedContent]="transportationType.help"
+      [healtheTooltipAdvancedDisabled]="!transportationType.help"
+      [healtheTooltipAdvancedTitle]="
+        transportationType.label + ' Transportation'
+      "
+      id="transportation-selection-{{ transportationType.label?.replace(' ', '-')}}-card"
+      [width]="'200px'"
+      healtheTooltipAdvanced
+      healtheTooltipAdvancedPosition="bottom"
+      healtheTooltipAdvancedYOffset="10"
+      fxLayout="column"
+      fxLayoutAlign="center center"
+      style="width: 150px; height: 150px; cursor:pointer;margin-top:20px"
+    >
+      <div fxLayout="column" fxLayoutAlign="center center">
+        <i
+          id="transportation-selection-{{ transportationType.label}}-card-icon"
+          [ngClass]="transportationType.icon"
+          class="text-primary fa-2x text-center unselectable"
+        ></i>
+        <p
+          style="width: 90px;"
+          id="transportation-selection-{{ transportationType.label}}-card-label"
+          class="text-bold text-primary text-wrap text-center unselectable"
+        >
+          {{ transportationType.label }}
+        </p>
+      </div>
+      <mat-checkbox
+        id="transportation-selection-{{ transportationType.label}}-card-checkbox"
+        (click)="$event.preventDefault()"
+        [formControlName]="transportationType.name"
+        [value]="transportationType.name"
+      ></mat-checkbox>
+    </mat-card>
+  </div>
+  <div class="spacersmall"></div>
+  <button
+    id="transportation-selection-continue"
+    (click)="continue()"
+    [disabled]="hiddenControl.value.length == 0"
+    class="primary-button"
+    mat-flat-button
+  >
+    CONTINUE
+  </button>
+  <div class="spacersmall"></div>
+  <i id="transportation-selection-message2" class="text-hint unselectable"
+    >Please select at least one transportation service to continue.</i
+  >
+</div>

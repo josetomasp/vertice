@@ -1,0 +1,100 @@
+<h2
+  style="padding-top: 30px; padding-bottom: 30px"
+  mat-dialog-title
+  fxLayoutAlign="space-between center"
+  id="nonParticipatingEmployersModal-customerName"
+>
+  Non-Participating List for
+  {{ nonParticipatingEmployersModalData.selectedCustomer }}
+  <button
+    id="nonParticipatingEmployersModal-closeXButton"
+    mat-icon-button
+    mat-dialog-close
+  >
+    <i class="fal fa-times modal-close-widget"></i>
+  </button>
+</h2>
+<mat-dialog-content>
+  <div fxLayout="row" fxLayoutAlign="start" fxLayoutGap="20px">
+    <div fxFlex="1 1 50%">
+      <div
+        class="overhead-label"
+        id="nonParticipatingEmployersModal-employerNameContainsLabel"
+      >
+        SEARCH FOR EMPLOYER NAME CONTAINING
+      </div>
+      <mat-form-field>
+        <input
+          id="nonParticipatingEmployersModal-employerNameContainsInput"
+          [formControl]="employerNameControl"
+          matInput
+          placeholder="Enter Employer Name"
+          cdkFocusInitial
+        />
+      </mat-form-field>
+    </div>
+    <div fxFlex="1 1 40%">
+      <div
+        class="overhead-label"
+        id="nonParticipatingEmployersModal-employerNameStartsWithLabel"
+      >
+        FILTER BY NAME STARTING WITH:
+      </div>
+      <div fxLayout="row" fxLayoutGap="15px">
+        <div
+          *ngFor="let preset of nameRangeFilterPresets"
+          [ngClass]="
+            preset.displayedText === currentNameRangeFilterPreset?.displayedText
+              ? 'selectedFilterRange'
+              : ''
+          "
+        >
+          <a
+            style="text-align: left; min-width: unset !important;"
+            mat-button
+            (click)="
+              currentNameRangeFilterPreset = preset; filterEmployerNameList()
+            "
+            id="nonParticipatingEmployersModal-employerNameStartsPreset-{{preset.displayedText}}"
+            >{{ preset.displayedText }}</a
+          >
+        </div>
+      </div>
+    </div>
+    <div fxLayoutAlign="start center">
+      <button
+        fxFlex="1 1 10%"
+        mat-stroked-button
+        class="secondary-button"
+        (click)="resetFilters()"
+        id="nonParticipatingEmployersModal-resetButton"
+      >
+        RESET
+      </button>
+    </div>
+  </div>
+  <div
+    fxLayout="column"
+    fxLayoutGap="5px"
+    *ngFor="
+      let nonParticipatingEmployerName of filteredNonParticipatingEmployerNames
+    "
+  >
+    <div style="padding-top: 5px">{{ nonParticipatingEmployerName }}</div>
+    <mat-divider></mat-divider>
+  </div>
+</mat-dialog-content>
+<mat-dialog-actions
+  style="margin-bottom: 20px; margin-right: 20px"
+  fxLayoutAlign="end"
+>
+  <button
+    mat-flat-button
+    class="primary-button"
+    mat-stroked-button
+    mat-dialog-close
+    id="nonParticipatingEmployersModal-closeButton"
+  >
+    CLOSE
+  </button>
+</mat-dialog-actions>

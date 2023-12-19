@@ -1,0 +1,52 @@
+<mat-card class="activity-tab-bar--no-padding">
+  <div fxLayoutGap="row" fxLayoutAlign="space-between">
+    <mat-tab-group
+      (selectedIndexChange)="gotoLink($event)"
+      id="referral-activity--tab-bar"
+    >
+      <!--
+        TODO: This is temp. The previous change from Core removed Fusions History and Activity tabs. Jeff told us to removed the prev logic and to remove the History and Activity tabs only for Transportation.
+      -->
+      <ng-container *ngFor="let tab of tabs">
+        <mat-tab
+          [id]="'authorization--tab-bar--' + tab.label"
+          [label]="tab.label"
+          [disabled]="isTabDisabled(tab.link)"
+        >
+        </mat-tab>
+      </ng-container>
+    </mat-tab-group>
+    <div fxLayout="row" fxLayoutAlign="end center">
+      <div
+        class="secondary reportIncident"
+        style="cursor: pointer;"
+        id="referral-activity--tab-bar-viewEditDocNotes"
+        fxLayout="row"
+        fxLayoutAlign="start center"
+        (click)="viewEditDocNotes()"
+      >
+        <fa-icon
+          [icon]="faStickyNote"
+          style="margin-right: 10px; font-size: 22px"
+          id="referral-activity--tab-bar-viewEditDocNotes-icon"
+        ></fa-icon>
+        <div>View / Edit Documents & Notes</div>
+      </div>
+      <div
+        class="secondary reportIncident"
+        style="cursor: pointer;"
+        id="referral-activity--tab-bar-reportNewIncident"
+        fxLayout="row"
+        fxLayoutAlign="start center"
+        (click)="reportNewIncident()"
+      >
+        <fa-icon
+          [icon]="faFileExclamation"
+          style="margin-right: 10px; font-size: 22px"
+          id="referral-activity--tab-bar-reportNewIncident-icon"
+        ></fa-icon>
+        <div>Report a New Incident</div>
+      </div>
+    </div>
+  </div>
+</mat-card>

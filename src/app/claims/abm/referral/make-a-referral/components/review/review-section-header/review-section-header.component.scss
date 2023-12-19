@@ -1,0 +1,12 @@
+@import 'variables';
+
+.headerText {
+  color: $primary;
+  font-weight: bold;
+}
+
+.editSectionText {
+  color: $secondary;
+  text-decoration: underline;
+  font-weight: bold;
+}

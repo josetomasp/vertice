@@ -1,0 +1,46 @@
+<div
+  *ngrxLet="reviewModel$; let vm"
+  class="healthe-layout healthe-layout__column healthe-layout__column--gap"
+  style="--gap-width: 16px"
+>
+  <ng-container *ngFor="let section of vm" [ngSwitch]="section.reviewType">
+    <healthe-composite-review-section
+      *ngSwitchCase="GenericReviewSectionType.CompositeReviewSection"
+      [title]="section.title"
+      (editThisSection)="goToSection(section)"
+      [editSectionEnabled]="editSectionEnabled"
+    >
+      <div
+        class="healthe-layout healthe-layout__column healthe-layout__column--gap"
+        *ngFor="let row of section.hydratedFormFields"
+      >
+        <div
+          class="healthe-layout healthe-layout__row"
+          *ngFor="let column of row"
+        >
+          <div
+            class="healthe-layout healthe-layout__column"
+            *ngFor="let field of column"
+          >
+            <label class="overhead-label">{{ field.label }}</label>
+            <p class="healthe-review__value" *ngIf="field.value">
+              {{ field.value }}
+            </p>
+            <p class="healthe-review__value text-hint" *ngIf="!field.value">
+              No Value for {{ field.label }}
+            </p>
+          </div>
+        </div>
+      </div>
+    </healthe-composite-review-section>
+    <healthe-simple-review-section
+      *ngSwitchCase="GenericReviewSectionType.SimpleReviewSection"
+      [label]="section.label"
+      [value]="section.value"
+      [type]="section.type"
+      [editSectionEnabled]="editSectionEnabled"
+      (editThisSection)="goToSection(section)"
+    >
+    </healthe-simple-review-section>
+  </ng-container>
+</div>

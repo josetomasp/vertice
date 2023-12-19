@@ -1,0 +1,32 @@
+{
+  "project": {
+    "timeout": {
+      "test": {
+        "builder": "@angular-builders/jest:run",
+        "options": {
+          "tsConfig": "projects/timeout/tsconfig.spec.json",
+          "styles": ["projects/timeout/src/styles.css"],
+          "scripts": [],
+          "assets": [
+            "projects/timeout/src/favicon.ico",
+            "projects/timeout/src/assets"
+          ]
+        }
+      }
+    },
+    "lomn": {
+      "test": {
+        "builder": "@angular-builders/jest:run",
+        "options": {
+          "tsConfig": "projects/lomn/tsconfig.spec.json",
+          "assets": [
+            "projects/lomn/src/favicon.ico",
+            "projects/lomn/src/assets"
+          ],
+          "styles": ["projects/lomn/src/styles.scss"],
+          "scripts": []
+        }
+      }
+    }
+  }
+}

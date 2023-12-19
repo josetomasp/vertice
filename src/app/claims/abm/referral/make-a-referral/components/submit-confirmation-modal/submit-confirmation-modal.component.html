@@ -1,0 +1,40 @@
+<div id="confirmation-modal-submit-modal">
+  <h1 mat-dialog-title id="confirmation-modal-submit-title">
+    <span *ngIf="!(submitData.submittingReferral$ | async)">Submit</span>
+    <span *ngIf="submitData.submittingReferral$ | async">Submitting ...</span></h1>
+  <mat-dialog-content id="confirmation-modal-submit-body">
+     <span *ngIf="!(submitData.submittingReferral$ | async)">Are you sure you want to submit this request? <b>You will not be able to undo
+       this action.</b></span>
+  </mat-dialog-content>
+  <div
+  *ngIf="!(submitData.submittingReferral$ | async)"
+    mat-dialog-actions
+    fxLayout="row"
+    fxLayoutAlign="end"
+    fxLayoutGap="15px"
+    style="padding-right: 15px"
+  >
+    <button
+      id="confirmation-modal-submit-deny"
+      mat-stroked-button
+      class="info-button"
+      [mat-dialog-close]="false"
+    >
+      CANCEL
+    </button>
+    <button
+      id="confirmation-modal-submit-affirm"
+      mat-flat-button
+      [disabled]="submitData.submittingReferral$ | async"
+      (click)="submit()"
+      class="success-button"
+    >
+      CONTINUE
+    </button>
+  </div>
+  <div *ngIf="submitData.submittingReferral$ | async"
+  fxLayout="column"
+  fxLayoutAlign="center center">
+    <mat-spinner [diameter]="55"></mat-spinner>
+  </div>
+</div>

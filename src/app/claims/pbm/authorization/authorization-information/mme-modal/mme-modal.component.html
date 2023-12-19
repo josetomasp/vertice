@@ -1,0 +1,56 @@
+<div fxLayout="row" fxLayoutAlign="space-between center" mat-dialog-title>
+  <h1 id="mme-modal-title">{{ data.prescription.displayName }}</h1>
+  <button mat-icon-button mat-dialog-close id="mme-modal--header-closeButton">
+    <i class="fal fa-times modal-close-widget"></i>
+  </button>
+</div>
+<mat-dialog-content id="mme-modal-body" class="mme-modal-bodyClass">
+  <div fxFlexAlign="center" class="mme-modal-title">
+    <fa-icon class="mme-modal-title-icon" [icon]="syringeIcon"></fa-icon>
+    Morphine Milligram Equivalent (MME) Information
+  </div>
+  <p>
+    This prescription has an MME value of
+    <b>{{ data.prescription.transactionalMme }}.</b>
+  </p>
+  <div *ngIf="!data.isRetroAuthorization; else: isRetroAuth">
+    <p
+    *ngIf="
+      data.prescription.transactionalMme - data.claimMme !== 0;
+      else: elseMme
+    "
+  >
+    The current claim MME is <b>{{ data.claimMme }}</b
+  >, and will be
+    {{
+    data.claimMme < data.prescription.claimMmeWithPrescription
+      ? 'increased'
+      : 'decreased'
+    }}
+    to <b>{{ data.prescription.claimMmeWithPrescription }}</b> if this
+    medication is approved.
+  </p>
+  <ng-template #elseMme>
+      <p>
+        The current claim MME is <b>{{ data.claimMme }}</b
+        >, and will not be changed if this medication is approved.
+      </p></ng-template
+    >
+  </div>
+  <ng-template #isRetroAuth>
+    <p>
+      Note: This is an historical Retro (Paper) bill and the medication has
+      already been dispensed.
+    </p></ng-template
+  >
+</mat-dialog-content>
+<div mat-dialog-actions fxLayout="row" class="mme-modal-actions" dir="rtl">
+  <button
+    id="mme-modal-okay-button"
+    mat-raised-button
+    class="primary-button"
+    [mat-dialog-close]="false"
+  >
+    OKAY
+  </button>
+</div>

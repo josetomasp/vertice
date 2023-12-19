@@ -1,0 +1,133 @@
+<mat-card class="tab-card">
+  <mat-card-title style="height: 46px;">
+    <mat-tab-group
+      #tabgroup
+      (selectedTabChange)="changeTab($event)"
+      class="secondary-tab"
+      style="height: 46px;"
+    >
+      <mat-tab
+        *healtheRemoveElementIfTrue="
+          componentGroupName;
+          elementName: 'allActivityTab'
+        "
+        id="activity-tab-all"
+        label="all"
+      >
+        <ng-template mat-tab-label>
+          <healthe-customer-configs-label
+            defaultText="All"
+            elementName="allActivityTab"
+            [forcedCapitalization]="false"
+          ></healthe-customer-configs-label>
+          <span
+            class="tag activity"
+            id="activity-all-tab-bubble"
+            matTooltip="This number represents the number of Pending Activities"
+          >
+            {{ (pendingActvityTotals$ | async).all }}
+          </span>
+        </ng-template>
+      </mat-tab>
+      <mat-tab
+        label="pharmacy"
+        *healtheRemoveElementIfTrue="
+          componentGroupName;
+          elementName: 'pharmacyActivityTab'
+        "
+        id="activity-tab-pharmacy"
+      >
+        <ng-template mat-tab-label>
+          <healthe-customer-configs-label
+            defaultText="Pharmacy"
+            elementName="pharmacyActivityTab"
+            [forcedCapitalization]="false"
+          ></healthe-customer-configs-label>
+          <span
+            class="tag activity"
+            id="activity-pharmacy-tab-bubble"
+            matTooltip="This number represents the number of Pending Activities"
+          >
+            {{ (pendingActvityTotals$ | async).pharmacy }}
+          </span>
+        </ng-template>
+      </mat-tab>
+      <mat-tab
+        *healtheRemoveElementIfTrue="
+          componentGroupName;
+          elementName: 'clinicalActivityTab'
+        "
+        id="activity-tab-clinical"
+        label="clinical"
+      >
+        <ng-template mat-tab-label>
+          <healthe-customer-configs-label
+            defaultText="Clinical"
+            elementName="clinicalActivityTab"
+            [forcedCapitalization]="false"
+          ></healthe-customer-configs-label>
+          <span
+            class="tag activity"
+            id="activity-clinical-tab-bubble"
+            matTooltip="This number represents the number of Pending Activities"
+          >
+            {{ (pendingActvityTotals$ | async).clinical }}
+          </span>
+        </ng-template>
+      </mat-tab>
+
+      <mat-tab
+        *healtheRemoveElementIfTrue="
+          componentGroupName;
+          elementName: 'ancillaryActivityTab'
+        "
+        id="activity-tab-ancillary"
+        label="ancillary"
+      >
+        <ng-template mat-tab-label>
+          <healthe-customer-configs-label
+            defaultText="Ancillary"
+            elementName="ancillaryActivityTab"
+            [forcedCapitalization]="false"
+          ></healthe-customer-configs-label>
+          <span
+            class="tag activity"
+            id="activity-ancillary-tab-bubble"
+            matTooltip="This number represents the number of Pending Activities"
+          >
+            {{ (pendingActvityTotals$ | async).ancillary }}
+          </span>
+        </ng-template>
+      </mat-tab>
+    </mat-tab-group>
+  </mat-card-title>
+</mat-card>
+<healthe-confirmation-banner
+  #alert206
+  [alertType]="alertType.DANGER"
+  [id]="'alert206'"
+  style="flex: 0 0 auto;"
+></healthe-confirmation-banner>
+<div class="spacersmall"></div>
+<healthe-pending-activity-table
+  [pendingActivities]="pendingActivities$ | async"
+  [activeTabName]="activeTabText"
+>
+</healthe-pending-activity-table>
+<div class="spacersmall"></div>
+<healthe-activity-table
+  [activeTabName]="activeTabText"
+  (columnViewChange)="columnViewChange($event)"
+  (export)="exportDocument($event)"
+  (dateRangeChange)="dateRangeChange($event)"
+  (columnSortChange)="columnSortChange($event)"
+  (filterChange)="filterChange($event)"
+  (refresh)="refresh()"
+  [activeColumnView]="activeColumnView$ | async"
+  [activityDataSource]="allActivityData$ | async"
+  [tableColumnList]="tableColumnList$ | async"
+  [dateRange]="dateRange$ | async"
+  [filterPredicates]="filterPredicates$ | async"
+  [isLoadingData]="isLoadingData$ | async"
+></healthe-activity-table>
+<div class="spacersmall"></div>

@@ -1,0 +1,44 @@
+<div id="auth-information-transportation-actions-title" class="title">
+  <fa-icon
+    [icon]="faAmbulance"
+    class="ieSvgFix"
+    style="margin-right: 10px; font-size: 22px"
+    id="auth-information-transportation-actions-title-icon"
+  ></fa-icon>
+
+  Other Transportation
+</div>
+<div class="spacersmall"></div>
+<div [formGroup]="formGroup" class="matFormFieldWidthFix">
+  <div>
+    <div class="overhead-label" id="auth-other-date-typeOfTransportation-label">
+      TYPE OF TRANSPORTATION<span class="required-text">*</span>
+    </div>
+    <mat-form-field>
+      <mat-select
+        formControlName="typeOfTransportation"
+        placeholder="Choose Transportation Type"
+        id="auth-other-date-typeOfTransportation"
+        style="width: 303px"
+      >
+        <mat-option
+          *ngFor="
+            let transportationType of (transportationTypes$ | async);
+            index as $Index
+          "
+          [value]="transportationType?.code"
+          id="auth-other-date-typeOfTransportation-option-{{$Index}}"
+          >{{ transportationType?.code }}</mat-option
+        >
+      </mat-select>
+      <mat-error id="auth-other-date-typeOfTransportation-error"
+        >Select 'Type of Transportation'
+      </mat-error>
+    </mat-form-field>
+  </div>
+</div>
+<div class="spacersmall"></div>
+<healthe-create-new-authorization-specific-date
+  [referralAuthorizationItem]="referralAuthorizationItem"
+  [dialogData]="dialogData"
+></healthe-create-new-authorization-specific-date>

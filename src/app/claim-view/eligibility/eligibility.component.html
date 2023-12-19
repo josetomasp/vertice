@@ -1,0 +1,243 @@
+<div>
+  <div class="spacersmall"></div>
+  <mat-card
+    *healtheRemoveElementIfTrue="
+      componentGroupName;
+      elementName: 'claimInformationCard'
+    "
+  >
+    <mat-card-title id="eligibility-Claim Information"
+      >Claim Information
+    </mat-card-title>
+    <mat-card-content>
+      <div fxLayout="row wrap" fxLayoutGap="35px grid">
+        <ng-container *ngFor="let item of (claimInfo$ | async)">
+          <ng-container
+            *healtheRemoveElementIfTrue="
+              componentGroupName;
+              elementName: item.elementName
+            "
+          >
+            <div
+              fxFlex="calc(12.5% - 35px)"
+              fxFlex.lt-lg="calc(25% - 35px)"
+              fxFlex.lt-md="calc(33.33% - 35px)"
+              fxFlex.lt-sm="calc(50% - 35px)"
+            >
+              <div
+                [id]="'eligibility-' + item.label + '-label'"
+                class="overhead-label"
+              >
+                <healthe-customer-configs-label
+                  [defaultText]="item.label"
+                  [elementName]="item.elementName"
+                ></healthe-customer-configs-label>
+              </div>
+              <div
+                #claimDetail
+                [id]="'eligibility-' + item.label + '-value'"
+                class="standard-text ellipsis-text"
+              >
+                <span [matTooltip]="item.value | uppercase">
+                  {{ item.value }}
+                </span>
+              </div>
+            </div>
+          </ng-container>
+        </ng-container>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <div class="spacersmall"></div>
+  <div fxLayout="row" fxLayout.lt-sm="column" fxLayoutGap="20px">
+    <mat-card
+      *healtheRemoveElementIfTrue="componentGroupName; elementName: 'idCard'"
+      fxFlex="50"
+    >
+      <mat-card-title id="eligibility-ID">ID</mat-card-title>
+      <mat-card-content>
+        <div fxLayout="row wrap" fxLayoutGap="35px grid">
+          <ng-container *ngFor="let item of (idInfo$ | async)">
+            <ng-container
+              *healtheRemoveElementIfTrue="
+                componentGroupName;
+                elementName: item.elementName
+              "
+            >
+              <div fxFlex="calc(33.33% - 35px)" fxFlex.lt-lg="calc(50% - 35px)">
+                <div
+                  [id]="'eligibility-' + item.label + '-label'"
+                  class="overhead-label"
+                >
+                  <healthe-customer-configs-label
+                    [defaultText]="item.label"
+                    [elementName]="item.elementName"
+                  ></healthe-customer-configs-label>
+                </div>
+                <div
+                  #idDetail
+                  [id]="'eligibility-' + item.label + '-value'"
+                  class="standard-text ellipsis-text"
+                >
+                  <span [matTooltip]="item.value | uppercase">
+                    {{ item.value }}
+                  </span>
+                </div>
+              </div>
+            </ng-container>
+          </ng-container>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card fxFlex>
+      <mat-card-title id="eligibility-Claim Dates">Claim Dates</mat-card-title>
+      <mat-card-content>
+        <div fxLayout="row wrap" fxLayoutGap="35px grid">
+          <ng-container *ngFor="let item of (claimDates$ | async)">
+            <ng-container
+              *healtheRemoveElementIfTrue="
+                componentGroupName;
+                elementName: item.elementName
+              "
+            >
+              <div fxFlex="calc(33.33% - 35px)" fxFlex.lt-lg="calc(50% - 35px)">
+                <div
+                  [id]="'eligibility-' + item.label + '-label'"
+                  class="overhead-label"
+                >
+                  <healthe-customer-configs-label
+                    [defaultText]="item.label"
+                    [elementName]="item.elementName"
+                  ></healthe-customer-configs-label>
+                </div>
+                <div
+                  #datesDetail
+                  [id]="'eligibility-' + item.label + '-value'"
+                  class="standard-text ellipsis-text"
+                >
+                  <span [matTooltip]="item.value | uppercase">
+                    {{ item.value }}
+                  </span>
+                </div>
+              </div>
+            </ng-container>
+          </ng-container>
+          <!-- Pharmacy Claim Dates -->
+          <ng-container
+            *healtheRemoveElementIfTrue="
+              componentGroupName;
+              elementName: 'pharmacyClaimDates'
+            "
+          >
+            <h4 fxFlex="1 1 100%" class="grid-title">Pharmacy Claim Dates</h4>
+            <ng-container *ngFor="let item of (claimPbmDates$ | async)">
+              <ng-container
+                *healtheRemoveElementIfTrue="
+                  componentGroupName;
+                  elementName: item.elementName
+                "
+              >
+                <div
+                  fxFlex="calc(33.33% - 35px)"
+                  fxFlex.lt-lg="calc(50% - 35px)"
+                >
+                  <ng-container *ngIf="item.elementName === 'pbmInactiveDate'">
+                    <healthe-claim-edit-eligibility-link
+                      [decodedClaimNumber]="decodedClaimNumber$ | async"
+                      [decodedCustomerId]="decodedCustomerId$ | async"
+                      [linkId]="item.elementName"
+                    ></healthe-claim-edit-eligibility-link>
+                  </ng-container>
+                  <ng-container *ngIf="item.elementName !== 'pbmInactiveDate'">
+                    <div
+                      [id]="'eligibility-pbm-' + item.label + '-label'"
+                      class="overhead-label"
+                    >
+                      <healthe-customer-configs-label
+                        [defaultText]="item.label"
+                        [elementName]="item.elementName"
+                      ></healthe-customer-configs-label>
+                      <healthe-claim-edit-eligibility-link
+                        *ngIf="item.editable"
+                        [decodedClaimNumber]="decodedClaimNumber$ | async"
+                        [decodedCustomerId]="decodedCustomerId$ | async"
+                        [linkId]="item.elementName"
+                      ></healthe-claim-edit-eligibility-link>
+                    </div>
+                    <div
+                      #datesDetail
+                      [id]="'eligibility-pbm-' + item.label + '-value'"
+                      class="standard-text ellipsis-text"
+                    >
+                      <span [matTooltip]="item.value | uppercase">
+                        {{ item.value }}
+                      </span>
+                    </div>
+                  </ng-container>
+                </div>
+              </ng-container>
+            </ng-container>
+          </ng-container>
+          <!-- Ancillary Claim Dates -->
+          <ng-container
+            *healtheRemoveElementIfTrue="
+              componentGroupName;
+              elementName: 'ancillaryClaimDates'
+            "
+          >
+            <h4 fxFlex="1 1 100%" class="grid-title">Ancillary Claim Dates</h4>
+            <ng-container *ngFor="let item of (claimAbmDates$ | async)">
+              <ng-container
+                *healtheRemoveElementIfTrue="
+                  componentGroupName;
+                  elementName: item.elementName
+                "
+              >
+                <div
+                  fxFlex="calc(33.33% - 35px)"
+                  fxFlex.lt-lg="calc(50% - 35px)"
+                >
+                  <ng-container *ngIf="item.elementName === 'abmInactiveDate'">
+                    <healthe-claim-edit-eligibility-link
+                      [decodedClaimNumber]="decodedClaimNumber$ | async"
+                      [decodedCustomerId]="decodedCustomerId$ | async"
+                      [linkId]="item.elementName"
+                    ></healthe-claim-edit-eligibility-link>
+                  </ng-container>
+                  <ng-container *ngIf="item.elementName !== 'abmInactiveDate'">
+                    <div
+                      [id]="'eligibility-abm-' + item.label + '-label'"
+                      class="overhead-label"
+                    >
+                      <healthe-customer-configs-label
+                        [defaultText]="item.label"
+                        [elementName]="item.elementName"
+                      ></healthe-customer-configs-label>
+                      <healthe-claim-edit-eligibility-link
+                        *ngIf="item.editable"
+                        [decodedClaimNumber]="decodedClaimNumber$ | async"
+                        [decodedCustomerId]="decodedCustomerId$ | async"
+                        [linkId]="item.elementName"
+                      ></healthe-claim-edit-eligibility-link>
+                    </div>
+                    <div
+                      #datesDetail
+                      [id]="'eligibility-abm-' + item.label + '-value'"
+                      class="standard-text ellipsis-text"
+                    >
+                      <span [matTooltip]="item.value | uppercase">
+                        {{ item.value }}
+                      </span>
+                    </div>
+                  </ng-container>
+                </div>
+              </ng-container>
+            </ng-container>
+          </ng-container>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

@@ -1,0 +1,20 @@
+<div fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="35px">
+  <div
+    class="headerText"
+    id="{{sectionName}}Review-SectionTitle-{{step}}"
+    fxFlex="0 0 calc({{sectionSpace}}% - 35px)"
+  >
+    {{ sectionTitle }}
+  </div>
+  <div
+    *ngIf="matStepper"
+    class="editSectionText"
+    id="{{sectionName}}Review-EditSection-{{step}}"
+    (click)="doNavigation()"
+    fxFlex="0 0 calc({{sectionSpace}}% - 35px)"
+  >
+    <span style="cursor: pointer;">Edit This Section</span>
+  </div>
+</div>
+
+<div class="spacersmall"></div>

@@ -1,0 +1,27 @@
+<div class='healthe-generic-wizard-footer'>
+  <button
+    mat-flat-button
+    class="info-button"
+    *ngIf="showBackButton"
+    (click)="back.emit()"
+  >
+    BACK
+  </button>
+  <button
+    class="primary-button"
+    mat-flat-button
+    *ngIf="showSubmitButton"
+    (click)="submit.emit()"
+    [disabled]="disableSubmitButton"
+  >
+    SUBMIT
+  </button>
+  <button
+    class="primary-button"
+    mat-flat-button
+    *ngIf="showNextButton"
+    (click)="next.emit()"
+  >
+    NEXT
+  </button>
+</div>

@@ -1,0 +1,50 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ErrorCardComponent content pass through snapshot 1`] = `
+<mat-expansion-panel
+  aria-label="Error Card"
+  class="mat-expansion-panel error-card _mat-animation-noopable"
+  role="alert"
+>
+  <mat-expansion-panel-header
+    aria-disabled="false"
+    aria-expanded="false"
+    class="mat-expansion-panel-header mat-focus-indicator error-card--expansion-header _mat-animation-noopable"
+    role="button"
+    tabindex="0"
+  >
+    <span
+      class="mat-content"
+    >
+      <div
+        class="error-card__title"
+        fxlayout="row"
+        style="box-sizing: border-box; display: flex; flex-direction: row;"
+      >
+        <header>
+          some title
+        </header>
+      </div>
+    </span>
+    <span
+      class="mat-expansion-indicator ng-trigger ng-trigger-indicatorRotate"
+      style="transform:rotate(0deg);0:transform;"
+    />
+    
+  </mat-expansion-panel-header>
+  <div
+    class="mat-expansion-panel-content ng-trigger ng-trigger-bodyExpansion"
+    role="region"
+    style="height:0px;visibility:hidden;0:height;1:visibility;"
+  >
+    <div
+      class="mat-expansion-panel-body"
+    >
+      <content>
+        some data
+      </content>
+      
+    </div>
+  </div>
+</mat-expansion-panel>
+`;

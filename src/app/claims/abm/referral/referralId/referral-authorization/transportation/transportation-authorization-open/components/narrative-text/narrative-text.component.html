@@ -1,0 +1,108 @@
+<ng-container *ngIf="referralAuthorizationItem">
+  <div *ngFor="let item of getNarrativeTextList()">
+    <div class="spacersmall"></div>
+    <ng-container [ngSwitch]="item.type">
+      <healthe-narrative-quantity-used
+        *ngSwitchCase="'QUANTITY_USED'"
+        [narrativeTextItem]="item"
+        [authNarrativeMode]="authNarrativeMode"
+        [chosenAction]="chosenAction"
+      ></healthe-narrative-quantity-used>
+
+      <healthe-narrative-date-range-change
+        *ngSwitchCase="'OPEN_AUTHORIZATION_DATE_RANGE'"
+        [formGroup]="formGroup"
+        [narrativeTextItem]="item"
+        [authNarrativeMode]="authNarrativeMode"
+        [authNarrativeConfig]="authNarrativeConfig"
+        [chosenAction]="chosenAction"
+      ></healthe-narrative-date-range-change>
+
+      <healthe-narrative-limit-change
+        *ngSwitchCase="'OPEN_AUTHORIZATION_LIMIT_MODIFICATION'"
+        [formGroup]="formGroup"
+        [narrativeTextItem]="item"
+        [authNarrativeConfig]="authNarrativeConfig"
+        [authNarrativeMode]="authNarrativeMode"
+        [chosenAction]="chosenAction"
+      ></healthe-narrative-limit-change>
+
+      <healthe-narrative-new-open-auth
+        *ngSwitchCase="'NEW_OPEN_AUTHORIZATION'"
+        [formGroup]="formGroup"
+        [narrativeTextItem]="item"
+        [authNarrativeMode]="authNarrativeMode"
+        [authNarrativeConfig]="authNarrativeConfig"
+        [chosenAction]="chosenAction"
+      ></healthe-narrative-new-open-auth>
+
+      <healthe-narrative-location-limit
+        *ngSwitchCase="'OPEN_AUTHORIZATION_LOCATION_LIMIT'"
+        [authNarrativeMode]="authNarrativeMode"
+        [narrativeTextItem]="item"
+        [authItem]="referralAuthorizationItem.authData"
+        [claimLocations]="claimLocations"
+        [chosenAction]="chosenAction"
+      ></healthe-narrative-location-limit>
+
+      <healthe-narrative-new-locations-added
+        *ngSwitchCase="'OPEN_AUTHORIZATION_NEW_LOCATION'"
+        [authNarrativeMode]="authNarrativeMode"
+        [narrativeTextItem]="item"
+        [formGroup]="formGroup"
+        [claimLocations]="claimLocations"
+        [chosenAction]="chosenAction"
+      ></healthe-narrative-new-locations-added>
+
+      <!-- Fusion change types because fusion names are a bit different -->
+      <healthe-narrative-limit-and-date-change
+        *ngSwitchCase="'OPEN_AUTHORIZATION_QUANTITY_CHANGE_WITH_DATE'"
+        [formGroup]="formGroup"
+        [narrativeTextItem]="item"
+        [authNarrativeConfig]="authNarrativeConfig"
+        [authNarrativeMode]="authNarrativeMode"
+        [chosenAction]="chosenAction"
+      ></healthe-narrative-limit-and-date-change>
+
+      <healthe-narrative-limit-change
+        *ngSwitchCase="'OPEN_AUTHORIZATION_QUANTITY_CHANGE'"
+        [formGroup]="formGroup"
+        [narrativeTextItem]="item"
+        [authNarrativeConfig]="authNarrativeConfig"
+        [authNarrativeMode]="authNarrativeMode"
+        [chosenAction]="chosenAction"
+      ></healthe-narrative-limit-change>
+
+      <healthe-narrative-date-range-change
+        *ngSwitchCase="'OPEN_AUTHORIZATION_DATE_CHANGE'"
+        [formGroup]="formGroup"
+        [narrativeTextItem]="item"
+        [authNarrativeMode]="authNarrativeMode"
+        [authNarrativeConfig]="authNarrativeConfig"
+        [chosenAction]="chosenAction"
+      ></healthe-narrative-date-range-change>
+
+      <healthe-narrative-authorized-dates
+        *ngSwitchCase="'AUTHORIZED_DATES'"
+        [formGroup]="formGroup"
+        [narrativeTextItem]="item"
+        [authNarrativeMode]="authNarrativeMode"
+        [authNarrativeConfig]="authNarrativeConfig"
+      ></healthe-narrative-authorized-dates>
+
+      <healthe-narrative-additional-quantity
+        *ngSwitchCase="'ADDITIONAL_QUANTITY'"
+        [formGroup]="formGroup"
+        [narrativeTextItem]="item"
+        [authNarrativeMode]="authNarrativeMode"
+        [authNarrativeConfig]="authNarrativeConfig"
+      ></healthe-narrative-additional-quantity>
+    </ng-container>
+  </div>
+  <div *ngIf="showErrors && !isOpenAuthDetailedExpanded">
+    <mat-error *ngIf="showFutureDateError()">
+      End date must be a future date. Please expand the details below to modify
+      the date range.</mat-error
+    >
+  </div>
+</ng-container>

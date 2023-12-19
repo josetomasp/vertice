@@ -1,0 +1,61 @@
+<div style="height: 636px">
+  <div fxLayout="row" fxLayoutAlign="space-between center" mat-dialog-title>
+    <span id="presriberLookupModal--title"
+      >Prescriber - {{ prescriberData.prescriber.name }}</span
+    >
+    <button
+      mat-icon-button
+      mat-dialog-close
+      id="presriberLookupModal--header-widget"
+    >
+      <i class="fal fa-times modal-close-widget"></i>
+    </button>
+  </div>
+
+  <div
+    style="height: 497px;overflow-x: hidden; margin-bottom: 0"
+    mat-dialog-content
+  >
+    <div fxLayout="row wrap" fxLayoutGap="35px grid">
+      <ng-container *ngFor="let item of prescriberInfo">
+        <div
+          fxFlex="calc({{item.columnWidth}}% - 35px)"
+          fxFlex.lt-lg="calc(50% - 35px)"
+        >
+          <div
+            [id]="'presriberLookupModal-' + item.label + '-label'"
+            class="overhead-label"
+          >
+            {{ item.label }}
+          </div>
+          <div
+            #idDetail
+            [id]="'presriberLookupModal-' + item.label + '-value'"
+            class="standard-text"
+          >
+            <ng-container *ngIf="item.isArray">
+              <div *ngFor="let value of item.fieldValue">{{ value }}</div>
+            </ng-container>
+            <ng-container *ngIf="!item.isArray && !item.isPhone">
+              {{ item.fieldValue }}
+            </ng-container>
+            <ng-container *ngIf="!item.isArray && item.isPhone">
+              {{ item.fieldValue | mask: '(000) 000-0000' }}
+            </ng-container>
+          </div>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+  <mat-dialog-actions style="padding-right: 20px;">
+    <div fxFlex="row" fxLayoutAlign="end center">
+      <button
+        id="presriberLookupModal-closeButton"
+        class="primary-button mat-flat-button mat-primary"
+        [mat-dialog-close]="true"
+      >
+        CLOSE
+      </button>
+    </div>
+  </mat-dialog-actions>
+</div>

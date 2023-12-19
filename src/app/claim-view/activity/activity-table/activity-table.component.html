@@ -1,0 +1,488 @@
+<mat-card id="tableCard">
+  <mat-card-header fxLayout="row" fxLayoutAlign="space-between">
+    <mat-card-title id="tableCard-header-text"
+      >All
+      <healthe-customer-configs-label
+        [defaultText]="activeTabName"
+        [elementName]="activeTabName?.toLowerCase() + 'ActivityTab'"
+        [forcedCapitalization]="false"
+      ></healthe-customer-configs-label>
+      Activity
+    </mat-card-title>
+    <div
+      id="tableCard-header"
+      fxLayoutAlign="end"
+      fxLayout="row wrap"
+      fxLayoutGap="30px"
+    >
+      <div>
+        <div style="height: 75px; margin-top: 21px;">
+          <button
+            (click)="refresh.emit()"
+            mat-button
+            class="secondary-button"
+            style="min-width: 50px !important;"
+            matTooltip="Refresh Data"
+            [matTooltipShowDelay]="500"
+          >
+            <fa-icon
+              style="position: absolute;top: 0;left: 16px;"
+              [icon]="fasSyncAlt"
+            ></fa-icon>
+          </button>
+        </div>
+      </div>
+      <div>
+        <div class="overhead-label" id="dateRange-overheadLabel">
+          DATE RANGE
+        </div>
+        <div class="mat-form-field-wrapper" style="width: 276px;">
+          <healthe-daterange
+            style="width: 276px;"
+            [options]="datePickerOptions"
+            id="dateRange"
+            [triggerIcon]="faCalendarAlt"
+            [ngModel]="dateRange"
+            (submit)="_dateRangeChange($event)"
+          >
+          </healthe-daterange>
+        </div>
+      </div>
+
+      <div>
+        <div class="overhead-label" id="columnViewOption-label">
+          COLUMN VIEW
+        </div>
+        <mat-form-field>
+          <mat-select
+            style="width: 150px;"
+            healtheSelect
+            id="columnViewOptions"
+            (ngModelChange)="applyColumnViewPreference($event)"
+            [(ngModel)]="activeColumnView"
+            [panelClass]="'column-panel-size'"
+          >
+            <mat-option
+              *ngFor="let option of columnViewOptions"
+              value="{{option.value}}"
+              id="columnViewOptions-{{option.value}}"
+              >{{ option.label }}</mat-option
+            >
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <div>
+        <div class="overhead-label" id="tableCard-header-columnPicker-label">
+          COLUMNS
+        </div>
+        <mat-form-field style="width: 50px;">
+          <fa-icon
+            [icon]="faThList"
+            style="position: absolute; left: 15px; top:9px; font-size: 18px;"
+          ></fa-icon>
+          <mat-select
+            style="width: 35px;"
+            healtheSelect
+            [ngModel]="tableColumnList"
+            (valueChange)="updateTableColumnList($event)"
+            multiple
+            id="columnPicker"
+            [panelClass]="'column-panel-size'"
+            #columnSelect
+          >
+            <mat-select-trigger></mat-select-trigger>
+            <div style="height: 300px; overflow-y:scroll">
+              <healthe-select-all-option
+                id="columnPicker-select-all"
+                [select]="columnSelect"
+                >All columns
+              </healthe-select-all-option>
+
+              <mat-divider></mat-divider>
+              <mat-option
+                *ngFor="let option of columnDropdownList"
+                value="{{option.value}}"
+                [id]="'columnPicker-' + option.value"
+                >{{ option.label }}</mat-option
+              >
+            </div>
+            <div fxLayout="column">
+              <button
+                mat-flat-button
+                class="primary-button column-panel-button"
+                id="columnPicker-save-as-default"
+                (click)="saveDefaultColumnPreferences()"
+              >
+                SAVE AS DEFAULT
+              </button>
+              <mat-divider></mat-divider>
+              <button
+                class="secondary-button column-panel-button"
+                id="columnPicker-column-preferences"
+                routerLink="/preferences"
+                fragment="claimtablelist"
+                (click)="navigateToColumnPreferences()"
+              >
+                COLUMN PREFERENCES
+              </button>
+            </div>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <div>
+        <div style="height: 75px;">
+          <button
+            mat-flat-button
+            style="width: 120px; margin-top: 21px"
+            id="tableCard-header-exportButton"
+            class="primary-button"
+            (click)="setOpenUntilClose(exportMenu)"
+            [mat-menu-trigger-for]="exportMenu"
+          >
+            EXPORT
+            <fa-icon
+              class="inline-right-icon"
+              [icon]="exportMenuIcon"
+            ></fa-icon>
+          </button>
+          <mat-menu #exportMenu [overlapTrigger]="false" yPosition="below">
+            <button
+              *ngFor="let exportOption of exportDropdownOptions"
+              mat-menu-item
+              [id]="'tableCard-header-exportOptions-' + exportOption.text"
+              (click)="exportOption.action()"
+            >
+              {{ exportOption.text }}
+            </button>
+          </mat-menu>
+        </div>
+      </div>
+
+      <div>
+        <a
+          style="margin-top: 26px"
+          id="tableCard-header-advancedFilterPanelTrigger"
+          mat-button
+          (click)="advancedFilters.toggle()"
+        >
+          Advanced Filters
+          <fa-icon
+            style="padding-left: 10px"
+            [icon]="advancedFilters.expanded ? faChevronUp : faChevronDown"
+            id="activityView-tableCard-header-advancedFilterPanelTrigger-chevron"
+          ></fa-icon>
+        </a>
+      </div>
+    </div>
+  </mat-card-header>
+  <mat-expansion-panel
+    id="tableCard-header-advancedFilterPanel"
+    #advancedFilters
+    style="box-shadow: none !important;"
+  >
+    <div
+      fxLayout="row wrap"
+      fxLayoutAlign="end center"
+      fxLayoutGap="30px"
+      id="tableCard-header-advancedFilterPanel-content"
+      [formGroup]="filterFormGroup"
+    >
+      <div>
+        <div
+          class="overhead-label"
+          id="tableCard-header-advancedFilterPanel-content-prescriberFilterMultiSelectDropdownLabel"
+        >
+          PRESCRIBER
+        </div>
+        <mat-form-field style="width: 276px;">
+          <mat-select
+            healtheSelect
+            formControlName="prescriberName"
+            id="tableCard-header-advancedFilterPanel-content-prescriberFilterMultiSelectDropdownTrigger"
+            style="width: 244px;"
+            multiple
+            [placeholder]="getPrescriberTriggerText()"
+            #prescriberFilter
+          >
+            <mat-select-trigger id="prescriberFilter-customTrigger">{{
+              getPrescriberTriggerText()
+            }}</mat-select-trigger>
+            <healthe-select-all-option
+              id="prescriberFilter-select-all"
+              [select]="prescriberFilter"
+              >All values
+            </healthe-select-all-option>
+            <mat-divider></mat-divider>
+            <mat-option
+              *ngFor="let option of prescriberOptions"
+              [value]="option.value"
+              [matTooltip]="option.label"
+              [id]="'prescriberOption-' + option.value"
+              >{{ option.label }}</mat-option
+            >
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div>
+        <div
+          class="overhead-label"
+          id="tableCard-header-advancedFilterPanel-content-outcomeFilterMultiSelectDropdownLabel"
+        >
+          {{ getOutcomeLabel(activeTabName) }}
+        </div>
+        <mat-form-field style="width: 276px;">
+          <mat-select
+            healtheSelect
+            formControlName="outcome"
+            id="tableCard-header-advancedFilterPanel-content-outcomeMultiSelectDropdownTrigger"
+            style="width: 244px;"
+            [placeholder]="getOutcomeTriggerText()"
+            multiple
+            #outcomeFilter
+          >
+            <mat-select-trigger id="outcomeFilter-customTrigger">{{
+              getOutcomeTriggerText()
+            }}</mat-select-trigger>
+            <healthe-select-all-option
+              id="outcomeFilter-select-all"
+              [select]="outcomeFilter"
+              >All values
+            </healthe-select-all-option>
+            <mat-divider></mat-divider>
+            <mat-option
+              *ngFor="let option of outcomeOptions"
+              [value]="option.value"
+              [matTooltip]="option.label"
+              [id]="'outcomeOption-' + option.value"
+              >{{ option.label }}</mat-option
+            >
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div>
+        <div
+          class="overhead-label"
+          id="tableCard-header-advancedFilterPanel-content-activityTypeFilterMultiSelectDropdownLabel"
+        >
+          {{ getTypeLabel(activeTabName) }}
+        </div>
+        <mat-form-field style="width: 276px;">
+          <mat-select
+            healtheSelect
+            #activityFilter
+            formControlName="activityType"
+            id="tableCard-header-advancedFilterPanel-content-activityTypeMultiSelectDropdownTrigger"
+            [placeholder]="getActivityTypeTriggerText()"
+            style="width: 244px;"
+            multiple
+          >
+            <mat-select-trigger id="activityFilter-customTrigger">{{
+              getActivityTypeTriggerText()
+            }}</mat-select-trigger>
+            <healthe-select-all-option
+              id="activityTypeFilter-select-all"
+              [select]="activityFilter"
+              >All values
+            </healthe-select-all-option>
+            <mat-divider></mat-divider>
+            <mat-option
+              *ngFor="let option of activityTypeOptions"
+              [value]="option.value"
+              [matTooltip]="option.label"
+              [id]="'activitTypeOption-' + option.value"
+              >{{ option.label }}</mat-option
+            >
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <div>
+        <div
+          class="overhead-label"
+          id="tableCard-header-advancedFilterPanel-content-itemFilterMultiSelectDropdownLabel"
+        >
+          ITEM NAME
+        </div>
+        <mat-form-field style="width: 276px;">
+          <mat-select
+            healtheSelect
+            #itemNameFilter
+            formControlName="itemName"
+            id="tableCard-header-advancedFilterPanel-content-itemFilterMultiSelectDropdownTrigger"
+            [placeholder]="getItemNameTriggerText()"
+            style="width: 244px;"
+            multiple
+          >
+            <mat-select-trigger id="itemNameFilter-customTrigger">{{
+              getItemNameTriggerText()
+            }}</mat-select-trigger>
+            <healthe-select-all-option
+              id="itemNameFilter-select-all"
+              [select]="itemNameFilter"
+              >All values
+            </healthe-select-all-option>
+            <mat-divider></mat-divider>
+            <mat-option
+              [id]="'itemNameOption-' + option.value"
+              *ngFor="let option of itemNameOptions"
+              [value]="option.value"
+              [matTooltip]="option.label"
+              >{{ option.label }}</mat-option
+            >
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <a
+        style="width: 140px; text-align: left;"
+        mat-button
+        id="tableCard-header-advancedFilterPanel-content-clearFiltersButton"
+        (click)="clearFilters()"
+      >
+        Clear filters
+      </a>
+    </div>
+  </mat-expansion-panel>
+
+  <div class="healthe-table-header--advancedFilter--summaryBox">
+    <p>
+      <span
+        class="healthe-table-header--advancedFilter--label"
+        id="healthe-table-header--advancedFilter--label"
+        >ADVANCED FILTERS:</span
+      ><span
+        class="healthe-table-header--advancedFilter--summary"
+        id="healthe-table-header--advancedFilter--summary"
+      >
+        {{ advancedFiltersSummary }}</span
+      >
+    </p>
+  </div>
+
+  <mat-paginator
+    [pageSizeOptions]="pagerSizeOptions"
+    (page)="pageEvent($event)"
+    #primaryPaginator
+  >
+  </mat-paginator>
+
+  <div
+    class="activityView-table-scroll"
+    style="max-height: 500px; overflow-y: scroll;"
+  >
+    <table
+      mat-table
+      style="min-width: 1500px"
+      [ngClass]="{
+        'activityView-table-fitColumnToData':
+          activeColumnView === 'expandColumns'
+      }"
+      [dataSource]="dataSource"
+      matSort
+    >
+      <ng-container
+        *ngFor="let column of (tableColumns$ | async)"
+        [matColumnDef]="column.name"
+      >
+        <th
+          class="healthe-table-cell"
+          [id]="'healthe-table-header--' + column.name"
+          mat-header-cell
+          [ngClass]="filterNonHeaderClasses(column.classes)"
+          *matHeaderCellDef
+          mat-sort-header
+        >
+          {{ column.label | uppercase }}
+        </th>
+
+        <td
+          #justText
+          class="healthe-table-cell"
+          mat-cell
+          [ngClass]="column.classes"
+          *matCellDef="let data; let i = index"
+          [id]="'activityView-table-cell-' + column.name + i"
+        >
+          <ng-container [ngSwitch]="linkable(column, data)">
+            <a
+              *ngSwitchCase="true"
+              style="text-align: left; display: block; overflow: hidden; text-overflow: ellipsis;"
+              class="ie-ellipsis"
+              mat-button
+              [matTooltip]="data[column.name]"
+              (click)="openActivityLink(data)"
+              href="javascript:void(0)"
+              >{{ data[column.name] }}</a
+            >
+            <span *ngSwitchDefault [matTooltip]="data[column.name]">
+              <ng-container [ngSwitch]="column.name">
+                <ng-container *ngSwitchCase="'itemName'">
+                  <ng-container *ngIf="data.ndc !== '' && !data.isCompound">
+                    <healthe-info-lookup-launcher
+                      [displayText]="data[column.name]"
+                      [drugLookup]="{
+                        drugID: data.ndc,
+                        quantity: data.quantity,
+                        drugDate: data.creationDate
+                      }"
+                    ></healthe-info-lookup-launcher>
+                  </ng-container>
+                  <ng-container *ngIf="data.ndc === '' || data.isCompound">
+                    {{ data[column.name] }}
+                  </ng-container>
+                </ng-container>
+                <ng-container *ngSwitchCase="'prescriberName'">
+                  <healthe-info-lookup-launcher
+                    [prescriberID]="data.prescriberId"
+                    [displayText]="data[column.name]"
+                  ></healthe-info-lookup-launcher>
+                </ng-container>
+                <ng-container *ngSwitchCase="'pharmacy'">
+                  <healthe-info-lookup-launcher
+                    [nabp]="data.nabp"
+                    [displayText]="data[column.name]"
+                  ></healthe-info-lookup-launcher>
+                </ng-container>
+                <ng-container *ngSwitchDefault>
+                  {{ data[column.name] }}
+                </ng-container>
+              </ng-container>
+            </span>
+          </ng-container>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="tableColumnList; sticky: true"></tr>
+      <tr
+        mat-row
+        [style.display]="isLoadingData ? 'none' : 'table-row'"
+        *matRowDef="let row; columns: tableColumnList; let i = index"
+      ></tr>
+    </table>
+  </div>
+  <div
+    id="claimActivityNoData"
+    *ngIf="isEmptyDataSet && !isLoadingData"
+    class="healthe-table--centered-container"
+    fxLayout="column"
+    fxLayoutAlign="center center"
+  >
+    <img src="assets/img/NoDataIcon.svg" />
+    <p class="standard-text" id="tableVerbiage">
+      {{ getVerbage(tableCondition.NoDataForQuery) }}
+    </p>
+  </div>
+  <div
+    id="claimActivityLoadingDataSpinner"
+    *ngIf="isLoadingData"
+    class="healthe-table--centered-container"
+    fxLayout="column"
+    fxLayoutAlign="center center"
+  >
+    <mat-spinner [diameter]="55"></mat-spinner>
+    <h2>Loading results...</h2>
+  </div>
+  <mat-paginator #secondaryPaginator></mat-paginator>
+</mat-card>

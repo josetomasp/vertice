@@ -1,0 +1,44 @@
+import { ErrorCardComponent } from '@modules/error-card/error-card.component';
+import { CommonModule } from '@angular/common';
+import { MatCardModule } from '@angular/material/card';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { FlexLayoutModule } from '@angular/flex-layout';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { Component, NO_ERRORS_SCHEMA } from '@angular/core';
+import { render, screen } from '@testing-library/angular';
+
+@Component({
+  selector: 'healthe-card-test',
+  template:
+    '<healthe-error-card><header>some title</header><content>some data</content></healthe-error-card>'
+})
+class CardTestComponent {}
+
+describe('ErrorCardComponent', function () {
+  async function setup(testComponent = ErrorCardComponent) {
+    return await render(testComponent, {
+      imports: [
+        CommonModule,
+        MatCardModule,
+        MatExpansionModule,
+        FlexLayoutModule,
+        FontAwesomeModule
+      ],
+      declarations: [CardTestComponent, ErrorCardComponent],
+      schemas: [NO_ERRORS_SCHEMA]
+    });
+  }
+  test('init', async () => {
+    await setup();
+  });
+  test('content pass through snapshot', async () => {
+    await setup(CardTestComponent as any);
+    // Validate content passthrough
+    expect(screen.getByRole(/region/i)).toContainElement(
+      screen.getByText(/some data/i)
+    );
+    expect(screen.getByText(/some title/i)).toBeInTheDocument();
+    // Validate snapshot
+    expect(screen.getByRole('alert')).toMatchSnapshot();
+  });
+});

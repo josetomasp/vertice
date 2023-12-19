@@ -1,0 +1,17 @@
+<div fxLayout="column" fxLayoutAlign="center end">
+  <div id="searchResultCount">Total Number of results: {{ resultsCount }}</div>
+  <div
+    fxLayout="column"
+    fxLayoutAlign="center end"
+    [style.visibility]="
+      searchIsRecordCountLimited && resultsCount >= resultsCountLimitErrorThreshold ? 'visible' : 'hidden'
+    "
+    id="searchResultsLimited"
+  >
+    <div class="danger-text">
+      Your search has been limited to
+      {{ resultsCountLimitErrorThreshold }} results.
+    </div>
+    <div>Please use additional search filters to narrow your results.</div>
+  </div>
+</div>

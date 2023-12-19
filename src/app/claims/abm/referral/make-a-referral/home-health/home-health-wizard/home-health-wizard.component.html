@@ -1,0 +1,93 @@
+<div *ngIf="isServiceSuccessfullySubmitted$ | async">
+  <healthe-confirmation-banner [alertType]="alertType.SUCCESS"
+                               [showCloseButton]="false"
+                               [idSufix]="serviceName"
+                               title="You have successfully submitted this service referral"
+                               [isVisible]="true"></healthe-confirmation-banner>
+  <div style="padding: 0 20px 0 20px;">
+    <healthe-home-health-review
+      [id]="MAKE_A_REFERRAL_SECTION_ID + serviceName"
+      [inReferralReviewMode]="true"
+    ></healthe-home-health-review>
+    <div class="spacersmall"></div>
+    <mat-divider></mat-divider>
+    <div class="spacersmall"></div>
+    <div
+      style="display: flex; flex-flow: row nowrap; justify-content: flex-end">
+      <button
+        mat-flat-button
+        class="primary-button"
+        [id]="'referral-review-copyToClipboard-button-' + serviceName"
+        (click)="copyToClipboard()"
+      >
+        COPY REFERRAL TO CLIPBOARD
+      </button>
+    </div>
+  </div>
+</div>
+
+<ng-container *ngIf="!(isServiceSuccessfullySubmitted$ | async)">
+  <mat-horizontal-stepper healtheStepState [sharedForm]="sharedForm">
+    <mat-step *ngFor="let step of subServiceSteps; let i = index">
+      <healthe-stepper-step-label
+        *matStepLabel
+        [step]="step"
+        [serviceName]="wizardStepConfig.serviceName"
+        [labelClass]="step.labelClass"
+        [iconClass]="step.iconClass"
+      ></healthe-stepper-step-label>
+      <ng-container [ngSwitch]="step.name">
+        <!-- Nursing -->
+        <healthe-home-health-nursing
+          [stepIndex]="i"
+          *ngSwitchCase="nursingStepName"
+        ></healthe-home-health-nursing>
+        <!-- In-Home Health -->
+        <healthe-home-health-in-home-therapy
+          [stepIndex]="i"
+          *ngSwitchCase="inHomeTherapyStepName"
+        ></healthe-home-health-in-home-therapy>
+        <!-- Aides -->
+        <healthe-home-health-aides
+          [stepIndex]="i"
+          *ngSwitchCase="aidesStepName"
+        ></healthe-home-health-aides>
+        <!-- Infusion -->
+        <healthe-home-health-infusion
+          [stepIndex]="i"
+          *ngSwitchCase="infusionStepName"
+        ></healthe-home-health-infusion>
+        <!-- Other -->
+        <healthe-home-health-other
+          [stepIndex]="i"
+          *ngSwitchCase="otherStepName"
+        ></healthe-home-health-other>
+        <healthe-home-health-vendors-wizard-form
+          *ngSwitchCase="wizardStepConfig.vendorsName"
+        ></healthe-home-health-vendors-wizard-form>
+        <healthe-home-health-documents
+          *ngSwitchCase="wizardStepConfig.documentsName"
+        ></healthe-home-health-documents>
+        <healthe-home-health-review
+          [stepperCompleted]="stepperCompleted"
+          *ngSwitchCase="wizardStepConfig.reviewName"
+        ></healthe-home-health-review>
+      </ng-container>
+    </mat-step>
+  </mat-horizontal-stepper>
+  <div class="spacersmall"></div>
+  <mat-divider
+    class="section-divider"
+    style="position: absolute; border-top-width: 2px; left: 20px; right: 20px; width: auto;"
+  ></mat-divider>
+  <div class="spacersmall"></div>
+  <healthe-step-advancer
+    (continue)="continue()"
+    (previous)="previous()"
+    [showContinueButton]="!showCloseButton()"
+    [showSubmitButton]="showCloseButton()"
+    (submitButtonEvent)="submit()"
+    (saveAsDraftEvent)="saveReferralAsDraft()"
+    [disableSubmitButton]="isSubmitDisabled()"
+  ></healthe-step-advancer>
+</ng-container>

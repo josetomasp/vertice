@@ -1,0 +1,34 @@
+@import 'variables';
+
+::ng-deep {
+  mat-expansion-panel-header .mat-content {
+    overflow: visible;
+  }
+  mat-expansion-panel.mat-expansion-panel:not(.healthe-expansion--grey-header)
+    mat-expansion-panel-header
+    > *:hover,
+  mat-expansion-panel.mat-expansion-panel:not(.healthe-expansion--grey-header)
+    mat-expansion-panel-header.mat-expansion-panel-header
+    > *:hover {
+    background-color: unset;
+  }
+}
+
+div > div:not(:first-child) {
+  margin-top: 15px;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.headerTextColor {
+  color: $gray-900;
+}
+
+.numberOfTrips {
+  width: 64px;
+  margin-right: 10px;
+}

@@ -1,0 +1,23 @@
+@import 'node_modules/@healthe/vertice-library/scss/variables';
+
+.alertInfo-modal-title {
+  color: $primary;
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 18px;
+  margin-bottom: 30px;
+}
+
+.mat-dialog-title {
+  box-sizing: content-box !important;
+}
+
+.alertInfo-modal-submit-bodyClass {
+  height: 215px;
+  overflow: auto;
+}
+
+.float-right {
+  margin-left: auto;
+  order: 2;
+}

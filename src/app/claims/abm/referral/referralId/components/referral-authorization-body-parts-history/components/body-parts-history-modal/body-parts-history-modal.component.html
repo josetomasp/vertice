@@ -1,0 +1,102 @@
+<div
+  fxLayout="row"
+  class="title-container"
+  fxLayoutAlign="space-between center"
+  mat-dialog-title
+>
+  <span id="body-parts-history-modal-title">Body Parts</span>
+  <button
+    mat-icon-button
+    mat-dialog-close
+    id="body-parts-history-modal-header-widget"
+  >
+    <i class="fal fa-times modal-close-widget"></i>
+  </button>
+</div>
+
+<mat-dialog-content>
+  <div *ngFor="let bodyPartHistory of bodyPartHistoryArray">
+    <h3 style="margin: 0;">{{ bodyPartHistory.authorizationDescription }}</h3>
+
+    <table mat-table [dataSource]="bodyPartHistory.bodyParts">
+      <ng-container matColumnDef="description">
+        <th
+          mat-header-cell
+          id="body-parts-history-modal-header-name"
+          class="healthe-table-cell tableHeader"
+          *matHeaderCellDef
+        >
+          BODY PART
+        </th>
+        <td
+          mat-cell
+          class="healthe-table-cell"
+          [id]="'body-parts-history-modal-cell-description-' + i"
+          *matCellDef="let data; let i = index"
+        >
+          <span [matTooltip]="data.description">{{ data.description }}</span>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="lastActionDate">
+        <th
+          mat-header-cell
+          id="body-parts-history-modal-header-lastActionDate"
+          class="healthe-table-cell tableHeader"
+          *matHeaderCellDef
+        >
+          DATE ACTIONED
+        </th>
+        <td
+          mat-cell
+          class="healthe-table-cell"
+          [id]="'body-parts-history-modal-cell-lastActionDate-' + i"
+          *matCellDef="let data; let i = index"
+        >
+          <span [matTooltip]="data.lastActionDate">{{
+            data.lastActionDate
+          }}</span>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="status">
+        <th
+          mat-header-cell
+          id="body-parts-history-modal-header-status"
+          class="healthe-table-cell tableHeader"
+          *matHeaderCellDef
+        >
+          STATUS
+        </th>
+        <td
+          mat-cell
+          class="healthe-table-cell"
+          [id]="'body-parts-history-modal-cell-status-' + i"
+          *matCellDef="let data; let i = index"
+        >
+          <span [matTooltip]="data.status">{{
+            data.status ? data.status : 'Approved'
+          }}</span>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+    </table>
+
+    <div class="spacerlarge"></div>
+  </div>
+</mat-dialog-content>
+
+<mat-dialog-actions class="button-container">
+  <div fxLayout="row" fxLayoutGap="20px" style="margin-right: 20px;">
+    <button
+      mat-flat-button
+      class="info-button"
+      id="body-parts-history-modal--cancel"
+      mat-dialog-close
+    >
+      CLOSE
+    </button>
+  </div>
+</mat-dialog-actions>

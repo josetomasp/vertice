@@ -1,0 +1,228 @@
+<div
+  fxLayout="row"
+  fxLayoutAlign="space-between center"
+  mat-dialog-title
+  style="padding-top: 30px; padding-bottom: 30px;"
+>
+  <span id="authorizedTransportationLocationsModal-title"
+    >Referral Locations - Transportation</span
+  >
+  <button
+    mat-icon-button
+    mat-dialog-close
+    id="authorizedTransportationLocationsModal-closeX"
+  >
+    <i class="fal fa-times modal-close-widget"></i>
+  </button>
+</div>
+
+<mat-dialog-content class="modalContent">
+  <div fxLayout="row" fxLayoutGap="50px">
+    <!-- DATE RANGE -->
+    <section>
+      <label
+        class="overhead-label"
+        id="authorizedTransportationLocationsModal-dateRange-label"
+        >DATE RANGE</label
+      >
+      <div
+        matTooltip="{{authorizedLocationsModalData.startDate}} - {{authorizedLocationsModalData.endDate}}"
+        class="standard-text ellipsis-text"
+        id="authorizedTransportationLocationsModal-dateRange-value"
+      >
+        {{ authorizedLocationsModalData.startDate }} -
+        {{ authorizedLocationsModalData.endDate }}
+      </div>
+    </section>
+    <!-- SERVICES -->
+    <section>
+      <label
+        class="overhead-label"
+        id="authorizedTransportationLocationsModal-services-label"
+        >SERVICES</label
+      >
+      <div
+        matTooltip="{{authorizedLocationsModalData.serviceType}}"
+        class="standard-text ellipsis-text"
+        id="authorizedTransportationLocationsModal-services-value"
+      >
+        {{ authorizedLocationsModalData.serviceType }}
+      </div>
+    </section>
+    <!-- NUMBER OF TRIPS -->
+    <section>
+      <label
+        class="overhead-label"
+        id="authorizedTransportationLocationsModal-numberOfTrips-label"
+        >NUMBER OF TRIPS</label
+      >
+      <div
+        matTooltip="{{authorizedLocationsModalData.tripsAuthorized}}"
+        class="standard-text ellipsis-text"
+        id="authorizedTransportationLocationsModal-numberOfTrips-value"
+      >
+        {{
+          authorizedLocationsModalData.unlimitedTrips
+            ? 'Unlimited'
+            : authorizedLocationsModalData.tripsAuthorized
+        }}
+      </div>
+    </section>
+  </div>
+  <div class="spacersmall"></div>
+  <!-- Locations -->
+  <!-- No location restrictions -->
+  <ng-container *ngIf="authorizedLocationsModalData.noLocationRestrictions">
+    <mat-expansion-panel
+      class="healthe-expansion--grey-header small-header"
+      [disabled]="true"
+    >
+      <mat-expansion-panel-header collapsedHeight="10px" expandedHeight="10px">
+        <span id="authorizedTransportationLocationsModal-noLocationRestrictions"
+          >No Location Restrictions</span
+        >
+      </mat-expansion-panel-header>
+    </mat-expansion-panel>
+  </ng-container>
+  <!-- Actual locations -->
+  <div
+    *ngIf="!authorizedLocationsModalData.noLocationRestrictions"
+    fxLayout="column"
+    fxLayoutGap="25px"
+  >
+    <ng-container
+      *ngFor="
+        let locationsOfType of authorizedLocationsModalData.authorizedLocationsByType;
+        index as locationTypeIndex
+      "
+    >
+      <!--
+        Single location expansion panel (disabled expansion and full location details in header)
+      -->
+      <mat-expansion-panel
+        *ngIf="locationsOfType.locations.length === 1"
+        class="healthe-expansion--grey-header small-header"
+        [disabled]="true"
+      >
+        <mat-expansion-panel-header collapsedHeight="10px">
+          <div
+            fxLayout="row"
+            fxLayoutGap="10px"
+            fxLayoutAlign="start center"
+            style="width:100%"
+          >
+            <div
+              *ngIf="!authorizedLocationsModalData.specifyTripsByLocation"
+              id="authorizedTransportationLocationsModal-locationType-{{locationTypeIndex}}-singleLocationHeaderLabel"
+            >
+              {{ locationsOfType.locationTypeDescription }} -
+              {{ locationsOfType.locations[0].name }} -
+              {{ locationsOfType.locations[0].address }}
+            </div>
+            <ng-container
+              *ngIf="authorizedLocationsModalData.specifyTripsByLocation"
+            >
+              <div
+                fxFlex="0 0 calc(70%-5px)"
+                id="authorizedTransportationLocationsModal-locationType-{{locationTypeIndex}}-singleLocationHeaderLabel"
+              >
+                {{ locationsOfType.locationTypeDescription }} -
+                {{ locationsOfType.locations[0].name }} -
+                {{ locationsOfType.locations[0].address }}
+              </div>
+              <div fxFlex="0 0 calc(30%-5px)">
+                <label
+                  class="overhead-label"
+                  id="authorizedTransportationLocationsModal-locationType-{{locationTypeIndex}}-singleLocationTripsLabel"
+                  ># OF TRIPS AUTHORIZED</label
+                >
+                <div
+                  class="standard-text"
+                  id="authorizedTransportationLocationsModal-locationType-{{locationTypeIndex}}-singleLocationTripsValue"
+                >
+                  {{ locationsOfType.locations[0].tripsAuthorized }}
+                </div>
+              </div>
+            </ng-container>
+          </div>
+        </mat-expansion-panel-header>
+      </mat-expansion-panel>
+
+      <!--
+        Multiple location expansion panel (enabled expansion and just locationType in header)
+      -->
+      <mat-expansion-panel
+        *ngIf="locationsOfType.locations.length > 1"
+        class="healthe-expansion--grey-header small-header"
+      >
+        <mat-expansion-panel-header
+          collapsedHeight="10px"
+          expandedHeight="10px"
+          id="authorizedTransportationLocationsModal-locationType-{{locationTypeIndex}}-multipleLocationHeaderLabel"
+          >{{
+            locationsOfType.locationTypeDescription
+          }}</mat-expansion-panel-header
+        >
+        <ng-template matExpansionPanelContent>
+          <div fxLayout="column" fxLayoutGap="15px">
+            <div
+              *ngFor="
+                let location of locationsOfType.locations;
+                index as mutlipleLocationIndex
+              "
+              fxLayout="row"
+              fxLayoutGap="10px"
+            >
+              <div
+                *ngIf="!authorizedLocationsModalData.specifyTripsByLocation"
+                id="authorizedTransportationLocationsModal-locationType-{{locationTypeIndex}}-location-{{mutlipleLocationIndex}}-locationValue"
+              >
+                {{ location.name }} - {{ location.address }}
+              </div>
+              <ng-container
+                *ngIf="authorizedLocationsModalData.specifyTripsByLocation"
+              >
+                <div
+                  fxFlex="0 0 calc(70%-5px)"
+                  fxLayoutAlign="start end"
+                  id="authorizedTransportationLocationsModal-locationType-{{locationTypeIndex}}-location-{{mutlipleLocationIndex}}-locationValue"
+                >
+                  {{ location.name }} - {{ location.address }}
+                </div>
+                <div fxFlex="0 0 calc(30%-5px)">
+                  <label
+                    class="overhead-label"
+                    id="authorizedTransportationLocationsModal-locationType-{{locationTypeIndex}}-location-{{mutlipleLocationIndex}}-locationTripsLabel"
+                    ># OF TRIPS AUTHORIZED</label
+                  >
+                  <div
+                    class="standard-text"
+                    id="authorizedTransportationLocationsModal-locationType-{{locationTypeIndex}}-location-{{mutlipleLocationIndex}}-locationTripsValue"
+                  >
+                    {{ location.tripsAuthorized }}
+                  </div>
+                </div>
+              </ng-container>
+            </div>
+          </div>
+        </ng-template>
+      </mat-expansion-panel>
+    </ng-container>
+  </div>
+  <div class="spacersmall"></div>
+</mat-dialog-content>
+
+<mat-dialog-actions
+  style="padding: 0; margin-bottom: 20px; justify-content: flex-end;"
+>
+  <div fxLayout="row" fxLayoutGap="20px" style="margin-right: 20px;">
+    <button
+      mat-flat-button
+      class="primary-button"
+      mat-dialog-close
+      id="authorizedTransportationLocationsModal-closeButton"
+    >
+      Close
+    </button>
+  </div>
+</mat-dialog-actions>

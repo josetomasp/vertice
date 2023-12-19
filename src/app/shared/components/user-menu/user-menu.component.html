@@ -1,0 +1,26 @@
+<button
+  (click)="menuOpen()"
+  [matMenuTriggerFor]="menu"
+  id="userMenu_button"
+  mat-button
+>
+  {{ userName }}
+  <fa-icon [icon]="menuIcon" style="margin-left: 10px;"></fa-icon>
+</button>
+<mat-menu #menu="matMenu">
+  <ng-container *ngFor="let item of menuItems">
+    <ng-container *ngIf="shouldShowElementWithSSOStatusInMind(item)">
+      <button
+        (click)="menuItemClicked(item)"
+        *healtheRemoveElementIfTrue="
+          componentGroupName;
+          elementName: item.elementName
+        "
+        [id]="'userMenu_' + item.elementName"
+        mat-menu-item
+      >
+        {{ item.displayName }}
+      </button>
+    </ng-container>
+  </ng-container>
+</mat-menu>

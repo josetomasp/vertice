@@ -1,0 +1,12 @@
+<div
+  class="locked-referral-alert--banner"
+  fxLayout="row"
+  fxLayoutAlign="start center"
+  fxLayoutGap="15px"
+>
+  <fa-icon class="locked-referral-alert--banner_icon" [icon]="faLock"></fa-icon>
+  <span class="standard-text"
+    >Note:
+    {{ lockedMessage ? lockedMessage : 'this referral is locked.' }}</span
+  >
+</div>

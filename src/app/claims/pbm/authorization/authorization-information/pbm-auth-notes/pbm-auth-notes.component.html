@@ -1,0 +1,148 @@
+<mat-expansion-panel
+  [formGroup]="parentFormGroup"
+  #banner
+  class="pbm-notes-expansion-panel"
+  [hideToggle]="!notesConfig.isAnExpandableSection"
+>
+  <mat-expansion-panel-header
+    [collapsedHeight]="''"
+    [expandedHeight]="''"
+    #bannerHeader
+    (click)="notesConfig.isAnExpandableSection ? null : bannerHeader._toggle()"
+    [ngClass]="
+      notesConfig.isAnExpandableSection
+        ? 'pbm-notes-expansion-panel--header'
+        : 'pbm-notes-expansion-panel--header nonExpandableHeader'
+    "
+  >
+    <mat-panel-title class="pbm-notes-expansion-panel--header--title">
+      <fa-icon [icon]="faFile" class="pbm-notes-expansion-panel_icon"></fa-icon>
+      {{ notesConfig.noteTitle }}
+    </mat-panel-title>
+    <span
+      class="text-secondary pbm-notes-expansion-panel--see-notes"
+      *ngIf="notesConfig.isAnExpandableSection"
+      >{{ banner.expanded ? 'Collapse Notes' : 'View/Edit Notes' }}</span
+    >
+    <span
+      class="tag tag-secondary"
+      *ngIf="notesConfig.historyNotes && notesConfig.isAnExpandableSection"
+      >{{ notes.length }}</span
+    >
+  </mat-expansion-panel-header>
+  <ng-container *ngIf="notesConfig.historyNotes">
+    <div *ngFor="let note of notes; let index = index">
+      <div fxLayout="column">
+        <div class="spacersmall"></div>
+        <div class="overhead-label" fxLayout="row" fxLayoutGap="6px">
+          <span
+            class="standard-text"
+            [id]="
+              index + '-pbm-notes--' + note.noteId + '-userCreated-' + index
+            "
+            >{{ note.userId }}</span
+          >
+          <span> - </span>
+          <span
+            class="standard-text"
+            [id]="
+              index + '-pbm-notes--' + note.noteId + '-timeCreated-' + index
+            "
+            >{{ note.dateTimeCreated }}</span
+          >
+        </div>
+        <div
+          class="standard-text"
+          style="max-width: 50%"
+          [id]="index + '-pbm-notes--' + note.noteId + '-note-' + index"
+        >
+          {{ note.comment }}
+        </div>
+      </div>
+    </div>
+  </ng-container>
+
+  <div class="spacersmall"></div>
+  <mat-form-field
+    *ngIf="
+      notesConfig.mode === pbmAuthFormMode.ReadWrite && noteFormControlName
+    "
+  >
+    <textarea
+      #notesInput
+      matInput
+      id="{{ index }}-auth-info-notes-input"
+      rows="3"
+      [formControlName]="noteFormControlName"
+      [placeholder]="notesConfig.placeholder"
+      style="resize: none"
+      [maxlength]="notesConfig.maxCharNumber"
+      formLabel="note"
+      healtheFormValidationExtractor
+    ></textarea>
+    <div class="textarea-input-count" *ngIf="notesConfig.showCharCount">
+      <span
+        class="textarea-input-count"
+        *ngIf="notesConfig?.maxCharNumber && noteFormControl"
+        >Characters left:
+        {{ notesConfig.maxCharNumber - noteFormControl?.value?.length }}</span
+      >
+    </div>
+
+    <div class="error-note-text">
+      <mat-error
+        id="{{ index }}-auth-info-notes-input-error-required"
+        *ngIf="noteFormControl?.hasError('required')"
+        >{{ notesConfig.requiredErrorMessage }}
+      </mat-error>
+    </div>
+
+    <ng-container
+      *ngFor="let error of (notesConfig?.customErrorMessages | keyvalue)"
+    >
+      <div class="error-note-text">
+        <mat-error
+          id="{{ index }}-{{ error.key }}"
+          *ngIf="noteFormControl.hasError(error.key)"
+        >
+          {{ error.value }}
+        </mat-error>
+      </div>
+    </ng-container>
+  </mat-form-field>
+  <span
+    *ngIf="
+      notesConfig.mode !== pbmAuthFormMode.ReadWrite &&
+      !notesConfig.historyNotes
+    "
+  >
+    {{ noteFormControl ? noteFormControl.value : '' }}
+  </span>
+  <div
+    class="spacersmall"
+    *ngIf="notesConfig.mode === pbmAuthFormMode.ReadWrite"
+  ></div>
+  <div
+    *ngIf="
+      notesConfig.addNoteButton &&
+      notesConfig.mode === pbmAuthFormMode.ReadWrite
+    "
+    fxLayout="row"
+    fxLayoutGap="6px"
+    fxLayoutAlign="end end"
+  >
+    <button
+      mat-flat-button
+      class="primary-button"
+      [disabled]="noteFormControl.invalid || disableSubmit"
+      (click)="addNewNote()"
+    >
+      ADD NOTE
+    </button>
+  </div>
+  <div
+    #lastElement
+    class="spacerstiny"
+    *ngIf="notesConfig.mode === pbmAuthFormMode.ReadWrite"
+  ></div>
+</mat-expansion-panel>

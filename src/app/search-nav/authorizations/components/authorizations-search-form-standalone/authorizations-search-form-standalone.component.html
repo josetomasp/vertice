@@ -1,0 +1,88 @@
+<div *ngIf='!displaySearchName' class='search-title' id='{{searchName}}'>
+  {{ searchName }}
+</div>
+<div>{{ subTitle }}</div>
+<div *ngFor='let item of subTitleListItems' style='margin-left: 40px;'>
+  {{ item }}
+</div>
+
+<!--UNTESTED: Could be helpful for future searches using the warning message -->
+<!--<healthe-confirmation-banner-->
+<!--  *ngIf='warningMessage'-->
+<!--  id='{{searchName}}-WarningMessage'-->
+<!--  [alertType]='alertType.WARNING'-->
+<!--  [title]='warningMessage'-->
+<!--  [isVisible]='true'-->
+<!--  [showCloseButton]='false'-->
+<!--&gt;</healthe-confirmation-banner>-->
+
+<!--UNTESTED: Could be helpful for future searches using error messages -->
+<!--<mat-error-->
+<!--  *ngIf='searchButtonClickedOnce'-->
+<!--  class='search&#45;&#45;validation-errors'-->
+<!--  [innerText]='getErrors(formGroup.errors)'-->
+<!--&gt;-->
+<!--</mat-error>-->
+<div class='spacersmall'></div>
+<div fxLayout='row' fxLayoutAlign='space-between'>
+  <div fxLayout='column'>
+    <div *ngFor='let simpleSearchRow of simpleSearchFormConfig'>
+      <div fxLayout='row wrap' fxLayoutGap='20px grid'>
+        <div *ngFor='let simpleSearchField of simpleSearchRow'>
+          <healthe-authorizations-search-form-field-switch-standalone
+            [searchFormFieldConfig]='simpleSearchField'
+            [searchFormFieldControl]='getSpecificControlByName(simpleSearchField.formControlName)'
+          ></healthe-authorizations-search-form-field-switch-standalone>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div fxLayout='column' style='padding-top: 20px;'>
+    <div fxLayout='row' fxLayoutGap='16px'>
+      <button
+        (click)='doSearch()'
+        class='primary-button'
+        mat-flat-button
+        id='{{searchName}}-searchButton'
+      >
+        SEARCH
+      </button>
+      <button
+        (click)='resetForm()'
+        class='secondary-button'
+        mat-stroked-button
+        id='{{searchName}}-resetButton'
+      >
+        RESET
+      </button>
+    </div>
+
+    <div class='spacertiny'></div>
+    <a
+      (click)='advancedShown = !advancedShown'
+      mat-button
+      *ngIf='advancedSearchFormConfig'
+      id='{{searchName}}-advancedSearchToggle'
+    >
+      Advanced Search
+      <i
+        style='padding-left: 10px'
+        [ngClass]="advancedShown ? 'fas fa-chevron-up' : 'fas fa-chevron-down'"
+      ></i>
+    </a>
+  </div>
+</div>
+
+<div *ngIf='advancedShown && advancedSearchFormConfig'>
+  <div class='spacersmall'></div>
+  <div *ngFor='let advancedSearchRow of advancedSearchFormConfig'>
+    <div fxLayout='row wrap' fxLayoutGap='20px grid'>
+      <div *ngFor='let advancedSearchField of advancedSearchRow'>
+        <healthe-authorizations-search-form-field-switch-standalone
+          [searchFormFieldConfig]='advancedSearchField'
+          [searchFormFieldControl]='getSpecificControlByName(advancedSearchField.formControlName)'
+        ></healthe-authorizations-search-form-field-switch-standalone>
+      </div>
+    </div>
+  </div>
+</div>

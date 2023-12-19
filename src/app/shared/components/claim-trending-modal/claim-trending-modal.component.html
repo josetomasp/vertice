@@ -1,0 +1,103 @@
+<div mat-dialog-title>
+  <div fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="30px">
+    <span
+      id="riskTrending--header-claimNumber"
+      fxLayout="row"
+      fxLayoutAlign="space-evenly center"
+      >Claim #{{ trendingRiskClaimNumber$ | async }}
+      <span
+        fxLayout="row"
+        fxLayoutAlign="space-evenly center"
+        style="margin-left: 8px; box-shadow: none;"
+      >
+        <span
+          id="riskTrending--header-riskLevelTag"
+          class="tag"
+          [ngClass]="getTagColor(data.riskLevelNumber)"
+          style="box-shadow: none !important;"
+          >{{ data.riskLevelNumber }}</span
+        >
+        <span
+          style="font-size: 16px; margin-left: 6px;"
+          id="riskTrending--header-riskLevelVerbiage"
+          >{{ data.riskLevel }}</span
+        >
+      </span></span
+    >
+    <button
+      mat-icon-button
+      mat-dialog-close
+      id="riskTrending--header-closeButton"
+    >
+      <i class="fal fa-times close-widget"></i>
+    </button>
+  </div>
+</div>
+
+<mat-dialog-content *ngIf="!(isLoading$ | async)" id="riskTrending--body">
+  <div
+    fxLayout="column"
+    fxFlex="1 1 auto"
+    fxLayoutGap="32px"
+    style="margin-bottom: 30px; width: 100%; overflow-x: visible;"
+  >
+    <!-- Claim Details -->
+    <div fxFlex="1 1 auto" id="riskTrending--body-claimantDetails">
+      <healthe-risk-details-expansion></healthe-risk-details-expansion>
+    </div>
+    <!-- Risk Graph -->
+    <div fxFlex="1 1 auto" id="riskTrending--body-riskGraph">
+      <healthe-risk-level-over-time-graph></healthe-risk-level-over-time-graph>
+    </div>
+    <!-- Risk Table -->
+    <div fxFlex="1 1 auto" id="riskTrending--body-riskTable">
+      <healthe-risk-table></healthe-risk-table>
+    </div>
+  </div>
+</mat-dialog-content>
+<mat-dialog-actions
+  fxLayout="row"
+  fxLayoutAlign="space-between center"
+  fxLayoutGap="20px"
+  style="margin: 10px 20px 0 20px"
+>
+  <button
+    mat-stroked-button
+    class="info-button"
+    id="closeDialog-button"
+    mat-dialog-close
+  >
+    CLOSE
+  </button>
+  <div fxLayout="row" fxLayoutGap="6px" fxLayoutAlign="space-around center">
+    <label class="label">ACTION</label>
+    <mat-form-field class="inline-form-field" style="width: 209px;">
+      <mat-select
+        style="width: 176px;"
+        healtheSelect
+        [(ngModel)]="selectedAction"
+        placeholder="Select Action"
+        id="riskTrending-actions"
+        [componentGroupName]="componentGroupName"
+        elementName="actionSelect"
+        healtheDisableElementIfTrue
+      >
+        <mat-option
+          [id]="'riskTrending-actions-option-' + option.type"
+          *ngFor="let option of data.interventions"
+          [value]="option"
+          >{{ option.action }}</mat-option
+        >
+      </mat-select>
+    </mat-form-field>
+    <button
+      mat-flat-button
+      class="primary-button"
+      [disabled]="!selectedAction"
+      (click)="requestAction()"
+      id="requestActions-button"
+    >
+      REQUEST ACTION(S)
+    </button>
+  </div>
+</mat-dialog-actions>

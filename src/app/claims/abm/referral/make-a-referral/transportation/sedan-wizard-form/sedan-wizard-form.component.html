@@ -1,0 +1,90 @@
+<div [formGroup]="stepForm">
+  <span class="overhead-label" id="sedan-wizard-authorizationDateType-label"
+    >TYPE OF AUTHORIZATION</span
+  >
+  <mat-radio-group fxLayout="row" fxLayoutGap="15px" [value]="dateMode">
+    <mat-radio-button
+      *ngFor="let type of authorizationDateTypes"
+      id="sedan-wizard-authorizationDateType-{{type}}"
+      [value]="type"
+      (click)="dateModeSwitch($event, type)"
+      >{{ type }}</mat-radio-button
+    >
+  </mat-radio-group>
+  <div class="spacersmall"></div>
+  <healthe-specific-date-form-array
+    [formArray]="stepForm.get('schedulingForm')"
+    [config]="specificDateConfig"
+    *ngIf="dateMode === authorizationDateTypes[0]"
+  ></healthe-specific-date-form-array>
+  <healthe-date-range-form
+    [idPrefix]="stepName"
+    [parentFormGroup]="stepForm.get('schedulingForm')"
+    [serviceActionType]="'sedan'"
+    *ngIf="dateMode === authorizationDateTypes[1]"
+    withTwoLocations="true"
+  ></healthe-date-range-form>
+  <div class="spacermedium"></div>
+  <div fxLayout="row wrap" fxLayoutGap="30px">
+    <div>
+      <span class="overhead-label" id="sedan-wizard-driverLanguage-label"
+        >DRIVER LANGUAGE</span
+      >
+      <mat-form-field>
+        <mat-select
+          healtheSelect
+          placeholder="Choose language"
+          [formControl]="stepForm.get('driverLanguage')"
+          id="sedan-wizard-driverLanguage-select"
+        >
+          <mat-option
+            *ngFor="let language of _languages; index as $driverLanguageIndex"
+            id="sedan-wizard-driverLanguage-option-{{$driverLanguageIndex}}"
+            [value]="language"
+            >{{ language }}</mat-option
+          >
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div>
+      <span class="overhead-label" id="sedan-wizard-rushServiceNeeded-label"
+        >RUSH SERVICE (NEEDED WITHIN 24 HOURS)?</span
+      >
+      <mat-radio-group
+        fxLayout="row"
+        fxLayoutGap="15px"
+        [formControl]="stepForm.get('rushServiceNeeded')"
+      >
+        <mat-radio-button
+          *ngFor="let value of booleanRadioValues"
+          id="sedan-wizard-rushServiceNeeded-option-{{value}}"
+          [value]="value"
+          >{{ value }}</mat-radio-button
+        >
+      </mat-radio-group>
+    </div>
+    <div>
+      <span class="overhead-label" id="sedan-wizard-paidAsExpense-label"
+        >WILL THIS BE PAID AS EXPENSE?
+        <fa-icon
+          [icon]="faInfoCircle"
+          class="sedan-icons"
+          matTooltip="Only select yes if this service is not related to medical and needs to be paid off the claim as expense related"
+        >
+        </fa-icon>
+      </span>
+      <mat-radio-group
+        fxLayout="row"
+        fxLayoutGap="15px"
+        [formControl]="stepForm.get('paidAsExpense')"
+      >
+        <mat-radio-button
+          *ngFor="let value of booleanRadioValues"
+          id="sedan-wizard-paidAsExpense-option-{{value}}"
+          [value]="value"
+          >{{ value }}</mat-radio-button
+        >
+      </mat-radio-group>
+    </div>
+  </div>
+</div>

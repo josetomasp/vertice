@@ -1,0 +1,26 @@
+<div>
+  <label
+    id="diagnostics-summary-details-Diagnosis-Code-label"
+    class="overhead-label"
+    >DIAGNOSIS CODE</label
+  >
+  <span fxLayout="row"
+    ><span
+      class="ellipsis-text"
+      id="diagnostics-summary-details-Diagnosis-Code-value"
+      style="font-size: 14px; font-weight: 500; max-width: 96%; display: inline-block"
+    >
+      <span style="padding-right: 4px">{{
+        diagnosisCodesAndDescriptionsCsv
+      }}</span>
+    </span>
+    <a
+      *ngIf="openICDCodesModalLabel"
+      id="diagnostics-summary-details-Diagnosis-Code-viewAllButton"
+      mat-button
+      style="min-width: 20px;"
+      (click)="openICDCodesModal()"
+      >{{ openICDCodesModalLabel }}</a
+    ></span
+  >
+</div>

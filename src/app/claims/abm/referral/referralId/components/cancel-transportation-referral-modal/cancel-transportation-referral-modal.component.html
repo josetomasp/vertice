@@ -1,0 +1,169 @@
+<div mat-dialog-title>Cancel Referral?</div>
+<mat-dialog-content>
+  <b>
+    Are you sure you want to cancel this referral? You will not be able to undo
+    this action. All services already rendered will be authorized. Any other
+    changes you made to this referral will be lost.
+  </b>
+
+  <table mat-table [dataSource]="cancelRows">
+    <ng-container matColumnDef="cancelCheckbox">
+      <th
+        mat-header-cell
+        id="cancelation-modal-header-cancel"
+        class="healthe-table-cell tableHeader"
+        *matHeaderCellDef
+      >
+        CANCEL?
+      </th>
+      <td
+        mat-cell
+        class="healthe-table-cell enableLongMatErrors"
+        style="overflow: visible"
+        [id]="'cancelation-modal-cell-cancel-' + i"
+        *matCellDef="let data; let i = index"
+      >
+        <mat-checkbox
+          style="margin-left: 18px"
+          [ngStyle]="{
+            'margin-top':
+              data.cancelCheckbox.invalid && data.cancelCheckbox.touched
+                ? '18px'
+                : null
+          }"
+          id="cancelation-modal-cell-cancel-checkbox-{{i}}"
+          [formControl]="data.cancelCheckbox"
+        >
+        </mat-checkbox>
+        <!-- style="white-space: pre-line; margin-bottom: 10px" -->
+        <mat-error
+          *ngIf="data.cancelCheckbox.invalid && data.cancelCheckbox.touched"
+          style="margin-top: 5px"
+        >You must confirm the authorization selection
+        </mat-error
+        >
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="trips">
+      <th
+        mat-header-cell
+        id="cancelation-modal-header-trips"
+        class="healthe-table-cell tableHeader"
+        *matHeaderCellDef
+      >
+        # OF TRIPS AUTHORIZED
+      </th>
+      <td
+        mat-cell
+        class="healthe-table-cell"
+        [id]="'cancelation-modal-cell-trips-' + i"
+        *matCellDef="let data; let i = index"
+      >
+        <span style="margin-left: 30px">{{ data.trips }}</span>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="startDate">
+      <th
+        mat-header-cell
+        id="cancelation-modal-header-startDate"
+        class="healthe-table-cell tableHeader"
+        *matHeaderCellDef
+      >
+        START DATE
+      </th>
+      <td
+        mat-cell
+        class="healthe-table-cell"
+        [id]="'cancelation-modal-cell-startDate-' + i"
+        *matCellDef="let data; let i = index"
+      >
+        {{ data.startDate | date: 'MM/dd/yyyy' }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="endDate">
+      <th
+        mat-header-cell
+        id="cancelation-modal-header-endDate"
+        class="healthe-table-cell tableHeader"
+        *matHeaderCellDef
+      >
+        END DATE
+      </th>
+      <td
+        mat-cell
+        class="healthe-table-cell"
+        [id]="'cancelation-modal-cell-endDate-' + i"
+        *matCellDef="let data; let i = index"
+      >
+        {{ data.endDate | date: 'MM/dd/yyyy' }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="cancelReason">
+      <th
+        mat-header-cell
+        id="cancelation-modal-header-cancelReason"
+        class="healthe-table-cell tableHeader"
+        style="width: 285px"
+        *matHeaderCellDef
+      >
+        CANCEL REASON
+      </th>
+      <td
+        mat-cell
+        class="healthe-table-cell"
+        [id]="'cancelation-modal-cell-cancelReason-' + i"
+        *matCellDef="let data; let i = index"
+      >
+        <mat-select
+          id="cancelation-modal-cell-cancel-cancelReason-{{i}}"
+          placeholder="Select Denial Explanation"
+          style="margin-top: 10px; width: 250px"
+          [ngStyle]="{
+            'margin-bottom':
+              data.cancelReason.invalid && data.cancelReason.touched
+                ? null
+                : '5px'
+          }"
+          [formControl]="data.cancelReason"
+          matTooltip="{{data.cancelReason.value}}"
+        >
+          <mat-option
+            *ngFor="let option of modalData.cancelReasons"
+            [value]="option"
+          >
+            {{ option }}</mat-option
+          >
+        </mat-select>
+        <mat-error
+          *ngIf="data.cancelReason.invalid && data.cancelReason.touched"
+          style="margin-bottom: 5px;"
+        >You must select a cancel reason
+        </mat-error
+        >
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+  </table>
+</mat-dialog-content>
+
+<mat-dialog-actions>
+  <div
+    fxLayout="row"
+    fxLayoutAlign="end start"
+    fxLayoutGap="20px"
+    style="padding-left: 20px; padding-right: 20px; width: 100%"
+  >
+    <button class="info-button" mat-stroked-button (click)="cancel()">
+      GO BACK
+    </button>
+    <button mat-flat-button class="danger-button" (click)="cancelReferral()">
+      CANCEL THIS REFERRAL
+    </button>
+  </div>
+</mat-dialog-actions>

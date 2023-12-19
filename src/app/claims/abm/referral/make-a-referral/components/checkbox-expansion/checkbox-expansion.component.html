@@ -1,0 +1,55 @@
+<mat-expansion-panel
+  class="healthe-expansion--grey-header small-header"
+  #expansionPanel
+  [disabled]="expansionGroupDisabled"
+>
+  <mat-expansion-panel-header
+    collapsedHeight="25px"
+    expandedHeight="25px"
+    #expansionPanelHeader
+  >
+    <!-- Location type 'select all' checkbox -->
+    <mat-checkbox
+      id="{{serviceActionType}}_out_{{ headerText }}"
+      [ngStyle]="{
+        display: expandWidgetHidden || !showExpansion ? 'none' : 'inherit'
+      }"
+      #selectAllCheckbox
+      (click)="toggleAll($event)"
+      [disabled]="primaryCheckbox.disabled"
+      >{{ headerText }}</mat-checkbox
+    >
+    <!-- Location type with a single location checkbox -->
+    <mat-checkbox
+      id="{{serviceActionType}}_out_{{ headerText }}-{{replaceAllWhiteSpaces(getBodyControlDisplayText(Object.keys(this.formGroup.controls)[0]), '_')}}"
+      *ngIf="!showExpansion"
+      [formControl]="primaryCheckbox"
+      [disabled]="primaryCheckbox.disabled"
+    >
+      {{ getAddressDisplayFromID(Object.keys(this.formGroup.controls)[0]) }}
+    </mat-checkbox>
+  </mat-expansion-panel-header>
+  <div style="padding-top: 15px" *ngIf="showExpansion">
+    <div
+      *ngFor="let locationId of Object.keys(formGroup.controls)"
+      style="margin-left: 30px"
+    >
+      <mat-checkbox
+        *ngIf="getFormControlByLocationId(locationId)"
+        id="{{serviceActionType}}_in_{{ replaceAllWhiteSpaces(getBodyControlDisplayText(locationId), '_') }}"
+        [formControl]="getFormControlByLocationId(locationId)"
+        class="standard-text ellipsis-text"
+        style="overflow: visible"
+      >
+        <div
+          [matTooltip]="
+            getBodyControlDisplayText(getAddressDisplayFromID(locationId))
+          "
+          class="standard-text ellipsis-text"
+        >
+          {{ getBodyControlDisplayText(getAddressDisplayFromID(locationId)) }}
+        </div>
+      </mat-checkbox>
+    </div>
+  </div>
+</mat-expansion-panel>

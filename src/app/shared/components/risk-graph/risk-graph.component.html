@@ -1,0 +1,127 @@
+<mat-card class="dashboard-chart">
+  <mat-card-header fxLayout="row" fxLayoutAlign="space-between">
+    <mat-card-title id="riskGraph-title">Claim Volume</mat-card-title>
+    <div fxLayout="row" fxLayoutAlign="space-between">
+      <mat-form-field style="margin-right: 15px;">
+        <label
+          class="overhead-label"
+          id="RiskGraphTypeLabel"
+          style="display:block;"
+          >Risk Graph
+        </label>
+        <mat-select
+          healtheSelect
+          id="selectGraphType"
+          [placeholder]="'Select an graph type'"
+          (ngModelChange)="riskTypeChanged.emit($event)"
+          [(ngModel)]="riskGraphType"
+          style="width: 146px"
+        >
+          <mat-option
+            *ngFor="let age of riskGraphTypeOptions"
+            [id]="'selectGraphType' + age.label + '-option'"
+            [value]="age.value"
+            >{{ age.label }}</mat-option
+          >
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field style="margin-right: 15px;">
+        <label class="overhead-label" id="claimAgeLabel" style="display:block;"
+          >Age of Claim
+        </label>
+        <mat-select
+          healtheSelect
+          id="claimAgeDropdown"
+          [placeholder]="'Select an age'"
+          (ngModelChange)="ageRangeChange.emit($event)"
+          [(ngModel)]="claimAgeRange"
+          style="width: 146px"
+        >
+          <mat-option
+            *ngFor="let age of claimAgeRangesOptions"
+            [id]="age.label + '-option'"
+            [value]="age.value"
+            >{{ age.label }}</mat-option
+          >
+        </mat-select>
+      </mat-form-field>
+    </div>
+  </mat-card-header>
+
+  <div
+    id="claimActivityLoadingDataSpinner"
+    *ngIf="(isLoading$ | async)"
+    fxLayout="column"
+    fxLayoutAlign="center center"
+  >
+    <mat-spinner diameter="55"></mat-spinner>
+    <h2>Loading results...</h2>
+  </div>
+  <div [hidden]="isLoading$ | async">
+    <div class="spacersmall"></div>
+    <healthe-risk-graph-category-header
+      *ngIf="hasData(currentMetrics$ | async)"
+      id="riskCategory-header"
+      (metricClicked)="metricClicked.emit($event)"
+      [riskMetrics$]="currentMetrics$"
+      [ColorMap]="metricColors"
+    ></healthe-risk-graph-category-header>
+    <div class="spacersmall"></div>
+    <mat-card-content
+      [ngClass]="{
+        hidden: !hasData(currentMetrics$ | async)
+      }"
+    >
+      <div fxLayout="row" style="height: 500px;">
+        <ngx-charts-line-chart
+          id="riskGraph"
+          [view]=""
+          #lineChart
+          [results]="currentSeries$ | async"
+          yAxis="true"
+          xAxis="true"
+          legend="true"
+          legendTitle=""
+          [curve]="curve"
+          legendPosition="below"
+          xAxisLabel="MONTH"
+          showXAxisLabel="true"
+          yAxisLabel="# OF CLAIMS"
+          showYAxisLabel="true"
+          autoScale="true"
+          roundDomains="true"
+          [customColors]="getCustomColor"
+          (select)="onSelect($event)"
+        ></ngx-charts-line-chart>
+      </div>
+    </mat-card-content>
+    <mat-card-content
+      [ngClass]="{
+        hidden: hasData(currentSeries$ | async)
+      }"
+      fxLayout="row"
+      fxLayoutAlign="center center"
+    >
+      <div fxLayout="column" fxLayoutAlign="center center">
+        <img src="assets/img/NoDataIcon.svg" />
+        <p class="standard-text" id="graphVerbiage">
+          {{ getVerbiage(tableCondition.NoDataForGraph) }}
+        </p>
+      </div>
+    </mat-card-content>
+  </div>
+</mat-card>
+<!-- Tool tip template -->
+<!-- The let-model attribute gets the data from the graph -->
+<!-- model format is {name: any, value: any, series: any} -->
+<ng-template #template let-model="model">
+  <div
+    id="graphTooltip"
+    style="margin: 10px"
+    fxLayout="column center"
+    fxLayoutGap="4px"
+  >
+    <span id="graphTooltip-title">{{ model.series }}</span>
+    <span id="graphTooltip-value">{{ model.value }} claims</span>
+  </div>
+</ng-template>

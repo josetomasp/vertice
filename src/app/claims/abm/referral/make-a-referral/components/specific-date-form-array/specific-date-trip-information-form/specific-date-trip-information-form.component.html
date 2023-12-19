@@ -1,0 +1,265 @@
+<div [formGroup]="formGroup" fxLayout="row" class="form-group--wrapper">
+  <div fxFlex="75%" fxLayout="column">
+    <div
+      *ngFor="let innerConfig of controlConfigs"
+      fxLayout="row wrap"
+      fxLayoutGap="30px"
+    >
+      <ng-container [ngSwitch]="getInnerConfigType(innerConfig)">
+        <ng-container *ngSwitchCase="'Array'">
+          <div
+            *ngFor="let controlConfig of innerConfig"
+            fxFlex="1 1 auto"
+            class="form-group-control-container"
+          >
+            <span
+              class="overhead-label"
+              id="wizard-specific-dates-{{controlConfig.formControlName}}-label-{{index}}"
+              >{{ controlConfig.label
+              }}<span
+                *ngIf="isRequiredField(controlConfig.formControlName)"
+                class="required-text"
+                >*</span
+              >
+              <fa-icon
+                *ngIf="controlConfig.tooltip"
+                id="wizard-specific-dates-{{controlConfig.formControlName}}-tooltip-{{index}}"
+                class="tooltip-icon"
+                [icon]="faInfoCircle"
+                [matTooltip]="controlConfig.tooltip"
+              ></fa-icon>
+            </span>
+            <mat-form-field
+              class="show-one-error"
+              [ngSwitch]="controlConfig.type"
+            >
+              <!-- INPUT TYPE SWITCH -->
+              <healthe-datepicker
+                *ngSwitchCase="fieldType.Date"
+                [formControlName]="controlConfig.formControlName"
+                id="wizard-specific-dates-{{controlConfig.formControlName}}-date-input-{{index}}"
+              >
+              </healthe-datepicker>
+              <mat-select
+                *ngSwitchCase="fieldType.Time"
+                [placeholder]="controlConfig.placeholder"
+                healtheSelect
+                [formControlName]="controlConfig.formControlName"
+                id="wizard-specific-dates-{{controlConfig.formControlName}}-time-input-{{index}}"
+              >
+                <mat-option
+                  *ngFor="
+                    let time of timeDropdownValues;
+                    index as $appointmentTimeIndex
+                  "
+                  [value]="time.value"
+                  id="wizard-specific-dates-{{controlConfig.formControlName}}-option-{{time.label}}-{{$appointmentTimeIndex}}"
+                  >{{ time.label }}</mat-option
+                >
+              </mat-select>
+              <mat-select
+                *ngSwitchCase="fieldType.Select"
+                [compareWith]="controlConfig.compareWith || multiSelectCompare"
+                [placeholder]="controlConfig.placeholder"
+                healtheSelect
+                [formControlName]="controlConfig.formControlName"
+                id="wizard-specific-dates-{{controlConfig.formControlName}}-select-input-{{index}}"
+              >
+                <mat-option
+                  *ngFor="
+                    let option of (controlConfig.options | async);
+                    index as $optionIndex
+                  "
+                  [value]="option.value"
+                  id="wizard-specific-dates-{{controlConfig.formControlName}}-option-{{option}}-{{$optionIndex}}"
+                  >{{ option.label }}</mat-option
+                >
+              </mat-select>
+              <mat-select
+                *ngSwitchCase="fieldType.Location"
+                [placeholder]="controlConfig.placeholder"
+                healtheSelect
+                [formControlName]="controlConfig.formControlName"
+                id="wizard-specific-dates-{{controlConfig.formControlName}}-select-{{index}}"
+                #locationSelect
+                matTooltipPosition="above"
+                matTooltip="{{locationToolTips[controlConfig.formControlName]}}"
+                [matTooltipDisabled]="
+                  !locationToolTips[controlConfig.formControlName]
+                "
+                [compareWith]="compareLocations"
+              >
+                <mat-option
+                  *ngFor="
+                    let location of (transportationLocations$ | async);
+                    index as $fromAddressIndex
+                  "
+                  [value]="location.value"
+                  (click)="
+                    setLocationToolTip(location, controlConfig.formControlName)
+                  "
+                  id="wizard-specific-dates-{{controlConfig.formControlName}}-option-{{$fromAddressIndex}}"
+                  >{{ location.label }}</mat-option
+                >
+
+                <mat-option
+                  (click)="showAddLocationModal(locationSelect)"
+                  id="wizard-specific-dates-{{controlConfig.formControlName}}-option-addLocation"
+                >
+                  <span
+                    id="wizard-specific-dates-addLocation-{{controlConfig.formControlName}}-button"
+                  >
+                    Add Location
+                  </span>
+                </mat-option>
+              </mat-select>
+              <mat-select
+                *ngSwitchCase="fieldType.MultiSelect"
+                multiple
+                [placeholder]="controlConfig.placeholder"
+                [compareWith]="controlConfig.compareWith || multiSelectCompare"
+                healtheSelect
+                [formControlName]="controlConfig.formControlName"
+                id="wizard-specific-dates-{{controlConfig.formControlName}}-multiselect-{{index}}"
+              >
+                <mat-option
+                  *ngFor="
+                    let option of (controlConfig.options | async);
+                    index as $optionIndex
+                  "
+                  [value]="option.value"
+                  id="wizard-specific-dates-{{controlConfig.formControlName}}-multioption-{{option}}-{{$optionIndex}}"
+                  >{{ option.label }}</mat-option
+                >
+              </mat-select>
+              <div *ngSwitchCase="fieldType.Number"
+                   [ngClass]="{'hideSpinner':controlConfig.hideNumberInputSpinner}">
+                <input
+                  class="form-group--input_half"
+                  matInput
+                  type="number"
+                  min="1"
+                  [placeholder]="controlConfig.placeholder"
+                  [formControlName]="controlConfig.formControlName"
+                  id="wizard-specific-dates-{{controlConfig.formControlName}}-number-{{index}}"
+                />
+              </div>
+              <input
+                *ngSwitchCase="fieldType.Text"
+                class="form-group--input_half"
+                matInput
+                type="text"
+                [placeholder]="controlConfig.placeholder"
+                [formControlName]="controlConfig.formControlName"
+                id="wizard-specific-dates-{{controlConfig.formControlName}}-text-{{index}}"
+              />
+              <mat-error
+                id="wizard-specific-dates-{{controlConfig.formControlName}}-error-{{index}}"
+                >{{
+                  getErrorMessage(
+                    controlConfig.errorMessages,
+                    controlConfig.formControlName
+                  )
+                }}
+              </mat-error>
+            </mat-form-field>
+          </div>
+        </ng-container>
+        <healthe-hh-single-or-range-switch
+          *ngSwitchCase="SpecificDateDynamicRowType.HHSingleAndRangeSwitch"
+          [parentFormGroup]="formGroup"
+          style="width:100%;"
+          fxLayout="row wrap"
+          fxLayoutGap="30px"
+          [currentStepIndex]="currentStepIndex"
+        >
+        </healthe-hh-single-or-range-switch>
+        <healthe-dme-single-or-range-switch
+          *ngSwitchCase="SpecificDateDynamicRowType.DMESingleAndRangeSwitch"
+          [parentFormGroup]="formGroup"
+          [locationOptions$]="transportationLocations$"
+          (showAddLocationModal)="showAddLocationModal($event)"
+          style="width:100%;"
+          fxLayout="row wrap"
+          fxLayoutGap="30px"
+          [index]="index"
+          [currentStepIndex]="currentStepIndex"
+        ></healthe-dme-single-or-range-switch>
+
+        <healthe-hcpc-and-product-select-switch
+          *ngSwitchCase="SpecificDateDynamicRowType.HCPCAndProductSelectSwitch"
+          [parentFormGroup]="formGroup"
+          [productOptions$]="productOptions$"
+          [index]="index"
+          style="width:100%;"
+          fxLayout="row wrap"
+          fxLayoutGap="30px"
+          [currentStepIndex]="currentStepIndex"
+        ></healthe-hcpc-and-product-select-switch>
+      </ng-container>
+    </div>
+  </div>
+  <div
+    class="form-group--action-wrapper"
+    fxLayout="row wrap"
+    fxLayoutAlign="space-around start"
+    fxFlex="25%"
+  >
+    <div class="form-group--action-item" *ngIf="actionConfig.enableAddStop">
+      <a
+        mat-button
+        (click)="addFormGroup.emit(index)"
+        id="wizard-specific-dates-AddStop-button-{{index}}"
+      >
+        <fa-icon [icon]="faPlus" size="lg" class="inline-left-icon"></fa-icon>
+        Add Stop
+      </a>
+    </div>
+    <div class="form-group--action-item" *ngIf="actionConfig.enableDelete">
+      <a
+        mat-button
+        (click)="delete()"
+        id="wizard-specific-dates-deleteStop-button-{{index}}"
+        [disabled]="disableDeleteButton"
+      >
+        <fa-icon
+          [icon]="faTrashAlt"
+          size="lg"
+          class="inline-left-icon"
+        ></fa-icon>
+        {{ actionConfig.deleteLabel }}
+      </a>
+    </div>
+    <div
+      id="wizard-specific-dates-add-note-{{index}}"
+      class="form-group--action-item"
+      *ngIf="actionConfig.enableAddNote"
+    >
+      <a mat-button (click)="addNotes()">
+        <fa-icon
+          [icon]="faStickyNote"
+          size="lg"
+          class="inline-left-icon"
+        ></fa-icon>
+        {{
+          formGroup.get('notes').value &&
+          formGroup.get('notes').value.length > 0
+            ? 'View'
+            : 'Add'
+        }}
+        Notes
+      </a>
+    </div>
+    <div
+      *ngIf="actionConfig.enableDuplicate"
+      id="wizard-specific-dates-duplicate-stop-button-{{index}}"
+      class="form-group--action-item"
+    >
+      <a mat-button (click)="duplicate()">
+        <fa-icon [icon]="faCopy" size="lg" class="inline-left-icon"></fa-icon>
+        Duplicate Stop
+      </a>
+    </div>
+  </div>
+</div>
+<div class="spacersmall"></div>

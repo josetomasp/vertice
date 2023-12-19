@@ -1,0 +1,118 @@
+<div style="height: 527px">
+  <div
+    fxLayout="row"
+    class="title-container"
+    fxLayoutAlign="space-between center"
+    mat-dialog-title
+  >
+    <span id="sendEmail-modal-title">Send Email</span>
+  </div>
+  <div mat-dialog-content [formGroup]="formGroup">
+    <div fxLayout="column" fxLayoutAlign="start start" fxLayoutGap="35px">
+      <div
+        fxLayout="row"
+        fxLayoutAlign="space-between start"
+        fxLayoutGap="20px"
+        style="width: 100%"
+      >
+        <div fxFlex="0 0">
+          <div class="overhead-label" id="sendEmail-modal-from-label">FROM</div>
+          <input
+            matInput
+            type="text"
+            formControlName="from"
+            id="sendEmail-modal-from"
+          />
+        </div>
+        <div fxFlex="0 0">
+          <div class="overhead-label" id="sendEmail-modal-to-label">
+            TO <span class="danger">*</span>
+          </div>
+          <mat-form-field>
+            <input
+              matInput
+              type="text"
+              formControlName="to"
+              id="sendEmail-modal-to"
+              placeholder="Enter an email address"
+            />
+            <mat-error
+              id="sendEmail-modal-to-error"
+              *ngIf="
+                formGroup.controls['to'].hasError('required') ||
+                formGroup.controls['to'].hasError('email')
+              "
+              >{{ emailErrorMessage }}
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div style="width: 100%">
+        <div class="overhead-label" id="sendEmail-modal-subject-label">
+          SUBJECT <span class="danger">*</span>
+        </div>
+        <mat-form-field>
+          <input
+            matInput
+            type="text"
+            formControlName="subject"
+            id="sendEmail-modal-subject"
+            placeholder="Enter a subject"
+          />
+          <mat-error
+            id="sendEmail-modal-subject-error"
+            *ngIf="formGroup.controls['subject'].hasError('required')"
+            >Subject is required.
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div style="width: 100%; height: 150px">
+        <div class="overhead-label" id="sendEmail-modal-body-label">
+          MESSAGE <span class="danger">*</span>
+        </div>
+        <mat-form-field>
+          <textarea
+            matInput
+            formControlName="body"
+            id="sendEmail-modal-body"
+            rows="5"
+            style="resize: none"
+          ></textarea>
+          <mat-error
+            id="sendEmail-modal-body-error"
+            style="margin-top: 73px;"
+            *ngIf="formGroup.controls['body'].hasError('required')"
+            >This field is required. Please enter a message.
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+  </div>
+
+  <div
+    mat-dialog-actions
+    fxLayout="row"
+    fxLayoutAlign="end start"
+    fxLayoutGap="20px"
+    style="padding: 0 20px 0 20px"
+  >
+    <button
+      mat-flat-button
+      mat-dialog-close
+      class="info-button"
+      id="sendEmail-modal-button-cancel"
+    >
+      CANCEL
+    </button>
+    <button
+      mat-flat-button
+      [disabled]="!sendEnabled"
+      class="primary-button"
+      id="sendEmail-modal-button-send"
+      (click)="sendEmail()"
+    >
+      SEND
+    </button>
+  </div>
+</div>

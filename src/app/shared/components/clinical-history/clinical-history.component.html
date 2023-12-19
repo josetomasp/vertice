@@ -1,0 +1,520 @@
+<mat-card id="tableCard">
+  <mat-card-header fxLayout="row" fxLayoutAlign="space-between">
+    <mat-card-title id="clinical-history-header-text"
+      >Clinical History
+    </mat-card-title>
+    <div
+      id="tableCard-header"
+      fxLayoutAlign="end"
+      fxLayout="row wrap"
+      fxLayoutGap="30px"
+    >
+      <div>
+        <div style="height: 75px; margin-top: 21px;">
+          <button
+            (click)="refreshData()"
+            mat-button
+            class="secondary-button"
+            style="min-width: 50px !important;"
+            matTooltip="Refresh Data"
+            id="clinical-history-refersh-button"
+            [matTooltipShowDelay]="500"
+          >
+            <fa-icon
+              style="position: absolute;top: 0;left: 16px;"
+              [icon]="faSyncAlt"
+            ></fa-icon>
+          </button>
+        </div>
+      </div>
+
+      <div>
+        <div
+          class="overhead-label"
+          id="clinical-history-dateRange-overheadLabel"
+        >
+          DATE RANGE
+        </div>
+        <div class="mat-form-field-wrapper" style="width: 276px;">
+          <healthe-daterange
+            style="width: 276px;"
+            [options]="datePickerOptions"
+            id="clinical-history-dateRange"
+            (submit)="submit()"
+            [formControl]="dateRangeFormControl"
+          >
+          </healthe-daterange>
+        </div>
+      </div>
+
+      <div>
+        <div
+          class="overhead-label"
+          id="clinical-history-columnViewOption-label"
+        >
+          COLUMN VIEW
+        </div>
+        <mat-form-field>
+          <mat-select
+            style="width: 150px;"
+            healtheSelect
+            id="clinical-history-columnViewOptions"
+            (ngModelChange)="applyColumnViewPreference($event)"
+            [ngModel]="tableColumnState$ | async"
+            [panelClass]="'column-panel-size'"
+          >
+            <mat-option
+              *ngFor="let option of columnViewOptions"
+              value="{{option.value}}"
+              id="clinical-history-columnViewOptions-{{option.value}}"
+              >{{ option.label }}</mat-option
+            >
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <div>
+        <div class="overhead-label" id="clinical-history-columnPicker-label">
+          COLUMNS
+        </div>
+        <mat-form-field style="width: 50px;">
+          <i
+            class="fal fa-th-list"
+            style="position: absolute; left: 15px; top:9px; font-size: 18px;"
+          ></i>
+          <mat-select
+            style="width: 35px;"
+            healtheSelect
+            [ngModel]="tableColumnList"
+            (valueChange)="updateTableColumnList($event)"
+            multiple
+            id="clinical-history-columnPicker"
+            [panelClass]="'column-panel-size'"
+            #columnSelect
+          >
+            <mat-select-trigger></mat-select-trigger>
+            <div style="height: 300px; overflow-y:scroll">
+              <healthe-select-all-option
+                id="clinical-history-columnPicker-select-all"
+                [select]="columnSelect"
+                >All Columns
+              </healthe-select-all-option>
+
+              <mat-divider></mat-divider>
+              <mat-option
+                *ngFor="let option of columnDropdownList"
+                value="{{option.value}}"
+                [id]="'clinical-history-columnPicker-' + option.value"
+                >{{ option.label }}</mat-option
+              >
+            </div>
+            <div fxLayout="column">
+              <button
+                mat-flat-button
+                class="primary-button column-panel-button"
+                id="clinical-history-columnPicker-save-as-default"
+                (click)="saveDefaultColumnPreferences()"
+              >
+                SAVE AS DEFAULT
+              </button>
+              <mat-divider></mat-divider>
+              <button
+                class="secondary-button column-panel-button"
+                id="clinical-history-columnPicker-column-preferences"
+                routerLink="/preferences"
+                fragment="claimtablelist"
+                (click)="navigateToColumnPreferences()"
+              >
+                COLUMN PREFERENCES
+              </button>
+            </div>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <div>
+        <div style="height: 75px;">
+          <button
+            mat-flat-button
+            style="width: 120px; margin-top: 21px"
+            id="clinical-history-exportButton"
+            class="primary-button"
+            (click)="setOpenUntilClose(exportMenu)"
+            [mat-menu-trigger-for]="exportMenu"
+          >
+            EXPORT <i class="inline-right-icon" [ngClass]="exportMenuIcon"></i>
+          </button>
+          <mat-menu #exportMenu [overlapTrigger]="false" yPosition="below">
+            <button
+              *ngFor="let exportOption of exportDropdownOptions"
+              mat-menu-item
+              [id]="'clinical-history--exportOptions-' + exportOption"
+              (click)="doExport(exportOption)"
+            >
+              {{ exportOption }}
+            </button>
+          </mat-menu>
+        </div>
+      </div>
+
+      <div>
+        <a
+          style="margin-top: 26px"
+          id="clinical-history--advancedFilterPanelTrigger"
+          mat-button
+          (click)="advancedFilters.toggle()"
+        >
+          Advanced Filters
+
+          <span style="padding-left: 10px">
+            <i
+              *ngIf="advancedFilters.expanded"
+              id="clinical-history-advancedFilterPanelTrigger-chevron-up"
+              class="fas fa-chevron-up"
+            ></i>
+            <i
+              *ngIf="!advancedFilters.expanded"
+              id="clinical-history-advancedFilterPanelTrigger-chevron-down"
+              class="fas fa-chevron-down"
+            ></i>
+          </span>
+        </a>
+      </div>
+    </div>
+  </mat-card-header>
+
+  <mat-expansion-panel
+    id="clinical-history--advancedFilterPanel"
+    #advancedFilters
+    style="box-shadow: none !important;"
+  >
+    <div
+      fxLayout="row wrap"
+      fxLayoutAlign="end center"
+      fxLayoutGap="30px"
+      [formGroup]="clinicalHistoryFilterFormGroup"
+    >
+      <div>
+        <div
+          class="overhead-label"
+          id="clinical-history-filters-prescriberLabel"
+        >
+          PRESCRIBER
+        </div>
+        <mat-form-field style="width: 276px;">
+          <mat-select
+            healtheSelect
+            formControlName="prescriberName"
+            style="width: 244px;"
+            multiple
+            [placeholder]="clinicalHistoryFilterTriggerText.prescriberName"
+            id="clinical-history--filters-prescriberSelect"
+            #prescriberFilter
+          >
+            <mat-select-trigger>{{
+              clinicalHistoryFilterTriggerText.prescriberName
+            }}</mat-select-trigger>
+
+            <healthe-select-all-option
+              id="clinical-history-prescriber-select-all"
+              [select]="prescriberFilter"
+              >All Values
+            </healthe-select-all-option>
+            <mat-divider></mat-divider>
+
+            <mat-option
+              *ngFor="
+                let option of (allClinicalHistoryFilters$ | async)
+                  .prescriberName
+              "
+              [value]="option"
+              id="clinical-history--filters-prescriberFilter-{{option}}-option"
+            >
+              {{ option === '' ? 'No Prescriber' : option }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <div>
+        <div class="overhead-label" id="clinical-history-filters-OutcomeLabel">
+          OUTCOME
+        </div>
+        <mat-form-field style="width: 276px;">
+          <mat-select
+            healtheSelect
+            formControlName="outcome"
+            style="width: 244px;"
+            multiple
+            [placeholder]="clinicalHistoryFilterTriggerText.outcome"
+            id="clinical-history-filters-OutcomeSelect"
+            #outcomeFilter
+          >
+            <mat-select-trigger>{{
+              clinicalHistoryFilterTriggerText.outcome
+            }}</mat-select-trigger>
+
+            <healthe-select-all-option
+              id="clinical-history-outcomeFilter-select-all"
+              [select]="outcomeFilter"
+              >All Values
+            </healthe-select-all-option>
+            <mat-divider></mat-divider>
+
+            <mat-option
+              *ngFor="
+                let option of (allClinicalHistoryFilters$ | async).outcome
+              "
+              [value]="option"
+              id="clinical-history-filters-outcomeFilter-{{option}}-option"
+            >
+              {{ option }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div>
+        <div
+          class="overhead-label"
+          id="clinical-history-filters-activityTypeLabel"
+        >
+          ACTIVITY TYPE
+        </div>
+        <mat-form-field style="width: 276px;">
+          <mat-select
+            healtheSelect
+            formControlName="activityType"
+            style="width: 244px;"
+            multiple
+            [placeholder]="clinicalHistoryFilterTriggerText.activityType"
+            id="clinical-history--filters-activityTypeSelect"
+            #activityTypeFilter
+          >
+            <mat-select-trigger>{{
+              clinicalHistoryFilterTriggerText.activityType
+            }}</mat-select-trigger>
+
+            <healthe-select-all-option
+              id="clinical-history-activityTypeFilter-select-all"
+              [select]="activityTypeFilter"
+              >All Values
+            </healthe-select-all-option>
+            <mat-divider></mat-divider>
+
+            <mat-option
+              *ngFor="
+                let option of (allClinicalHistoryFilters$ | async).activityType
+              "
+              [value]="option"
+              id="clinical-history-filters-activityTypeFilter-{{option}}-option"
+            >
+              {{ option }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <div>
+        <div
+          class="overhead-label"
+          id="clinical-history--filters-itemNameLabel"
+        >
+          ITEM NAME
+        </div>
+        <mat-form-field style="width: 276px;">
+          <mat-select
+            healtheSelect
+            formControlName="itemName"
+            style="width: 244px;"
+            multiple
+            [placeholder]="clinicalHistoryFilterTriggerText.itemName"
+            id="clinical-history--filters-itemNameSelect"
+            #itemNameFilter
+          >
+            <mat-select-trigger>{{
+              clinicalHistoryFilterTriggerText.itemName
+            }}</mat-select-trigger>
+
+            <healthe-select-all-option
+              id="clinical-history-itemNameFilter-select-all"
+              [select]="itemNameFilter"
+              >All Values
+            </healthe-select-all-option>
+            <mat-divider></mat-divider>
+
+            <mat-option
+              *ngFor="
+                let option of (allClinicalHistoryFilters$ | async).itemName
+              "
+              [value]="option"
+              id="clinical-history-filters-itemNameFilter-{{option}}-option"
+            >
+              {{ option }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <a
+        style="width: 140px; text-align: left;"
+        mat-button
+        id="clinical-history-filters-clearFiltersButton"
+        (click)="clearFilters()"
+      >
+        Clear Filters
+      </a>
+    </div>
+  </mat-expansion-panel>
+  <div class="healthe-table-header--advancedFilter--summaryBox">
+    <p>
+      <span
+        class="healthe-table-header--advancedFilter--label"
+        id="healthe-table-header--advancedFilter--label"
+        >ADVANCED FILTERS:</span
+      ><span
+        class="healthe-table-header--advancedFilter--summary"
+        id="healthe-table-header--advancedFilter--summary"
+      >
+        {{ advancedFiltersSummary }}</span
+      >
+    </p>
+  </div>
+
+  <mat-paginator
+    [pageSizeOptions]="pagerSizeOptions"
+    [pageSize]="pageSize$ | async"
+    #primaryPaginator
+    id="clinical-history-primary-paginator"
+  ></mat-paginator>
+
+  <div
+    class="sharedHistory-table-scroll"
+    style="max-height: 500px; overflow-y: scroll;"
+  >
+    <table
+      *ngIf="ieColumnResetHackDisplay"
+      style="min-width: 1500px"
+      mat-table
+      [dataSource]="dataSource"
+      matSort
+      [matSortActive]="(currentSort$ | async).id"
+      [matSortDirection]="(currentSort$ | async).start"
+      [ngClass]="tableClass"
+    >
+      <ng-container
+        *ngFor="let column of masterColumnList"
+        [matColumnDef]="column.name"
+      >
+        <th
+          mat-header-cell
+          *matHeaderCellDef
+          mat-sort-header
+          id="clinical-history-resultsTable-{{column.name}}-columnHeader"
+          [ngClass]="additionalColumnClasses"
+          [ngStyle]="column.headerStyles"
+          class="ie-overflow"
+        >
+          {{ column.label | uppercase }}
+        </th>
+
+        <td
+          mat-cell
+          #tableData
+          *matCellDef="let data; let rowIndex = index"
+          class="healthe-table-cell"
+          id="clinical-history-resultsTable-{{column.name}}-columnData-{{rowIndex}}"
+          [ngClass]="additionalColumnClasses"
+          [ngStyle]="column.cellStyles"
+          [matTooltip]="data[column.name]"
+        >
+          <ng-container [ngSwitch]="linkable(column, data)">
+            <a
+              *ngSwitchCase="true"
+              style="text-align: left; display: block; overflow: hidden; text-overflow: ellipsis;"
+              class="ie-ellipsis"
+              mat-button
+              [matTooltip]="data[column.name]"
+              [href]="data.vertice25Link"
+              target="_blank"
+              >{{ data[column.name] }}</a
+            >
+            <ng-container *ngSwitchDefault [ngSwitch]="column.name">
+              <ng-container *ngSwitchCase="'itemName'">
+                <ng-container *ngIf="data.ndc !== ''">
+                  <healthe-info-lookup-launcher
+                    [displayText]="data[column.name]"
+                    [drugLookup]="{
+                      drugID: data.ndc,
+                      quantity: data.quantity,
+                      drugDate: data.creationDate
+                    }"
+                  ></healthe-info-lookup-launcher>
+                </ng-container>
+                <ng-container *ngIf="data.ndc === ''">
+                  {{ data[column.name] }}
+                </ng-container>
+              </ng-container>
+              <ng-container *ngSwitchCase="'prescriberName'">
+                <healthe-info-lookup-launcher
+                  [prescriberID]="data.prescriberId"
+                  [displayText]="data[column.name]"
+                ></healthe-info-lookup-launcher>
+              </ng-container>
+              <ng-container *ngSwitchCase="'pharmacy'">
+                <healthe-info-lookup-launcher
+                  [nabp]="data.nabp"
+                  [displayText]="data[column.name]"
+                ></healthe-info-lookup-launcher>
+              </ng-container>
+              <ng-container *ngSwitchDefault>
+                {{ data[column.name] }}
+              </ng-container>
+            </ng-container>
+          </ng-container>
+        </td>
+      </ng-container>
+      <
+
+      <tr mat-header-row *matHeaderRowDef="tableColumnList; sticky: true"></tr>
+      <tr
+        mat-row
+        [style.display]="(isLoading$ | async) ? 'none' : 'table-row'"
+        *matRowDef="let row; columns: tableColumnList"
+      ></tr>
+    </table>
+  </div>
+
+  <div
+    fxLayout="column"
+    fxLayoutAlign="center center"
+    style="margin-top: 10px;"
+    class="healthe-table--centered-container"
+    *ngIf="(clinicalHistory$ | async).length === 0 || (isLoading$ | async)"
+  >
+    <ng-container
+      *ngIf="(clinicalHistory$ | async).length === 0 && !(isLoading$ | async)"
+    >
+      <img
+        id="clinical-history-noDataIcon"
+        alt="No data found for this claim"
+        src="assets/img/NoDataIcon.svg"
+      />
+      <p class="standard-text" id="clinical-history-nodata-verbage">
+        {{ getVerbage(tableCondition.NoDataForQuery) }}
+      </p></ng-container
+    >
+    <ng-container *ngIf="(isLoading$ | async) || !ieColumnResetHackDisplay">
+      <mat-spinner
+        [diameter]="55"
+        id="clinical-history--resultsTable-loadingResultsSpinner"
+      ></mat-spinner>
+      <h2 id="clinical-history--resultsTable-loadingResultsMessage">
+        Loading results...
+      </h2>
+    </ng-container>
+  </div>
+
+  <mat-paginator
+    id="clinical-history-secondary-paginator"
+    #secondaryPaginator
+  ></mat-paginator>
+</mat-card>

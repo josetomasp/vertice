@@ -1,0 +1,38 @@
+@import 'variables';
+.stateErrorText {
+  font-weight: 500;
+  line-height: 15px;
+  color: $danger;
+  font-size: 12px;
+  cursor: default;
+  padding: 2px;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+.non-participant-box {
+  display: block;
+  font-weight: 500;
+  line-height: 15px;
+  color: $danger;
+  font-size: 12px;
+  margin-bottom: 6px;
+}
+.non-participant-box span {
+  display: block;
+  padding: 8px 0 3px 0;
+}
+.sticky-footer {
+  left: 0;
+  right: 0;
+  bottom: 10px;
+  margin-top: 20px;
+  box-shadow: 0 0 5px 0 rgb(52 58 64 / 26%) !important;
+  position: sticky;
+}
+.non-participant-button {
+  margin-top: 19px;
+}

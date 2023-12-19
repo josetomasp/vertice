@@ -1,0 +1,9 @@
+@import 'variables';
+@import 'text';
+
+.sedan-icons {
+  @extend .inline-left-icon;
+  font-size: 1.33333em; // fa-2x
+  position: relative;
+  left: 3px;
+}

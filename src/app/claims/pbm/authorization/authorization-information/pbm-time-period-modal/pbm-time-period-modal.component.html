@@ -1,0 +1,678 @@
+<div
+  fxLayout="row"
+  fxLayoutAlign="space-between center"
+  mat-dialog-title
+  id="time-period-modal-submit-title"
+>
+  <span id="time-frame-modal-title"
+    >Time frames required for these decisions..</span
+  >
+  <button
+    mat-icon-button
+    mat-dialog-close
+    id="time-period-modal--header-closeButton"
+    (click)="close()"
+  >
+    <i class="fal fa-times modal-close-widget"></i>
+  </button>
+</div>
+<mat-dialog-content
+  [formGroup]="_timePeriodForm"
+  class="mb-0"
+  *ngIf="
+    data.data.positiveDrugs &&
+    data.data.positiveDrugs.priorAuthlimits.length > 0
+  "
+>
+  <div class="time-period-primary-info-container mat-card">
+    <div
+      fxLayout="row"
+      fxLayoutGap="32px"
+      fxLayoutAlign="space-between center"
+      style="margin-bottom: 15px"
+    >
+      <div>
+        <span style="font-weight: bold">
+          <i class="fa-solid fa-circle-check" style="color: green"></i>
+          Drug Approval
+        </span>
+      </div>
+      <div>
+        <ng-container>
+          <div
+            fxLayoutAlign="end center"
+            *healtheRemoveElementIfTrue="
+              componentGroupName;
+              elementName: 'approvalActionAllButton'
+            "
+          >
+            <button
+              mat-flat-button
+              id="menuDropdown-approvalDrug-actionAll-Approval"
+              class="primary-button"
+              (click)="approvalSetOpenUntilClose(approvalDrugActionAllMenu)"
+              [mat-menu-trigger-for]="approvalDrugActionAllMenu"
+            >
+              ACTION ALL
+              <fa-icon
+                class="inline-right-icon"
+                [icon]="approvalActionAllMenuIcon"
+              ></fa-icon>
+            </button>
+            <mat-menu
+              #approvalDrugActionAllMenu
+              [overlapTrigger]="false"
+              yPosition="below"
+            >
+              <ng-container
+                *ngFor="let actionAllOption of approvalDrugActionAllDropdownOptions"
+              >
+                <button
+                  *ngIf="approvalDrugActionAllDropdownOptions.length > 0"
+                  mat-menu-item
+                  [id]="
+                    'claimBannerTopFields-actionAllOption-' +
+                    actionAllOption.text
+                  "
+                  (click)="actionAllOption.action()"
+                >
+                  {{ actionAllOption.text }}
+                </button>
+              </ng-container>
+            </mat-menu>
+          </div>
+        </ng-container>
+      </div>
+    </div>
+    <div
+      fxLayout="row"
+      fxLayoutGap="32px"
+      style="margin-bottom: 15px"
+      *ngFor="
+        let drug of data.data.positiveDrugs.priorAuthlimits;
+        index as index
+      "
+    >
+      <div fxFlex="1 1 100%">
+        <div fxLayout="row" fxLayoutGap="32px">
+          <mat-card
+            class="mat-card mat-focus-indicator"
+            style="width: 100%; padding: 10px"
+          >
+            <div
+              fxLayout="row"
+              fxLayoutGap="32px"
+              fxLayoutAlign="space-between center"
+            >
+              <div>
+                <span class="text-primary cell-underline">{{
+                  drug.itemName
+                }}</span>
+              </div>
+              <div class="datepickerContainer">
+                <healthe-single-date-picker-control
+                  formControlName="{{ positiveDrugDatePickerControlName + index }}"
+                  id="{{ positiveDrugDatePickerControlName + index }}"
+                  formLabel="Enter Date"
+                  [options]="generatePickerConfig(drug.limits, todaysDate)"
+                  [attr.data-index]="index"
+                >
+                </healthe-single-date-picker-control>
+              </div>
+            </div>
+            <div
+              fxLayout="row"
+              fxLayoutGap="32px"
+              fxLayoutAlign="end center"
+              style="min-height: 5px"
+            >
+              <div>
+                <mat-error
+                  *ngIf="
+                  timePeriodForm.get(positiveDrugDatePickerControlName + index)
+                    .touched &&
+                  timePeriodForm
+                    .get(positiveDrugDatePickerControlName + index)
+                    .getError('required') 
+                  "
+                  >Date is required.
+                </mat-error>
+                <mat-error
+                  *ngIf="
+                    timePeriodForm.get(positiveDrugDatePickerControlName + index)
+                      .touched &&
+                    timePeriodForm
+                      .get(positiveDrugDatePickerControlName + index)
+                      .getError('dateMustBeGreaterThan') &&  
+                    !timePeriodForm
+                      .get(positiveDrugDatePickerControlName + index)
+                      .getError('invalidDate') &&  
+                    !timePeriodForm
+                      .get(positiveDrugDatePickerControlName + index)
+                      .getError('required')
+                  "
+                  >Date must be greater than or equal to the Filled Date of
+                  {{ drug.dateFilled | date: 'MM/dd/yyyy'}}.
+                </mat-error>
+                <mat-error
+                  *ngIf="
+                    timePeriodForm
+                      .get(positiveDrugDatePickerControlName + index)
+                      .getError('dateMustBelowerThan') &&  
+                    !timePeriodForm
+                        .get(positiveDrugDatePickerControlName + index)
+                        .getError('invalidDate') &&  
+                    !timePeriodForm
+                        .get(positiveDrugDatePickerControlName + index)
+                        .getError('required')
+                  "
+                  >Date must be lower than or equal to a year from today.
+                </mat-error>
+              </div>
+            </div>
+          </mat-card>
+        </div>
+      </div>
+    </div>
+  </div>
+</mat-dialog-content>
+<mat-dialog-content
+  [formGroup]="_timePeriodForm"
+  class="mb-0"
+  *ngIf="
+    data.data.negativeDrugs &&
+    data.data.negativeDrugs.priorAuthlimits.length > 0
+  "
+>
+  <div class="time-period-primary-info-container mat-card">
+    <div
+      fxLayout="row"
+      fxLayoutGap="32px"
+      fxLayoutAlign="space-between center"
+      style="margin-bottom: 15px"
+    >
+      <div>
+        <span style="font-weight: bold">
+          <i class="fa-solid fa-circle-xmark" style="color: red"></i>
+          Drugs Denials
+        </span>
+      </div>
+      <div>
+        <ng-container>
+          <div
+            fxLayoutAlign="end center"
+            *healtheRemoveElementIfTrue="
+              componentGroupName;
+              elementName: 'denialsActionAllButton'
+            "
+          >
+            <button
+              mat-flat-button
+              id="menuDropdown-denialsDrug-actionAll-denials"
+              class="primary-button"
+              (click)="denialsSetOpenUntilClose(denialsDrugActionAllMenu)"
+              [mat-menu-trigger-for]="denialsDrugActionAllMenu"
+            >
+              ACTION ALL
+              <fa-icon
+                class="inline-right-icon"
+                [icon]="denialsActionAllMenuIcon"
+              ></fa-icon>
+            </button>
+            <mat-menu
+              #denialsDrugActionAllMenu
+              [overlapTrigger]="false"
+              yPosition="below"
+            >
+              <ng-container
+                *ngFor="let actionAllOption of denialsDrugActionAllDropdownOptions"
+              >
+                <button
+                  *ngIf="denialsDrugActionAllDropdownOptions.length > 0"
+                  mat-menu-item
+                  [id]="
+                    'claimBannerTopFields-actionAllOption-' +
+                    actionAllOption.text
+                  "
+                  (click)="actionAllOption.action()"
+                >
+                  {{ actionAllOption.text }}
+                </button>
+              </ng-container>
+            </mat-menu>
+          </div>
+        </ng-container>
+      </div>
+    </div>
+    <div
+      fxLayout="row"
+      fxLayoutGap="32px"
+      style="margin-bottom: 15px"
+      *ngFor="
+        let drug of data.data.negativeDrugs.priorAuthlimits;
+        index as index
+      "
+    >
+      <div fxFlex="1 1 100%">
+        <div fxLayout="row" fxLayoutGap="32px">
+          <mat-card
+            class="mat-card mat-focus-indicator"
+            style="width: 100%; padding: 10px"
+          >
+            <div
+              fxLayout="row"
+              fxLayoutGap="32px"
+              fxLayoutAlign="space-between center"
+            >
+              <div>
+                <span class="text-primary cell-underline">{{
+                  drug.itemName
+                }}</span>
+              </div>
+              <div class="datepickerContainer">
+                <healthe-single-date-picker-control
+                  formControlName="{{ negativeDrugDatePickerControlName + index }}"
+                  id="{{ negativeDrugDatePickerControlName + index }}"
+                  formLabel="Enter Date"
+                  [options]="generatePickerConfig(drug.limits, todaysDate)"
+                  [attr.data-index]="index"
+                >
+                </healthe-single-date-picker-control>
+              </div>
+            </div>
+            <div
+              fxLayout="row"
+              fxLayoutGap="32px"
+              fxLayoutAlign="end center"
+              style="min-height: 5px"
+            >
+              <div>
+                <mat-error
+                  *ngIf="
+                    timePeriodForm.get(negativeDrugDatePickerControlName + index)
+                      .touched &&
+                    timePeriodForm
+                      .get(negativeDrugDatePickerControlName + index)
+                      .getError('required') 
+                  "
+                  >Date is required.
+                </mat-error>
+                <mat-error
+                  *ngIf="
+                    timePeriodForm.get(negativeDrugDatePickerControlName + index)
+                      .touched &&
+                    timePeriodForm
+                      .get(negativeDrugDatePickerControlName + index)
+                      .getError('dateMustBeGreaterThan') &&  
+                    !timePeriodForm
+                      .get(negativeDrugDatePickerControlName + index)
+                      .getError('invalidDate') &&  
+                    !timePeriodForm
+                      .get(negativeDrugDatePickerControlName + index)
+                      .getError('required')
+                  "
+                  >Date must be greater than or equal to the Filled Date of
+                  {{ drug.dateFilled | date: 'MM/dd/yyyy'}}.
+                </mat-error>
+                <mat-error
+                  *ngIf="
+                    timePeriodForm
+                      .get(negativeDrugDatePickerControlName + index)
+                      .getError('denyIndefinitelyDateMustBeLowerThan') &&  
+                    !timePeriodForm
+                      .get(negativeDrugDatePickerControlName + index)
+                      .getError('invalidDate') &&  
+                    !timePeriodForm
+                      .get(negativeDrugDatePickerControlName + index)
+                      .getError('required')
+                  "
+                  >Date must be lower than or equal to a year from today.
+                </mat-error>
+              </div>
+            </div>
+          </mat-card>
+        </div>
+      </div>
+    </div>
+  </div>
+</mat-dialog-content>
+<mat-dialog-content
+  [formGroup]="_timePeriodForm"
+  class="mb-0"
+  *ngIf="
+    data.data.positiveDoctors &&
+    data.data.positiveDoctors.priorAuthlimits.length > 0
+  "
+>
+  <div class="time-period-primary-info-container mat-card">
+    <div
+      fxLayout="row"
+      fxLayoutGap="32px"
+      fxLayoutAlign="space-between center"
+      style="margin-bottom: 15px"
+    >
+      <div>
+        <span style="font-weight: bold">
+          <i class="fa-solid fa-circle-check" style="color: green"></i>
+          Prescribers Approval
+        </span>
+      </div>
+      <div>
+        <ng-container>
+          <div
+            fxLayoutAlign="end center"
+            *healtheRemoveElementIfTrue="
+              componentGroupName;
+              elementName: 'approvalActionAllButton'
+            "
+          >
+            <button
+              mat-flat-button
+              id="menuDropdown-approvalDoctor-actionAll-Approval"
+              class="primary-button"
+              (click)="approvalSetOpenUntilClose(approvalDoctorActionAllMenu)"
+              [mat-menu-trigger-for]="approvalDoctorActionAllMenu"
+            >
+              ACTION ALL
+              <fa-icon
+                class="inline-right-icon"
+                [icon]="approvalActionAllMenuIcon"
+              ></fa-icon>
+            </button>
+            <mat-menu
+              #approvalDoctorActionAllMenu
+              [overlapTrigger]="false"
+              yPosition="below"
+            >
+              <ng-container
+                *ngFor="let actionAllOption of approvalDoctorActionAllDropdownOptions"
+              >
+                <button
+                  *ngIf="approvalDoctorActionAllDropdownOptions.length > 0"
+                  mat-menu-item
+                  [id]="
+                    'claimBannerTopFields-actionAllOption-' +
+                    actionAllOption.text
+                  "
+                  (click)="actionAllOption.action()"
+                >
+                  {{ actionAllOption.text }}
+                </button>
+              </ng-container>
+            </mat-menu>
+          </div>
+        </ng-container>
+      </div>
+    </div>
+    <div
+      fxLayout="row"
+      fxLayoutGap="32px"
+      style="margin-bottom: 15px"
+      *ngFor="
+        let doctor of data.data.positiveDoctors.priorAuthlimits;
+        index as index
+      "
+    >
+      <div fxFlex="1 1 100%">
+        <div fxLayout="row" fxLayoutGap="32px">
+          <mat-card
+            class="mat-card mat-focus-indicator"
+            style="width: 100%; padding: 10px"
+          >
+            <div
+              fxLayout="row"
+              fxLayoutGap="32px"
+              fxLayoutAlign="space-between center"
+            >
+              <div>
+                <span class="text-primary cell-underline">{{
+                  doctor.itemName
+                }}</span>
+              </div>
+              <div class="datepickerContainer">
+                <healthe-single-date-picker-control
+                  formControlName="{{ positiveDoctorDatePickerControlName + index }}"
+                  id="{{ positiveDoctorDatePickerControlName + index }}"
+                  formLabel="Enter Date"
+                  [options]="generatePickerConfig(doctor.limits, todaysDate)"
+                  [attr.data-index]="index"
+                >
+                </healthe-single-date-picker-control>
+              </div>
+            </div>
+            <div
+              fxLayout="row"
+              fxLayoutGap="32px"
+              fxLayoutAlign="end center"
+              style="min-height: 5px"
+            >
+              <div>
+                <mat-error
+                  *ngIf="
+                    timePeriodForm.get(positiveDoctorDatePickerControlName + index)
+                      .touched &&
+                    timePeriodForm
+                      .get(positiveDoctorDatePickerControlName + index)
+                      .getError('required') 
+                  "
+                  >Date is required.
+                </mat-error>
+                <mat-error
+                  *ngIf="
+                    timePeriodForm.get(positiveDoctorDatePickerControlName + index)
+                      .touched &&
+                    timePeriodForm
+                      .get(positiveDoctorDatePickerControlName + index)
+                      .getError('dateMustBeGreaterThan') &&  
+                    !timePeriodForm
+                      .get(positiveDoctorDatePickerControlName + index)
+                      .getError('invalidDate') &&  
+                    !timePeriodForm
+                      .get(positiveDoctorDatePickerControlName + index)
+                      .getError('required')
+                  "
+                  >Date must be greater than or equal to the Filled Date of
+                  {{ doctor.dateFilled | date: 'MM/dd/yyyy'}}.
+                </mat-error>
+                <mat-error
+                  *ngIf="
+                    timePeriodForm
+                      .get(positiveDoctorDatePickerControlName + index)
+                      .getError('dateMustBelowerThan') &&  
+                    !timePeriodForm
+                      .get(positiveDoctorDatePickerControlName + index)
+                      .getError('invalidDate') &&  
+                    !timePeriodForm
+                      .get(positiveDoctorDatePickerControlName + index)
+                      .getError('required')
+                  "
+                  >Date must be lower than or equal to a year from today.
+                </mat-error>
+              </div>
+            </div>
+          </mat-card>
+        </div>
+      </div>
+    </div>
+  </div>
+</mat-dialog-content>
+<mat-dialog-content
+  [formGroup]="_timePeriodForm"
+  class="mb-0"
+  *ngIf="
+    data.data.negativeDoctors &&
+    data.data.negativeDoctors.priorAuthlimits.length > 0
+  "
+>
+  <div class="time-period-primary-info-container mat-card">
+    <div
+      fxLayout="row"
+      fxLayoutGap="32px"
+      fxLayoutAlign="space-between center"
+      style="margin-bottom: 15px"
+    >
+      <div>
+        <span style="font-weight: bold">
+          <i class="fa-solid fa-circle-xmark" style="color: red"></i>
+          Prescribers Denials
+        </span>
+      </div>
+      <div>
+        <ng-container>
+          <div
+            fxLayoutAlign="end center"
+            *healtheRemoveElementIfTrue="
+              componentGroupName;
+              elementName: 'denialsActionAllButton'
+            "
+          >
+            <button
+              mat-flat-button
+              id="menuDropdown-denialsDoctor-actionAll-denials"
+              class="primary-button"
+              (click)="denialsSetOpenUntilClose(denialsDoctorActionAllMenu)"
+              [mat-menu-trigger-for]="denialsDoctorActionAllMenu"
+            >
+              ACTION ALL
+              <fa-icon
+                class="inline-right-icon"
+                [icon]="denialsActionAllMenuIcon"
+              ></fa-icon>
+            </button>
+            <mat-menu
+              #denialsDoctorActionAllMenu
+              [overlapTrigger]="false"
+              yPosition="below"
+            >
+              <ng-container
+                *ngFor="let actionAllOption of denialsDoctorActionAllDropdownOptions"
+              >
+                <button
+                  *ngIf="denialsDoctorActionAllDropdownOptions.length > 0"
+                  mat-menu-item
+                  [id]="
+                    'claimBannerTopFields-actionAllOption-' +
+                    actionAllOption.text
+                  "
+                  (click)="actionAllOption.action()"
+                >
+                  {{ actionAllOption.text }}
+                </button>
+              </ng-container>
+            </mat-menu>
+          </div>
+        </ng-container>
+      </div>
+    </div>
+    <div
+      fxLayout="row"
+      fxLayoutGap="32px"
+      style="margin-bottom: 15px"
+      *ngFor="
+        let doctor of data.data.negativeDoctors.priorAuthlimits;
+        index as index
+      "
+    >
+      <div fxFlex="1 1 100%">
+        <div fxLayout="row" fxLayoutGap="32px">
+          <mat-card
+            class="mat-card mat-focus-indicator"
+            style="width: 100%; padding: 10px"
+          >
+            <div
+              fxLayout="row"
+              fxLayoutGap="32px"
+              fxLayoutAlign="space-between center"
+              style="margin-bottom: 5px"
+            >
+              <div>
+                <span class="text-primary cell-underline">{{
+                  doctor.itemName
+                }}</span>
+              </div>
+              <div class="datepickerContainer">
+                <healthe-single-date-picker-control
+                  formControlName="{{ negativeDoctorDatePickerControlName + index }}"
+                  id="{{ negativeDoctorDatePickerControlName + index }}"
+                  formLabel="Enter Date"
+                  [options]="generatePickerConfig(doctor.limits, todaysDate)"
+                  [attr.data-index]="index"
+                >
+                </healthe-single-date-picker-control>
+              </div>
+            </div>
+            <div
+              fxLayout="row"
+              fxLayoutGap="32px"
+              fxLayoutAlign="end center"
+              style="min-height: 5px"
+            >
+              <div>
+                <mat-error
+                  *ngIf="
+                    timePeriodForm.get(negativeDoctorDatePickerControlName + index)
+                      .touched &&
+                    timePeriodForm
+                      .get(negativeDoctorDatePickerControlName + index)
+                      .getError('required') 
+                  "
+                  >Date is required.
+                </mat-error>
+                <mat-error
+                  *ngIf="
+                    timePeriodForm.get(negativeDoctorDatePickerControlName + index)
+                      .touched &&
+                    timePeriodForm
+                      .get(negativeDoctorDatePickerControlName + index)
+                      .getError('dateMustBeGreaterThan') &&  
+                    !timePeriodForm
+                      .get(negativeDoctorDatePickerControlName + index)
+                      .getError('invalidDate') &&  
+                    !timePeriodForm
+                      .get(negativeDoctorDatePickerControlName + index)
+                      .getError('required')
+                  "
+                  >Date must be greater than or equal to the Filled Date of
+                  {{ doctor.dateFilled | date: 'MM/dd/yyyy'}}.
+                </mat-error>
+                <mat-error
+                  *ngIf="
+                    timePeriodForm
+                      .get(negativeDoctorDatePickerControlName + index)
+                      .getError('denyIndefinitelyDateMustBeLowerThan') &&  
+                    !timePeriodForm
+                      .get(negativeDoctorDatePickerControlName + index)
+                      .getError('invalidDate') &&  
+                    !timePeriodForm
+                      .get(negativeDoctorDatePickerControlName + index)
+                      .getError('required')
+                  "
+                  >Date must be lower than or equal to a year from today.
+                </mat-error>
+              </div>
+            </div>
+          </mat-card>
+        </div>
+      </div>
+    </div>
+  </div>
+</mat-dialog-content>
+
+<mat-dialog-actions class="sticky-footer">
+  <div class="spacermedium"></div>
+  <div fxLayout="row" fxLayoutAlign="end center" class="footer-buttons">
+    <div>
+      <button
+        mat-stroked-button
+        mat-dialog-close
+        class="info-button"
+        (click)="close()"
+      >
+        CANCEL
+      </button>
+    </div>
+    <div>
+      <button mat-flat-button class="success-button" (click)="submit()">SUBMIT</button>
+    </div>
+  </div>
+</mat-dialog-actions>

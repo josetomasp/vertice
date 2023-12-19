@@ -1,0 +1,24 @@
+<healthe-referral-overview-card
+  [archeType]="authorizationArchType$ | async"
+></healthe-referral-overview-card>
+
+<div *ngIf="!allContactAttemptsActive" class="spacersmall"></div>
+<!--TODO: Add if kinect warning banner-->
+<div
+  *ngIf="(authorizationArchType$ | async) === ReferralAuthorizationArchetype.Kinect">
+  <healthe-confirmation-banner [alertType]="AlertType.WARNING"
+                               [showCloseButton]="false"
+                               idSufix="kinect-notice"
+                               title="Please note that further communication regarding this referral must be directed towards the referral's assigned vendor."
+                               [isVisible]="true">
+  </healthe-confirmation-banner>
+</div>
+<healthe-referral-activity-tab-bar
+  *ngIf="!allContactAttemptsActive"
+  [url]="url"
+  [tabs]="tabs"
+  [archeType]="authorizationArchType$ | async"
+  [referralAuthorizationAction]="referralAuthorizationAction$ | async"
+></healthe-referral-activity-tab-bar>
+
+<router-outlet></router-outlet>

@@ -1,0 +1,179 @@
+<ng-container *ngIf="isCancelOnly">
+  <healthe-pbm-auth-locked-banner
+    lockedMessage="This authorization cannot be modified because it is not approved and/or ended more than 30 days ago."
+  ></healthe-pbm-auth-locked-banner>
+  <div class="spacersmall"></div>
+</ng-container>
+<ng-container
+  *ngIf="
+    referralAuthorizationSet?.referralAuthorization?.authorizationItems
+      ?.length > 0
+  "
+>
+  <healthe-error-banner
+    [errorMessages]="errorBannerErrors"
+    [bannerTitle]="errorBannerTitle"
+  ></healthe-error-banner>
+  <ng-container *ngIf="_isAuthorizationIsSuccessfullySubmitted === true">
+    <healthe-transportation-open-post-submit
+      *ngIf="
+        referralAuthorizationSet.authorizationType ===
+        ReferralAuthorizationType.OPEN
+      "
+      [formValues]="formGroup.value"
+      [referralAuthorizationItem]="
+        referralAuthorizationSet.referralAuthorization.authorizationItems[0]
+      "
+      [claimLocations]="transportationLocations$ | async"
+    ></healthe-transportation-open-post-submit>
+
+    <healthe-transportation-detailed-post-submit
+      *ngIf="
+        referralAuthorizationSet.authorizationType ===
+        ReferralAuthorizationType.DETAILED
+      "
+      [formValues]="formGroup.value"
+    ></healthe-transportation-detailed-post-submit>
+  </ng-container>
+
+  <mat-card *ngIf="_isAuthorizationIsSuccessfullySubmitted === false">
+    <mat-card-title>
+      <span id="auth-information-transportation-title"
+        >Authorization Information</span
+      >
+      <ng-container *ngIf="rush">
+        <fa-icon
+          [icon]="faExclamationTriangle"
+          id="auth-information-transporation-rush-icon"
+          size="lg"
+          class="rushIcon"
+        ></fa-icon>
+        <span
+          id="auth-information-transportation-rush-text"
+          class="rushIcon-text"
+          >Rush</span
+        >
+      </ng-container>
+    </mat-card-title>
+    <mat-card-content>
+      <!-- List of things to approve goes here -->
+
+      <ng-container *ngIf="referralAuthorizationSet">
+        <healthe-transportation-authorization-open
+          *ngIf="
+            referralAuthorizationSet.authorizationType ===
+            ReferralAuthorizationType.OPEN
+          "
+          [referralAuthorizationSet]="referralAuthorizationSet"
+          [generalTransportationAuthFormGroup]="formGroup"
+          [referralAuthorizationAction]="_referralAuthorizationAction"
+          [isReadOnlyForm]="isReadOnlyForm"
+        ></healthe-transportation-authorization-open>
+        <healthe-transportation-authorization-detailed-list
+          *ngIf="
+            referralAuthorizationSet.authorizationType ===
+            ReferralAuthorizationType.DETAILED
+          "
+          [authData]="authData"
+          [subHeaderNote]="subHeaderNote"
+          [formGroup]="formGroup"
+        ></healthe-transportation-authorization-detailed-list>
+        <div class="spacertiny"></div>
+        <div>
+          <span id="auth-information-transportation-itinerary-notes-label"
+            >NOTES</span
+          >
+          <span
+            id="auth-information-transportation-itinerary-notes-label-hint"
+            class="text-hint"
+          >
+            (Optional)</span
+          >
+        </div>
+
+        <div class="spacertiny"></div>
+        <div id="auth-information-transportation-vendor-notes">
+          <div *ngFor="let note of vendorNote; let index = index">
+            <div
+              fxLayout="column"
+              [fxLayoutAlign]="
+                'start ' +
+                (note.noteOrigination === NoteOriginator.VENDOR
+                  ? 'start'
+                  : 'end')
+              "
+            >
+              <div class="overhead-label" fxLayout="row" fxLayoutGap="6px">
+                <span
+                  [id]="
+                    'referralNotes--' +
+                    note.noteOrigination +
+                    '-userCreated-' +
+                    index
+                  "
+                  >{{ note.userCreated }}</span
+                >
+                <span
+                  [id]="
+                    'referralNotes--' +
+                    note.noteOrigination +
+                    '-dateCreated-' +
+                    index
+                  "
+                  >{{ note.dateCreated }}</span
+                >
+
+                <span
+                  [id]="
+                    'referralNotes--' +
+                    note.noteOrigination +
+                    '-timeCreated-' +
+                    index
+                  "
+                  >{{ note.timeCreated }}</span
+                >
+              </div>
+              <div
+                class="standard-text"
+                style="max-width: 50%"
+                [id]="
+                  'referralNotes--' + note.noteOrigination + '-note-' + index
+                "
+              >
+                {{ note.note }}
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="spacersmall"></div>
+        <mat-form-field>
+          <textarea
+            matInput
+            rows="4"
+            [formControl]="formGroup.controls['additionalNotes']"
+            id="auth-information-transportation-referral-notes"
+            placeholder="Enter Additional Notes"
+            style="resize: none"
+          ></textarea>
+        </mat-form-field>
+      </ng-container>
+    </mat-card-content>
+  </mat-card>
+
+  <healthe-referral-authorization-footer *ngIf="(referralAuthorizationSet.referralAuthorization.originalAuthorizationItems !== undefined
+  && referralAuthorizationSet.referralAuthorization.originalAuthorizationItems[0].formGroup !== undefined)
+   || _referralAuthorizationAction === ReferralAuthorizationActionEnum.AUTHORIZE"
+    [referralAuthorizationType]="
+        referralAuthorizationSet.authorizationType
+      "
+    [isCancelOnly]="isCancelOnly"
+    [formGroup]="formGroup"
+    [referralAuthorizationAction]="_referralAuthorizationAction"
+    [authorizationItems]="
+        referralAuthorizationSet.referralAuthorization
+          .originalAuthorizationItems
+      "
+    (denialSubmit)="denialSubmitReset()"
+    (submissionErrors)="setSubmissionErrors($event)"
+  ></healthe-referral-authorization-footer>
+</ng-container>

@@ -1,0 +1,26 @@
+import { NarrativeTextComponent } from '../narrative-text.component';
+import { render } from '@testing-library/angular';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { provideMockStore } from '@ngrx/store/testing';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+
+describe('NarrativeTextComponent', function () {
+  async function setup() {
+    return render(NarrativeTextComponent, {
+      /**
+       * TODO: Remove dependency on HttpClientTestingModule for narrative text component
+       *
+       * The narrative text component is a glorified form group. It should be
+       * using the ControlValueAccessor interface so it can interact with
+       * FormGroups and FormControls directly
+       */
+      imports: [HttpClientTestingModule, FormsModule, ReactiveFormsModule],
+      providers: [provideMockStore()],
+      componentProperties: {}
+    });
+  }
+
+  test('init', async () => {
+    await setup();
+  });
+});

@@ -1,0 +1,17 @@
+@import 'variables';
+
+:host {
+  width: 100%;
+  height: 100%;
+}
+
+.information-icon {
+  color: $primary;
+  font-size: 15px;
+}
+
+.number-input-no-arrows::-webkit-outer-spin-button,
+.number-input-no-arrows::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}

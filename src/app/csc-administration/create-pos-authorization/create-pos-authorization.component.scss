@@ -1,0 +1,11 @@
+@import 'variables';
+
+.title {
+  font-weight: normal;
+  font-size: 28px;
+}
+
+.title-divider {
+  border-left: $gray-400 solid 1px;
+  height: 30px;
+}

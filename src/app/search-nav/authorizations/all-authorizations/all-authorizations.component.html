@@ -1,0 +1,42 @@
+<div healtheServerErrorOverlayAnchor *ngrxLet='viewModel$; let viewModel'>
+  <ng-container *ngrxLet='store.searchOptionsErrors$; let searchOptionsErrors'>
+
+    <ng-container *ngIf='(store.isAnyOptionLoading$ | async)'>
+      <div class='spacersmall'></div>
+      <healthe-loading-spinner
+        loadingVerbiage='Loading search options...'
+      ></healthe-loading-spinner>
+    </ng-container>
+
+    <ng-container
+      *ngIf='!(store.isAnyOptionLoading$ | async) && searchOptionsErrors.length === 0'>
+      <mat-card>
+        <mat-card-content>
+          <healthe-authorizations-search-form-standalone
+            [searchName]='searchName'
+            [displaySearchName]='true'
+            subTitle='Fill out any combination of fields'
+            [initialSearchFormValues]='viewModel.searchFormValues'
+            [simpleSearchFormConfig]='viewModel.simpleSearchFormConfig'
+            (searchNow)='executeSearch($event)'
+          ></healthe-authorizations-search-form-standalone>
+        </mat-card-content>
+      </mat-card>
+
+      <healthe-authorizations-search-results-standalone
+        [simpleSearchFormConfig]='viewModel.simpleSearchFormConfig'
+        [resultsColumnsConfig]='resultsColumnsConfig'
+        componentGroupName='AllAuthorizationsComponent'
+        [resultsDefaultSort]='resultsDefaultSort'
+        [pageSizePreference]='viewModel.pageSizePreference'
+        [searchFormValues]='viewModel.searchFormValues'
+        [searchIsRecordCountLimited]='viewModel.searchIsRecordCountLimited'
+        [searchResults]='viewModel.searchResultRows'
+        [totalNumberOfResults]='viewModel.totalNumberOfResults'
+        [isResultLoading]='viewModel.isSearchLoading'
+        [showExportButton]='true'
+        (doExport)='doExport($event)'
+      ></healthe-authorizations-search-results-standalone>
+    </ng-container>
+  </ng-container>
+</div>

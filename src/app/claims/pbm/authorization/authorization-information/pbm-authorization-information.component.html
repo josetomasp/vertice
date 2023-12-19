@@ -1,0 +1,270 @@
+<healthe-error-banner
+  *ngIf="
+    authorizationDetails &&
+    authorizationDetails.initializationErrors &&
+    authorizationDetails.initializationErrors.length > 0
+  "
+  id="pbm-auth-initializationErrorsBanner"
+  [errorMessages]="authorizationDetails.initializationErrors"
+  bannerTitle="Error while loading authorization data:"
+></healthe-error-banner>
+<healthe-error-banner
+  *ngIf="submitErrors && submitErrors.length > 0"
+  [errorMessages]="submitErrors"
+  bannerTitle="{{ errorBannerTitle }}:"
+></healthe-error-banner>
+<healthe-error-card
+  [expanded]="true"
+  *ngIf="
+    showErrors && submitClickedBefore && displayValidationErrors?.length > 0
+  "
+>
+  <fa-icon
+    style="
+      align-self: center;
+      color: white;
+      font-size: 18px;
+      padding-right: 8px;
+    "
+    [icon]="faExclamationTriangle"
+  >
+  </fa-icon>
+  <header><h2 style="color: white">Validation Errors</h2></header>
+  <content>
+    <ul>
+      <li *ngFor="let error of displayValidationErrors">
+        <a mat-button (click)="goToElement(error.for)">{{ error.message }}</a>
+      </li>
+    </ul>
+  </content>
+</healthe-error-card>
+<div
+  *ngIf="isLoading$ | async"
+  id="POSauthDataSpinner"
+  class="healthe-table--centered-container"
+  fxLayout="column"
+  fxLayoutAlign="center center"
+>
+  <mat-spinner [diameter]="55"></mat-spinner>
+  <h2>Loading data...</h2>
+</div>
+<div #errorBannerSpacer class="spacertiny"></div>
+<healthe-non-actionable-user-banner
+  *ngIf="pbmAuthorizationConfigService.noActionableUser$ | async"
+>
+</healthe-non-actionable-user-banner>
+<div
+  class="spacertiny"
+  *ngIf="pbmAuthorizationConfigService.noActionableUser$ | async"
+></div>
+<div
+  [formGroup]="pbmAuthorizationConfigService.authorizationFormGroup"
+  #submitBanner
+  *ngIf="isAuthDataLoaded == true"
+>
+  <mat-card>
+    <healthe-reassignment-referral-banner
+      *ngIf="showReassignmentBanner"
+      [reassignmentMessage]="
+        'The PHI Member ID has been updated by the adjuster from ' +
+        phiMemberId +
+        ' to ' +
+        currentPhiMemberId
+      "
+    ></healthe-reassignment-referral-banner>
+    <div class="spacersmall"></div>
+    <mat-card-title>
+      <div fxLayout="row" fxLayoutAlign="space-between">
+        <div id="auth-info-header-title">
+          {{ pbmAuthorizationConfigService.authorizationTitle$ | async }}
+        </div>
+        <div
+          style="width: 50%; display: flex"
+          *ngIf="
+            pbmAuthorizationConfigService.authorizationDetailHeaderActionsConfig$
+              | async
+          "
+        >
+          <healthe-component-grid
+            [componentConfig]="
+              pbmAuthorizationConfigService.authorizationDetailHeaderActionsConfig$
+                | async
+            "
+          ></healthe-component-grid>
+        </div>
+      </div>
+    </mat-card-title>
+    <mat-card-content fxLayout="column" fxLayoutGap="30px">
+      <div
+        class="inset-card successfullSubmit"
+        *ngIf="showSuccessSubmitBanner$ | async"
+      >
+        <fa-icon [icon]="faCheck"></fa-icon>
+        <span>
+          You have successfully Actioned this
+          {{ pbmAuthorizationConfigService.serviceName$ | async }}
+          Authorization.</span
+        >
+      </div>
+      <healthe-pbm-auth-details-inset-card
+        *ngIf="
+          pbmAuthorizationConfigService.authorizationDetailHeaderInsetCardConfig$
+            | async
+        "
+        [componentConfig]="
+          pbmAuthorizationConfigService.authorizationDetailHeaderInsetCardConfig$
+            | async
+        "
+      ></healthe-pbm-auth-details-inset-card>
+      <div *ngFor='let alert of reviewerAlerts$ | async'>
+        <div class='text-danger la-threshold'>
+          <div
+            *ngIf='
+            alert.isThresholdAlert;
+            then thresholdAlert;
+            else nonThresholdAlert
+          '
+          ></div>
+          <ng-template #thresholdAlert>
+            <fa-icon [icon]='faBadgeDollar'></fa-icon>
+          </ng-template>
+          <ng-template #nonThresholdAlert>
+            <fa-icon [icon]='faExclamationTriangle' style='padding-right: 8px'>
+            </fa-icon>
+          </ng-template>
+          <span>{{
+            alert.rejectAlert ? alert.rejectAlert : alert.alertMessage
+            }}</span>
+        </div>
+      </div>
+      <div class="text-danger" *ngIf="isReconsideration$ | async">
+        <fa-icon
+          [icon]="faExclamationTriangle"
+          style="padding-right: 8px"
+        ></fa-icon
+        >This bill is a Reconsideration
+      </div>
+
+      <i class="fa-solid"></i>
+      <ng-container *ngIf="authorizationDetails && (userIsInternal$ | async)">
+        <healthe-pbm-auth-notes
+          id="rtr-promotion-internalNotes"
+          [notes]="authorizationDetailsNotes$ | async"
+          [title]="prescriptionNotesConfig.noteTitle"
+          [notesConfig]="prescriptionNotesConfig"
+          index="internalNote"
+          (addNote)="saveInternalNote($event)"
+          [parentFormGroup]="
+            pbmAuthorizationConfigService.authorizationFormGroup
+          "
+          noteFormControlName="internalNotes"
+          style="width: 100%"
+        ></healthe-pbm-auth-notes>
+      </ng-container>
+      <ng-container
+        *ngIf="
+          (pbmAuthorizationConfigService.authorizationLevelNotesConfig$ | async)
+            ?.authorizationLevelNotes
+        "
+      >
+        <healthe-pbm-auth-notes
+          #authorizationNotes
+          [notesConfig]="
+            pbmAuthorizationConfigService.authorizationLevelNotesConfig$ | async
+          "
+          [notes]="authorizationDetailsNotes$ | async"
+          (addNote)="addNoteToAuthorization($event)"
+          (addPaperAuthNote)="addPaperAuthNote($event)"
+          [parentFormGroup]="
+            pbmAuthorizationConfigService.authorizationFormGroup
+          "
+          noteFormControlName="noteFormControl"
+        >
+        </healthe-pbm-auth-notes>
+      </ng-container>
+      <ng-container
+        *ngIf="
+          (pbmAuthorizationConfigService.lineItemConfigs$ | async).length > 0
+        "
+        formArrayName="lineItemsFormArray"
+        healtheFormValidationExtractor
+        formLabel="Authorization Details"
+      >
+        <ng-container *ngFor="let group of lineItems.controls; index as index$">
+          <healthe-pbm-auth-line-item-card
+            [index]="index$"
+            [lineItem]="
+              pbmAuthorizationConfigService.lineItemByIndex$(index$) | async
+            "
+            [actionCardConfig]="
+              pbmAuthorizationConfigService.lineItemConfig$(index$) | async
+            "
+            [notesConfig]="
+              pbmAuthorizationConfigService.authorizationLevelNotesConfig$
+                | async
+            "
+            [actionLabel]="authorizationActionLabel$ | async"
+            [denialReasons]="authorizationDenialReasons$ | async"
+            [showDenialReasons]="showDenialReasons$ | async"
+            [showSecondDenialReason]="showSecondDenialReason$ | async"
+            [formGroupName]="index$"
+            healtheFormValidationExtractor
+            [formLabel]="
+              (pbmAuthorizationConfigService.lineItemByIndex$(index$) | async)
+                ?.drugItemName
+            "
+            [userName]="userName$ | async"
+            [userIsInternal]="userIsInternal$ | async"
+            (priorAuthErrorsEmitter)="showLineItemActionErrors($event)"
+            (saveLineItemDecisionEvent)="saveLineItemDecision$.next($event)"
+            (submittedClickedBefore)="submitClickedBefore = $event"
+            [authorizationDetails]="authorizationDetails"
+            (formValuesChanged)="builtDisplayValidationErrors()"
+          >
+          </healthe-pbm-auth-line-item-card>
+        </ng-container>
+      </ng-container>
+    </mat-card-content>
+  </mat-card>
+
+  <div class="spacersmall"></div>
+  <healthe-pbm-pos-footer
+    *ngIf="
+      (pbmAuthorizationConfigService.authorizationFooterConfig$ | async) &&
+      (pbmAuthorizationConfigService.pbmServiceType$ | async) !== 'paper'
+    "
+    [submitted]="showSuccessSubmitBanner$ | async"
+    [userIsInternal$]="userIsInternal$"
+    [authorizationDenialReasons$]="authorizationDenialReasons$"
+    [pbmAuthFooterConfig]="
+      pbmAuthorizationConfigService.authorizationFooterConfig$ | async
+    "
+    [errorCardComponent]="errorCardComponent"
+    [saveLineItemDecision$]="saveLineItemDecision$"
+    (displayErrors)="useDisplayErrors($event)"
+    (submittedClickedBefore)="setSubmittedClickedBefore($event)"
+    (showValidationErrors)="setShowValidationErrors($event)"
+    [mode]="pbmAuthorizationConfigService.authorizationLevelAccessMode$ | async"
+    (showInitializationErrorsBanner)="showInitializationErrorsBanner()"
+    (setValidationErrorFilter)="setValidationErrorFilter($event)"
+  ></healthe-pbm-pos-footer>
+  <healthe-pbm-paper-footer
+    *ngIf="
+      (pbmAuthorizationConfigService.authorizationFooterConfig$ | async) &&
+      (pbmAuthorizationConfigService.pbmServiceType$ | async) === 'paper'
+    "
+    [userIsInternal$]="userIsInternal$"
+    [authorizationDenialReasons$]="authorizationDenialReasons$"
+    [pbmAuthFooterConfig]="
+      pbmAuthorizationConfigService.authorizationFooterConfig$ | async
+    "
+    [errorCardComponent]="errorCardComponent"
+    [encodedAuthId$]="encodedAuthId$"
+    (displayErrors)="useDisplayErrors($event)"
+    (submittedClickedBefore)="setSubmittedClickedBefore($event)"
+    (showValidationErrors)="setShowValidationErrors($event)"
+    (showInitializationErrorsBanner)="showInitializationErrorsBanner()"
+    (setValidationErrorFilter)="setValidationErrorFilter($event)"
+  >
+  </healthe-pbm-paper-footer>
+</div>

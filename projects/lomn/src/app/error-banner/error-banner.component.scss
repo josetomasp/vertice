@@ -1,0 +1,69 @@
+@import 'variables';
+
+.submit-error {
+  background: $danger;
+  margin: 1rem;
+
+  &__collapse {
+    padding-right: 1rem;
+  }
+
+  &__column1 {
+    max-width: 3rem;
+  }
+
+  &__column2 {
+    max-width: 60rem;
+  }
+
+  &__column3 {
+    max-width: 12rem;
+  }
+
+  &__count {
+    background-color: $white;
+    color: $danger;
+    font-size: 12px;
+    margin-left: 10px;
+    position: relative;
+    top: -2px;
+  }
+
+  &__detailed-errors {
+    margin: 0rem;
+    padding-left: 6rem;
+  }
+
+  &__message {
+    position: absolute;
+    right: 90px;
+  }
+
+  &__title {
+    width: 160vh;
+  }
+
+  &--padding-right {
+    padding-right: 2rem;
+  }
+
+  &--white {
+    color: $white;
+  }
+
+  // for colors
+  .mat-expansion-panel-header,
+  ::ng-deep .mat-expansion-panel-content {
+    background-color: $danger !important;
+  }
+
+  .mat-expansion-panel-header {
+    cursor: pointer;
+    padding-top: 0.5rem !important;
+    padding-bottom: 0.5rem !important;
+  }
+
+  .mat-expansion-indicator::after {
+    color: $white !important;
+  }
+}

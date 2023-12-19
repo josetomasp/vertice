@@ -1,0 +1,35 @@
+.column-base {
+  word-break: break-word;
+  white-space: pre-line;
+  overflow: hidden;
+  padding-right: 5px;
+}
+
+.mat-column {
+  &-riskLevelAndCategory {
+    @extend .column-base;
+  }
+
+  &-riskSubcategory {
+    @extend .column-base;
+  }
+
+  &-riskIndicator {
+    @extend .column-base;
+  }
+
+  &-riskDescription {
+    @extend .column-base;
+  }
+
+  &-atRiskOf {
+    @extend .column-base;
+  }
+}
+
+.tag {
+  box-shadow: none !important;
+  font-size: 11px;
+  padding: 4px 7px;
+  line-height: 8px;
+}

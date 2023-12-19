@@ -1,0 +1,22 @@
+:host {
+  position: absolute;
+  top: 16px;
+  bottom: 16px;
+  right: 16px;
+  left: 16px;
+  & > .ta-tab-group {
+    ::ng-deep {
+      .mat-tab-header {
+        background-color: white;
+        margin-bottom: 16px !important;
+      }
+    }
+  }
+  .ta-footer {
+    position: sticky;
+    bottom: 16px;
+    display: flex;
+    justify-content: space-between;
+    z-index: 999;
+  }
+}

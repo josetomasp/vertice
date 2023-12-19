@@ -1,0 +1,207 @@
+<div fxLayout="row" fxLayoutAlign="space-between center" mat-dialog-title>
+  <span>{{ modalData.title }}</span>
+  <button
+    mat-icon-button
+    mat-dialog-close
+    id="referralOverviewModal--header-closeButton"
+  >
+    <i class="fal fa-times modal-close-widget"></i>
+  </button>
+</div>
+<div
+  class="view-auth-banner"
+  fxLayout="row"
+  fxLayoutAlign="space-between center"
+>
+  <span id="AuthOverview-label" class="sectionLabel"
+    >Authorization Overview</span
+  >
+</div>
+<div mat-dialog-content style="overflow-x: hidden;">
+  <div
+    fxLayout="row wrap"
+    fxLayoutAlign="space-between center"
+    class="summaryBox"
+    fxLayoutGap="20px"
+  >
+    <div>
+      <div id="referralId-label" class="overhead-label">REFERRAL ID</div>
+      <div id="referralId-value" class="standard-text ellipsis-text">
+        <span> {{ modalData.referralId }}</span>
+      </div>
+    </div>
+    <div>
+      <div id="createDate-label" class="overhead-label">CREATE DATE</div>
+      <div id="createDate-value" class="standard-text ellipsis-text">
+        <span> {{ modalData.createDate }}</span>
+      </div>
+    </div>
+
+    <div>
+      <div id="status-label" class="overhead-label">STATUS</div>
+      <div id="status-value" class="standard-text ellipsis-text">
+        <span> {{ modalData.status }}</span>
+      </div>
+    </div>
+
+    <div>
+      <div id="vendorName-label" class="overhead-label">VENDOR</div>
+      <div id="vendorName-value" class="standard-text ellipsis-text">
+        <span> {{ modalData.vendorName }}</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="spacersmall"></div>
+
+  <div
+    fxLayout="row wrap"
+    class="disable-scroll"
+    fxLayoutAlign="space-between start"
+    fxLayoutGap="35px grid"
+  >
+    <div>
+      <div id="serviceType-label" class="overhead-label">SERVICE TYPE</div>
+      <div id="serviceType-value" class="standard-text ellipsis-text">
+        <span> {{ modalData.serviceType }}</span>
+      </div>
+    </div>
+    <div>
+      <div id="itineraryType-label" class="overhead-label">TRIP FREQUENCY</div>
+      <div id="itineraryType-value" class="standard-text ellipsis-text">
+        <span> {{ modalData.itineraryType }}</span>
+      </div>
+    </div>
+
+    <div>
+      <div id="quantity-label" class="overhead-label">QUANTITY</div>
+      <div id="quantity-value" class="standard-text ellipsis-text">
+        <span> {{ modalData.quantity }}</span>
+      </div>
+    </div>
+
+    <div>
+      <div id="date-label" class="overhead-label">DATE</div>
+      <div id="date-value" class="standard-text ellipsis-text">
+        <span> {{ modalData.date }}</span>
+      </div>
+    </div>
+
+    <div>
+      <div id="fromAddr-label" class="overhead-label">FROM ADDRESS</div>
+      <div
+        *ngIf="modalData.fromAddress"
+        id="fromAddr-value"
+        class="standard-text ellipsis-text"
+      >
+        <ul class="addressList">
+          <li>{{ modalData.fromAddress.name }}</li>
+          <li>{{ modalData.fromAddress.addressLine1 }}</li>
+          <li *ngIf="modalData.fromAddress.addressLine2">
+            {{ modalData.fromAddress.addressLine2 }}
+          </li>
+          <li>
+            {{ modalData.fromAddress.city }}, {{ modalData.fromAddress.state }}
+            {{ modalData.fromAddress.zip }}
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div>
+      <div id="toAddr-label" class="overhead-label">TO ADDRESS</div>
+      <div
+        *ngIf="modalData.toAddress"
+        id="toAddr-value"
+        class="standard-text ellipsis-text"
+      >
+        <ul class="addressList">
+          <li>{{ modalData.toAddress.name }}</li>
+          <li>{{ modalData.toAddress.addressLine1 }}</li>
+          <li *ngIf="modalData.toAddress.addressLine2">
+            {{ modalData.toAddress.addressLine2 }}
+          </li>
+          <li>
+            {{ modalData.toAddress.city }}, {{ modalData.toAddress.state }}
+            {{ modalData.toAddress.zip }}
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div>
+      <div id="phone-label" class="overhead-label">Phone</div>
+      <div id="phone-value" class="standard-text ellipsis-text">
+        <span> {{ modalData.providerPhone }}</span>
+      </div>
+    </div>
+
+    <div>
+      <div id="fax-label" class="overhead-label">Fax</div>
+      <div id="fax-value" class="standard-text ellipsis-text">
+        <span> {{ modalData.providerFax }}</span>
+      </div>
+    </div>
+
+    <div>
+      <div id="paidAsExpense-label" class="overhead-label">
+        WILL THIS BE A PAID AS EXPENSE?
+      </div>
+      <div id="paidAsExpense-value" class="standard-text ellipsis-text">
+        <span> {{ translateBoolean(modalData.isPaidExpense) }}</span>
+      </div>
+    </div>
+
+    <div>
+      <div id="addPassengers-label" class="overhead-label">
+        ANY ADDITIONAL PASSENGERS?
+      </div>
+      <div id="addPassengers-value" class="standard-text ellipsis-text">
+        <span> {{ modalData.additionalPassengers }}</span>
+      </div>
+    </div>
+
+    <div>
+      <div id="translational-label" class="overhead-label">
+        TRANSLATION SERVICE NEEDED?
+      </div>
+      <div id="translational-value" class="standard-text ellipsis-text">
+        <span> {{ modalData.translationServices }}</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="spacersmall"></div>
+
+  <healthe-referral-documents
+    [dateOfService]="modalData?.dateOfServiceForDocumentUpload"
+    [hesReferralDetailId]="hesReferralDetailIdForUploadDocuments"
+  ></healthe-referral-documents>
+  <div class="spacersmall"></div>
+
+  <div><healthe-referral-notes-widget></healthe-referral-notes-widget></div>
+</div>
+<div mat-dialog-actions fxLayout="row" fxLayoutAlign="space-between center">
+  <button
+    id="bottomClose-button"
+    class="info-button"
+    mat-stroked-button
+    (click)="closeModal()"
+  >
+    CLOSE
+  </button>
+  <div fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="20px">
+    <button
+      id="createIncidentReport-button"
+      mat-button
+      class="primary-button actionButton"
+      (click)="createIncidentReport()"
+    >
+      CREATE INCIDENT REPORT
+    </button>
+    <healthe-referral-information-request-button
+      [referralInformationRequest]="modalData.referralInformationRequest"
+      buttonText="REQUEST DOCUMENTATION"
+    ></healthe-referral-information-request-button>
+  </div>
+</div>

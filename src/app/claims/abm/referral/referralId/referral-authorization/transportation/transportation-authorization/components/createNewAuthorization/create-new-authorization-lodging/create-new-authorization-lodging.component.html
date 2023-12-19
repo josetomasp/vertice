@@ -1,0 +1,186 @@
+<div class="modal-lodging">
+  <div id="open-add-lodging-actions-title" class="add-lodging__title">
+    <fa-icon
+      [icon]="faHotel"
+      class="ieSvgFix add-logding__icon"
+      id="open-add-lodging-actions-title-icon"
+    ></fa-icon>
+    Lodging
+  </div>
+
+  <div class="spacersmall"></div>
+  <div [formGroup]="formGroup" class="matFormFieldWidthFix">
+    <div flex fxLayout="row" fxLayoutGap="3%">
+      <!-- Destination -->
+      <div fxFlex="60">
+        <span
+          class="overhead-label"
+          id="open-add-lodging-destinationField-label"
+          >DESTINATION<span class="required-text">*</span></span
+        >
+        <mat-form-field class="show-one-error">
+          <healthe-places-autocomplete
+            formControlName="destination"
+            placeholder="City or Airport"
+            #destination
+            type="BOTH"
+            id="open-add-lodging-destinationField-input"
+          ></healthe-places-autocomplete>
+          <mat-error
+            id="open-add-lodging-destinationField-error-required"
+            *ngIf="formGroup.controls['destination'].hasError('required')"
+            >Destination cannot be empty
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <!-- # Of Travelers -->
+      <div fxFlex="20">
+        <span
+          class="overhead-label"
+          id="open-add-lodging-numberOfGuestsField-label"
+          ># OF TRAVELERS<span class="required-text">*</span></span
+        >
+        <mat-form-field>
+          <mat-select
+            formControlName="numberOfGuests"
+            id="open-add-lodging-numberOfGuestsField-input"
+          >
+            <mat-option
+              *ngFor="let count of numberOfGuestsOptions"
+              [value]="count"
+              id="open-add-lodging-numberOfGuestsField-option-{{count}}"
+              >{{ count }}</mat-option
+            >
+          </mat-select>
+          <mat-error
+            id="open-add-lodging-numberOfGuestsField-error-required"
+            *ngIf="formGroup.controls['numberOfGuests'].hasError('required')"
+            >Number of Travelers cannot be empty
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <!-- # OF ROOMS -->
+      <div fxFlex="20">
+        <span
+          class="overhead-label"
+          id="open-add-lodging-numberOfRoomsField-label"
+          ># OF ROOMS</span
+        >
+        <mat-form-field>
+          <mat-select
+            formControlName="numberOfRooms"
+            id="open-add-lodging-numberOfRoomsField-input"
+          >
+            <mat-option
+              *ngFor="let count of numberOfRoomsOptions"
+              [value]="count"
+              id="open-add-lodging-numberOfRoomsField-option-{{count}}"
+              >{{ count }}</mat-option
+            >
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="spacersmall"></div>
+    <!-- Row 2 -->
+    <div fxLayout="row" fxLayoutGap="25px">
+      <!-- Check In Date -->
+      <div>
+        <span
+          class="overhead-label"
+          id="open-add-lodging-checkInDateField-label"
+          >CHECK IN DATE<span class="required-text">*</span></span
+        >
+        <mat-form-field class="show-one-error">
+          <healthe-datepicker
+            formControlName="checkInDate"
+            id="open-add-lodging-checkInDate-input"
+            (blur)="updateValidityOnBlur()"
+            width="165px"
+          >
+          </healthe-datepicker>
+          <mat-error
+            id="open-add-lodging-checkInDate-error-required"
+            *ngIf="formGroup.controls['checkInDate'].hasError('required')"
+            >Check In Date cannot be empty
+          </mat-error>
+          <mat-error
+            id="open-add-lodging-checkInDate-error-checkinDateAfterCheckoutDate"
+            *ngIf="
+              formGroup.controls['checkInDate'].hasError(
+                'checkinDateAfterCheckoutDate'
+              )
+            "
+            >Check In date should be before Check Out date
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <!-- Check Out Date -->
+      <div>
+        <span
+          class="overhead-label"
+          id="open-add-lodging-checkOutDateField-label"
+          >CHECK OUT DATE<span class="required-text">*</span></span
+        >
+        <mat-form-field class="show-one-error">
+          <healthe-datepicker
+            formControlName="checkOutDate"
+            id="open-add-lodging-checkOutDate-input"
+            (blur)="updateValidityOnBlur()"
+            width="165px"
+          >
+          </healthe-datepicker>
+          <mat-error
+            id="open-add-lodging-checkOutDate-error-required"
+            *ngIf="formGroup.controls['checkOutDate'].hasError('required')"
+            >Check Out Date cannot be empty
+          </mat-error>
+          <mat-error
+            id="open-add-lodging-checkOutDate-error-checkinDateAfterCheckoutDate"
+            *ngIf="
+              formGroup.controls['checkOutDate'].hasError(
+                'checkinDateAfterCheckoutDate'
+              )
+            "
+            >Check In date should be before Check Out date
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <!-- Price of Room -->
+      <div>
+        <span
+          class="overhead-label"
+          id="open-add-lodging-priceOfRoomField-label"
+          >PRICE OF ROOM</span
+        >
+        <mat-form-field>
+          <mat-select
+            formControlName="priceOfRoom"
+            id="open-add-lodging-priceOfRoomField-input"
+            class="add-lodging--width-125"
+          >
+            <mat-option
+              *ngFor="let price of priceOfRoomOptions"
+              [value]="price"
+              id="open-add-lodging-priceOfRoomField-option-{{price}}"
+              >{{ price }}</mat-option
+            >
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <!-- Number of Nights -->
+      <div>
+        <span class="overhead-label" id="open-add-lodging-numberOfNights-label"
+          >NUMBER OF NIGHTS</span
+        >
+        <p id="lodging-numberOfNights">{{ numberOfNights }}</p>
+      </div>
+    </div>
+    <div class="spacersmall"></div>
+    <!-- Row 3 -->
+    <healthe-create-new-authorization-appointment
+      [referralAuthorizationItem]="referralAuthorizationItem"
+      [dialogData]="dialogData"
+    ></healthe-create-new-authorization-appointment>
+  </div>
+</div>

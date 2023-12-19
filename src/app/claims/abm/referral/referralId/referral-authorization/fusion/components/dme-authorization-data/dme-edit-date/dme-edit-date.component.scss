@@ -1,0 +1,11 @@
+.dmeEditDateContainer {
+  width: fit-content;
+
+  ::ng-deep.overhead-label {
+    white-space: nowrap;
+  }
+
+  .standard-text {
+    white-space: nowrap;
+  }
+}

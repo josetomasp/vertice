@@ -1,0 +1,75 @@
+<div fxLayout="row" fxLayoutAlign="space-between">
+  <button
+    mat-stroked-button
+    class="info-button"
+    mat-dialog-close
+    id="authorization-actions-button-close"
+  >
+    CLOSE
+  </button>
+  <button
+    mat-stroked-button
+    class="primary-button"
+    (click)="goToViewIncidentReports()"
+    id="authorization-actions-button-viewIncidents"
+  >
+    VIEW INCIDENT REPORT(S)
+  </button>
+  <button
+    mat-stroked-button
+    class="primary-button"
+    (click)="goToCreateIncidentReport()"
+    id="authorization-actions-button-reportIncidents"
+  >
+    CREATE INCIDENT REPORT
+  </button>
+  <button
+    class="primary-button"
+    mat-stroked-button
+    *ngIf="stage !== ReferralStage.RESULTS"
+    (click)="doInformationRequest(requestForInformationMenuOptions[1].request)"
+    id="authorization-actions-button-requestDocumentation"
+  >
+    REQUEST DOCUMENTATION
+  </button>
+  <div *ngIf="stage === ReferralStage.RESULTS">
+    <button
+      (menuClosed)="requestForInformationMenuOpened = false"
+      (menuOpened)="requestForInformationMenuOpened = true"
+      [mat-menu-trigger-for]="informationRequestMenu"
+      class="primary-button"
+      mat-stroked-button
+      id="authorization-actions-button-requestMenu"
+    >
+      REQUEST
+      <i
+        class="inline-right-icon far"
+        [ngClass]="{
+          'fa-chevron-up': requestForInformationMenuOpened,
+          'fa-chevron-down': !requestForInformationMenuOpened
+        }"
+      ></i>
+    </button>
+    <mat-menu
+      #informationRequestMenu="matMenu"
+      [overlapTrigger]="false"
+      yPosition="below"
+    >
+      <button
+        *ngFor="
+          let InformationRequestOption of requestForInformationMenuOptions
+        "
+        mat-menu-item
+        [id]="
+          'referralResultsModal-requestForInformationButton-Option-'.concat(
+            InformationRequestOption.label
+          )
+        "
+        (click)="doInformationRequest(InformationRequestOption.request)"
+        id="authorization-actions-button-requestMenu-{{InformationRequestOption.request.requestType}}"
+      >
+        {{ InformationRequestOption.label }}
+      </button>
+    </mat-menu>
+  </div>
+</div>

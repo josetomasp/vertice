@@ -1,0 +1,41 @@
+.title-container {
+  margin-top: 5px !important;
+}
+
+.mat-dialog-title {
+  box-sizing: content-box !important;
+}
+
+.button-container {
+  margin-top: 20px;
+  padding: 0;
+  margin-bottom: 20px;
+  justify-content: flex-end;
+}
+
+.flex-column {
+  display: flex;
+  flex-direction: column;
+  flex-basis: 100%;
+  flex: 1;
+}
+
+.cancelation-modal-authtitle {
+  margin-top: 0 !important;
+}
+
+.isCancellingColumn {
+  width: 90px;
+}
+
+.dateColumn {
+  width: 180px;
+}
+
+.reasonColumn {
+  width: 300px;
+}
+
+.cancelation-modal-cancelReason-select {
+  width: 90%;
+}

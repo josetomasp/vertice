@@ -1,0 +1,76 @@
+@import 'variables';
+
+.timeout {
+  &--wrapper {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-shadow: rgba(0, 0, 0, 0.01) 0 0 1px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: white;
+    background-color: $primary;
+    justify-content: center;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+  }
+  &--centered-content {
+    line-height: 0.5;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    align-content: center;
+    align-self: center;
+    position: absolute;
+    margin-top: -50px;
+    .timeout-exclamation {
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      text-shadow: rgba(0, 0, 0, 0.01) 0 0 1px;
+      font-size: 64px;
+    }
+    h1 {
+      color: white;
+      font-size: 24px;
+    }
+    p {
+      font-weight: 400;
+      font-size: 16px;
+      margin: 5px;
+      padding: 0;
+    }
+  }
+  &--footer {
+    line-height: 2;
+    font-size: 10px;
+    padding: 32px;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+    img {
+      width: 150px;
+      padding: 20px;
+    }
+    a {
+      color: white !important;
+      font-weight: 400;
+    }
+  }
+}
+
+.primary-button {
+  background-color: $secondary !important;
+  color: $white;
+  &:hover {
+    background-color: rgba($secondary, 0.7) !important;
+  }
+}

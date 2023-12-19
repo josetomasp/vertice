@@ -1,0 +1,106 @@
+<p id="assignFirstFill-claimSearchFilter-reminderText">
+  Fill out claim number of any other combination of fields to search.
+</p>
+<div class="spacersmall"></div>
+<div fxLayout="row" fxLayoutAlign="space-between start" style="width: 100%">
+  <div
+    fxLayout="row"
+    fxLayoutAlign="start start"
+    fxLayoutGap="35px"
+    [formGroup]="claimSearchFormGroup"
+  >
+    <div>
+      <div
+        class="overhead-label"
+        id="assignFirstFill-claimSearchFilter-claimNumber-label"
+      >
+        CLAIM NUMBER
+      </div>
+      <input
+        matInput
+        placeholder="Enter Claim"
+        formControlName="claimNumber"
+        id="assignFirstFill-claimSearchFilter-claimNumber-input"
+      />
+    </div>
+    <div>
+      <div
+        class="overhead-label"
+        id="assignFirstFill-claimSearchFilter-claimantFirstName-label"
+      >
+        CLAIMANT FIRST NAME
+      </div>
+      <input
+        matInput
+        placeholder="Enter Claimant First Name"
+        formControlName="claimantFirstName"
+        id="assignFirstFill-claimSearchFilter-claimantFirstName-input"
+      />
+    </div>
+    <div>
+      <div
+        class="overhead-label"
+        id="assignFirstFill-claimSearchFilter-claimantLastName-label"
+      >
+        CLAIMANT LAST NAME
+      </div>
+      <input
+        matInput
+        placeholder="Enter Claimant Last Name"
+        formControlName="claimantLastName"
+        id="assignFirstFill-claimSearchFilter-claimantLastName-input"
+      />
+    </div>
+    <div>
+      <div
+        class="overhead-label"
+        id="assignFirstFill-claimSearchFilter-claimantSsn-label"
+      >
+        CLAIMANT SSN
+      </div>
+
+      <input
+        matInput
+        type="text"
+        mask="000000000"
+        [validation]="false"
+        placeholder="Enter Social Security #"
+        formControlName="claimantSsn"
+        id="assignFirstFill-claimSearchFilter-claimantSsn-input"
+      />
+    </div>
+  </div>
+
+  <div
+    fxLayout="row"
+    fxLayoutAlign="end end"
+    fxLayoutGap="35px"
+    style="margin-top: 20px"
+  >
+    <button
+      mat-stroked-button
+      class="secondary-button"
+      (click)="resetButtonClicked()"
+      id="assignFirstFill-claimSearchFilter-resetButton"
+    >
+      RESET
+    </button>
+    <button
+      mat-flat-button
+      class="primary-button"
+      (click)="searchButtonClicked()"
+      [disabled]="claimSearchFormGroup.invalid"
+      id="assignFirstFill-claimSearchFilter-searchButton"
+    >
+      SEARCH
+    </button>
+  </div>
+</div>
+<mat-error
+  *ngIf="claimSearchFormGroup.invalid && claimSearchFormGroup.touched"
+  style="margin-top: 3px"
+  id="assignFirstFill-claimSearchFilter-validationErrorMessage"
+>
+  An SSN, a Claim Number, or Claimant First and Last Name are required for
+  search.
+</mat-error>

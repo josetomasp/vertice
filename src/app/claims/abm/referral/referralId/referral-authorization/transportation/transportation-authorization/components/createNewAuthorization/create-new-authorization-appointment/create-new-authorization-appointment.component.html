@@ -1,0 +1,67 @@
+<div
+  fxLayout="row"
+  fxLayoutAlign="start start"
+  fxLayoutGap="35px"
+  [formGroup]="formGroup"
+  [ngClass]="errorBoxClass"
+>
+  <div style="width: 170px">
+    <div class="overhead-label" id="createAppointment-appointmentDate-label">
+      APPOINTMENT DATE
+    </div>
+    <mat-form-field class="show-one-error">
+      <healthe-datepicker
+        [id]="'createAppointment-appointmentDate-datepicker'"
+        formControlName="appointmentDate"
+        width="175px"
+      ></healthe-datepicker>
+    </mat-form-field>
+  </div>
+
+  <div>
+    <div class="overhead-label" id="createAppointment-appointmentTime-label">
+      APPOINTMENT TIME
+    </div>
+    <mat-form-field class="show-one-error">
+      <mat-select
+        formControlName="appointmentTime"
+        style="width: 100px;"
+        placeholder="Choose Time"
+        [id]="'createAppointment-appointmentTime-select'"
+      >
+        <mat-option
+          *ngFor="let option of dialogData.timeDropdownValues; let i = index"
+          [value]="option.value"
+          id="createAppointment-appointmentTime-option-{{i}}"
+          >{{ option.label }}</mat-option
+        >
+      </mat-select>
+    </mat-form-field>
+  </div>
+  <div>
+    <div class="overhead-label" id="createAppointment-appointmentType-label">
+      APPOINTMENT TYPE
+    </div>
+    <mat-form-field class="show-one-error">
+      <mat-select
+        formControlName="appointmentType"
+        style="width: 100px;"
+        placeholder="Choose Type"
+        [id]="'createAppointment-appointmentType-select'"
+      >
+        <mat-option
+          *ngFor="let option of dialogData.appointmentTypes; let i = index"
+          [value]="option"
+          id="createAppointment-appointmentType-option-{{i}}"
+          >{{ option }}</mat-option
+        >
+      </mat-select>
+    </mat-form-field>
+  </div>
+  <div class="secondary clearAppointments" (click)="clearAppointments()">
+    Clear Appointments
+  </div>
+</div>
+<mat-error *ngIf="formGroup.hasError('allOrNothing') && allTouched()">
+  {{ ERROR_MESSAGES.appointment_allOrNothing }}
+</mat-error>

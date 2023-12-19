@@ -1,0 +1,19 @@
+<div
+  style="height: 150px; width: 600px; padding: 20px"
+  fxLayout="column"
+  fxLayoutAlign="space-between center"
+  fxLayoutGap="25px"
+>
+  <h3>{{ title }}</h3>
+
+  <mat-spinner *ngIf="isLoadingDose" [diameter]="40"></mat-spinner>
+  <div *ngIf="null != errorMessage">{{ errorMessage }}</div>
+  <button
+    *ngIf="!isLoadingDose"
+    mat-flat-button
+    class="primary-button"
+    (click)="dialogRef.close(loadSuccess)"
+  >
+    OK
+  </button>
+</div>

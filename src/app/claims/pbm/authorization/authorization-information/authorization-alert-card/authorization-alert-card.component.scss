@@ -1,0 +1,77 @@
+@import 'variables';
+
+.alert-card {
+  background-color: $danger;
+  color: white;
+
+  ::ng-deep {
+    & *:hover {
+      background-color: transparent !important;
+    }
+
+    & div.mat-expansion-panel-content div.mat-expansion-panel-body {
+      background-color: $danger;
+      color: white;
+    }
+
+    & .mat-expansion-indicator::after {
+      color: white;
+    }
+  }
+
+  &-header,
+  .mat-expanded {
+    background-color: $danger;
+    color: white;
+    height: 0 !important;
+
+    &:hover {
+      background-color: $danger !important;
+    }
+
+    ::ng-deep & span.mat-content:hover {
+      background-color: $danger !important;
+    }
+  }
+
+  &--alert-line {
+    width: 100%;
+
+    &_offset {
+    }
+
+    & a {
+      color: white;
+      text-decoration: underline;
+      cursor: pointer;
+
+      &:hover {
+        color: $gray-100;
+      }
+
+      &:visited,
+      &:focus {
+        color: $gray-200;
+      }
+    }
+
+    & .end-div-wrapper {
+      margin-left: auto;
+      margin-right: 10px;
+    }
+
+    & .mat-chip-list {
+      display: inline-block;
+      margin-left: 10px;
+
+      & .mat-standard-chip {
+        padding: 2px 12px;
+        background-color: white !important;
+
+        &:hover {
+          background-color: white !important;
+        }
+      }
+    }
+  }
+}

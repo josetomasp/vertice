@@ -1,0 +1,52 @@
+@import 'variables';
+
+.lomn-medication {
+  &--header--button-icon {
+    font-size: 16px;
+  }
+
+  &--card {
+    margin: 30px;
+    padding-bottom: 25px;
+    &--inset {
+      background-color: $gray-600;
+      margin: -20px -20px 0 -20px;
+      padding: 10px 20px;
+
+      &--header {
+        h3 {
+          color: #9fd2d5;
+        }
+      }
+
+      button {
+        margin-top: 10px;
+      }
+    }
+    textarea {
+      margin-bottom: 10px;
+      height: 75px;
+    }
+  }
+}
+
+.overhead-label,
+::ng-deep .lomn-medication--card .mat-radio-label-content {
+  color: initial !important;
+}
+
+.prescriber {
+  font-weight: 600;
+  color: rgba(0, 179, 227, 0.7);
+}
+.textarea-input-count {
+  font-style: italic;
+  font-size: 12px;
+  color: $gray-700;
+}
+
+.regular-mail-note {
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  color: $danger;
+}

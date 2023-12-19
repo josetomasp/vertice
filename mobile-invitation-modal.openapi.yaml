@@ -1,0 +1,52 @@
+openapi: 3.0.0
+info:
+  title: Mobile Invitation Modal State Models
+  version: 0.0.1
+  description: The jurne/pwa/gain life integration
+components:
+  schemas:
+    VerticeMobileInvitationHistoryItem:
+      description: "The converted model for the ui of UserInvitationRequest"
+      type: object
+      properties:
+        requestDate:
+          type: string
+          description: 'Formatted requestDate using our standard formatting'
+          x-json-path: $[0].requestDate
+        email:
+          type: string
+          x-json-path: $[0].email
+        maskedSsn:
+          type: string
+          description: 'Formatted ssn using prepending xxx-xx with the ssnSerialNumber'
+          x-json-path: $[0].ssnSerialNumber
+          example: 'xxx-xx-1234'
+        dob:
+          type: string
+          description: 'Formatted birthDate using our standard formatting'
+          x-json-path: $[0].birthDate
+          example: '12/02/2022'
+        phoneNumber:
+          type: string
+          x-json-path: $[0].birthDate
+    MobileInviteModalViewModel:
+      description: ""
+      properties:
+        title:
+          type: string
+        invitationHistory:
+          type: array
+          items:
+            $ref: '#/components/schemas/VerticeMobileInvitationHistoryItem'
+        phiMemberId:
+          type: string
+        claimantVerificationInformationForm:
+          type: string
+        claimantVerificationInformationPresets:
+          type: string
+        isInvitationHistoryLoading:
+          type: boolean
+        invitationHistoryErrors:
+          type: array
+          items:
+            type: object

@@ -1,0 +1,67 @@
+@import 'variables';
+
+.error-card {
+  border: 2px solid $danger;
+  & > fa-icon {
+    align-self: center;
+  }
+  &__collapse {
+    padding-right: 1rem;
+  }
+
+  &__detailed-errors {
+    margin: 0rem;
+    padding-left: 6rem;
+  }
+
+  &__message {
+    position: absolute;
+    right: 90px;
+  }
+
+  &--expansion-header {
+    background-color: $danger !important;
+    &:hover {
+      background-color: $danger !important;
+    }
+  }
+
+  &__title {
+    width: 160vh;
+  }
+
+  &--padding-right {
+    padding-right: 2rem;
+  }
+
+  &--white {
+    color: $white;
+  }
+
+  .mat-expansion-panel:not(.mat-expanded)
+    .mat-expansion-panel-header:not([aria-disabled='true']):hover,
+  .mat-expansion-panel
+    .mat-expansion-panel-header:not([aria-disabled='true']):hover,
+  mat-expansion-panel
+    mat-expansion-panel-header.mat-expansion-panel-header.mat-expanded:focus {
+    background-color: $danger !important;
+  }
+
+  // for colors
+  ::ng-deep .mat-expansion-panel-header {
+    cursor: pointer;
+    padding-top: 0.5rem !important;
+    padding-bottom: 0.5rem !important;
+    background-color: #ea6850;
+    border-radius: 0;
+    &:hover {
+      background-color: darken($danger, 1%);
+    }
+    .mat-content:hover {
+      background-color: darken($danger, 1%);
+    }
+    .mat-expansion-indicator::after {
+      color: white !important;
+    }
+  }
+}

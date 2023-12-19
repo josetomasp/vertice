@@ -1,0 +1,263 @@
+<mat-card [formGroup]="form" fxLayoutGap="18px">
+  <div class="nav-search-box__search-title" id="{{title}}">{{ title }}</div>
+  <!-- Row: Header Text -->
+  <div fxLayout="row">
+    <span
+      id="filterBoxSummary"
+      class="nav-search-box__header-text-box"
+      [ngClass]="isEmptyForm ? 'referral-search-box--danger' : ''"
+      >{{ helperText }}</span
+    >
+  </div>
+  <mat-error class="nav-search-box__header-text-box-error">
+    <span data-testid="filterbox-summary-error" id="filterBoxSummaryError" *ngIf="isSearchDisabled()"
+      >Please see the above rules on required search criteria</span
+    >
+  </mat-error>
+
+  <div *ngIf="customers" style="max-width: 180px">
+    <div id="customer-label" class="overhead-label">Customer</div>
+    <mat-form-field>
+      <mat-select
+        healtheSelect
+        formControlName="customerId"
+        placeholder="Choose a Customer"
+        id="customer-select"
+      >
+        <mat-option
+          [value]="option.value"
+          id="customer-select-{{option.label}}_option"
+          *ngFor="let option of customers"
+        >
+          {{ option.label }}
+        </mat-option>
+      </mat-select>
+      <mat-error
+        *ngIf="form.controls['customerId'].hasError('required')"
+        id="customer-select-error-required"
+        >Must select a customer
+      </mat-error>
+    </mat-form-field>
+    <div class="spacersmall"></div>
+  </div>
+
+  <!-- Row: Base Search -->
+  <div fxLayout="row" fxLayoutAlign="space-between">
+    <div fxLayout="column" fxLayoutAlign="start">
+      <div fxLayout="row wrap" fxLayoutGap="20px grid">
+        <!-- Adjuster -->
+        <div *ngIf="!hideAdjustersDropdown">
+          <div id="assignedTo-label" class="overhead-label">
+            Assigned Adjuster
+            <div
+              style="display: inline-flex"
+              class="secondary"
+              matTooltip="Assigned adjuster list only contains users that are assigned to pending referrals"
+            >
+              <fa-icon [icon]="infoI"></fa-icon>
+            </div>
+          </div>
+          <mat-form-field>
+            <mat-select
+              healtheSelect
+              formControlName="assignedTo"
+              placeholder="Select Adjuster"
+              id="assignedTo-select"
+            >
+              <mat-option
+                [value]="option.value"
+                id="assignedTo-select-{{option.label}}_option"
+                *ngFor="let option of users"
+              >
+                {{ option.label }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <!-- Referral ID -->
+        <div>
+          <div
+            for="referralID-input"
+            id="referralID-label"
+            class="overhead-label"
+          >
+            REFERRAL ID
+          </div>
+          <mat-form-field>
+            <input
+              id="referralID-input"
+              data-testid="data-referralID-input"
+              formControlName="referralId"
+              matInput
+              placeholder="Enter ID"
+              type="text"
+            />
+          </mat-form-field>
+        </div>
+
+        <!-- Claim Number -->
+        <div>
+          <div
+            for="claimNumber-input"
+            id="claimNumber-label"
+            class="overhead-label"
+          >
+            CLAIM NUMBER
+          </div>
+          <mat-form-field>
+            <input
+              id="claimNumber-input"
+              formControlName="claimNumber"
+              matInput
+              placeholder="Enter Claim"
+              type="text"
+            />
+          </mat-form-field>
+        </div>
+
+        <!-- Date Received -->
+        <div>
+          <div
+            class="overhead-label nav-search-box--uppercase"
+            id="dateRange-overheadLabel"
+          >
+            {{ dateRangeLabel }}
+          </div>
+          <div class="mat-form-field-wrapper">
+            <healthe-daterange
+              #dateRange
+              [options]="datePickerOptions"
+              id="dateRange"
+              [triggerIcon]="faCalendarAlt"
+              (submit)="_dateRangeChange($event)"
+              [hasSubmit]="false"
+            >
+            </healthe-daterange>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div fxLayout="column">
+      <div
+        fxLayout="row"
+        fxLayoutGap="16px"
+        class="nav-search-box__search-button"
+      >
+        <!-- Search Button -->
+        <button
+          (click)="search()"
+          [disabled]="isSearchDisabled()"
+          id="claimSearch-submitButton"
+          data-testid="filterbox-search-button"
+          class="primary-button"
+          mat-flat-button
+        >
+          SEARCH
+        </button>
+        <button
+          (click)="resetForm()"
+          class="secondary-button"
+          data-testid="filterbox-reset-button"
+          mat-stroked-button
+          id="resetButton"
+        >
+          RESET
+        </button>
+      </div>
+      <div class="spacertiny"></div>
+      <!-- Row: Button-Advanced Search -->
+      <a
+        id="advancedFiltersButton"
+        data-testid="data-advancedFiltersButton"
+        (click)="advancedFilters.toggle()"
+        mat-button
+      >
+        Advanced Search
+        <i
+          class="nav-search-box--padding-left"
+          [ngClass]="
+            advancedFilters.expanded
+              ? 'fas fa-chevron-up'
+              : 'fas fa-chevron-down'
+          "
+          id="activityView-tableCard-header-advancedFilterPanelTrigger-chevron"
+        ></i>
+      </a>
+    </div>
+  </div>
+
+  <!-- Advanced Search -->
+  <mat-expansion-panel #advancedFilters class="nav-search-box__mat-expansion">
+    <div fxLayout="row wrap" fxLayoutGap="20px grid">
+      <!-- Status -->
+      <div *ngIf="statuses">
+        <div
+          id="status-label" class="overhead-label"
+          data-testid="data-status-label"
+          >Status
+        </div>
+        <mat-form-field>
+          <mat-select
+            healtheSelect
+            formControlName="status"
+            placeholder="Select Status"
+            id="status-select"
+            data-testid="data-status-select"
+          >
+            <mat-option
+              [value]="option.value"
+              id="status-select-{{option.label}}_option"
+              *ngFor="let option of statuses"
+            >
+              {{ option.label }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <!-- Service Type -->
+      <div>
+        <div id="serviceType-label" class="overhead-label">Service Type</div>
+        <mat-form-field>
+          <mat-select
+            healtheSelect
+            formControlName="serviceType"
+            placeholder="Select Service Type"
+            id="serviceType-select"
+            data-testid="data-serviceType-select"
+          >
+            <mat-option
+              [value]="option.value"
+              id="serviceType-select-{{option.label}}_option"
+              data-testid="data-serviceType-select"
+              *ngFor="let option of serviceTypes"
+            >
+              {{ option.label }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </div>
+  </mat-expansion-panel>
+
+  <!-- Filter Summary -->
+</mat-card>
+
+<div fxLayout="row" class="nav-search-box__filter">
+  <div fxFlex="1 1 auto">
+    <label
+      *ngIf="(filterSummary$ | async)"
+      class="label"
+      id="filterSummary-title"
+      style="padding-right: 10px;"
+      >SEARCH FILTERS:</label
+    >
+    <span
+      class="standard-text"
+      id="filterSummary-summary"
+      style="font-weight: 500; font-size: 13px;"
+      >{{ filterSummary$ | async }}</span
+    >
+  </div>
+</div>

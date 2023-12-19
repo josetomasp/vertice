@@ -1,0 +1,62 @@
+<ng-container [ngSwitch]="approvalType">
+  <div
+    *ngSwitchCase="AuthApprovalState.Approve"
+    class="success"
+    id="referral-auth-review-approve"
+  >
+    <fa-icon
+      [icon]="statusIcon"
+      size="lg"
+      style="margin-right: 10px"
+      id="referral-auth-review-approve-icon"
+    ></fa-icon
+    >{{ approvalTypeName }}
+  </div>
+
+  <div *ngSwitchCase="AuthApprovalState.Deny">
+    <div fxLayout="row" fxLayoutAlign="start" fxLayoutGap="35px">
+      <div class="danger" id="referral-auth-review-deny-type">
+        <fa-icon
+          [icon]="statusIcon"
+          size="lg"
+          style="margin-right: 10px"
+          id="referral-auth-review-deny-type-icon"
+        ></fa-icon
+        >{{ approvalTypeName }}
+      </div>
+      <div fxLayout="column">
+        <div class="overhead-label" id="referral-auth-review-deny-label">
+          <healthe-customer-configs-label
+            defaultText="Denial"
+            elementName="denial"
+            [forcedCapitalization]="false"
+          ></healthe-customer-configs-label>
+          Reason
+        </div>
+        <div id="referral-auth-review-deny-reason">{{ approvalReason }}</div>
+      </div>
+    </div>
+  </div>
+
+  <div *ngSwitchCase="AuthApprovalState.Pending">
+    <div fxLayout="row" fxLayoutAlign="start" fxLayoutGap="35px">
+      <div class="primary" id="referral-auth-review-pendType-type">
+        <fa-icon
+          [icon]="statusIcon"
+          size="lg"
+          style="margin-right: 10px"
+          id="referral-auth-review-pendType-type-icon"
+        ></fa-icon
+        >{{ approvalTypeName }}
+      </div>
+      <div fxLayout="column">
+        <div class="overhead-label" id="referral-auth-review-pendType-label">
+          PEND TYPE
+        </div>
+        <div id="referral-auth-review-pendType-reason">
+          {{ approvalReason }}
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-container>

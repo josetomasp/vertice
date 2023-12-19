@@ -1,0 +1,30 @@
+<div class="lomn-step--container">
+  <h4 class="text-primary lomn-step_title">
+    Generate Letter of Medical Necessity for Which Prescription(s)?
+  </h4>
+  <div class="lomn-step--check-box-form--container">
+    <div class="lomn-step--check-box-form--input-wrapper">
+      <mat-checkbox
+        [checked]="allSelected"
+        (click)="medicationListFormControl.markAsTouched()"
+        (change)="toggleAll($event)"
+      >
+        Select All
+      </mat-checkbox>
+    </div>
+    <div
+      *ngFor="let control of medicationListFormArray.controls; index as $index"
+      class="lomn-step--check-box-form--input-wrapper"
+    >
+      <mat-checkbox
+        (click)="medicationListFormControl.markAsTouched()"
+        [value]="medicationListOptions[$index].value"
+        [formControl]="control"
+        >{{ medicationListOptions[$index].label }}</mat-checkbox
+      >
+    </div>
+    <mat-error *ngIf="showValidationMessage"
+      >Select at least one prescription.</mat-error
+    >
+  </div>
+</div>

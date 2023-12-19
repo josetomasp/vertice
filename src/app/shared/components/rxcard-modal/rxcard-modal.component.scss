@@ -1,0 +1,50 @@
+@import 'variables';
+
+.rxCard {
+  &-not-started {
+    color: $gray-600;
+  }
+
+  &-in-progress {
+    color: #287ed2; // New Color Used in InVision MockUps
+  }
+
+  &-completed {
+    color: #37a162; // New Color Used in InVision MockUps
+  }
+
+  &-dialog-content {
+    background-color: $gray-200;
+    margin: 0;
+    padding: 30px 20px;
+  }
+
+  &-section {
+    &-title {
+      font-size: 18px;
+      font-weight: 600;
+      line-height: 20px;
+    }
+
+    &-status {
+      font-size: 14px;
+      font-weight: 600;
+      line-height: 20px;
+    }
+
+    &-note {
+      font-size: 12px;
+      color: $gray-700;
+    }
+  }
+
+  &-bold {
+    font-weight: 600;
+  }
+
+  &-mat-divider {
+    margin-left: -30px;
+    margin-right: -30px;
+    border-top-width: 1.3px;
+  }
+}

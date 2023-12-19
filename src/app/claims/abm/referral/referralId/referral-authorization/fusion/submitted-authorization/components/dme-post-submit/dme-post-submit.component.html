@@ -1,0 +1,49 @@
+<mat-card
+  style="margin-bottom: 16px;"
+  class="dme-auth-no-details"
+  *ngFor="
+    let authorization of (fusionReferralAuthorizations$ | async);
+    index as $index
+  "
+>
+  <div class="authorization--card--inset">
+    <header
+      class="authorization--card--inset--header"
+      fxLayout="row"
+      fxLayoutAlign="space-between"
+    >
+      <h3 
+        class="text-primary" 
+        id="authorization--card--inset--header--title--{{$index}}">
+        {{ authorization.authorizationUnderReview.isSubstitution
+          ? authorization.authorizationUnderReview.substitutionAuthorizationUnderReview.description
+          : authorization.authorizationUnderReview.categoryDesc }}
+      </h3>
+      <button mat-stroked-button class="secondary-button">VIEW NOTES</button>
+    </header>
+    <healthe-alert-info-banner [clinicalAlerts]="authorization.alertInfoList">
+    </healthe-alert-info-banner>
+    <healthe-reasons-banner
+      [reasons]="authorization.reasonsReviewNeeded"
+    ></healthe-reasons-banner>
+    <div class="spacer-small"></div>
+    <healthe-action-reason-display
+      [approvalType]="authorization.authorizationUnderReview.isSubstitution 
+        ? authorization.authorizationUnderReview.substitutionAuthorizationUnderReview.action 
+        :authorization.action
+      "
+      [reason]="authorization.authorizationUnderReview.isSubstitution 
+        ? authorization.authorizationUnderReview.substitutionAuthorizationUnderReview.reasonForAction 
+        :authorization.reasonForAction
+      "
+    ></healthe-action-reason-display>
+    <mat-divider></mat-divider>
+    <div class="spacersmall"></div>
+    <healthe-dme-authorization-data
+      [fusionAuth]="authorization"
+      [index]="$index"
+      [isSubstitutionCard]="authorization.authorizationUnderReview.isSubstitution" 
+      [narrativeMode]="'PostSubmit'"
+    ></healthe-dme-authorization-data>
+  </div>
+</mat-card>

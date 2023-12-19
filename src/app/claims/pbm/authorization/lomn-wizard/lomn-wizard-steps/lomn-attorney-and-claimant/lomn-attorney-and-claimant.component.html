@@ -1,0 +1,431 @@
+<p class="danger">
+  Ex Parte law requires communication be provided to the claimant/attorney.
+  Provide an address for the claimant's attorney or validate the claimant
+  address.
+</p>
+<div class="spacersmall"></div>
+<div>
+  <label class="overhead-label">ATTORNEY INVOLVEMENT?</label>
+  <mat-radio-group
+    fxLayout="row"
+    fxLayoutGap="15px"
+    [formControl]="
+      attorneyAndClaimantInformationFormGroup.get('attorneyInvolvement')
+    "
+    id="attorneyInvolvement-radioButtonGroup"
+  >
+    <mat-radio-button [value]="true" id="attorneyInvolvement-radioButton-yes"
+      >Yes
+    </mat-radio-button>
+    <mat-radio-button [value]="false" id="attorneyInvolvement-radioButton-no"
+      >No
+    </mat-radio-button>
+  </mat-radio-group>
+</div>
+
+<!-- Attorney Information -->
+<ng-container
+  *ngIf="
+    attorneyAndClaimantInformationFormGroup.get('attorneyInvolvement').value
+  "
+>
+  <div class="spacersmall"></div>
+  <div>
+    <h4 class="text-primary lomn-step_title">Attorney Information</h4>
+    <span class="lomn-step_title_help"
+      >Please verify the accuracy of the attorney contact information.</span
+    >
+  </div>
+  <div
+    fxLayout="row"
+    fxLayoutAlign="start start"
+    fxLayoutGap="35px"
+    style="width: 100%"
+  >
+    <div class="input-style">
+      <span class="overhead-label" id="lomn-step_att_name-label">
+        ATTORNEY NAME <span class="text-required">*</span>
+      </span>
+      <mat-form-field>
+        <input
+          matInput
+          [formControl]="getAttorneyInformationFormGroup().get('name')"
+          placeholder="Enter the Attorney Name"
+          id="lomn-step_att_name-input"
+        />
+        <mat-error
+          *ngIf="
+            getAttorneyInformationFormGroup()
+              .get('name')
+              .hasError('required')
+          "
+          id="lomn-step_name-required-error"
+        >
+          Attorney name cannot be empty
+        </mat-error>
+      </mat-form-field>
+    </div>
+    <div class="input-style">
+      <span class="overhead-label" id="lomn-step_att_Street1-label">
+        STREET ADDRESS <span class="text-required">*</span>
+      </span>
+      <mat-form-field>
+        <input
+          matInput
+          [formControl]="getAttorneyInformationFormGroup().get('addressLine1')"
+          placeholder="Enter a Street Address"
+          id="lomn-step_att_Street1-input"
+        />
+        <mat-error
+          *ngIf="
+            getAttorneyInformationFormGroup()
+              .get('addressLine1')
+              .hasError('required')
+          "
+          id="lomn-step_Street1-required-error"
+        >
+          Enter the Street Address
+        </mat-error>
+      </mat-form-field>
+    </div>
+
+    <div class="input-style">
+      <span class="overhead-label" id="lomn-step_att_Street2-label">
+        STREET ADDRESS (APT. OR SUITE #)
+      </span>
+
+      <mat-form-field>
+        <input
+          matInput
+          [formControl]="getAttorneyInformationFormGroup().get('addressLine2')"
+          placeholder="Enter a Street Address 2"
+          id="lomn-step_att_Street2-input"
+        />
+      </mat-form-field>
+    </div>
+  </div>
+
+  <div
+    fxLayout="row"
+    fxLayoutAlign="start start"
+    fxLayoutGap="35px"
+    style="width: 100%"
+  >
+    <div class="input-style">
+      <span class="overhead-label" id="lomn-step_att_city-label">
+        CITY <span class="text-required">*</span>
+      </span>
+
+      <mat-form-field>
+        <input
+          matInput
+          [formControl]="getAttorneyInformationFormGroup().get('city')"
+          placeholder="Enter a City"
+          id="lomn-step_att_city-input"
+        />
+        <mat-error
+          *ngIf="
+            getAttorneyInformationFormGroup()
+              .get('city')
+              .hasError('required')
+          "
+          id="lomn-step_att_city-required-error"
+        >
+          Enter the City
+        </mat-error>
+      </mat-form-field>
+    </div>
+
+    <div class="input-style-small">
+      <span class="overhead-label" id="lomn_att--state">
+        STATE <span class="text-required">*</span>
+      </span>
+      <mat-form-field>
+        <mat-select
+          healtheSelect
+          placeholder="Select State"
+          id="lomn_att--state-select"
+          [formControl]="getAttorneyInformationFormGroup().get('state')"
+        >
+          <mat-option
+            *ngFor="let state of states"
+            id="lomn_att--state-select-option-{{state}}"
+            value="{{state}}"
+          >
+            {{ state }}
+          </mat-option>
+        </mat-select>
+        <mat-error
+          *ngIf="
+            getAttorneyInformationFormGroup()
+              .get('state')
+              .hasError('required')
+          "
+          id="add-state_att-required-error"
+        >
+          Select a value for 'State'
+        </mat-error>
+      </mat-form-field>
+    </div>
+
+    <div class="input-style-small">
+      <span class="overhead-label" id="lomn-step_att_zip-label">
+        ZIP CODE <span class="text-required">*</span>
+      </span>
+
+      <mat-form-field>
+        <input
+          matInput
+          [formControl]="getAttorneyInformationFormGroup().get('zipCode')"
+          placeholder="Enter a Zip"
+          id="lomn-step_att_zip-input"
+        />
+        <mat-error
+          *ngIf="
+            getAttorneyInformationFormGroup()
+              .get('zipCode')
+              .hasError('required')
+          "
+          id="add-zipCode-required-error"
+        >
+          Enter the Zip Code
+        </mat-error>
+        <mat-error
+          *ngIf="
+            getAttorneyInformationFormGroup()
+              .get('zipCode')
+              .hasError('zipCodeWrongFormat')
+          "
+          id="add-zipCode-format-error"
+        >
+          Enter a valid Zip Code
+        </mat-error>
+      </mat-form-field>
+    </div>
+
+    <div class="input-style-medium">
+      <span class="overhead-label" id="lomn-step_email-label">
+        EMAIL ADDRESS
+      </span>
+
+      <mat-form-field>
+        <input
+          matInput
+          [formControl]="getAttorneyInformationFormGroup().get('email')"
+          placeholder="Enter a Email Address"
+          id="lomn-step_email-input"
+        />
+      </mat-form-field>
+    </div>
+
+    <div class="input-style-small">
+      <span class="overhead-label" id="lomn-step_phone_att-label"> PHONE </span>
+
+      <mat-form-field>
+        <input
+          matInput
+          [formControl]="getAttorneyInformationFormGroup().get('phone')"
+          placeholder="Enter a Phone"
+          id="lomn-step_phone_att-input"
+          type="tel"
+          mask="(000) 000-0000"
+          [value]="
+            getAttorneyInformationFormGroup().get('phone').value
+              | mask: '(000) 000-0000'
+          "
+        />
+      </mat-form-field>
+    </div>
+
+    <div class="input-style-small">
+      <span class="overhead-label" id="lomn-step_fax_att-label"> FAX </span>
+
+      <mat-form-field>
+        <input
+          matInput
+          [formControl]="getAttorneyInformationFormGroup().get('fax')"
+          placeholder="Enter a Fax"
+          id="lomn-step_fax_att-input"
+          type="tel"
+          mask="(000) 000-0000"
+          [value]="
+            getAttorneyInformationFormGroup().get('fax').value
+              | mask: '(000) 000-0000'
+          "
+        />
+      </mat-form-field>
+    </div>
+  </div>
+</ng-container>
+
+<!-- Claimant Information -->
+<div class="spacersmall"></div>
+<div>
+  <h4 class="text-primary lomn-step_title">Claimant Contact Information</h4>
+  <span class="lomn-step_title_help"
+    >Please verify the accuracy of the claimant contact information.</span
+  >
+</div>
+<div
+  fxLayout="row"
+  fxLayoutAlign="start start"
+  fxLayoutGap="35px"
+  style="width: 100%"
+>
+  <div class="input-style">
+    <span class="overhead-label" id="lomn-step_Street1-label">
+      STREET ADDRESS <span class="text-required">*</span>
+    </span>
+    <mat-form-field>
+      <input
+        matInput
+        [formControl]="getClaimantInformationFormGroup().get('addressLine1')"
+        placeholder="Enter a Street Address"
+        id="lomn-step_Street1-input"
+      />
+      <mat-error
+        *ngIf="
+          getClaimantInformationFormGroup()
+            .get('addressLine1')
+            .hasError('required')
+        "
+        id="lomn-step_Street1-required-error"
+      >
+        Enter the Street Address
+      </mat-error>
+    </mat-form-field>
+  </div>
+
+  <div class="input-style">
+    <span class="overhead-label" id="lomn-step_Street2-label">
+      STREET ADDRESS (APT. OR SUITE #)
+    </span>
+
+    <mat-form-field>
+      <input
+        matInput
+        [formControl]="getClaimantInformationFormGroup().get('addressLine2')"
+        placeholder="Enter a Street Address 2"
+        id="lomn-step_Street2-input"
+      />
+    </mat-form-field>
+  </div>
+</div>
+
+<div
+  fxLayout="row"
+  fxLayoutAlign="start start"
+  fxLayoutGap="35px"
+  style="width: 100%"
+>
+  <div class="input-style">
+    <span class="overhead-label" id="lomn-step_city-label">
+      CITY <span class="text-required">*</span>
+    </span>
+
+    <mat-form-field>
+      <input
+        matInput
+        [formControl]="getClaimantInformationFormGroup().get('city')"
+        placeholder="Enter a City"
+        id="lomn-step_city-input"
+      />
+      <mat-error
+        *ngIf="
+          getClaimantInformationFormGroup()
+            .get('city')
+            .hasError('required')
+        "
+        id="lomn-step_city-required-error"
+      >
+        Enter the City
+      </mat-error>
+    </mat-form-field>
+  </div>
+
+  <div class="input-style-small">
+    <span class="overhead-label" id="lomn--state">
+      STATE <span class="text-required">*</span>
+    </span>
+    <mat-form-field>
+      <mat-select
+        healtheSelect
+        placeholder="Select State"
+        id="lomn--state-select"
+        [formControl]="getClaimantInformationFormGroup().get('state')"
+      >
+        <mat-option
+          *ngFor="let state of states"
+          id="lomn--state-select-option-{{state}}"
+          value="{{state}}"
+        >
+          {{ state }}
+        </mat-option>
+      </mat-select>
+      <mat-error
+        *ngIf="
+          getClaimantInformationFormGroup()
+            .get('state')
+            .hasError('required')
+        "
+        id="add-state-required-error"
+      >
+        Select a value for 'State'
+      </mat-error>
+    </mat-form-field>
+  </div>
+
+  <div class="input-style-small">
+    <span class="overhead-label" id="lomn-step_zip-label">
+      ZIP CODE <span class="text-required">*</span>
+    </span>
+
+    <mat-form-field>
+      <input
+        matInput
+        [formControl]="getClaimantInformationFormGroup().get('zipCode')"
+        placeholder="Enter a Zip"
+        id="lomn-step_zip-input"
+      />
+      <mat-error
+        *ngIf="
+          getClaimantInformationFormGroup()
+            .get('zipCode')
+            .hasError('required')
+        "
+        id="add-zipCode-required-error"
+      >
+        Enter the Zip Code
+      </mat-error>
+      <mat-error
+        *ngIf="
+          getClaimantInformationFormGroup()
+            .get('zipCode')
+            .hasError('zipCodeWrongFormat')
+        "
+        id="add-zipCode-format-error"
+      >
+        Enter a valid Zip Code
+      </mat-error>
+    </mat-form-field>
+  </div>
+
+  <div class="input-style-small">
+    <span class="overhead-label" id="lomn-step_phone-label"> PHONE </span>
+
+    <mat-form-field>
+      <input
+        matInput
+        [formControl]="getClaimantInformationFormGroup().get('phone')"
+        placeholder="Enter a Phone"
+        id="lomn-step_phone-input"
+        type="tel"
+        mask="(000) 000-0000"
+        [value]="
+          getClaimantInformationFormGroup().get('phone').value
+            | mask: '(000) 000-0000'
+        "
+      />
+    </mat-form-field>
+  </div>
+</div>

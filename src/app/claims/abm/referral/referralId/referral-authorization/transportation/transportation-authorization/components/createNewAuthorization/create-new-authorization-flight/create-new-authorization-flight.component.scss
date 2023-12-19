@@ -1,0 +1,15 @@
+@import 'variables';
+
+.add-flight {
+  &__title {
+    color: $primary;
+  }
+  &__icon {
+    margin-right: 10px;
+    font-size: 22px;
+  }
+}
+
+::ng-deep fa-icon.ieSvgFix > svg {
+  width: 28px;
+}

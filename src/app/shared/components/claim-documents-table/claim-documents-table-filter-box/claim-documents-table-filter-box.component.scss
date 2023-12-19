@@ -1,0 +1,9 @@
+/**
+* STYLES BELOW THIS POINT NEED TO BE FIXED IN THE COMPONENT LIBRARY.
+**/
+:host ::ng-deep {
+  .mat-select {
+    width: calc(100% - 32px);
+    display: block;
+  }
+}

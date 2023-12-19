@@ -1,0 +1,51 @@
+<div [formGroup]="stepForm">
+  <healthe-surgical-information-with-location
+    [parentFormGroup]="wizard.sharedForm"
+    [subService]="selectedService.concat('-other')"
+    [locations$]="locations$"
+  >
+  </healthe-surgical-information-with-location>
+  <div class="spacersmall"></div>
+
+  <!-- ICD Codes and modal -->
+  <healthe-icd-codes-display
+    [diagnosisCodes]="this.wizard.sharedForm.get('diagnosisCodes')"
+  ></healthe-icd-codes-display>
+  <div class="spacersmall"></div>
+
+  <healthe-specific-date-form-array
+    [config]="specificDateConfig"
+    [formArray]="stepForm.get('schedulingForm')"
+    [selectedService]="selectedService"
+  ></healthe-specific-date-form-array>
+  <div class="spacersmall"></div>
+  <div>
+    <span class="overhead-label" id="diagnostics-wizard-other-rush-label"
+      >RUSH SERVICES (NEEDED WITHIN 24 HOURS)?</span
+    >
+    <mat-radio-group
+      formControlName="rush"
+      fxLayout="row"
+      fxLayoutGap="30px"
+      class="other-radio-group"
+    >
+      <mat-radio-button
+        [value]="false"
+        id="diagnostics-wizard-other-rush-button-no"
+        >No</mat-radio-button
+      >
+      <mat-radio-button
+        [value]="true"
+        id="diagnostics-wizard-other-rush-button-yes"
+        >Yes</mat-radio-button
+      >
+    </mat-radio-group>
+  </div>
+
+  <div class="spacersmall"></div>
+
+  <!-- Prescriber Information -->
+  <healthe-ordering-prescriber-information
+    [parentFormGroup]="wizard.sharedForm"
+  ></healthe-ordering-prescriber-information>
+</div>

@@ -1,0 +1,72 @@
+<div>
+  <div class="overhead-label" id="{{step}}-review-approvedLocations-label">
+    APPROVED LOCATIONS
+  </div>
+
+  <div
+    class="standard-text"
+    *ngFor="let location of displayData['approvedLocations']; let i = index"
+    id="{{step}}-review-approvedLocations-{{i}}"
+  >
+    {{ location }}
+  </div>
+</div>
+<div class="spacersmall"></div>
+
+<div fxLayout="row" fxLayoutGap="35px">
+  <div fxFlex="0 0 calc({{columnSpacing}}% -35px)">
+    <div class="overhead-label" id="{{step}}--review-dateRange-label">
+      DATE RANGE
+    </div>
+    <div class="standard-text" id="{{step}}--review-dateRange">
+      {{ displayData['dateRange'] }}
+    </div>
+  </div>
+
+  <div fxFlex="0 0 calc({{columnSpacing}}% -35px)">
+    <div class="overhead-label" id="{{step}}--review-noTrips-label">
+      NUMBER OF TRIPS
+    </div>
+    <div class="standard-text" id="{{step}}--review-noTrips">
+      {{ displayData['numberOfTrips'] }}
+    </div>
+  </div>
+</div>
+
+<div class="spacersmall"></div>
+
+<div fxLayout="row" fxLayoutGap="35px">
+  <div fxFlex="0 0 calc({{columnSpacing}}% -35px)">
+    <div class="overhead-label" id="{{step}}--review-driverLanguage-label">
+      DRIVER LANGUAGE
+    </div>
+    <div class="standard-text" id="{{step}}--review-driverLanguage">
+      {{ displayData['driverLanguage'] }}
+    </div>
+  </div>
+
+  <div fxFlex="0 0 calc({{columnSpacing}}% -35px)">
+    <div class="overhead-label" id="{{step}}--review-rushService-label">
+      RUSH SERVICE (NEEDED WITHIN 24 HOURS)?
+    </div>
+    <div class="standard-text" id="{{step}}--review-rushService">
+      {{ displayData['rushServiceNeeded'] }}
+    </div>
+  </div>
+
+  <div fxFlex="0 0 calc({{columnSpacing}}% -35px)">
+    <div class="overhead-label" id="{{step}}--review-paidAsExpense-label">
+      WILL THIS BE PAID AS EXPENSE?
+    </div>
+    <div class="standard-text" id="{{step}}--review-paidAsExpense">
+      {{ displayData['paidAsExpense'] }}
+    </div>
+  </div>
+</div>
+
+<div class="spacersmall"></div>
+
+<div class="overhead-label" id="{{step}}--review-notes-label">NOTES</div>
+<div class="standard-text" id="{{step}}--review-notes">
+  {{ displayData['notes'] }}
+</div>

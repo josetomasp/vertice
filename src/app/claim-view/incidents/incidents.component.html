@@ -1,0 +1,298 @@
+<div class="spacersmall"></div>
+<healthe-error-banner
+  *ngIf="showIncidentsErrors$ | async"
+  [errorMessages]="incidentsErrors$ | async"
+  bannerTitle="Claim Incidents Errors"
+></healthe-error-banner>
+<div class="spacersmall" *ngIf="showIncidentsErrors$ | async"></div>
+<mat-card>
+  <mat-card-title id="incidents-header">
+    <div fxLayout="row" fxLayoutAlign="space-between center">
+      <span id="incidents-title">Incidents</span>
+      <span
+        ><button
+          mat-button
+          class="secondary-button mat-stroked-button"
+          style="min-width: 50px; margin-right: 20px"
+          matTooltip="Refresh Data"
+          [matTooltipShowDelay]="500"
+          id="incidents-refresh-button"
+          (click)="fetchDataFromServer()"
+          [disabled]="isLoading$ | async"
+        >
+          <i class="fas fa-sync" style="font-size: 15px"></i></button
+        ><button
+          mat-button
+          class="secondary-button mat-stroked-button"
+          id="incidents-create-report-button"
+          (click)="createIncident()"
+        >
+          CREATE INCIDENT REPORT
+        </button></span
+      >
+    </div>
+  </mat-card-title>
+  <mat-card-content>
+    <div style="overflow-x: scroll; margin-top: 11px; z-index: 90">
+      <table
+        mat-table
+        style="min-width: 1500px"
+        [dataSource]="(incidentsResponse$ | async).incidents"
+      >
+        <ng-container matColumnDef="dateSubmitted">
+          <th
+            mat-header-cell
+            id="incidentsTable-header-dateSubmitted"
+            class="healthe-table-cell tableHeader"
+            *matHeaderCellDef
+            style="width: 75px"
+          >
+            DATE SUBMITTED
+          </th>
+          <td
+            #dateSubmitted
+            mat-cell
+            class="healthe-table-cell tableHeader"
+            [id]="'incidentsTable-cell-dateSubmitted-' + i"
+            *matCellDef="let data; let i = index"
+          >
+            <span [matTooltip]="data.dateSubmitted">
+              {{ data.dateSubmitted }}
+            </span>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="incidentNumber">
+          <th
+            mat-header-cell
+            id="incidentsTable-header-incidentNumber"
+            class="healthe-table-cell tableHeader"
+            *matHeaderCellDef
+            style="width: 75px"
+          >
+            INCIDENT #
+          </th>
+          <td
+            #incidentNumber
+            mat-cell
+            class="healthe-table-cell tableHeader"
+            [id]="'incidentsTable-cell-incidentNumber-' + i"
+            *matCellDef="let data; let i = index"
+          >
+            <span [matTooltip]="data.incidentNumber">
+              <a
+                (click)="openIncidentEdit(data.incidentNumber)"
+                href="javascript:void(0)"
+                >{{ data.incidentNumber }}</a
+              >
+            </span>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="incidentType">
+          <th
+            mat-header-cell
+            id="incidentsTable-header-incidentType"
+            class="healthe-table-cell tableHeader"
+            *matHeaderCellDef
+            style="width: 75px"
+          >
+            INCIDENT TYPE
+          </th>
+          <td
+            #incidentType
+            mat-cell
+            class="healthe-table-cell tableHeader"
+            [id]="'incidentsTable-cell-incidentType-' + i"
+            *matCellDef="let data; let i = index"
+          >
+            <span [matTooltip]="data.incidentType">
+              {{ data.incidentType }}
+            </span>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="incidentDate">
+          <th
+            mat-header-cell
+            id="incidentsTable-header-incidentDate"
+            class="healthe-table-cell tableHeader"
+            *matHeaderCellDef
+            style="width: 75px"
+          >
+            INCIDENT DATE
+          </th>
+          <td
+            #incidentDate
+            mat-cell
+            class="healthe-table-cell tableHeader"
+            [id]="'incidentsTable-cell-incidentDate-' + i"
+            *matCellDef="let data; let i = index"
+          >
+            <span [matTooltip]="data.incidentDate">
+              {{ data.incidentDate }}
+            </span>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="referralID">
+          <th
+            mat-header-cell
+            id="incidentsTable-header-referralID"
+            class="healthe-table-cell tableHeader"
+            *matHeaderCellDef
+            style="width: 75px"
+          >
+            REFERRAL ID
+          </th>
+          <td
+            #referralID
+            mat-cell
+            class="healthe-table-cell tableHeader"
+            [id]="'incidentsTable-cell-referralID-' + i"
+            *matCellDef="let data; let i = index"
+          >
+            <span [matTooltip]="data.referralID">
+              <a
+                (click)="goToReferralActivity(data)"
+                href="javascript:void(0)"
+                >{{ data.referralID }}</a
+              >
+            </span>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="service">
+          <th
+            mat-header-cell
+            id="incidentsTable-header-service"
+            class="healthe-table-cell tableHeader"
+            *matHeaderCellDef
+            style="width: 75px"
+          >
+            SERVICE
+          </th>
+          <td
+            #service
+            mat-cell
+            class="healthe-table-cell tableHeader"
+            [id]="'incidentsTable-cell-service-' + i"
+            *matCellDef="let data; let i = index"
+          >
+            <span [matTooltip]="data.service"> {{ data.service }} </span>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="vendor">
+          <th
+            mat-header-cell
+            id="incidentsTable-header-vendor"
+            class="healthe-table-cell tableHeader"
+            *matHeaderCellDef
+            style="width: 75px"
+          >
+            VENDOR
+          </th>
+          <td
+            #vendor
+            mat-cell
+            class="healthe-table-cell tableHeader"
+            [id]="'incidentsTable-cell-vendor-' + i"
+            *matCellDef="let data; let i = index"
+          >
+            <span [matTooltip]="data.vendor"> {{ data.vendor }} </span>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="submittedBy">
+          <th
+            mat-header-cell
+            id="incidentsTable-header-submittedBy"
+            class="healthe-table-cell tableHeader"
+            *matHeaderCellDef
+            style="width: 75px"
+          >
+            SUBMITTED BY
+          </th>
+          <td
+            #submittedBy
+            mat-cell
+            class="healthe-table-cell tableHeader"
+            [id]="'incidentsTable-cell-submittedBy-' + i"
+            *matCellDef="let data; let i = index"
+          >
+            <span [matTooltip]="data.submittedBy">
+              {{ data.submittedBy }}
+            </span>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="incidentStatus">
+          <th
+            mat-header-cell
+            id="incidentsTable-header-incidentStatus"
+            class="healthe-table-cell tableHeader"
+            *matHeaderCellDef
+            style="width: 75px"
+          >
+            STATUS
+          </th>
+          <td
+            #incidentStatus
+            mat-cell
+            class="healthe-table-cell tableHeader"
+            [id]="'incidentsTable-cell-incidentStatus-' + i"
+            *matCellDef="let data; let i = index"
+          >
+            <span [matTooltip]="data.incidentStatus">
+              {{ data.incidentStatus }}
+            </span>
+          </td>
+        </ng-container>
+
+        <tr
+          mat-header-row
+          style="height: 50px !important"
+          *matHeaderRowDef="tableColumns; sticky: true"
+        ></tr>
+        <tr
+          mat-row
+          [hidden]="isLoading$ | async"
+          *matRowDef="let row; columns: tableColumns; let i = index"
+        ></tr>
+      </table>
+    </div>
+
+    <div
+      id="incidentsLoadingDataSpinner"
+      class="healthe-table--centered-container"
+      fxLayout="column"
+      fxLayoutAlign="center center"
+    >
+      <ng-container *ngIf="isLoading$ | async">
+        <mat-spinner [diameter]="55"></mat-spinner>
+        <h2>Loading results...</h2>
+      </ng-container>
+
+      <ng-container
+        *ngIf="
+          (incidentsResponse$ | async).incidents.length === 0 &&
+          !(isLoading$ | async)
+        "
+      >
+        <img
+          style="margin-top: 25px"
+          alt="No incidents found for this claim"
+          src="assets/img/NoDataIcon.svg"
+        />
+        <p
+          class="standard-text"
+          style="text-align: center"
+          id="incidents-no-data"
+        >
+          No incidents available for the claim
+        </p></ng-container
+      >
+    </div>
+  </mat-card-content>
+</mat-card>

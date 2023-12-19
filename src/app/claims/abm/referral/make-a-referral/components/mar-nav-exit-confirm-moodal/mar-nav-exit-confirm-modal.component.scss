@@ -1,0 +1,9 @@
+.modal-actions {
+  justify-content: flex-end;
+  & > button {
+    margin-right: 16px;
+  }
+}
+.modal-content {
+  height: 25%;
+}

@@ -1,0 +1,519 @@
+<div *ngrxLet="viewModel$; let viewModel">
+<div class="spacersmall"></div>
+<healthe-error-banner
+  *ngIf="viewModel.errors.length > 0"
+  [errorMessages]="viewModel.errors"
+  bannerTitle="Claim Billing Errors"
+></healthe-error-banner>
+<div class="spacersmall" *ngIf="viewModel.errors.length > 0"></div>
+<mat-card id="tableCard">
+  <mat-card-header fxLayout="row" fxLayoutAlign="space-between">
+    <mat-card-title id="tableCard-header-text"
+      >Processed Billing
+    </mat-card-title>
+    <div
+      id="tableCard-header"
+      fxLayoutAlign="end"
+      fxLayout="row wrap"
+      fxLayoutGap="30px"
+    >
+      <div>
+        <div class="overhead-label" id="dateRange-overheadLabel">
+          SERVICE DATE RANGE
+        </div>
+        <div class="mat-form-field-wrapper" style="width: 276px">
+          <healthe-daterange
+            style="width: 276px"
+            [options]="datePickerOptions"
+            id="dateRange"
+            (submit)="dateRangeChange()"
+            [formControl]="dateRangeFormControl"
+          >
+          </healthe-daterange>
+        </div>
+      </div>
+
+      <div>
+        <div class="overhead-label" id="columnViewOption-label">
+          COLUMN VIEW
+        </div>
+        <mat-form-field>
+          <mat-select
+            style="width: 150px"
+            id="columnViewOptions"
+            (ngModelChange)="applyColumnViewPreference($event)"
+            [ngModel]="viewModel.tableColumnState"
+            [panelClass]="'column-panel-size'"
+          >
+            <mat-option
+              *ngFor="let option of columnViewOptions"
+              value="{{ option.value }}"
+              id="columnViewOptions-{{ option.value }}"
+              >{{ option.label }}</mat-option
+            >
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <div>
+        <div class="overhead-label" id="tableCard-header-columnPicker-label">
+          COLUMNS
+        </div>
+        <mat-form-field style="width: 50px">
+          <i
+            class="fal fa-th-list"
+            style="position: absolute; left: 15px; top: 9px; font-size: 18px"
+          ></i>
+          <mat-select
+            style="width: 35px"
+            [ngModel]="viewModel.tableColumnList"
+            (valueChange)="updateTableColumnList($event)"
+            multiple
+            id="columnPicker"
+            [panelClass]="'column-panel-size'"
+            #columnSelect
+          >
+            <mat-select-trigger></mat-select-trigger>
+            <div style="height: 300px; overflow-y: scroll">
+              <healthe-select-all-option
+                id="columnPicker-select-all"
+                [select]="columnSelect"
+                >All Columns
+              </healthe-select-all-option>
+
+              <mat-divider></mat-divider>
+              <mat-option
+                *ngFor="let option of columnDropdownList"
+                value="{{ option.value }}"
+                [id]="'columnPicker-' + option.value"
+                >{{ option.label }}</mat-option
+              >
+            </div>
+            <div fxLayout="column">
+              <button
+                mat-flat-button
+                class="primary-button column-panel-button"
+                id="columnPicker-save-as-default"
+                (click)="saveDefaultColumnPreferences()"
+              >
+                SAVE AS DEFAULT
+              </button>
+              <mat-divider></mat-divider>
+              <button
+                class="secondary-button column-panel-button"
+                id="columnPicker-column-preferences"
+                routerLink="/preferences"
+                fragment="claimtablelist"
+                (click)="navigateToColumnPreferences()"
+              >
+                COLUMN PREFERENCES
+              </button>
+            </div>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <div>
+        <div style="height: 75px">
+          <button
+            mat-flat-button
+            style="width: 120px; margin-top: 21px"
+            id="tableCard-header-exportButton"
+            class="primary-button"
+            (click)="setOpenUntilClose(exportMenu)"
+            [mat-menu-trigger-for]="exportMenu"
+          >
+            EXPORT <i class="inline-right-icon" [ngClass]="exportMenuIcon"></i>
+          </button>
+          <mat-menu #exportMenu [overlapTrigger]="false" yPosition="below">
+            <button
+              *ngFor="let exportOption of exportDropdownOptions"
+              mat-menu-item
+              [id]="'tableCard-header-exportOptions-' + exportOption"
+              (click)="doExport(exportOption)"
+            >
+              {{ exportOption }}
+            </button>
+          </mat-menu>
+        </div>
+      </div>
+
+      <div>
+        <a
+          style="margin-top: 26px"
+          id="tableCard-header-advancedFilterPanelTrigger"
+          mat-button
+          (click)="advancedFilters.toggle()"
+        >
+          Advanced Filters
+
+          <span style="padding-left: 10px">
+            <i
+              *ngIf="advancedFilters.expanded"
+              id="advancedFilterPanelTrigger-chevron-up"
+              class="fas fa-chevron-up"
+            ></i>
+            <i
+              *ngIf="!advancedFilters.expanded"
+              id="advancedFilterPanelTrigger-chevron-down"
+              class="fas fa-chevron-down"
+            ></i>
+          </span>
+        </a>
+      </div>
+    </div>
+  </mat-card-header>
+
+  <mat-expansion-panel
+    id="tableCard-header-advancedFilterPanel"
+    #advancedFilters
+    style="box-shadow: none !important"
+  >
+    <div
+      fxLayout="row wrap"
+      fxLayoutAlign="end center"
+      fxLayoutGap="30px"
+      [formGroup]="billingFilterFormGroup"
+    >
+      <div>
+        <div class="overhead-label" id="billing-filters-ProductLabel">
+          PRODUCT TYPE
+        </div>
+        <mat-form-field style="width: 276px">
+          <mat-select
+            healtheSelect
+            formControlName="productType"
+            style="width: 244px"
+            multiple
+            [placeholder]="billingFilterTriggerText.product"
+            id="billing-filters-ProductSelect"
+            #productFilter
+          >
+            <mat-select-trigger>{{
+              billingFilterTriggerText.product
+            }}</mat-select-trigger>
+
+            <healthe-select-all-option
+              id="productFilter-select-all"
+              [select]="productFilter"
+              >All Values
+            </healthe-select-all-option>
+            <mat-divider></mat-divider>
+
+            <mat-option
+              *ngFor="let option of viewModel.allBillingFilters.productType"
+              [value]="option"
+              id="billing-filters-ProductFilter-{{ option }}_option"
+            >
+              {{ option }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <div>
+        <div class="overhead-label" id="billing-filters-PrescriberLabel">
+          PRESCRIBER
+        </div>
+        <mat-form-field style="width: 276px">
+          <mat-select
+            healtheSelect
+            formControlName="prescriberName"
+            style="width: 244px"
+            multiple
+            [placeholder]="billingFilterTriggerText.prescriberName"
+            id="billing-filters-PrescriberSelect"
+            #prescriberFilter
+          >
+            <mat-select-trigger>{{
+              billingFilterTriggerText.prescriberName
+            }}</mat-select-trigger>
+
+            <healthe-select-all-option
+              id="prescriberFilter-select-all"
+              [select]="prescriberFilter"
+              >All Values
+            </healthe-select-all-option>
+            <mat-divider></mat-divider>
+
+            <mat-option
+              *ngFor="let option of viewModel.allBillingFilters.prescriberName"
+              [value]="option"
+              id="billing-filters-PrescriberFilter-{{ option }}_option"
+            >
+              {{ option }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div>
+        <div class="overhead-label" id="billing-filters-ItemNameLabel">
+          ITEM NAME
+        </div>
+        <mat-form-field style="width: 276px">
+          <mat-select
+            healtheSelect
+            formControlName="itemName"
+            style="width: 244px"
+            multiple
+            [placeholder]="billingFilterTriggerText.itemName"
+            id="billing-filters-ItemNameSelect"
+            #itemNameFilter
+          >
+            <mat-select-trigger>{{
+              billingFilterTriggerText.itemName
+            }}</mat-select-trigger>
+
+            <healthe-select-all-option
+              id="itemNameFilter-select-all"
+              [select]="itemNameFilter"
+              >All Values
+            </healthe-select-all-option>
+            <mat-divider></mat-divider>
+
+            <mat-option
+              *ngFor="let option of viewModel.allBillingFilters.itemName"
+              [value]="option"
+              id="billing-filters-ItemNameFilter-{{ option }}_option"
+            >
+              {{ option }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <div>
+        <div class="overhead-label" id="billing-filters-StatusLabel">
+          STATUS
+        </div>
+        <mat-form-field style="width: 276px">
+          <mat-select
+            healtheSelect
+            formControlName="status"
+            style="width: 244px"
+            multiple
+            [placeholder]="billingFilterTriggerText.status"
+            id="billing-filters-StatusSelect"
+            #statusFilter
+          >
+            <mat-select-trigger>{{
+              billingFilterTriggerText.status
+            }}</mat-select-trigger>
+
+            <healthe-select-all-option
+              id="statusFilter-select-all"
+              [select]="statusFilter"
+              >All Values
+            </healthe-select-all-option>
+            <mat-divider></mat-divider>
+
+            <mat-option
+              *ngFor="let option of viewModel.allBillingFilters.status"
+              [value]="option"
+              id="billing-filters-StatusFilter-{{ option }}_option"
+            >
+              {{ option }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <a
+        style="width: 140px; text-align: left"
+        mat-button
+        id="billing-filters-clearFiltersButton"
+        (click)="clearFilters()"
+      >
+        Clear Filters
+      </a>
+    </div>
+  </mat-expansion-panel>
+  <div class="healthe-table-header--advancedFilter--summaryBox">
+    <p>
+      <span
+        class="healthe-table-header--advancedFilter--label"
+        id="healthe-table-header--advancedFilter--label"
+        >ADVANCED FILTERS:</span
+      ><span
+        class="healthe-table-header--advancedFilter--summary"
+        id="healthe-table-header--advancedFilter--summary"
+      >
+        {{ advancedFiltersSummary }}</span
+      >
+    </p>
+  </div>
+  <mat-paginator
+    [pageSizeOptions]="pagerSizeOptions"
+    [pageSize]="viewModel.pageSize"
+    #primaryPaginator
+  ></mat-paginator>
+  <div
+    class="billing-table-scroll"
+    style="max-height: 500px; overflow-y: scroll"
+  >
+    <table
+      style="min-width: 1500px"
+      mat-table
+      [dataSource]="dataSource"
+      matSort
+      [matSortActive]="viewModel.tableSort.id"
+      [matSortDirection]="viewModel.tableSort.start"
+      [ngClass]="tableClass"
+    >
+      <ng-container
+        *ngFor="let column of masterColumnList"
+        [matColumnDef]="column.name"
+      >
+        <th
+          mat-header-cell
+          *matHeaderCellDef
+          mat-sort-header
+          id="billing-resultsTable-{{ column.name }}ColumnHeader"
+          [ngClass]="getColumnClasses(column) | async"
+          [ngStyle]="column.headerStyles"
+          class="ie-overflow"
+        >
+          {{ column.label | uppercase }}
+        </th>
+
+        <td
+          mat-cell
+          #tableData
+          *matCellDef="let data; let rowIndex = index"
+          id="billing-resultsTable-{{ column.name }}ColumnData-{{ rowIndex }}"
+          [ngClass]="getColumnClasses(column) | async"
+          [ngStyle]="column.cellStyles"
+          [matTooltip]="data[column.name]"
+        >
+          <ng-container [ngSwitch]="column.name">
+            <ng-container *ngSwitchCase="'itemName'">
+              <ng-container
+                *ngIf="
+                  data.ndc !== '' ||
+                  (data.code !== '' &&
+                    (data.billSource === 'PAPER' || data.billSource === 'POS'))
+                "
+              >
+                <healthe-info-lookup-launcher
+                  [displayText]="data[column.name]"
+                  [drugLookup]="{
+                    drugID: data.ndc || data.code,
+                    quantity: data.quantity,
+                    drugDate: data.serviceDate
+                  }"
+                ></healthe-info-lookup-launcher>
+              </ng-container>
+              <ng-container *ngIf="data.ndc === ''">
+                {{ data[column.name] }}
+              </ng-container>
+            </ng-container>
+            <ng-container *ngSwitchCase="'prescriberName'">
+              <healthe-info-lookup-launcher
+                [prescriberID]="data.prescriberID"
+                [displayText]="data[column.name]"
+              ></healthe-info-lookup-launcher>
+            </ng-container>
+            <ng-container *ngSwitchCase="'providerName'">
+              <ng-container *ngIf="data.productType === 'Pharmacy'">
+                <healthe-info-lookup-launcher
+                  [nabp]="data.providerID"
+                  [displayText]="data[column.name]"
+                ></healthe-info-lookup-launcher>
+              </ng-container>
+              <ng-container *ngIf="data.productType !== 'Pharmacy'">
+                {{ data[column.name] }}
+              </ng-container>
+            </ng-container>
+            <ng-container *ngSwitchDefault>
+              <billing-table-cell
+                [cellData]="data[column.name]"
+                [column]="column"
+              ></billing-table-cell>
+            </ng-container>
+          </ng-container>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="viewModel.tableColumnList; sticky: true"></tr>
+      <tr
+        mat-row
+        [style.display]="viewModel.isLoading ? 'none' : 'table-row'"
+        *matRowDef="let row; columns: viewModel.tableColumnList"
+      ></tr>
+    </table>
+  </div>
+
+  <div
+    fxLayout="column"
+    fxLayoutAlign="center center"
+    style="margin-top: 10px"
+    class="healthe-table--centered-container"
+    *ngIf="viewModel.billingHistoryTableData.length === 0 || viewModel.isLoading"
+  >
+    <ng-container
+      *ngIf="viewModel.billingHistoryTableData.length === 0 && !viewModel.isLoading"
+    >
+      <img
+        alt="No billing data found for this claim"
+        src="assets/img/NoDataIcon.svg"
+      />
+      <p class="standard-text" style="text-align: center">
+        No data available for date range and/or filters.<br />
+        Please adjust your search criteria for more results.
+      </p></ng-container
+    >
+    <ng-container *ngIf="viewModel.isLoading">
+      <mat-spinner
+        [diameter]="55"
+        id="billing-resultsTable-loadingResultsSpinner"
+      ></mat-spinner>
+      <h2 id="billing-resultsTable-loadingResultsMessage">
+        Loading results...
+      </h2>
+    </ng-container>
+  </div>
+  <mat-paginator #secondaryPaginator></mat-paginator>
+</mat-card>
+<div class="spacersmall"></div>
+
+<mat-card
+  id="totalsSummaryCard"
+  *ngIf="viewModel.billingHistoryTableData.length !== 0 && !viewModel.isLoading"
+>
+  <mat-card-header fxLayout="row" fxLayoutAlign="space-between">
+    <mat-card-title id="tableCard-header-billTotals">Totals</mat-card-title>
+    <mat-card-subtitle
+      >Totals displayed include all records for the Date Range, and do not
+      exclude records that are filtered out.
+    </mat-card-subtitle>
+  </mat-card-header>
+
+  <mat-card-content style="padding-left: 10px">
+    <div fxLayout="row wrap" fxLayoutGap="35px grid">
+      <div
+        *ngFor="let item of totalsSummary"
+        fxFlex="calc(25% - 35px)"
+        fxFlex.lt-lg="calc(25% - 35px)"
+        fxFlex.lt-md="calc(33.33% - 35px)"
+        fxFlex.lt-sm="calc(50% - 35px)"
+      >
+        <div>
+          <div [id]="'billing-' + item.label + '-label'" class="overhead-label">
+            {{ item.label }}
+          </div>
+          <div
+            #billingDetail
+            [id]="'billing-' + item.label + '-value'"
+            class="standard-text ellipsis-text"
+            style="white-space: pre-line"
+            [matTooltip]="item.value"
+          >
+            {{ item.value }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </mat-card-content>
+</mat-card>
+
+<div class="spacersmall"></div>
+</div>

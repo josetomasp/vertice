@@ -1,0 +1,57 @@
+@import 'variables';
+:host {
+  width: 100%;
+}
+.healthe-header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
+  &__title-group {
+    display: flex;
+    flex-direction: column;
+    &__service-display-name {
+      font-size: 18px;
+      margin: 4px;
+    }
+    &__section-status {
+      margin: 4px;
+
+      &_not-started {
+        color: $purple;
+      }
+      &_in-progress {
+        color: $primary;
+      }
+      &_submitted {
+        color: $green;
+      }
+      &_error {
+        color: $red;
+      }
+    }
+    &__referral-only {
+      color: $gray-400;
+      font-style: italic;
+      margin: 0 0 0 16px;
+      font-weight: 400;
+      align-self: center;
+    }
+  }
+  &__action-group__center {
+    align-items: center;
+  }
+  &__action-group {
+    display: flex;
+    flex-direction: row;
+    margin-right: 24px;
+    &__remove {
+      font-size: 18px;
+      color: $secondary;
+    }
+    &__expand-chevron {
+      font-size: 12px;
+      margin-left: 8px;
+    }
+  }
+}

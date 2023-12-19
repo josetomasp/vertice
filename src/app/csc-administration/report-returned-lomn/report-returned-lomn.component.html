@@ -1,0 +1,145 @@
+<div class="main-nav-wrapper">
+  <healthe-header-bar title="Report Returned LOMN"></healthe-header-bar>
+  <div class="spacersmall"></div>
+  <mat-card>
+    <mat-card-title>Notify Returned LOMN</mat-card-title>
+    <mat-card-content>
+      <div fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="35px">
+        <div class="spacertiny"></div>
+        <div fxLayout="column" fxLayoutAlign="start start">
+          <div class="overhead-label" id="report-returned-lomn-qrCode-label">
+            QR CODE
+          </div>
+          <mat-form-field>
+            <input
+              matInput
+              [formControl]="getControl(reportReturnedMform, 'qrCode')"
+              id="report-returned-lomn-qrCode"
+            />
+          </mat-form-field>
+        </div>
+        <div fxLayout="column" fxLayoutAlign="start start">
+          <div class="overhead-label">&nbsp;</div>
+          <button
+            mat-flat-button
+            class="secondary-button"
+            id="report-returned-lomn-validateCode-button"
+            (click)="validateLomn()"
+          >
+            VALIDATE CODE
+          </button>
+        </div>
+        <div
+          fxLayout="column"
+          fxLayoutAlign="start start"
+          *ngIf="lomnQR != null"
+        >
+          <div class="overhead-label">&nbsp;</div>
+          <p
+            class="standard-text"
+            style="text-align:center"
+            id="report-returned-lomn-claimNumber"
+          >
+            Claim #: {{ lomnQR.claimNumber }}
+          </p>
+        </div>
+        <div
+          fxLayout="column"
+          fxLayoutAlign="start start"
+          *ngIf="lomnQR != null"
+        >
+          <div class="overhead-label">&nbsp;</div>
+          <p
+            class="standard-text"
+            style="text-align:center"
+            id="report-returned-lomn-injuredWorker"
+          >
+            Injured Worker: {{ lomnQR.claimantFullName }}
+          </p>
+        </div>
+        <div
+          fxLayout="column"
+          fxLayoutAlign="start start"
+          *ngIf="displayValidationErrorMessage"
+        >
+          <div class="overhead-label">&nbsp;</div>
+          <mat-error id="report-returned-lomn-validation-error">
+            *No LOMNs found for QR code given.
+          </mat-error>
+        </div>
+      </div>
+      <div
+        fxLayout="row"
+        fxLayoutAlign="space-between"
+        style="padding-left: 35px;"
+      >
+        <div fxLayout="column" style="padding-top: 20px;">
+          <div fxLayout="row" fxLayoutGap="35px">
+            <span
+              *ngIf="!displayUploadError"
+              class="report-returned-lomn-upload-helper-text"
+              id="report-returned-lomn-upload-helper-text"
+            >
+              Upload Unreadable Fax With TIFF or TIF Extension</span
+            >
+            <mat-error
+              *ngIf="displayUploadError"
+              id="report-returned-lomn-upload-file-error"
+            >
+              {{ uploadErrorMessage }}
+            </mat-error>
+            <button
+              mat-flat-button
+              [disabled]="disableUploadButton"
+              class="secondary-button"
+              id="report-returned-lomn-upload-button"
+              (click)="uploadDocument()"
+            >
+              UPLOAD
+            </button>
+            <input
+              type="file"
+              accept=".tiff,.tif"
+              #HiddenFileInputButton
+              style="display: none"
+              id="report-returned-lomn-upload-file"
+              (change)="handleFileInput($event)"
+            />
+            <span
+              *ngIf="files != null && files.length > 0"
+              class="mat-button-wrapper"
+              >{{ files[0].name }}</span
+            >
+            <div *ngIf="isResultLoading" class="margin-top-100px">
+              <div class="spacersmall"></div>
+              <healthe-loading-spinner
+                loadingVerbiage="Uploading File..."
+              ></healthe-loading-spinner>
+            </div>
+          </div>
+        </div>
+        <div fxLayout="column" fxLayout="column" style="padding-top: 20px;">
+          <div fxLayout="row" fxLayoutGap="16px">
+            <button
+              mat-flat-button
+              class="secondary-button"
+              id="report-returned-lomn-reset-button"
+              (click)="reset()"
+            >
+              RESET
+            </button>
+            <button
+              mat-flat-button
+              class="primary-button"
+              id="report-returned-lomn-submit-button"
+              [disabled]="disableSubmitButton"
+              (click)="submit()"
+            >
+              SUBMIT
+            </button>
+          </div>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>

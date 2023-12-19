@@ -1,0 +1,50 @@
+<div class="reports-wrapper">
+  <healthe-header-bar title="Reports"> </healthe-header-bar>
+  <div class="spacersmall"></div>
+  <div
+    fxLayout="row wrap"
+    fxLayoutGap="35px grid"
+    fxLayoutAlign="center start"
+    *ngIf="errors.length === 0"
+  >
+    <div
+      fxFlex="calc(50%-35px)"
+      *ngFor="let reportsGroup of Object.keys(reportsListByGroup)"
+    >
+      <mat-card>
+        <mat-card-title id="report-list-{{ reportsGroup }}">{{
+          reportsGroup
+        }}</mat-card-title>
+        <mat-card-content>
+          <div class="report-name">REPORT NAME</div>
+          <div class="spacertiny"></div>
+          <mat-divider inset="true"></mat-divider>
+          <ng-container *ngFor="let report of reportsListByGroup[reportsGroup]">
+            <div
+              class="report-item ALink"
+              (click)="navigateUser(report)"
+              fxLayout="row"
+              fxLayoutGap="10px"
+              id="report-list-{{ reportsGroup }}-{{ report.reportName }}"
+            >
+              <div>{{ report.reportName }}</div>
+              <div class="new-report" *ngIf="report.new">! New</div>
+            </div>
+            <mat-divider inset="true"></mat-divider>
+          </ng-container>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+  <div *ngIf="errors.length > 0" fxLayout="column" fxLayoutAlign="start center">
+    <img style="margin-top: 25px;" src="assets/img/NoDataIcon.svg" />
+    <p
+      *ngFor="let error of errors; let i = index"
+      class="standard-text"
+      style="text-align:center"
+      id="reports-error-message-{{i}}"
+    >
+      {{ error }}
+    </p>
+  </div>
+</div>

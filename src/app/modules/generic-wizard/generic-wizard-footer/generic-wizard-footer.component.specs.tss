@@ -1,0 +1,25 @@
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+
+import { GenericWizardFooterComponent } from './generic-wizard-footer.component';
+
+describe('GenericWizardFooterComponent', () => {
+  let component: GenericWizardFooterComponent;
+  let fixture: ComponentFixture<GenericWizardFooterComponent>;
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      declarations: [ GenericWizardFooterComponent ]
+    })
+    .compileComponents();
+  });
+
+  beforeEach(() => {
+    fixture = TestBed.createComponent(GenericWizardFooterComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+  });
+
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
+});

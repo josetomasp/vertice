@@ -1,0 +1,17 @@
+@import 'variables';
+
+.referral-activity-wrapper {
+  overflow-x: hidden;
+}
+
+.vertical-rule {
+  color: $gray-300;
+  border: 1px solid $gray-300;
+  box-sizing: border-box;
+  margin: 8px 0 8px 0;
+  height: 20px;
+}
+
+.loader {
+  margin-top: 50px;
+}

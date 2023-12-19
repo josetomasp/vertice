@@ -1,0 +1,23 @@
+@import 'variables';
+
+// invalid
+.mat-horizontal-stepper-header.mat-step-header.invalid .mat-step-icon {
+  border-color: $danger;
+}
+
+.mat-horizontal-stepper-header.mat-step-header.invalid
+  .mat-step-icon
+  .mat-step-icon-content {
+  color: $danger;
+}
+
+//valid
+.mat-horizontal-stepper-header.mat-step-header.valid .mat-step-icon {
+  border-color: $success;
+}
+
+.mat-horizontal-stepper-header.mat-step-header.valid
+  .mat-step-icon
+  .mat-step-icon-content {
+  color: $success;
+}

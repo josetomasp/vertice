@@ -1,0 +1,28 @@
+<ng-container *ngIf="changeSummaryText.length">
+  <div fxLayout="row" fxLayoutAlign="space-between start">
+    <div fxLayout="column" fxLayoutAlign="start start" fxLayoutGap="10px">
+      <div
+        *ngFor="let text of changeSummaryText; let i = index"
+        class="danger"
+        [innerHTML]="text"
+        id="referral-auth-changes-summary-item-{{i}}"
+      ></div>
+    </div>
+    <div>
+      <button
+        type="button"
+        mat-flat-button
+        (click)="undoChanges()"
+        id="referral-auth-changes-summary-undoButton"
+        class="secondary-button"
+      >
+        <fa-icon
+          [icon]="faSyncAlt"
+          size="lg"
+          style="margin-right: 5px"
+        ></fa-icon
+        >Undo Changes
+      </button>
+    </div>
+  </div>
+</ng-container>

@@ -1,0 +1,206 @@
+<div
+  fxLayout="column"
+  fxLayoutGap="20px"
+  style="margin-top: 20px; margin-bottom: 20px"
+>
+  <div
+    *ngFor="let leg of itineraryData; let i = index; let lastItem = last"
+    fxLayout="column"
+    fxLayoutGap="20px"
+  >
+    <div class="secondary" style="font-weight: bold">
+      {{ titleLines[i].title }}
+      <img
+        *ngIf="titleLines[i].image"
+        src="{{titleLines[i].image}}"
+        height="20px"
+        width="40px"
+        style="position: relative; top: 5px"
+      />
+    </div>
+
+    <mat-tab-group class="modalTabBar">
+      <mat-tab label="Mileage & Location Info">
+        <div fxLayout="column" fxLayoutGap="20px">
+          <div fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="35px">
+            <div>
+              <div
+                class="overhead-label"
+                id="groundTransportationTab-mileage-destination-label-{{ i }}"
+              >
+                DESTINATION
+              </div>
+              <div id="groundTransportationTab-mileage-destination-{{ i }}">
+                {{ leg.mileageTab.destination }}
+              </div>
+            </div>
+
+            <div>
+              <div
+                class="overhead-label"
+                id="groundTransportationTab-mileage-fromAddr-label-{{ i }}"
+              >
+                FROM ADDRESS
+              </div>
+              <div
+                *ngFor="let line of leg.mileageTab.fromAddr; let ix = index"
+                id="groundTransportationTab-mileage-fromAddr{{ix}}-{{ i }}"
+              >
+                {{ line }}
+              </div>
+            </div>
+
+            <div>
+              <div
+                class="overhead-label"
+                id="groundTransportationTab-mileage-toAddr-label-{{ i }}"
+              >
+                TO ADDRESS
+              </div>
+              <div
+                *ngFor="let line of leg.mileageTab.toAddr; let ix = index"
+                id="groundTransportationTab-mileage-toAddr{{ix}}-{{ i }}"
+              >
+                {{ line }}
+              </div>
+            </div>
+
+            <div>
+              <div
+                class="overhead-label"
+                id="groundTransportationTab-mileage-pickupTime-label-{{ i }}"
+              >
+                PICKUP TIME
+              </div>
+              <div id="groundTransportationTab-mileage-pickupTime-{{ i }}">
+                {{ leg.mileageTab.pickupTime }}
+              </div>
+            </div>
+
+            <div>
+              <div
+                class="overhead-label"
+                id="groundTransportationTab-mileage-dropOffTime-label-{{ i }}"
+              >
+                DROP-OFF TIME
+              </div>
+              <div id="groundTransportationTab-mileage-dropOffTime-{{ i }}">
+                {{ leg.mileageTab.dropOffTime }}
+              </div>
+            </div>
+          </div>
+
+          <div fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="35px">
+            <div>
+              <div
+                class="overhead-label"
+                id="groundTransportationTab-mileage-milage-label-{{ i }}"
+              >
+                MILEAGE
+              </div>
+              <div id="groundTransportationTab-mileage-milage-{{ i }}">
+                {{ leg.mileageTab.mileage }} Miles
+              </div>
+            </div>
+
+            <div *ngIf="stage === ReferralStage.RESULTS">
+              <div
+                class="overhead-label"
+                id="groundTransportationTab-mileage-cost-label-{{ i }}"
+              >
+                COST
+              </div>
+              <div id="groundTransportationTab-mileage-cost-{{ i }}">
+                {{ leg.mileageTab.cost }}
+              </div>
+            </div>
+
+            <div>
+              <div
+                class="overhead-label"
+                id="groundTransportationTab-mileage-apptType-label-{{ i }}"
+              >
+                APPOINTMENT TYPE
+              </div>
+              <div id="groundTransportationTab-mileage-apptType-{{ i }}">
+                {{ leg.mileageTab.appointmentInfo.appointmentType }}
+              </div>
+            </div>
+
+            <div>
+              <div
+                class="overhead-label"
+                id="groundTransportationTab-mileage-appt-label-{{ i }}"
+              >
+                APPT. DATE & TIME
+              </div>
+              <div
+                *ngFor="
+                  let line of leg.mileageTab.appointmentInfo
+                    .appointmentDateAndTime;
+                  let ix = index
+                "
+                id="groundTransportationTab-mileage-appt{{ix}}-{{ i }}"
+              >
+                {{ line }}
+              </div>
+            </div>
+
+            <div>
+              <div
+                class="overhead-label"
+                id="groundTransportationTab-mileage-drNameAndSpec-label-{{ i }}"
+              >
+                DOCTOR NAME & SPECIALTY
+              </div>
+              <div id="groundTransportationTab-mileage-drNameAndSpec-{{ i }}">
+                {{ leg.mileageTab.appointmentInfo.doctorNameAndSpec }}
+              </div>
+            </div>
+          </div>
+        </div>
+      </mat-tab>
+      <mat-tab label="Driver & Trip Rating Info">
+        <div fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="35px">
+          <div *ngIf="stage === ReferralStage.RESULTS">
+            <div
+              class="overhead-label"
+              id="groundTransportationTab-driver-stars-label-{{ i }}"
+            >
+              IW SATISFACTION SCORE
+            </div>
+            <div id="groundTransportationTab-driver-stars-{{ i }}">
+              <healthe-stars [starRating]="leg.driverTab.stars"></healthe-stars>
+            </div>
+          </div>
+
+          <div>
+            <div
+              class="overhead-label"
+              id="groundTransportationTab-driver-contactInfo-label-{{ i }}"
+            >
+              CONTACT INFORMATION
+            </div>
+            <div id="groundTransportationTab-driver-contactInfo-{{ i }}">
+              {{ leg.driverTab.contactInfo }}
+            </div>
+          </div>
+
+          <div *ngIf="stage === ReferralStage.RESULTS">
+            <div
+              class="overhead-label"
+              id="groundTransportationTab-driver-rating-label-{{ i }}"
+            >
+              DRIVER RATING
+            </div>
+            <div id="groundTransportationTab-driver-rating-{{ i }}">
+              {{ leg.driverTab.driverRating }}
+            </div>
+          </div>
+        </div>
+      </mat-tab>
+    </mat-tab-group>
+
+    <mat-divider *ngIf="!lastItem"></mat-divider>
+  </div>
+</div>

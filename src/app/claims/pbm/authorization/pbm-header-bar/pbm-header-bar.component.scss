@@ -1,0 +1,13 @@
+@import 'variables';
+
+.header {
+  &-separator {
+    width: 2px;
+    background-color: $gray-300;
+    height: 20px;
+  }
+
+  &-authorization-type {
+    font-weight: normal;
+  }
+}

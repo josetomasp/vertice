@@ -1,0 +1,228 @@
+<div
+  fxLayout="row"
+  fxLayoutAlign="space-between center"
+  mat-dialog-title
+  style="height: 57px;"
+>
+  <span id="ViewLog--title">View Log</span>
+  <button mat-icon-button mat-dialog-close id="ViewLog--header-closeButton">
+    <i class="fal fa-times modal-close-widget"></i>
+  </button>
+</div>
+
+<div
+  fxLayout="row"
+  fxLayoutAlign="end start"
+  fxLayoutGap="35px"
+  style="margin-right: 35px"
+>
+  <div>
+    <div style="height: 75px;">
+      <button
+        mat-flat-button
+        style="width: 120px; margin-top: 21px"
+        id="prescription-history-exportButton"
+        class="primary-button"
+        (click)="setOpenUntilClose(exportMenu)"
+        [mat-menu-trigger-for]="exportMenu"
+      >
+        EXPORT
+        <fa-icon class="inline-right-icon" [icon]="exportMenuIcon"></fa-icon>
+      </button>
+      <mat-menu #exportMenu [overlapTrigger]="false" yPosition="below">
+        <button
+          *ngFor="let exportOption of exportDropdownOptions"
+          mat-menu-item
+          [id]="'prescription-history--exportOptions-' + exportOption"
+          (click)="doExport(exportOption)"
+        >
+          {{ exportOption }}
+        </button>
+      </mat-menu>
+    </div>
+  </div>
+</div>
+
+<mat-dialog-content style="height: 370px; margin-top: 0;">
+  <table mat-table [dataSource]="tableRows">
+    <ng-container matColumnDef="lastModified">
+      <th
+        mat-header-cell
+        id="ViewLog-table-header-lastModified"
+        class="healthe-table-cell tableHeader"
+        *matHeaderCellDef
+      >
+        LAST MODIFIED
+      </th>
+      <!-- prettier-ignore -->
+      <td
+        mat-cell
+        class="healthe-table-cell tableHeader"
+        [id]="'ViewLog-table-cell-lastModified-' + i"
+        *matCellDef="let data; let i = index"
+      >{{ data.lastModified }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="modifiedBy">
+      <th
+        mat-header-cell
+        id="ViewLog-table-header-modifiedBy"
+        class="healthe-table-cell tableHeader"
+        *matHeaderCellDef
+      >
+        MODIFIED BY
+      </th>
+      <td
+        mat-cell
+        class="healthe-table-cell tableHeader"
+        [id]="'ViewLog-table-cell-modifiedBy-' + i"
+        *matCellDef="let data; let i = index"
+      >
+        {{ data.modifiedBy }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="memberId">
+      <th
+        mat-header-cell
+        id="ViewLog-table-header-memberId"
+        class="healthe-table-cell tableHeader"
+        *matHeaderCellDef
+      >
+        MEMBER ID
+      </th>
+      <td
+        mat-cell
+        class="healthe-table-cell tableHeader"
+        [id]="'ViewLog-table-cell-memberId-' + i"
+        *matCellDef="let data; let i = index"
+      >
+        {{ data.memberId }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="ndc">
+      <th
+        mat-header-cell
+        id="ViewLog-table-header-ndc"
+        class="healthe-table-cell tableHeader"
+        *matHeaderCellDef
+      >
+        NDC
+      </th>
+      <td
+        mat-cell
+        class="healthe-table-cell tableHeader"
+        [id]="'ViewLog-table-cell-ndc-' + i"
+        *matCellDef="let data; let i = index"
+      >
+        {{ data.ndc }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="authStatus">
+      <th
+        mat-header-cell
+        id="ViewLog-table-header-authStatus"
+        class="healthe-table-cell tableHeader"
+        *matHeaderCellDef
+      >
+        AUTH STATUS
+      </th>
+      <td
+        mat-cell
+        class="healthe-table-cell tableHeader"
+        [id]="'ViewLog-table-cell-authStatus-' + i"
+        *matCellDef="let data; let i = index"
+      >
+        {{ data.authStatus }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="authStatusQueue">
+      <th
+        mat-header-cell
+        id="ViewLog-table-header-authStatusQueue"
+        class="healthe-table-cell tableHeader"
+        *matHeaderCellDef
+      >
+        AUTH STATUS QUEUE
+      </th>
+      <!-- prettier-ignore -->
+      <td
+        mat-cell
+        class="healthe-table-cell tableHeader"
+        [id]="'ViewLog-table-cell-authStatusQueue-' + i"
+        *matCellDef="let data; let i = index"
+      >{{ data.authStatusQueue }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="healtheComments">
+      <th
+        mat-header-cell
+        id="ViewLog-table-header-healtheComments"
+        class="healthe-table-cell tableHeader"
+        *matHeaderCellDef
+      >
+        HEALTHE COMMENTS
+      </th>
+      <!-- prettier-ignore -->
+      <td
+        mat-cell
+        class="healthe-table-cell tableHeader"
+        [id]="'ViewLog-table-cell-healtheComments-' + i"
+        *matCellDef="let data; let i = index"
+      >{{ data.healtheComments }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="adjusterComments">
+      <th
+        mat-header-cell
+        id="ViewLog-table-header-adjusterComments"
+        class="healthe-table-cell tableHeader"
+        *matHeaderCellDef
+      >
+        ADJUSTER COMMENTS
+      </th>
+      <!-- prettier-ignore -->
+      <td
+        mat-cell
+        class="healthe-table-cell tableHeader"
+        [id]="'ViewLog-table-cell-adjusterComments-' + i"
+        *matCellDef="let data; let i = index"
+      >{{ data.adjusterComments }}</td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="tableColumns; sticky: true"></tr>
+    <tr
+      mat-row
+      [hidden]="isLoading"
+      *matRowDef="let row; columns: tableColumns; let i = index"
+    ></tr>
+  </table>
+
+  <ng-container *ngIf="isLoading">
+    <div class="spacersmall"></div>
+    <div fxLayout="row" fxLayoutAlign="center center">
+      <div
+        fxLayout="column"
+        fxLayoutAlign="center center"
+        id="ViewLog-loading Spinner"
+      >
+        <mat-spinner [diameter]="55"></mat-spinner>
+        <h2>Loading results...</h2>
+      </div>
+    </div>
+  </ng-container>
+  <ng-container *ngIf="!isLoading && tableRows.length === 0">
+    <div class="spacersmall"></div>
+    <div fxLayout="column" fxLayoutAlign="center center">
+      <img alt="No Data Indicator" src="assets/img/NoDataIcon.svg" />
+
+      <p class="standard-text">No Log Data...</p>
+    </div>
+  </ng-container>
+</mat-dialog-content>
+<mat-dialog-actions align="end" style="padding-right: 35px">
+  <button mat-flat-button class="primary-button" mat-dialog-close>OKAY</button>
+</mat-dialog-actions>

@@ -1,0 +1,231 @@
+<div class="spacersmall"></div>
+<div [formGroup]="formGroup" class="matFormFieldWidthFix">
+  <div fxLayout="row wrap" fxLayoutAlign="start start" fxLayoutGap="35px grid">
+    <div>
+      <div
+        class="overhead-label"
+        id="flight-flyingFrom-autocomplete-input-label-{{idIndex}}"
+      >
+        FLYING FROM<span class="required-text">*</span>
+      </div>
+      <mat-form-field class="show-one-error" style="min-width: 300px">
+        <input
+          matInput
+          [matTooltip]="flyingFrom.value"
+          type="text"
+          class="mat-input-element"
+          formControlName="flyingFrom"
+          placeholder="Airport"
+          id="flight-flyingFrom-autocomplete-input-{{idIndex}}"
+          style="width: 100%"
+        />
+        <div
+          [matMenuTriggerFor]="flyingFromAutoCompleteMenu"
+          #flyingFromMenuAutocompleteTrigger="matMenuTrigger"
+        ></div>
+        <mat-menu
+          #flyingFromAutoCompleteMenu
+          class="section-autocomplete-panel"
+        >
+          <mat-option
+            [value]="option.value"
+            [id]="'placesSuggestion' + i"
+            (click)="
+              selectOption(
+                option.value,
+                flyingFromAutocompleteTrigger,
+                'flyingFrom'
+              )
+            "
+            *ngFor="
+              let option of (flyingFromSuggestions$ | async);
+              let i = index
+            "
+          >
+            <fa-icon
+              class="text-secondary"
+              style="font-size: 16px; margin-right: 10px"
+              [icon]="option.icon"
+            ></fa-icon>
+            {{ option.value }}
+          </mat-option>
+        </mat-menu>
+        <mat-error
+          id="flight-flyingFrom-autocomplete-error-required-{{idIndex}}"
+          *ngIf="formGroup.controls['flyingFrom'].hasError('required')"
+          >Flying From cannot be empty
+        </mat-error>
+
+        <mat-error
+          id="flight-flyingFrom-autocomplete-error-wasValuePicked-{{idIndex}}"
+          *ngIf="formGroup.controls['flyingFrom'].hasError('wasValuePicked')"
+          >No airports matched your search
+        </mat-error>
+        <mat-error
+          id="flight-flyingFrom-autocomplete-error-duplicate-{{idIndex}}"
+          *ngIf="formGroup.controls['flyingFrom'].hasError('duplicate')"
+          >Flying From and Flying To cannot be the same airport
+        </mat-error>
+      </mat-form-field>
+    </div>
+    <div>
+      <div
+        class="overhead-label"
+        id="flight-flyingTo-autocomplete-input-label-{{idIndex}}"
+      >
+        FLYING TO<span class="required-text">*</span>
+      </div>
+      <mat-form-field class="show-one-error" style="min-width: 300px">
+        <input
+          matInput
+          type="text"
+          [matTooltip]="flyingTo.value"
+          class="mat-input-element"
+          formControlName="flyingTo"
+          placeholder="Airport"
+          id="flight-flyingTo-autocomplete-input-{{idIndex}}"
+          style="width: 100%"
+        />
+        <div
+          [matMenuTriggerFor]="flyingToAutoCompleteMenu"
+          #flyingToMenuAutocompleteTrigger="matMenuTrigger"
+        ></div>
+        <mat-menu #flyingToAutoCompleteMenu class="section-autocomplete-panel">
+          <mat-option
+            [value]="option.value"
+            [id]="'placesSuggestion' + i"
+            (click)="
+              selectOption(
+                option.value,
+                flyingToAutocompleteTrigger,
+                'flyingTo'
+              )
+            "
+            *ngFor="let option of (flyingToSuggestions$ | async); let i = index"
+          >
+            <fa-icon
+              class="text-secondary"
+              style="font-size: 16px; margin-right: 10px"
+              [icon]="option.icon"
+            ></fa-icon>
+            {{ option.value }}
+          </mat-option>
+        </mat-menu>
+
+        <mat-error
+          id="flight-flyingTo-autocomplete-error-required-{{idIndex}}"
+          *ngIf="formGroup.controls['flyingTo'].hasError('required')"
+          >Flying To cannot be empty
+        </mat-error>
+
+        <mat-error
+          id="flight-flyingTo-autocomplete-error-wasValuePicked-{{idIndex}}"
+          *ngIf="formGroup.controls['flyingTo'].hasError('wasValuePicked')"
+          >No airports matched your search
+        </mat-error>
+
+        <mat-error
+          id="flight-flyingTo-autocomplete-error-duplicate-{{idIndex}}"
+          *ngIf="formGroup.controls['flyingTo'].hasError('duplicate')"
+          >Flying From and Flying To cannot be the same airport
+        </mat-error>
+      </mat-form-field>
+    </div>
+    <div>
+      <div
+        class="overhead-label"
+        id="flight-numberOfTravelers-input-label-{{idIndex}}"
+      >
+        # OF TRAVELERS <span class="required-text">*</span>
+      </div>
+      <mat-form-field>
+        <mat-select
+          formControlName="numberOfTravelers"
+          class="detailed-flight--select-width"
+          id="flight-numberOfTravelers-select-{{idIndex}}"
+        >
+          <mat-option
+            *ngFor="let option of numberOfTravelersOptions"
+            [value]="option"
+            id="flight-numberOfTravelers-option-{{option}}-{{idIndex}}"
+            >{{ option }}</mat-option
+          >
+        </mat-select>
+        <mat-error
+          id="flight-numberOfTravelers-error-required-{{idIndex}}"
+          *ngIf="formGroup.controls['numberOfTravelers'].hasError('required')"
+          >Number of Travelers cannot be empty
+        </mat-error>
+      </mat-form-field>
+    </div>
+  </div>
+  <div class="spacersmall"></div>
+  <div fxLayout="row wrap" fxLayoutAlign="start start" fxLayoutGap="35px grid">
+    <div>
+      <div class="overhead-label">
+        DEPARTURE DATE<span class="required-text">*</span>
+      </div>
+      <mat-form-field class="show-one-error">
+        <healthe-datepicker
+          id="flight-departuredate-datepicker-{{idIndex}}"
+          formControlName="departureDate"
+        ></healthe-datepicker>
+        <mat-error
+          id="flight-departure-datepicker-error-required-{{idIndex}}"
+          *ngIf="formGroup.controls['departureDate'].hasError('required')"
+        >
+          Departure Date cannot be empty
+        </mat-error>
+        <mat-error
+          id="flight-departure-datepicker-error-departureBeforeReturn-{{idIndex}}"
+          *ngIf="
+            formGroup.controls['departureDate'].hasError(
+              'departureBeforeReturn'
+            )
+          "
+        >
+          "Departure Date should be on or before Return Date"
+        </mat-error>
+      </mat-form-field>
+    </div>
+
+    <div>
+      <div class="overhead-label" id="flight-returnDate-label">RETURN DATE</div>
+      <mat-form-field class="show-one-error">
+        <healthe-datepicker
+          id="flight-return-datepicker-{{idIndex}}"
+          formControlName="returnDate"
+        ></healthe-datepicker>
+        <mat-error
+          id="flight-return-datepicker-error-departureBeforeReturn-{{idIndex}}"
+          *ngIf="
+            formGroup.controls['returnDate'].hasError('departureBeforeReturn')
+          "
+        >
+          "Departure Date should be on or before Return Date"
+        </mat-error>
+      </mat-form-field>
+    </div>
+    <healthe-appointment-info
+      [appointmentData]="authData"
+      [sectionName]="sectionName"
+    ></healthe-appointment-info>
+
+    <div
+      *ngIf="false === referralAuthorizationItem.isAddedItem"
+      class="secondary"
+      style="cursor: pointer"
+      id="flight-relatedAppointments-button-{{idIndex}}"
+      fxLayout="row"
+      fxLayoutAlign="start center"
+      (click)="viewRelatedAppointments()"
+    >
+      <fa-icon
+        [icon]="faNotesMedical"
+        style="margin-right: 10px; font-size: 22px"
+        id="flight-relatedAppointments-button-icon-{{idIndex}}"
+      ></fa-icon>
+      <div>View Related<br />Appointments</div>
+    </div>
+  </div>
+</div>

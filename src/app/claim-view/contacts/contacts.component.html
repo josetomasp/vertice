@@ -1,0 +1,85 @@
+<div class="spacersmall"></div>
+
+<div class="card-list-wrapper">
+  <div style="min-width: 800px;" class="card-list-container">
+    <section
+      matSort
+      class="healthe-card-list-header"
+      fxLayout="row"
+      fxLayoutGap="12px"
+      style="padding-left: 20px; padding-right: 20px;"
+      id="contacts-card-list-header"
+    >
+      <span
+        *ngFor="let column of contactsCardListColumns; let i = index"
+        class="healthe-card-list-header-text"
+        mat-sort-header="{{ column.name }}"
+        disabled
+        fxFlex="20"
+        id="contacts-card-list-header-text-{{ i }}"
+      >
+        <span id="contacts-card-list-header-{{ column.label }}">{{
+          column.label
+        }}</span>
+      </span>
+    </section>
+
+    <ng-container
+      *ngFor="let element of (contactsCardListData$ | async); let i = index"
+    >
+      <mat-card
+        fxLayout="row"
+        fxLayoutGap="12px"
+        id="contacts-card-list-body-{{ i }}"
+      >
+        <span
+          #contactsCardListContactType
+          [matTooltip]="element.contactType"
+          class="standard-text ellipsis-text"
+          fxFlex="20"
+          id="contacts-card-list-contactType-{{ i }}"
+          >{{ element.contactType }}</span
+        >
+        <span
+          #contactsCardListName
+          [matTooltip]="element.name"
+          class="standard-text ellipsis-text"
+          fxFlex="20"
+          id="contacts-card-list-name-{{ i }}"
+          >{{ element.name }}</span
+        >
+        <span fxFlex="20">
+          <div fxLayout="column" fxLayoutGap="1px">
+            <div
+              *ngFor="let phoneNumber of element.phone; let j = index"
+              class="standard-text ellipsis-text"
+              id="contacts-card-list-{{ i }}-phone-{{ j }}"
+            >
+              {{ phoneNumber }}
+            </div>
+          </div>
+        </span>
+        <span
+          #contactsCardListEmail
+          [matTooltip]="element.email"
+          class="standard-text ellipsis-text"
+          fxFlex="20"
+          id="contacts-card-list-email-{{ i }}"
+          >{{ element.email }}</span
+        >
+
+        <span fxFlex="20">
+          <div fxLayout="column" fxLayoutGap="1px">
+            <div
+              *ngFor="let addressLine of element.address; let j = index"
+              class="standard-text ellipsis-text"
+              id="contacts-card-list-{{ i }}-address-{{ j }}"
+            >
+              {{ addressLine }}
+            </div>
+          </div>
+        </span>
+      </mat-card>
+    </ng-container>
+  </div>
+</div>

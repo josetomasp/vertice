@@ -1,0 +1,90 @@
+@import 'variables';
+
+.healthe {
+  // Special widths for particular columns
+  &-table {
+    &-column {
+      &_paidAmount {
+        max-width: 79px !important;
+      }
+
+      &_dateWidth {
+        width: 90px !important;
+      }
+
+      &_daysSupplyWidth {
+        width: 70px !important;
+      }
+
+      &_quantityWidth {
+        width: 45px !important;
+      }
+    }
+
+    // Styles for advanced filters' summary
+    &-header {
+      &--advancedFilter {
+        &--summaryBox {
+          margin-bottom: 17px;
+        }
+
+        &--label {
+          line-height: 15px;
+          font-weight: 500;
+          font-size: 12px;
+          opacity: 0.5;
+          color: $text-muted;
+        }
+
+        &--summary {
+          color: $text-muted;
+          font-size: 14px;
+          font-weight: 500;
+          line-height: 18px;
+        }
+      }
+    }
+  }
+}
+
+::ng-deep {
+  .activityView-table-scroll {
+    width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+  }
+
+  .activityView-table-wrapText {
+    white-space: normal !important;
+  }
+
+  .activityView-table-truncateText {
+    white-space: nowrap !important;
+  }
+}
+
+.column-panel-button {
+  margin: 20px 15px 20px 15px;
+  width: auto;
+}
+
+// For some reason this has to be outside ::ng-content
+.activityView-table-fitColumnToData {
+  table-layout: auto;
+}
+
+@media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+  .ie-ellipsis {
+    overflow-x: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    min-width: auto;
+    float: left;
+    max-width: 90%;
+  }
+}
+
+// I tried ::ng-deep'ing this in styles.scss, but for whatever reason it wouldn't apply
+.mat-header-cell {
+  border-bottom-width: 2px !important;
+}

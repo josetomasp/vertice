@@ -1,0 +1,105 @@
+<mat-card>
+  <healthe-authorization-important-note
+    [abmClaimStatus$]="abmClaimStatus$"
+  ></healthe-authorization-important-note>
+  <ng-container *ngIf="(isMARAllowed$ | async)">
+    <mat-card-header>
+      <mat-card-title id="makeReferral-serviceSelection-title"
+        >What services would you like to include in this referral?
+      </mat-card-title>
+    </mat-card-header>
+    <div class="spacersmall"></div>
+    <mat-card-content>
+      <mat-card-subtitle
+        id="makeReferral-serviceSelection-overhead-label"
+        class="overhead-label"
+        >SELECT SERVICES
+      </mat-card-subtitle>
+      <div [formGroup]="checkboxGroup" class="selection-list">
+        <mat-checkbox
+          #selectAllCheckbox
+          value="false"
+          id="makeReferral-serviceSelection-selectAll-checkbox"
+          (click)="selectAll()"
+          ><span id="makeReferral-serviceSelection-selectAll-label"
+            >Select All
+          </span>
+        </mat-checkbox>
+        <div *ngFor="let service of (selectableServices$ | async)">
+          <mat-checkbox
+            [formControlName]="service.serviceType"
+            id="makeReferral-serviceSelection-{{service.serviceType}}-checkbox"
+            ><span
+              id="makeReferral-serviceSelection-{{service.serviceType}}-label"
+              >{{ service.serviceType }}
+            </span>
+          </mat-checkbox>
+          <span
+            *ngIf="service.activeReferrals?.length > 0"
+            class="tag primary"
+            style="margin-left: 7px; cursor:pointer"
+            id="makeReferral-serviceSelection-{{service.serviceType}}-view"
+            (click)="
+              showActiveReferralsModal(
+                service.activeReferrals,
+                service.serviceType
+              )
+            "
+          >
+            <span style="text-decoration: underline"
+              >{{ service.activeReferrals.length }} Active</span
+            >
+          </span>
+        </div>
+      </div>
+
+      <div class="spacerlarge"></div>
+      <mat-divider inset="true"></mat-divider>
+      <div class="spacersmall"></div>
+
+      <div fxLayout="row" fxLayoutAlign="end center">
+        <div>
+          <span class="service-selected-requirement-text">
+            Please select at least one service to continue.
+          </span>
+          <button
+            (click)="goToServiceDetailSelection()"
+            [disabled]="isNextDisabled"
+            class="primary-button"
+            id="makeReferral-serviceSelection-nextButton"
+            mat-button
+            mat-flat-button
+          >
+            Next
+          </button>
+        </div>
+      </div>
+    </mat-card-content>
+  </ng-container>
+  <ng-container *ngIf="!(isMARAllowed$ | async)">
+    <mat-card-content
+      fxLayout="column wrap"
+      fxFlexAlign="center"
+      fxLayoutAlign="center center"
+    >
+      <h4 *ngIf="(abmClaimStatus$ | async) == ClaimStatusEnum.TERMINATED">
+        Based on your customer configuration, referral services are unavailable
+        for terminated claims
+      </h4>
+      <h4 *ngIf="(abmClaimStatus$ | async) == ClaimStatusEnum.BLOCKED">
+        Referral services are unavailable for blocked Claims
+      </h4>
+
+      <fa-icon
+        class="text-danger"
+        [icon]="faExclamationTriangle"
+        size="4x"
+      ></fa-icon>
+    </mat-card-content>
+    <mat-card-actions style="padding: 16px">
+      <button mat-flat-button class="primary-button" (click)="goBack()">
+        BACK
+      </button>
+    </mat-card-actions>
+  </ng-container>
+</mat-card>

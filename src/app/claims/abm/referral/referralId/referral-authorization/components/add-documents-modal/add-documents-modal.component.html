@@ -1,0 +1,44 @@
+<div
+  fxLayout="row"
+  fxLayoutAlign="space-between center"
+  mat-dialog-title
+  style="height: 57px;"
+>
+  <span id="AddDocument--title">Add Document(s)</span>
+  <button
+    mat-icon-button
+    (click)="closeModal()"
+    id="AddDocument--header-closeButton"
+  >
+    <i class="fal fa-times modal-close-widget"></i>
+  </button>
+</div>
+
+<mat-dialog-content style="height: 300px; margin-top:0px; margin-bottom: 0;">
+  <p>
+    For any changes on this screen to take effect, the referral must be
+    submitted using the Submit button.
+  </p>
+  <span class="sectionLabel" id="AddDocument--Documentstitle">Documents</span>
+
+  <healthe-authorization-documents-picker
+    [documents$]="documents$"
+    [formArray]="formArray"
+    (selectedDocuments)="getSelectedDocuments($event)"
+  >
+  </healthe-authorization-documents-picker>
+</mat-dialog-content>
+<mat-dialog-actions
+  fxLayout="row"
+  fxLayoutAlign="end start"
+  style="padding-right: 20px; padding-left: 20px;"
+>
+  <button
+    class="primary-button"
+    mat-flat-button
+    (click)="closeModal()"
+    id="AddDocument-closeButton"
+  >
+    CLOSE
+  </button>
+</mat-dialog-actions>

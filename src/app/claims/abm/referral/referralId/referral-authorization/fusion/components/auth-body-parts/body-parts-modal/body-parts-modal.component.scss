@@ -1,0 +1,17 @@
+::ng-deep mat-form-field.add-body-parts {
+  width: 60%;
+}
+
+.primary-button {
+  margin-right: 15px;
+}
+
+::ng-deep mat-optgroup .mat-optgroup-label {
+  font-size: 20px !important;
+  font-weight: 700;
+  color: black;
+}
+
+.mat-dialog-title {
+  box-sizing: content-box !important;
+}

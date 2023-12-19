@@ -1,0 +1,83 @@
+<div fxLayout="column" fxLayoutAlign="center center">
+  <p
+    id="diagnostics-selection-message1"
+    class="text-primary text-bold unselectable"
+  >
+    What diagnostics services would you like to request?
+  </p>
+  <!-- Language types -->
+  <div
+    [formGroup]="selectionTypeFormGroup"
+    fxLayout="row wrap"
+    fxLayoutAlign="space-around space-around "
+    style="width: 65%;"
+  >
+    <ng-container *ngIf="!(isLoading$ | async)">
+      <mat-card
+        (click)="toggleCheckboxAndUpdateForm(selectionType.name)"
+        *ngFor="let selectionType of (selectionTypes$ | async)"
+        [healtheTooltipAdvancedContent]="selectionType.help"
+        [healtheTooltipAdvancedDisabled]="!selectionType.help"
+        [healtheTooltipAdvancedTitle]="selectionType.label + ' Diagnostics'"
+        id="diagnostics-selection-{{ selectionType.label?.replace(' ', '-')}}-card"
+        [width]="'200px'"
+        healtheTooltipAdvanced
+        healtheTooltipAdvancedPosition="bottom"
+        healtheTooltipAdvancedYOffset="10"
+        fxLayout="column"
+        fxLayoutAlign="center center"
+        style="width: 150px; height: 150px; cursor:pointer; margin-top:20px"
+      >
+        <div fxLayout="column" fxLayoutAlign="center center">
+          <i
+            *ngIf="selectionType.icon[0] !== 'image'"
+            id="diagnostics-selection-{{ selectionType.label}}-card-icon"
+            [ngClass]="selectionType.icon"
+            class="text-primary fa-2x text-center unselectable"
+          ></i>
+          <img
+            *ngIf="selectionType.icon[0] === 'image'"
+            [src]="selectionType.icon[1]"
+            [class]="selectionType.icon[2]"
+          />
+          <p
+            style="width: 100px;"
+            id="diagnostics-selection-{{ selectionType.label}}-card-label"
+            class="text-bold text-primary text-wrap text-center unselectable"
+          >
+            {{ selectionType.label }}
+          </p>
+        </div>
+        <mat-checkbox
+          id="diagnostics-selection-{{ selectionType.label}}-card-checkbox"
+          (click)="$event.preventDefault()"
+          [formControlName]="selectionType.name"
+          [value]="selectionType.name"
+        ></mat-checkbox>
+      </mat-card>
+    </ng-container>
+    <ng-container *ngIf="(isLoading$ | async)">
+      <div fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="35px">
+        <mat-spinner
+          [diameter]="55"
+          id="mar-loadingResultsSpinner"
+        ></mat-spinner>
+        <h2 id="mar-loadingResultsMessage">Loading...</h2>
+      </div>
+    </ng-container>
+  </div>
+  <div class="spacersmall"></div>
+  <button
+    id="diagnostics-selection-continue"
+    (click)="continue()"
+    [disabled]="hiddenControl.value.length == 0"
+    class="primary-button"
+    mat-flat-button
+  >
+    CONTINUE
+  </button>
+  <div class="spacersmall"></div>
+  <i id="diagnostics-selection-message2" class="text-hint unselectable"
+    >Please select at least one diagnostics service to continue.</i
+  >
+</div>

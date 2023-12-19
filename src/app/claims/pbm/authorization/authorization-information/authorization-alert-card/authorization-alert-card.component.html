@@ -1,0 +1,86 @@
+<mat-expansion-panel
+  *ngIf="(showAlertCard$ | async)"
+  class="alert-card"
+  [disabled]="!(moreThanOneAlert$ | async)"
+  id="authorization-alert--expansion-panel"
+  (opened)="setExpansionOpened()"
+  (closed)="setExpansionClosed()"
+>
+  <mat-expansion-panel-header
+    expandedHeight="0px"
+    collapsedHeight="0px"
+    class="alert-card-header"
+    id="authorization-alert--expansion-panel--header"
+  >
+    <div
+      *ngFor="let alert of [firstAlert$ | async]; index as $topIndex"
+      fxLayout="row"
+      fxLayoutAlign="start center"
+      fxLayoutGap="20px"
+      class="alert-card--alert-line"
+      [id]="'authorization-alert--alert-top-line-' + $topIndex"
+    >
+      <fa-icon
+        [icon]="faExclamationTriangle"
+        [id]="'authorization-alert--alert-top-line-' + $topIndex + '-icon'"
+      ></fa-icon>
+      <p [id]="'authorization-alert--alert-top-line-' + $topIndex + '-summary'">
+        {{ alert.alertSummary }}
+      </p>
+      <a
+        [id]="
+          'authorization-alert--alert-top-line-' +
+          $topIndex +
+          '-read-more-button'
+        "
+        (click)="openAlertModal($event, alert.alertModalHTML)"
+        >Read More</a
+      >
+      <div class="end-div-wrapper" *ngIf="countAlerts > 1">
+        <span
+          [id]="
+            'authorization-alert--alert-top-line-' +
+            $topIndex +
+            '-openCloseLabel'
+          "
+          >{{ panelOpenedOrClosedLabels[panelOpenedOrClosedIndex] }}</span
+        >
+        <mat-chip-list>
+          <mat-chip
+            [id]="'authorization-alert--alert-top-line-' + $topIndex + '-count'"
+            >{{ countAlerts }}</mat-chip
+          >
+        </mat-chip-list>
+      </div>
+    </div>
+  </mat-expansion-panel-header>
+  <div
+    *ngFor="let alert of (remainingAlerts$ | async); index as $bottomIndex"
+    fxLayout="row"
+    fxLayoutAlign="start center"
+    fxLayoutGap="20px"
+    class="alert-card--alert-line alert-card--alert-line_offset"
+    [id]="'authorization-alert--alert-bottom-line-' + $bottomIndex"
+  >
+    <fa-icon
+      [id]="'authorization-alert--alert-bottom-line-' + $bottomIndex + '-icon'"
+      [icon]="faExclamationTriangle"
+    ></fa-icon>
+    <p
+      [id]="
+        'authorization-alert--alert-bottom-line-' + $bottomIndex + '-summary'
+      "
+    >
+      {{ alert.alertSummary }}
+    </p>
+    <a
+      [id]="
+        'authorization-alert--alert-bottom-line-' +
+        $bottomIndex +
+        '-read-more-button'
+      "
+      (click)="openAlertModal($event, alert.alertModalHTML)"
+      >Read More</a
+    >
+  </div>
+</mat-expansion-panel>

@@ -1,0 +1,107 @@
+<div mat-dialog-title>
+  Rx Card Request
+  <fa-icon [icon]="faTimes" class="modal-close-icon" (click)="close()"
+    >close
+  </fa-icon>
+</div>
+
+<mat-dialog-content
+  fxLayout="column"
+  fxLayoutGap="20px"
+  class="rxCard-dialog-content"
+>
+  <mat-expansion-panel id="rxCardCustomerInformationValidation" expanded="true">
+    <mat-expansion-panel-header collapsedHeight="20px" expandedHeight="20px">
+      <div style="width: 97%" fxLayout="column">
+        <div class="rxCard-section-title">Claimant Information</div>
+      </div>
+    </mat-expansion-panel-header>
+    <mat-divider class="rxCard-mat-divider"></mat-divider>
+    <div style="margin-top: 20px">
+      <div fxLayout="row wrap" fxLayoutGap="20px grid">
+        <ng-container *ngFor="let claimantInfo of checkBoxData">
+          <div fxFlex="1 1 calc(50% - 20px)">
+            <span class="rxCard-bold">{{ claimantInfo.title }}</span> -
+            {{ claimantInfo.value }}
+          </div>
+        </ng-container>
+      </div>
+    </div>
+  </mat-expansion-panel>
+  <mat-expansion-panel id="rxCardPhoneNumberValidation" expanded="true">
+    <mat-expansion-panel-header collapsedHeight="40px" expandedHeight="40px">
+      <div style="width: 97%" fxLayout="column">
+        <div class="rxCard-section-title">Phone Number Validation</div>
+        <div
+          class="rxCard-section-status"
+          [ngClass]="phoneNumberValidationStatus.class"
+        >
+          {{ phoneNumberValidationStatus.text }}
+        </div>
+        <div class="rxCard-section-note" fxLayoutAlign="end end">
+          NOTE: Select Rx Card recipient's phone number
+        </div>
+      </div>
+    </mat-expansion-panel-header>
+    <mat-divider class="rxCard-mat-divider"></mat-divider>
+    <div style="margin-top: 20px">
+      <div class="overhead-label" id="phoneNumberOverheadLabel">
+        SELECT PHONE NUMBER
+      </div>
+      <mat-radio-group
+        id="phoneNumberRadioGroup"
+        [(ngModel)]="phoneNumberSelected"
+        fxLayout="row"
+        fxLayoutGap="20px"
+        style="width: 100%;"
+        fxLayoutAlign="space-between"
+      >
+        <mat-radio-button value="custom" (change)="radioChange($event)"
+          >Enter number manually
+        </mat-radio-button>
+        <mat-radio-button value="o2" (change)="radioChange($event)"
+          ><span class="rxCard-bold">Cell</span> - (555) 769-9876
+        </mat-radio-button>
+        <mat-radio-button value="o1" (change)="radioChange($event)"
+          ><span class="rxCard-bold">Home</span> - (555) 345-1945
+        </mat-radio-button>
+      </mat-radio-group>
+      <div *ngIf="showPhoneInput">
+        <mat-form-field style="width: 333px; margin: 10px 0 0 28px">
+          <input
+            matInput
+            maxlength="14"
+            placeholder="(xxx) xxx-xxxx"
+            mask="(000) 000-0000"
+            [formControl]="phoneNumberControl"
+          />
+          <mat-error *ngIf="phoneNumberControl.invalid"
+            >Please enter a valid phone number: Ex. (xxx) xxx-xxxx
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+  </mat-expansion-panel>
+</mat-dialog-content>
+
+<mat-dialog-actions fxLayoutAlign="end" style="padding: 0; margin: 20px 0">
+  <div fxLayout="row" fxLayoutGap="20px" style="margin-right: 20px;">
+    <button
+      mat-stroked-button
+      class="info-button"
+      id="rxCardCancelButton"
+      (click)="close()"
+    >
+      CANCEL
+    </button>
+    <button
+      mat-flat-button
+      class="primary-button"
+      id="rxCardSendTextButton"
+      [disabled]="!sendTextButtonEnabled"
+      (click)="sendText()"
+    >
+      SEND TEXT
+    </button>
+  </div>
+</mat-dialog-actions>

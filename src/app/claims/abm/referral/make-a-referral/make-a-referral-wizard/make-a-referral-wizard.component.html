@@ -1,0 +1,196 @@
+<ng-container *ngIf="(errors$ | async).length > 0">
+  <healthe-mar-submit-error-banner
+    [errors$]="errors$"
+  ></healthe-mar-submit-error-banner>
+</ng-container>
+
+<mat-card>
+  <mat-card-header>
+    <div fxLayout="column" fxLayoutAlign="start" style="width: 100%">
+      <div fxLayout="row" fxLayoutAlign="space-between center">
+        <h2
+          mat-card-title
+          id="create-a-referral-title"
+          style="font-size: 20px; font-weight: bold"
+        >
+          Create Referral
+        </h2>
+        <button
+          class="quaternary-button"
+          mat-flat-button
+          id="create-a-referral-addService"
+          (click)="addService()"
+        >
+          ADD A SERVICE
+        </button>
+      </div>
+      <h3
+        class="unselectable"
+        id="create-a-referral-subtitle"
+        mat-card-subtitle
+      >
+        Begin each desired section of the referral by clicking on the "begin"
+        button
+      </h3>
+      <ng-container *ngIf="(referralErrors$ | async)">
+        <healthe-confirmation-banner
+          [id]="'transportation-transportation-submit-wizard-serverErrors'"
+          [alertType]="alertType.DANGER"
+          [bodyList]="referralErrors$ | async"
+          [isVisible]="true"
+          title="There were some problems with your submission."
+        ></healthe-confirmation-banner>
+      </ng-container>
+    </div>
+  </mat-card-header>
+  <mat-card-content fxLayout="column" fxLayoutGap="24px">
+    <ng-container
+      *ngFor="let service of (selectedServiceTypes$ | async); count as length"
+    >
+      <mat-expansion-panel
+        class="section-expansion-panel"
+        *ngIf="!isKinectService(service)"
+        #expansionPanel
+        [hideToggle]="true"
+        [expanded]="length === 1"
+      >
+        <mat-expansion-panel-header
+          #panelHeader
+          (click)="$event.stopPropagation(); panelHeader._toggle()"
+          style="padding-top: 20px !important; padding-bottom: 20px !important;"
+        >
+          <div
+            fxLayout="row"
+            fxLayoutAlign="space-between center"
+            style="width:100%;"
+          >
+            <div fxLayout="column">
+              <h3
+                class="unselectable"
+                id="create-a-referral-service-{{service}}"
+                style="margin:4px;"
+              >
+                {{ service }}
+              </h3>
+              <h4
+                id="create-a-referral-service-status"
+                [ngClass]="{
+                  'section-status_not-started': !(
+                    getSectionDirty$(service) | async
+                  ),
+                  'section-status_in-progress':
+                    getSectionDirty$(service) | async,
+                    'section-status_submitted':
+                     isServiceSuccessfullySubmitted$(service) | async
+
+                }"
+                class="unselectable"
+                style="margin:4px;"
+              >
+                {{
+                getSectionStatusVerbiage(
+                  getSectionDirty$(service) | async,
+                  getIsReferralServiceComplete$(service) | async,
+                  isServiceSuccessfullySubmitted$(service) | async
+                )
+                }}
+              </h4>
+            </div>
+            <div fxLayout="row" fxLayoutAlign="start center">
+              <div
+                id="create-a-referral-{{service}}-trash"
+                (click)="removeService(service)"
+                style="cursor: pointer"
+              >
+                <i
+                  class="text-secondary fal fa-trash-alt"
+                  style="font-size: 18px; margin-right: 16px"
+                ></i>
+              </div>
+              <button
+                (click)="beginSectionAndToggle(service, expansionPanel)"
+                class="primary-button"
+                id="create-a-referral-{{service}}-begin"
+                mat-flat-button
+                style="margin-right: 16px;"
+              >
+                {{
+                getButtonText(
+                  expansionPanel,
+                  getSectionDirty$(service) | async
+                )
+                }}
+
+                <i
+                  [ngClass]="{
+                    'fa-chevron-up': expansionPanel.expanded,
+                    'fa-chevron-down': !expansionPanel.expanded
+                  }"
+                  class="far"
+                  style="font-size: 14px; padding-left: 8px"
+                ></i>
+              </button>
+            </div>
+          </div>
+        </mat-expansion-panel-header>
+        <healthe-wizard-portal
+          [referralType]="service"
+          [serviceExpansionPanel]="expansionPanel"
+        ></healthe-wizard-portal>
+      </mat-expansion-panel>
+      <healthe-kinect-wizard *ngIf="isKinectService(service)" [service]="serviceToSelectableServiceMap.get(service)" >
+      </healthe-kinect-wizard>
+    </ng-container>
+
+  </mat-card-content>
+
+</mat-card>
+
+<mat-card style="position: sticky; bottom: 0;">
+  <div fxLayout="row" fxLayoutAlign="space-between start" fxLayoutGap="20px"
+       *ngIf="!(areAllServicesSubmitted$ | async)">
+    <button
+      mat-stroked-button
+      class="info-button"
+      id="create-a-referral-cancel-all-button"
+      (click)="cancel()"
+    >
+      CANCEL
+    </button>
+    <div fxLayout="row" fxLayoutAlign="end start" fxLayoutGap="20px">
+      <button
+        mat-stroked-button
+        class="secondary-button"
+        id="create-a-referral-addReferralNotes-button"
+        (click)="openReferralNotes(referralNotes)"
+      >
+        {{
+        referralNotes != null && referralNotes != ''
+          ? 'EDIT REFERRAL NOTES'
+          : 'ADD REFERRAL NOTES'
+        }}
+      </button>
+    </div>
+  </div>
+  <div *ngIf="areAllServicesSubmitted$ | async" style="display: flex; flex-flow: row nowrap; justify-content: center; align-items: center">
+    <div style="display: flex; flex-flow: row nowrap; justify-content: space-between; gap: 30px">
+    <a
+      mat-flat-button
+      class="primary-button"
+      id="referral-review-goto-claimView"
+      [routerLink]="['/claimview', encodedCustomerId$ | async, encodedClaimNumber$ | async]"
+    >
+     GO TO CLAIM VIEW
+    </a>
+    <button
+      mat-flat-button
+      class="primary-button"
+      id="referral-review-makeAnotherReferral"
+      (click)="makeAnotherReferral()"
+    >
+      MAKE ANOTHER REFERRAL
+    </button>
+    </div>
+   </div>
+</mat-card>
+

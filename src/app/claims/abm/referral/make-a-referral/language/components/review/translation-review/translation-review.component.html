@@ -1,0 +1,109 @@
+<healthe-review-section-header
+  [sectionName]="sectionName"
+  [columnCount]="5"
+  [step]="stepName"
+  [sectionTitle]="sectionTitle"
+></healthe-review-section-header>
+<div fxLayout="row" fxLayoutGap="35px">
+  <div fxFlex="0 0 calc({{columnSpacing}}% -35px)">
+    <div class="overhead-label" id="{{stepName}}--review-language-label">
+      LANGUAGE NEEDED
+    </div>
+    <div class="standard-text" id="{{stepName}}--review-language">
+      {{ displayData['language'] }}
+    </div>
+  </div>
+  <div>
+    <div class="overhead-label" id="{{stepName}}-review-location-label">
+      SERVICE ADDRESS
+    </div>
+    <div
+      *ngFor="let location of displayData['locations']; let i = index"
+      class="standard-text"
+      id="{{stepName}}-review-location-{{i}}"
+    >
+      {{ location }}
+    </div>
+  </div>
+</div>
+
+<div class="spacersmall"></div>
+
+<!-- 'Table' header -->
+<div fxLayout="row" fxLayoutGap="35px">
+  <div fxFlex="0 0 calc({{columnSpacing}}% -35px)">
+    <div class="overhead-label" id="{{stepName}}-review-date-label">DATE</div>
+  </div>
+
+  <div fxFlex="0 0 calc({{columnSpacing}}% -35px)">
+    <div
+      class="overhead-label"
+      id="{{stepName}}-review-appointmentAddress-label"
+    >
+      ADDRESS
+    </div>
+  </div>
+
+  <div fxFlex="0 0 calc({{columnSpacing}}% -35px)">
+    <div class="overhead-label" id="{{stepName}}-review-notes-label">NOTES</div>
+  </div>
+</div>
+
+<!-- 'Table' Data -->
+<ng-container *ngFor="let item of displayData['schedulingForm']; let i = index">
+  <div fxLayout="row" fxLayoutGap="35px">
+    <div fxFlex="0 0 calc({{columnSpacing}}% -35px)">
+      <div class="standard-text" id="{{stepName}}-review-date-{{i}}">
+        {{ item['appointmentDate'] }}
+      </div>
+    </div>
+
+    <div fxFlex="0 0 calc({{columnSpacing}}% -35px)">
+      <div
+        class="standard-text"
+        id="{{stepName}}-review-appointmentAddress-{{i}}"
+      >
+        {{ item['appointmentAddress']['columnText'] }}
+        <fa-icon
+          [icon]="faInfoCircle"
+          class="review-icons"
+          [matTooltip]="item['appointmentAddress']['tooltip']"
+        >
+        </fa-icon>
+      </div>
+    </div>
+
+    <div fxFlex="0 0 calc({{columnSpacing}}% -35px)">
+      <div class="standard-text" id="{{stepName}}-review-notes-{{i}}">
+        <span class="editNotes" (click)="addNotes(i, item['notes'])"
+          ><fa-icon [icon]="faStickyNote"></fa-icon>
+          <span *ngIf="true === usingReturnedFormState"> View Notes</span
+          ><span *ngIf="false === usingReturnedFormState">
+            View/Edit Notes</span
+          ></span
+        >
+      </div>
+    </div>
+  </div>
+  <div class="spacertiny"></div>
+</ng-container>
+
+<div fxLayout="row" fxLayoutGap="35px">
+  <div fxFlex="0 0 calc({{columnSpacing}}% -35px)">
+    <div class="overhead-label" id="{{stepName}}--review-rushService-label">
+      RUSH SERVICE (NEEDED WITHIN 24 HOURS)?
+    </div>
+    <div class="standard-text" id="{{stepName}}--review-rushService">
+      {{ displayData['rushServiceNeeded'] ? 'Yes' : 'No' }}
+    </div>
+  </div>
+
+  <div fxFlex="0 0 calc({{columnSpacing}}% -35px)">
+    <div class="overhead-label" id="{{stepName}}--review-paidAsExpense-label">
+      WILL THIS BE PAID AS EXPENSE?
+    </div>
+    <div class="standard-text" id="{{stepName}}--review-paidAsExpense">
+      {{ displayData['paidAsExpense'] ? 'Yes' : 'No' }}
+    </div>
+  </div>
+</div>

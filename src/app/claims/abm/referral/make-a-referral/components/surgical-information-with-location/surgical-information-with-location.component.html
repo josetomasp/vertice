@@ -1,0 +1,58 @@
+<div fxLayout="row wrap" fxLayoutGap="30px" [formGroup]="parentFormGroup">
+  <div class="surgicalInput">
+    <span class="overhead-label" id="wizard-{{subService}}-post-surgical-label"
+      >POST-SURGICAL</span
+    >
+    <mat-radio-group
+      fxLayout="row"
+      class="post-surgical-radio-group"
+      formControlName="postSurgical"
+      [value]="parentFormGroup.get('postSurgical').value"
+    >
+      <mat-radio-button
+        [value]="false"
+        id="wizard-post-surgical-button-no-{{subService}}"
+        >No</mat-radio-button
+      >
+      <mat-radio-button
+        style="padding-left: 30px"
+        [value]="true"
+        id="wizard-post-surgical-button-yes-{{subService}}"
+        >Yes</mat-radio-button
+      >
+    </mat-radio-group>
+  </div>
+  <div class="surgicalInput">
+    <span class="overhead-label" id="wizard-{{subService}}-surgery-date-label"
+      >SURGERY DATE</span
+    >
+    <healthe-datepicker
+      #surgeryDate
+      formControlName="surgeryDate"
+      id="wizard-specific-dates-surgery-date-input-{{subService}}"
+    >
+    </healthe-datepicker>
+  </div>
+  <div class="surgicalInput">
+    <span class="overhead-label" id="wizard-schedule-near-label"
+      >SCHEDULE NEAR?<span class="required-text">*</span></span
+    >
+    <mat-form-field style="width:300px;">
+      <mat-select
+        healtheSelect
+        placeholder="Please select a location"
+        formControlName="scheduleNear"
+        [value]="parentFormGroup.get('scheduleNear').value"
+        [compareWith]="compareWithLocation"
+      >
+        <mat-option
+          *ngFor="let option of (locations$ | async)"
+          [value]="option.value"
+        >
+          {{ option.label }}
+        </mat-option>
+      </mat-select>
+      <mat-error>Select a location</mat-error>
+    </mat-form-field>
+  </div>
+</div>

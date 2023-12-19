@@ -1,0 +1,37 @@
+<mat-expansion-panel class="submit-error" [(expanded)]="expanded">
+  <mat-expansion-panel-header>
+    <div fxLayout="row" class="submit-error__title">
+      <div class="submit-error__column1">
+        <i
+          id="timeoutContent--exclamation"
+          class="fal fa-exclamation-triangle submit-error--padding-right submit-error--white"
+        ></i>
+      </div>
+      <div class="submit-error--white submit-error__column2">
+        {{
+          partialFail
+            ? 'Part of the referral submission has failed with the following errors'
+            : 'The referral submission has failed with the following errors. Please try again or contact Healthesystems for assistance.'
+        }}
+      </div>
+      <div
+        class="submit-error--white submit-error__column3 submit-error__message"
+      >
+        <div class="submit-error__collapse">
+          {{ expanded ? 'Collapse Errors' : 'See All Errors' }}
+          <span class="tag submit-error__count">{{
+            (errors$ | async)?.length
+          }}</span>
+        </div>
+      </div>
+    </div>
+  </mat-expansion-panel-header>
+
+  <ul class="submit-error__detailed-errors submit-error--white">
+    <ng-container *ngFor="let errorObj of (errors$ | async)">
+      <ng-container *ngFor="let message of errorObj.error.messages">
+        <li>{{ message }}</li>
+      </ng-container>
+    </ng-container>
+  </ul>
+</mat-expansion-panel>

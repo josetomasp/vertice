@@ -1,0 +1,127 @@
+<mat-expansion-panel
+  class='healthe-generic-wizard'
+  *ngrxLet='store.vm$; let vm'
+  [hideToggle]='true'
+  [expanded]='vm.wizardOpen'
+  disabled='true'
+>
+  <mat-expansion-panel-header
+    class='healthe-generic-wizard__expansion-panel-header'
+  >
+    <healthe-generic-wizard-header
+      (toggleExpanded)='toggleExpanded(vm.wizardStatus)'
+      [expanded]='vm.wizardOpen'
+      (delete)='deleteService.emit()'
+      [sectionStatus]='vm.wizardStatus'
+      [expansionToggleLabel]='vm.expansionToggleLabel'
+      [serviceDisplayName]='vm.serviceDisplayName'
+      [referralOnly]='vm.referralOnly'
+    ></healthe-generic-wizard-header>
+  </mat-expansion-panel-header>
+  <ng-container *ngIf='vm.wizardStatus !== GenericWizardStatus.Submitted'>
+    <mat-horizontal-stepper
+      #stepper
+      healtheGenericStepStateReporter
+      [formGroup]='store.formGroup'
+    >
+      <mat-step
+        *ngFor='let step of vm.steps; index as $index'
+        healtheFormValidationExtractor
+        [formLabel]='step.stepTitle'
+        [formGroupName]='step.stepName'
+        [stepControl]='getAbstractControl(step)'
+      >
+        <healthe-error-card
+          class='healthe-generic-wizard__error-card'
+          expanded='true'
+          *ngIf='errorInfoCardState'
+        >
+          <header class='healthe-generic-wizard__error-card--header'>
+            {{ errorInfoCardState.errorTitle }}
+          </header>
+          <content
+            class='healthe-layout healthe-layout__column healthe-layout__column--gap'
+          >
+            <div
+              *ngIf='
+                !errorInfoCardState.errorInfoList ||
+                errorInfoCardState.errorInfoList.length == 0
+              '
+              class='healthe-generic-wizard__error-card--no-error-info healthe-layout healthe-layout__row healthe-layout--main-axis--center healthe-layout--cross-axis--center'
+            >
+              No Errors to report...
+            </div>
+            <span
+              class='healthe-generic-wizard__error-card--error-info healthe-layout healthe-layout__row healthe-layout--cross-axis--center healthe-layout--main-axis--space-between'
+              *ngFor='let info of errorInfoCardState.errorInfoList'
+            >
+              {{ info.errorMessage }}
+              <span class='healthe-layout'>
+                <button
+                  *ngFor='let action of info.actions'
+                  mat-stroked-button
+                  class='info-button'
+                  (click)='action.actionCallback()'
+                >
+                  {{ action.actionLabel }}
+                </button>
+              </span>
+            </span>
+          </content>
+        </healthe-error-card>
+        <healthe-generic-step-label
+          *matStepLabel
+          [stepIndex]='$index'
+          [step]='{ label: step.stepTitle, name: step.stepName }'
+          [serviceName]='serviceType'
+        ></healthe-generic-step-label>
+        <ng-container [ngSwitch]='step.stepType'>
+          <healthe-generic-configurable-step
+            *ngSwitchCase='GenericStepType.ConfigurableStep'
+            [config]='$any(step)'
+          ></healthe-generic-configurable-step>
+          <healthe-vendors-step
+            *ngSwitchCase='GenericStepType.VendorStep'
+            [config]='$any(step)'
+          >
+          </healthe-vendors-step>
+          <healthe-documents-step *ngSwitchCase='GenericStepType.DocumentStep'>
+          </healthe-documents-step>
+          <healthe-generic-review-step
+            *ngSwitchCase='GenericStepType.ReviewStep'
+          ></healthe-generic-review-step>
+        </ng-container>
+      </mat-step>
+    </mat-horizontal-stepper>
+    <healthe-generic-wizard-footer
+      (next)='stepper.next()'
+      (back)='stepper.previous()'
+      [showBackButton]='vm.displayPreviousButton'
+      [showNextButton]='!vm.displaySubmit'
+      [showSubmitButton]='vm.displaySubmit'
+      [disableSubmitButton]='this.store.formGroup.invalid'
+      (submit)='onSubmit()'
+    ></healthe-generic-wizard-footer>
+  </ng-container>
+  <div
+    style='--gap-width: 16px'
+    class='healthe-generic-wizard-review-submitted__container healthe-layout__column healthe-layout__column--gap'
+    *ngIf='vm.wizardStatus === GenericWizardStatus.Submitted'
+  >
+    <mat-card
+      *ngIf='vm.successMessage'
+      class='healthe-generic-wizard-review-submitted__success-card'
+    >
+      <fa-icon [icon]='faCheck'></fa-icon>
+      {{ vm.successMessage }}</mat-card
+    >
+    <mat-card
+      *ngIf='vm.warningMessage'
+      class='healthe-generic-wizard-review-submitted__warning-card'
+    >
+      <fa-icon [icon]='faFlag'></fa-icon>
+      {{ vm.warningMessage }}</mat-card
+    >
+    <healthe-generic-review-step></healthe-generic-review-step>
+  </div>
+</mat-expansion-panel>

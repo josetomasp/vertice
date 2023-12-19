@@ -1,0 +1,20 @@
+@import 'variables';
+@import 'text';
+
+.editNotes {
+  color: $secondary;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.review-icons {
+  @extend .inline-left-icon;
+  font-size: 1.33333em; // fa-2x
+  position: relative;
+  left: 3px;
+}
+
+.hide-text {
+  transform: scale(0);
+  height: 0;
+}

@@ -1,0 +1,37 @@
+import { ActionFormComponent } from './action-form.component';
+import { render } from '@testing-library/angular';
+import { FusionAuthorizationService } from '../../fusion-authorization.service';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { MatDialogModule } from '@angular/material/dialog';
+import { provideMockStore } from '@ngrx/store/testing';
+import { provideMockActions } from '@ngrx/effects/testing';
+import { of } from 'rxjs';
+import { FormControl, FormGroup } from '@angular/forms';
+import {
+  FormValidationExtractorService
+} from '@modules/form-validation-extractor';
+
+describe('ActionFormComponent', function () {
+  async function setup() {
+    return render(ActionFormComponent, {
+      componentProperties: {
+        formGroup: new FormGroup({
+          action: new FormControl(),
+          denialReason: new FormControl(),
+          approvalReason: new FormControl(),
+          pendReason: new FormControl()
+        })
+      },
+      imports: [HttpClientTestingModule, MatDialogModule],
+      providers: [
+        FormValidationExtractorService,
+        FusionAuthorizationService,
+        provideMockStore({ initialState: {} }),
+        provideMockActions(() => of())
+      ]
+    });
+  }
+  test('init', async () => {
+    await setup();
+  });
+});

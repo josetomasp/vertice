@@ -1,0 +1,69 @@
+<div
+  fxLayout="row"
+  fxLayout.lt-md="column"
+  fxLayoutGap.lt-md="40px"
+  [formGroup]="generalSettingsForm"
+>
+  <div fxFlex="2 2 40%">
+    <div
+      id="preferences-general-settings-leftsideNavText"
+      class="section-title"
+    >
+      Left Side Navigation Panel
+    </div>
+    <div class="overhead-label" id="leftSideNavOpenedControl-label">
+      LEFT SIDE NAVIGATION PANEL DISPLAY UPON PAGE LOAD
+    </div>
+    <div>
+      <mat-radio-group id="leftSideNavOpenedControl" formControlName="expanded">
+        <mat-radio-button
+          id="leftSideNavOpenedControl-{{option.label}}"
+          *ngFor="let option of leftSideNavRadioOptions"
+          [value]="option.value"
+          style="margin-right: 20px;"
+          ><span id="leftSideNavOpenedControl-{{option.label}}-label">{{
+            option.label
+          }}</span></mat-radio-button
+        >
+      </mat-radio-group>
+    </div>
+  </div>
+  <div fxFlex="2 2 40%">
+    <div
+      id="preferences-general-settings-globalPaginationText"
+      class="section-title"
+    >
+      Global Pagination
+    </div>
+    <label class="overhead-label" id="globalPaginationRadioOptions-label"
+      >DEFAULT DISPLAY PER PAGE</label
+    >
+    <div style="padding-top: 6px;">
+      <mat-radio-group
+        id="globalPaginationRadioOptions"
+        formControlName="pageSize"
+      >
+        <mat-radio-button
+          id="globalPaginationRadioOptions-{{option.label}}"
+          *ngFor="let option of globalPaginationRadioOptions"
+          style="margin-right: 20px;"
+          [value]="option.value"
+          ><span id="globalPaginationRadioOptions-{{option.label}}-label">{{
+            option.label
+          }}</span></mat-radio-button
+        >
+      </mat-radio-group>
+    </div>
+  </div>
+  <div fxFlex="1 1 20%" fxLayout="row" fxLayoutAlign="end end">
+    <button
+      mat-stroked-button
+      class="secondary-button"
+      (click)="resetToDefaults()"
+      id="resetDefaultGeneralSettingsButton"
+      style="min-width: 204px;"
+    >
+      RESET TO DEFAULT SETTINGS
+    </button>
+  </div>
+</div>

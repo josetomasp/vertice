@@ -1,0 +1,73 @@
+<div [ngStyle]="headStyle">
+  <div
+    fxLayout="row"
+    style="height:64px;"
+    fxLayoutAlign="space-between center"
+    mat-dialog-title
+  >
+    <span id="addNotes--title">{{
+      readOnly ? 'View Note' : 'Add a Note'
+    }}</span>
+    <button
+      mat-icon-button
+      [mat-dialog-close]="false"
+      id="addNotes--header-close-widget"
+    >
+      <i class="fal fa-times modal-close-widget"></i>
+    </button>
+  </div>
+  <p style="padding-left: 25px" id="addNotes-message" *ngIf="!readOnly">
+    {{ editMessageText }}
+  </p>
+  <div
+    mat-dialog-content
+    style="height: 250px;overflow-x: hidden; margin-bottom: 0"
+    id="addNotes-modal-content"
+  >
+    <ng-container *ngIf="readOnly"
+      ><p style="word-wrap: break-word; white-space: pre-wrap">
+        {{ data.notes }}
+      </p></ng-container
+    >
+    <ng-container *ngIf="!readOnly">
+      <label
+        for="addNotes-textarea"
+        id="addNotes-textarea-label"
+        class="overhead-label"
+        >NOTES</label
+      >
+      <mat-form-field
+        ><textarea
+          [formControl]="noteFormControl"
+          id="addNotes-textarea"
+          rows="8"
+          [placeholder]="placeholder"
+          matInput
+          cdkFocusInitial
+        ></textarea
+      ></mat-form-field>
+    </ng-container>
+  </div>
+  <mat-dialog-actions style="padding: 12px;">
+    <div fxFlex="row" fxLayoutAlign="end end" fxLayoutGap="20px">
+      <button
+        id="addNotes-cancel-button"
+        mat-stroked-button
+        class="info-button"
+        [mat-dialog-close]="false"
+      >
+        <span *ngIf="readOnly">CLOSE</span><span *ngIf="!readOnly">CANCEL</span>
+      </button>
+      <button
+        *ngIf="!readOnly"
+        id="addNotes-submit-button"
+        mat-raised-button
+        class="success-button"
+        style="font-size: 11px; font-weight: bold"
+        [mat-dialog-close]="noteFormControl.value"
+      >
+        ADD NOTE
+      </button>
+    </div>
+  </mat-dialog-actions>
+</div>

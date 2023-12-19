@@ -1,0 +1,41 @@
+<div
+  id="confirmation-modal-{{modalData.titleString}}-modal"
+  [ngStyle]="{ 'min-height': modalData.minHeight }"
+>
+  <h1
+    mat-dialog-title
+    id="confirmation-modal-{{modalData.titleString}}-title"
+    class="{{modalData.headerClass}}"
+  >
+    {{ modalData.titleString }}
+  </h1>
+  <mat-dialog-content
+    id="confirmation-modal-{{modalData.titleString}}-body"
+    [innerHTML]="modalData.bodyHtml"
+  ></mat-dialog-content>
+  <div
+    mat-dialog-actions
+    fxLayout="row"
+    fxLayoutAlign="end"
+    fxLayoutGap="15px"
+    style="padding-right: 15px"
+  >
+    <button
+      id="confirmation-modal-{{modalData.titleString}}-deny"
+      mat-stroked-button
+      *ngIf="modalData.denyString"
+      class="info-button"
+      [mat-dialog-close]="false"
+    >
+      {{ modalData.denyString | uppercase }}
+    </button>
+    <button
+      id="confirmation-modal-{{modalData.titleString}}-affirm"
+      mat-flat-button
+      [ngClass]="modalData.affirmClass"
+      [mat-dialog-close]="true"
+    >
+      {{ modalData.affirmString | uppercase }}
+    </button>
+  </div>
+</div>

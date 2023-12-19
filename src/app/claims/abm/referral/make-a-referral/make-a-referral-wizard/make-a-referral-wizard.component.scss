@@ -1,0 +1,31 @@
+@import 'variables';
+
+.section {
+  &-divider {
+    position: absolute;
+    border-top-width: 2px;
+    left: 20px;
+    right: 20px;
+    width: auto;
+  }
+
+  &-expansion-panel {
+    ::ng-deep .mat-expansion-panel-body {
+      padding: 12px !important;
+    }
+  }
+
+  &-status {
+    &_not-started {
+      color: $purple;
+    }
+
+    &_in-progress {
+      color: $primary;
+    }
+
+    &_submitted {
+      color: $success;
+    }
+  }
+}

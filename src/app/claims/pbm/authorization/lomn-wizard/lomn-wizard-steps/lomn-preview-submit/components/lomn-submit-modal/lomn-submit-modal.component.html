@@ -1,0 +1,57 @@
+<ng-container *ngIf="isSubmitting">
+  <mat-dialog-content>
+    <div
+      id="lomnSubmittingSpinner"
+      fxLayout="column"
+      fxLayoutAlign="center center"
+      style="height: 165px;"
+    >
+      <mat-spinner [diameter]="55"></mat-spinner>
+      <h2>Submitting Request...</h2>
+    </div>
+  </mat-dialog-content>
+</ng-container>
+
+<ng-container *ngIf="!isSubmitting">
+  <div fxLayout="row" fxLayoutAlign="space-between center" mat-dialog-title>
+    <h1 id="confirmation-modal-submit-title">Send Letters</h1>
+    <button
+      mat-icon-button
+      mat-dialog-close
+      id="addBodyParts--header-closeButton"
+    >
+      <i class="fal fa-times modal-close-widget"></i>
+    </button>
+  </div>
+  <div id="confirmation-modal-submit-modal">
+    <mat-dialog-content id="confirmation-modal-submit-body">
+      Are you sure you want to send these Letter(s) of Medical Necessity? <br />
+      You won't be able to undo this action.
+    </mat-dialog-content>
+    <div
+      mat-dialog-actions
+      fxLayout="row"
+      fxLayoutAlign="end"
+      fxLayoutGap="15px"
+      style="padding-right: 15px"
+    >
+      <button
+        id="confirmation-modal-submit-deny"
+        mat-stroked-button
+        class="info-button"
+        [mat-dialog-close]="false"
+      >
+        CANCEL
+      </button>
+      <button
+        id="confirmation-modal-submit-affirm"
+        mat-flat-button
+        [disabled]="submitData.submittingLOMN$ | async"
+        (click)="submit()"
+        class="success-button"
+      >
+        SEND
+      </button>
+    </div>
+  </div>
+</ng-container>

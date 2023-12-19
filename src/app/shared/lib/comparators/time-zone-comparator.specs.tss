@@ -1,0 +1,59 @@
+import { timeZoneComparator } from '@shared';
+
+const testArray = ['HAST', 'CST', 'AST', 'EST', 'AKST', 'MST', 'PST', 'EST'];
+const ascSortedArrayResult = [
+  'AST',
+  'EST',
+  'EST',
+  'CST',
+  'MST',
+  'PST',
+  'AKST',
+  'HAST'
+];
+
+const descSortedArrayResult = [
+  'HAST',
+  'AKST',
+  'PST',
+  'MST',
+  'CST',
+  'EST',
+  'EST',
+  'AST'
+];
+
+describe('timeZoneComparator', () => {
+  test('compareSameValue', async () => {
+    expect(0 === timeZoneComparator(null, null, true)).toEqual(true);
+    expect(0 === timeZoneComparator(null, null, false)).toEqual(true);
+    expect(0 === timeZoneComparator('EST', 'EST', false)).toEqual(true);
+  });
+
+  test('compareDifferentValue', async () => {
+    expect(1 === timeZoneComparator('PST', 'EST', true)).toEqual(true);
+    expect(1 === timeZoneComparator('PST', 'AST', true)).toEqual(true);
+    expect(-1 === timeZoneComparator('EST', null, true)).toEqual(true);
+
+    expect(-1 === timeZoneComparator('PST', 'EST', false)).toEqual(true);
+    expect(-1 === timeZoneComparator('PST', 'AST', false)).toEqual(true);
+    expect(1 === timeZoneComparator('EST', null, false)).toEqual(true);
+
+    expect(-1 === timeZoneComparator('EST', 'PST', true)).toEqual(true);
+    expect(-1 === timeZoneComparator('AST', 'PST', true)).toEqual(true);
+    expect(1 === timeZoneComparator(null, 'EST', true)).toEqual(true);
+  });
+
+  test('compareArraySorts', async () => {
+    expect(
+      testArray.sort(function (a, b) {
+        return timeZoneComparator(a, b, false);
+      })
+    ).toEqual(descSortedArrayResult);
+    expect(
+      testArray.sort(function (a, b) {
+        return timeZoneComparator(a, b, true);
+      })
+    ).toEqual(ascSortedArrayResult);
+  });
+});

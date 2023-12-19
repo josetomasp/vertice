@@ -1,0 +1,298 @@
+<div style="height: 558px" *ngFor="let options of [serviceOptions$ | async]">
+  <div fxLayout="row" fxLayoutAlign="space-between center" mat-dialog-title>
+    <span id="addLocationModal--title">Add Location</span>
+    <button
+      mat-icon-button
+      [mat-dialog-close]="false"
+      id="addLocationModal--header-close-widget"
+    >
+      <i class="fal fa-times modal-close-widget"></i>
+    </button>
+  </div>
+
+  <div
+    style="height: 420px;overflow-x: hidden; margin-bottom: 0"
+    mat-dialog-content
+  >
+    <div
+      fxLayout="column"
+      fxLayoutAlign="start start"
+      fxLayoutGap="20px"
+      [formGroup]="formGroup"
+    >
+      <span id="addLocationModal--title-message">
+        Please enter a location type, name, and an address.
+      </span>
+      <div
+        fxLayout="row"
+        fxLayoutAlign="start start"
+        fxLayoutGap="35px"
+        style="width: 100%"
+      >
+        <div fxFlex="calc(50% - 35px)">
+          <span
+            class="overhead-label"
+            id="addLocationModal--LocationType-label"
+          >
+            LOCATION TYPE <span class="text-required">*</span>
+          </span>
+          <mat-form-field>
+            <mat-select
+              healtheSelect
+              placeholder="Choose a location type"
+              id="addLocationModal--LocationType-select"
+              formControlName="locationType"
+            >
+              <mat-option
+                *ngFor="let type of options.locationTypes"
+                id="addLocationModal--LocationType-select-option-{{type.description}}"
+                [value]="type"
+              >
+                {{ type.description }}
+              </mat-option>
+            </mat-select>
+            <mat-error
+              *ngIf="formGroup.controls['locationType'].hasError('required')"
+              id="add-location-type-required-error"
+            >
+              Select a location type
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div fxFlex="calc(50% - 35px)">
+          <span
+            class="overhead-label"
+            id="addLocationModal--LocationName-label"
+          >
+            LOCATION NAME <span class="text-required">*</span>
+          </span>
+          <mat-form-field>
+            <input
+              matInput
+              formControlName="locationName"
+              placeholder="Enter a location name"
+              id="addLocationModal--LocationName-input"
+            />
+            <mat-error
+              *ngIf="formGroup.controls['locationName'].hasError('required')"
+              id="add-location-name-required-error"
+            >
+              Enter a location name
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div
+        fxLayout="row"
+        fxLayoutAlign="start start"
+        fxLayoutGap="35px"
+        style="width: 100%"
+      >
+        <div fxFlex="calc(50% - 35px)">
+          <span
+            class="overhead-label"
+            id="addLocationModal--LocationPhone-label"
+          >
+            LOCATION PHONE NUMBER
+          </span>
+          <mat-form-field>
+            <input
+              matInput
+              formControlName="locationPhone"
+              id="addLocationModal--LocationPhone-input"
+              maxlength="14"
+              placeholder="(xxx) xxx-xxxx"
+              mask="(000) 000-0000"
+            />
+          </mat-form-field>
+        </div>
+
+        <div fxFlex="calc(50% - 35px)">
+          <ng-container
+            *ngIf="addLocationConfig.enablePhysicianSpecialtyDropdown"
+          >
+            <span
+              class="overhead-label"
+              id="addLocationModal--physicianSpecialty"
+            >
+              PHYSICIAN SPECIALTY
+            </span>
+            <mat-form-field>
+              <mat-select
+                healtheSelect
+                placeholder="Choose a physician speciality"
+                id="addLocationModal--physicianSpecialty-select"
+                formControlName="physicianSpecialty"
+              >
+                <mat-option [value]="null"
+                  id="addLocationModal--physicianSpecialty-select-option-none"
+                >
+                  None
+                </mat-option>
+                <mat-option
+                  *ngFor="let specialty of options.physicianSpecialties"
+                  id="addLocationModal--physicianSpecialty-select-option-{{specialty}}"
+                  value="{{specialty}}"
+                >
+                  {{ specialty }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </ng-container>
+        </div>
+      </div>
+
+      <div
+        fxLayout="row"
+        fxLayoutAlign="start start"
+        fxLayoutGap="35px"
+        style="width: 100%"
+      >
+        <div fxFlex="calc(50% - 35px)">
+          <span class="overhead-label" id="addLocationModal--Street1-label">
+            STREET ADDRESS <span class="text-required">*</span>
+          </span>
+          <mat-form-field>
+            <input
+              matInput
+              formControlName="street1Address"
+              placeholder="Enter a Street Address"
+              id="addLocationModal--Street1-input"
+            />
+            <mat-error
+              *ngIf="formGroup.controls['street1Address'].hasError('required')"
+              id="add-Street1-required-error"
+            >
+              Street Address cannot be empty
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div fxFlex="calc(50% - 35px)">
+          <span class="overhead-label" id="addLocationModal--Street2-label">
+            STREET ADDRESS 2
+          </span>
+
+          <mat-form-field>
+            <input
+              matInput
+              formControlName="street2Address"
+              placeholder="Enter a Street Address 2"
+              id="addLocationModal--Street2-input"
+            />
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div
+        fxLayout="row"
+        fxLayoutAlign="start start"
+        fxLayoutGap="35px"
+        style="width: 100%"
+      >
+        <div fxFlex="calc(50% - 35px)">
+          <span class="overhead-label" id="addLocationModal--city-label">
+            CITY<span class="text-required">*</span>
+          </span>
+          <mat-form-field>
+            <input
+              matInput
+              formControlName="city"
+              placeholder="Enter a City"
+              id="addLocationModal--city-input"
+            />
+            <mat-error
+              *ngIf="formGroup.controls['city'].hasError('required')"
+              id="add-city-required-error"
+            >
+              City cannot be empty
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div fxFlex="calc(50% - 35px)">
+          <div
+            fxLayout="row"
+            fxLayoutAlign="space-between start"
+            fxLayoutGap="35px"
+          >
+            <div style="width: 162px;">
+              <span class="overhead-label" id="addLocationModal--state">
+                STATE<span class="text-required">*</span>
+              </span>
+              <mat-form-field>
+                <mat-select
+                  healtheSelect
+                  placeholder="Select State"
+                  id="addLocationModal--state-select"
+                  formControlName="state"
+                >
+                  <mat-option
+                    *ngFor="let state of states"
+                    id="addLocationModal--state-select-option-{{state}}"
+                    value="{{state}}"
+                  >
+                    {{ state }}
+                  </mat-option>
+                </mat-select>
+                <mat-error
+                  *ngIf="formGroup.controls['state'].hasError('required')"
+                  id="add-state-required-error"
+                >
+                  Select a state
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div style="width: 140px">
+              <span class="overhead-label" id="addLocationModal--zip-label">
+                ZIP CODE<span class="text-required">*</span>
+              </span>
+              <mat-form-field>
+                <input
+                  matInput
+                  mask="00000-9999"
+                  formControlName="zip"
+                  placeholder="Enter Zip"
+                  id="addLocationModal--zip-input"
+                />
+                <mat-error
+                  *ngIf="formGroup.controls['zip'].hasError('required')"
+                  id="add-zip-required-error"
+                >
+                  Zip Code cannot be empty
+                </mat-error>
+                <mat-error
+                  *ngIf="formGroup.controls['zip'].hasError('invalidZip')"
+                  id="add-zip-invalid-error"
+                >
+                  Invalid Zip Code format
+                </mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <mat-dialog-actions style="padding-right: 20px;">
+    <div fxFlex="row" fxLayoutAlign="end center" fxLayoutGap="20px">
+      <button
+        mat-stroked-button
+        id="addLocationModal--cancelButton"
+        class="info-button"
+        [mat-dialog-close]="false"
+      >
+        CANCEL
+      </button>
+      <button
+        id="addLocationModal--addButton"
+        class="primary-button mat-flat-button mat-primary"
+        (click)="addLocation()"
+        [disabled]="isAddButtonDisabled()"
+      >
+        ADD
+      </button>
+    </div>
+  </mat-dialog-actions>
+</div>

@@ -1,0 +1,29 @@
+@import 'variables';
+.search-claim {
+  &__search-button {
+    margin-top: 18px;
+    float: right;
+  }
+  &__mat-expansion {
+    box-shadow: none !important;
+    .mat-expansion-panel-body {
+      padding: 1rem 30px 1px 0 !important;
+    }
+  }
+  &__header-text-box {
+    padding-bottom: 1rem;
+  }
+
+  &--danger {
+    color: $danger;
+    font-weight: bold;
+  }
+
+  &--padding-left {
+    padding-left: 10px;
+  }
+}
+
+.submit-error {
+  margin: 1rem 0 !important;
+}

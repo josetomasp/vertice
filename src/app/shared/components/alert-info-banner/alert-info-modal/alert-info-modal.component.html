@@ -1,0 +1,46 @@
+<div fxLayout="row" fxLayoutAlign="space-between center" mat-dialog-title>
+  <h2 id="alertInfo-modal-submit-title">Additional Alert Information</h2>
+  <button
+    mat-icon-button
+    mat-dialog-close
+    id="alertInfo-modal--header-closeButton"
+  >
+    <i class="fal fa-times modal-close-widget"></i>
+  </button>
+</div>
+<mat-dialog-content
+  id="alertInfo-modal-submit-body"
+  class="alertInfo-modal-submit-bodyClass"
+  ><div fxFlexAlign="center" class="alertInfo-modal-title">
+    {{ data.alertInfo.name }}
+  </div>
+  <p>{{ data.alertInfo.message }}</p>
+</mat-dialog-content>
+<div
+  mat-dialog-actions
+  fxLayout="row"
+  style="padding: 0 15px; justify-content: space-between;"
+>
+  <a
+    *ngIf="data.alertInfo.attachmentUrl && data.alertInfo.attachmentUrl != ''"
+    mat-button
+    (click)="openPositionPaper()"
+    fxFlexAlign="center"
+    class="alertInfo-modal-download-button"
+  >
+    <fa-icon
+      class="alertInfo-modal-download-button-icon"
+      [icon]="downloadIcon"
+    ></fa-icon>
+    Download Position Paper
+  </a>
+  <button
+    id="alertInfo-modal-okay-button"
+    fxFlexAlign="end"
+    mat-raised-button
+    class="primary-button float-right"
+    [mat-dialog-close]="false"
+  >
+    OKAY
+  </button>
+</div>

@@ -1,0 +1,236 @@
+<ng-container *ngIf="!readOnly" [formGroup]="getLocationFormGroup(authIndex)">
+  <mat-error
+    id="quantity-appointments-error-required-{{authIndex}}"
+    *ngIf="showRequiredError"
+  >
+    Please enter a number of
+    {{
+      categoryDesc === 'Document Translation'
+        ? 'Documents Translations'
+        : 'Appointments'
+    }}.
+    <div class="spacertiny"></div>
+  </mat-error>
+  <mat-error
+    id="quantity-appointments-error-min-{{authIndex}}"
+    *ngIf="showMinError"
+  >
+    #
+    {{
+      categoryDesc === 'Document Translation'
+        ? 'translation(s)'
+        : 'appointment(s)'
+    }}
+    cannot be less than {{ minInput }}.
+    <div class="spacertiny"></div>
+  </mat-error>
+  <mat-error
+    id="quantity-appointments-error-min-{{authIndex}}"
+    *ngIf="showMinPendError"
+  >
+    #
+    {{
+      categoryDesc === 'Document Translation'
+        ? 'translation(s)'
+        : 'appointment(s)'
+    }}
+    cannot be less than {{ minInput }}.
+    <div class="spacertiny"></div>
+  </mat-error>
+  <mat-error
+    id="select-location-error-min-{{authIndex}}"
+    *ngIf="showExtentionDenyError"
+  >
+    Cannot deny a location that has already been approved.
+    <div class="spacertiny"></div>
+  </mat-error>
+  <mat-error
+    id="quantity-below-original-error-min-{{authIndex}}"
+    *ngIf="showExtentionMinError"
+    >Cannot go below previously approved value.
+    <div class="spacertiny"></div>
+  </mat-error>
+  <mat-error
+    id="quantity-below-original-error-min-{{authIndex}}"
+    *ngIf="showLocationMinError"
+    >You must select at least 1 location before submitting the referral for
+    authorization
+    <div class="spacertiny"></div>
+  </mat-error>
+
+  <div
+    *ngIf="
+      !showLocationMinError &&
+      !showMinError &&
+      !showMinPendError &&
+      !showRequiredError &&
+      !showExtentionDenyError &&
+      !showExtentionMinError
+    "
+  >
+    <div class="spacertiny"></div>
+    <div class="spacertiny"></div>
+  </div>
+  <ng-container
+    *ngFor="let location of locationsDisplay; let locationIndex = index"
+  >
+    <mat-expansion-panel
+      class="details-location-expansion-panel mat-elevation-z0"
+      [expanded]="true"
+      #locationExpantionPanel
+    >
+      <mat-expansion-panel-header
+        [collapsedHeight]="''"
+        [expandedHeight]="''"
+        class="details-expansion-panel--header"
+        #locationExpantionPanelHeader
+      >
+        <mat-panel-title class="details-expansion-panel--header--title">
+          <div fxLayout="row" fxLayoutAlign="center center" fxFlexFill>
+            <div
+              id="{{authIndex}}-{{locationIndex}}-{{location.locationId}}-detail-title"
+              fxFlex="0 0 calc(33.33% -35px)"
+              class="detail-title-header"
+              fxLayoutAlign="start center"
+            >
+              <mat-checkbox
+                (click)="locationExpantionPanelHeader._toggle()"
+                id="{{authIndex}}-{{locationIndex}}-{{location.locationId}}-wizard-details-selectAll-checkbox"
+                healtheFormValidationExtractor
+                formLabel="Location Approved"
+                formControlName="approved"
+              >
+              </mat-checkbox>
+              <span class="header-text">{{
+                location.serviceLevelTypeDesc
+              }}</span>
+            </div>
+            <div
+              *ngIf="location.change"
+              id="{{authIndex}}-{{locationIndex}}-{{location.locationId}}-detail-remaining"
+              fxFlex="0 0 calc(33.33% -35px)"
+              class="detail-title-header"
+            >
+              <input
+                (click)="locationExpantionPanelHeader._toggle()"
+                *ngIf="getLocationFormGroupProperty(locationIndex, 'approved').value"
+                type="number"
+                min="{{minInput}}"
+                class="detail--input"
+                healtheFormValidationExtractor
+                formLabel="Remaining Appointments"
+                formControlName="remainingQuantity"
+                matInput
+                id="{{authIndex}}-{{locationIndex}}-{{location.locationId}}-detail-remaining"
+              />
+              <span class="header-text"
+                >{{
+                  categoryDesc === 'Document Translation'
+                    ? 'Documents Translations'
+                    : 'Appointments'
+                }}
+                Remaining</span
+              >
+            </div>
+            <div
+              id="{{authIndex}}-{{locationIndex}}-{{location.locationId}}-detail-total"
+              fxFlex="0 0 calc(33.33% -35px)"
+              class="detail-title-header"
+            >
+              <input
+                (click)="locationExpantionPanelHeader._toggle()"
+                *ngIf="
+                  !location.change &&
+                  getLocationFormGroupProperty(locationIndex, 'approved').value
+                "
+                type="number"
+                min="{{minInput}}"
+                class="detail--input"
+                healtheFormValidationExtractor
+                formLabel="Total Appointments"
+                formControlName="numAppointments"
+                matInput
+                id="{{authIndex}}-{{locationIndex}}-{{location.locationId}}-detail-total"
+              />
+              <span class="header-bold-text" *ngIf="location.change">{{
+                location.change.totalQuantity
+              }}</span>
+              <span class="header-text">
+                Total
+                {{
+                  categoryDesc === 'Document Translation'
+                    ? 'Documents Translations'
+                    : 'Appointments'
+                }}</span
+              >
+            </div>
+          </div>
+        </mat-panel-title>
+        <span class="details-expansion-panel--see-details"></span>
+      </mat-expansion-panel-header>
+      <ng-container *ngFor="let detail of location.locationDetails">
+        <div class="location-list-item ">
+          {{ detail.locationTypeDesc }} - {{ detail.locationDetailName }}
+        </div>
+      </ng-container>
+    </mat-expansion-panel>
+  </ng-container>
+</ng-container>
+<ng-container *ngIf="readOnly" [formGroup]="getLocationFormGroup(authIndex)">
+  <ng-container
+    *ngFor="let location of locationsDisplay; let locationIndex = index"
+  >
+    <mat-expansion-panel
+      class="details-location-expansion-panel mat-elevation-z0"
+      [expanded]="true"
+    >
+      <mat-expansion-panel-header
+        [collapsedHeight]="''"
+        [expandedHeight]="''"
+        class="details-expansion-panel--header"
+        #locationExpantionPanelHeader
+      >
+        <mat-panel-title class="details-expansion-panel--header--title">
+          <div fxLayout="row" fxFlexFill>
+            <div fxFlex="0 0 calc(33.33% -35px)" class="detail-title-header">
+              <fa-icon
+                class="approval-indicator"
+                [ngClass]="{
+                  'approval-indicator_approved text-success': location.approved,
+                  'approval-indicator_disapprove text-danger': !location.approved
+                }"
+                [icon]="location.approved ? faCheck : faTimes"
+              ></fa-icon>
+              <span class="header-text">{{
+                location.serviceLevelTypeDesc
+              }}</span>
+            </div>
+            <div
+              id="details-expansion-detail-total_post-submit"
+              fxFlex="0 0 calc(33.33% -35px)"
+              class="detail-title-header"
+            >
+              <span class="header-bold-text">{{
+                location.numAppointments
+              }}</span>
+              <span class="header-text">
+                Total
+                {{
+                  categoryDesc === 'Document Translation'
+                    ? 'Documents Translations'
+                    : 'Appointments'
+                }}</span
+              >
+            </div>
+          </div>
+        </mat-panel-title>
+        <span class="details-expansion-panel--see-details"></span>
+      </mat-expansion-panel-header>
+      <ng-container *ngFor="let detail of location.locationDetails">
+        <div class="location-list-item ">
+          {{ detail.locationTypeDesc }} - {{ detail.locationDetailName }}
+        </div>
+      </ng-container>
+    </mat-expansion-panel>
+  </ng-container>
+</ng-container>

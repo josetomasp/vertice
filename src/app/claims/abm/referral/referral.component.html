@@ -1,0 +1,28 @@
+<div class="referral-wrapper">
+  <healthe-header-bar
+    [title]="'Claim #' + (decodedClaimNumber$ | async)"
+    [link]="claimViewLink$ | async"
+  >
+    <healthe-status-tag
+      *healtheRemoveElementIfTrue="'banner'; elementName: 'pbmActivePill'"
+      statusType="pbm"
+      [claimStatus]="pbmClaimStatus$ | async"
+    ></healthe-status-tag>
+    <healthe-status-tag
+      *healtheRemoveElementIfTrue="'banner'; elementName: 'abmActivePill'"
+      statusType="abm"
+      [claimStatus]="abmClaimStatus$ | async"
+    ></healthe-status-tag>
+    <p
+      class="referral-wrapper__referral-type"
+      *ngIf="(referralTabType && decodedReferralId$ | async)"
+    >
+      {{ referralType$ | async }} {{ referralTabType }} -
+      {{ decodedReferralId$ | async }}
+    </p>
+  </healthe-header-bar>
+  <div class="spacersmall"></div>
+  <healthe-claim-overview-bar></healthe-claim-overview-bar>
+  <div class="spacersmall"></div>
+  <router-outlet></router-outlet>
+</div>

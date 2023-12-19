@@ -1,0 +1,101 @@
+<healthe-review-section-header
+  [columnCount]="3"
+  [step]="stepName"
+  [sectionName]="sectionName"
+  [sectionTitle]="sectionTitle"
+></healthe-review-section-header>
+<div fxLayout="row" fxLayoutGap="35px">
+  <div fxFlex="0 0 calc(calc({{columnSpacing}}% *2  -35px)">
+    <div class="overhead-label" id="{{stepNameForId}}-review-product-label">
+      PRODUCT
+    </div>
+  </div>
+  <div fxFlex="0 0 calc({{columnSpacing}}% -35px)">
+    <div class="overhead-label" id="{{stepNameForId}}-review-qty-label">
+      QTY
+    </div>
+  </div>
+  <div fxFlex="0 0 calc({{columnSpacing}}% -35px)">
+    <div class="overhead-label" id="{{stepNameForId}}-review-rental-label">
+      RENTAL
+    </div>
+  </div>
+  <div fxFlex="0 0 calc({{columnSpacing}}% -35px)">
+    <div class="overhead-label" id="{{stepNameForId}}-review-dates-label">
+      DATE(S)
+    </div>
+  </div>
+  <div fxFlex="0 0 calc(calc({{columnSpacing}}% *3 )-35px)">
+    <div
+      class="overhead-label"
+      id="{{stepNameForId}}-review-deliveryAddress-label"
+    >
+      DELIVERY ADDRESS
+    </div>
+  </div>
+  <div fxFlex="0 0 calc(calc({{columnSpacing}}% *2 ) -35px)">
+    <div
+      class="overhead-label"
+      id="{{stepNameForId}}-review-serviceNotes-label"
+    >
+      NOTES
+    </div>
+  </div>
+</div>
+<div class="spacertiny"></div>
+<ng-container *ngFor="let item of displayData?.schedulingForms; let i = index">
+  <div fxLayout="row" fxLayoutGap="35px">
+    <div fxFlex="0 0 calc(calc({{columnSpacing}}% *2  -35px)">
+      <div class="standard-text" id="{{stepNameForId}}-review-product">
+        {{ item.product }}
+      </div>
+    </div>
+    <div fxFlex="0 0 calc({{columnSpacing}}% -35px)">
+      <div class="standard-text" id="{{stepNameForId}}-review-qty">
+        {{ item.quantity }}
+      </div>
+    </div>
+    <div fxFlex="0 0 calc({{columnSpacing}}% -35px)">
+      <div class="standard-text" id="{{stepNameForId}}-review-rental">
+        {{ item.rental }}
+      </div>
+    </div>
+    <div fxFlex="0 0 calc({{columnSpacing}}% -35px)">
+      <div class="standard-text" id="{{stepNameForId}}-review-dates">
+        {{ item.dates }}
+      </div>
+    </div>
+    <div fxFlex="0 0 calc(calc({{columnSpacing}}% *3 )-35px)">
+      <div class="standard-text" id="{{stepNameForId}}-review-deliveryAdress">
+        {{ item.deliveryAddress }}
+      </div>
+    </div>
+    <div fxFlex="0 0 calc(calc({{columnSpacing}}% *2 ) -35px)">
+      <div class="standard-text" id="{{stepNameForId}}-review-notes-{{i}}">
+        <span class="editNotes" (click)="addNotes(i, item.notes)"
+          ><fa-icon [icon]="faStickyNote"></fa-icon>
+          <span *ngIf="inReferralReviewMode"> View Notes</span
+          ><span *ngIf="!inReferralReviewMode"> View/Edit Notes</span></span
+        >
+      </div>
+    </div>
+  </div>
+  <div class="spacertiny"></div>
+</ng-container>
+
+<div class="spacersmall"></div>
+
+<div fxLayout="row" fxLayoutGap="35px">
+  <div fxFlex="0 0 calc(100% -35px)">
+    <div class="overhead-label" id="{{stepNameForId}}-review-serviceRush-label">
+      RUSH SERVICE (NEEDED WITHIN 24 HOURS)?
+    </div>
+  </div>
+</div>
+<div fxLayout="row" fxLayoutGap="35px">
+  <div fxFlex="0 0 calc(100% -35px)">
+    <div class="standard-text" id="{{stepNameForId}}-review-serviceRush">
+      {{ displayData?.rush }}
+    </div>
+  </div>
+</div>

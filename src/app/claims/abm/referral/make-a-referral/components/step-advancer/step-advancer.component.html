@@ -1,0 +1,43 @@
+<div fxLayout="row" fxLayoutAlign="end">
+  <div>
+    <button
+      mat-stroked-button
+      class="secondary-button"
+      style="margin-right: 16px;"
+      id="create-a-referral-saveasDraft-button"
+      (click)="saveAsDraftEvent.emit($event)"
+    >
+      SAVE AS DRAFT
+    </button>
+    <button
+      id="stepper-previous"
+      mat-stroked-button
+      class="info-button"
+      style="margin-right: 16px;"
+      (click)="previous.emit($event)"
+      [disabled]="previousDisabled"
+    >
+      PREVIOUS
+    </button>
+    <button
+      id="stepper-continue"
+      mat-flat-button
+      class="primary-button"
+      (click)="continue.emit($event)"
+      [disabled]="continueDisabled"
+      *ngIf="showContinueButton"
+    >
+      CONTINUE
+    </button>
+    <button
+      id="stepper-submit"
+      mat-flat-button
+      class="primary-button"
+      (click)="submitButtonEvent.emit($event)"
+      *ngIf="showSubmitButton"
+      [disabled]="disableSubmitButton"
+    >
+      SUBMIT
+    </button>
+  </div>
+</div>

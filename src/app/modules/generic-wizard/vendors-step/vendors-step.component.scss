@@ -1,0 +1,13 @@
+@import 'variables';
+//BLOCK
+.healthe-vendor-step {
+  // ELEMENT
+  &__arrow {
+    color: $secondary;
+    cursor: pointer;
+    // MODIFIER
+    &--disabled {
+      color: $gray-400;
+    }
+  }
+}

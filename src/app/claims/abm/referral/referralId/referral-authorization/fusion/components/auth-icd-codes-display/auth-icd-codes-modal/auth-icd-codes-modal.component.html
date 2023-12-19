@@ -1,0 +1,129 @@
+<div fxLayout="row" fxLayoutAlign="space-between center" mat-dialog-title>
+  <span id="referralIcdCodesModal--title">Diagnosis Code</span>
+  <button
+    mat-icon-button
+    mat-dialog-close
+    id="referralIcdCodesModal--header-closeButton"
+  >
+    <i class="fal fa-times modal-close-widget"></i>
+  </button>
+</div>
+
+<div style="height: 35vh;" mat-dialog-content>
+  <div
+    style="padding-right: 4px;"
+    *ngFor="let icdCode of selectedICDCodeList; let i = index"
+  >
+    <div
+      fxLayout="row"
+      fxLayoutAlign="space-between center"
+      style="margin-bottom: 20px;"
+    >
+      <span
+        class="standard-text ellipsis-text icdCodeItem"
+        #icdCodeValue
+        [matTooltip]="icdCode.displayText"
+        [ngClass]="getIcdDisplayTextClass(icdCode)"
+        [id]="'icdCodeLine' + i"
+        >{{ icdCode.displayText }}</span
+      >
+      <i
+        *ngIf="showDeleteIcon(icdCode)"
+        class="fal fa-trash-alt trashCan"
+        (click)="deleteItem(icdCode)"
+        [id]="'icdCodeTrashIcon' + i"
+      ></i>
+
+      <i
+        *ngIf="showRestoreIcon(icdCode)"
+        (click)="unDeleteItem(icdCode)"
+        class="fas fa-undo isDeletedIcon"
+        [id]="'icdCodeUndoIcon' + i"
+      ></i>
+    </div>
+  </div>
+</div>
+
+<div
+  *ngIf="!isReadOnly"
+  mat-dialog-actions
+  fxLayout="column"
+  fxLayoutAlign="start start"
+>
+  <div class="sectionLabel" id="referralIcdCodesModal-addDiagnosisCode-title">
+    Add Diagnosis Code
+  </div>
+
+  <div class="spacertiny"></div>
+  <input
+    type="text"
+    placeholder="Enter and select ICD code"
+    matInput
+    [formControl]="icdAutoComplete"
+    [matAutocomplete]="auto"
+    class="mat-input-element"
+    id="icd-code-autocomplete-input"
+    style="width: 100%"
+  />
+  <mat-autocomplete
+    #auto="matAutocomplete"
+    [displayWith]="autoCompleteDisplayNull"
+  >
+    <mat-option
+      *ngFor="let option of (icdCodeSuggestions$ | async); let i = index"
+      [value]="option"
+      [id]="'icdCodeSuggestion' + i"
+    >
+      {{ option.displayText }}
+    </mat-option>
+  </mat-autocomplete>
+  <div class="spacersmall"></div>
+  <div id="icdCode-deletedInRed-text" class="standard-text deletedText">
+    Deleted items appear in red
+  </div>
+  <div id="icdCode-addInGreen-text" class="standard-text addedText">
+    Added items appear in green
+  </div>
+  <div id="icdCode-saveOrCancel-text" class="standard-text">
+    Click "SAVE" to apply these changes or "CANCEL" to undo
+  </div>
+
+  <div class="spacersmall"></div>
+  <div fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="20px">
+    <button
+      id="bottomCancel-button"
+      class="info-button"
+      mat-stroked-button
+      (click)="closeModal()"
+    >
+      CANCEL
+    </button>
+
+    <button
+      id="bottomSave-button"
+      class="primary-button actionButton"
+      mat-button
+      (click)="saveAndcloseModal()"
+    >
+      SAVE
+    </button>
+  </div>
+</div>
+
+<div
+  *ngIf="isReadOnly"
+  mat-dialog-actions
+  fxLayout="column"
+  fxLayoutAlign="start start"
+>
+  <div fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="20px">
+    <button
+      id="bottomCancel-button"
+      class="info-button"
+      mat-stroked-button
+      (click)="closeModal()"
+    >
+      CLOSE
+    </button>
+  </div>
+</div>

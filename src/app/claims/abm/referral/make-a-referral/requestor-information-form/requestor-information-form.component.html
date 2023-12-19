@@ -1,0 +1,412 @@
+<mat-expansion-panel [expanded]="true">
+  <mat-expansion-panel-header collapsedHeight="20px" expandedHeight="20px"
+    ><h3>Requestor Information</h3></mat-expansion-panel-header
+  >
+  <div [formGroup]="requestorInformationFormGroup">
+    <div fxLayout="row wrap" fxLayoutGap="20px">
+      <div *ngIf="formOptions?.roles?.length > 0">
+        <div
+          class="overhead-label"
+          id="requestor-information-form-requestor-role-label"
+        >
+          REQUESTOR ROLE<span
+            *ngIf="
+              hasRequiredValidator(
+                requestorInformationFormFieldNames.REQUESTOR_ROLE
+              )
+            "
+            class="required-text"
+            >*</span
+          >
+          <fa-icon
+            *ngIf="requestorRoleToolTip"
+            [matTooltip]="requestorRoleToolTip"
+            [icon]="faInfoCircle"
+            style="position: absolute;"
+            class="information-icon"
+          ></fa-icon>
+        </div>
+        <mat-form-field
+          class="field-shared"
+          style="width: 480px"
+          *ngIf="!inReferralReviewMode"
+        >
+          <mat-select
+            [formControlName]="
+              requestorInformationFormFieldNames.REQUESTOR_ROLE
+            "
+            healtheSelect
+            placeholder="Select Role"
+            id="requestor-information-form-requestor-role-select"
+          >
+            <mat-option
+              [value]="option.code"
+              *ngFor="let option of formOptions?.roles; let index$ = index"
+              id="requestor-information-form-requestor-role-option-{{index$}}"
+            >
+              {{ option.description }}
+            </mat-option>
+            <mat-option
+              id="requestor-information-form-requestor-role-option-none"
+            >
+              None
+            </mat-option>
+          </mat-select>
+          <mat-error
+            *ngIf="
+              requestorInformationFormGroup
+                .get(requestorInformationFormFieldNames.REQUESTOR_ROLE)
+                .hasError('required')
+            "
+            >Requestor Role is required
+          </mat-error>
+          <mat-error
+            *ngIf="
+              requestorInformationFormGroup
+                .get(requestorInformationFormFieldNames.REQUESTOR_ROLE)
+                .hasError('invalidStateFundTerminatedRoleChoice')
+            "
+            >This claim is in Terminated status. Requestor is not authorized.
+            Please instruct requestor to contact the assigned claims adjuster
+            for more information.
+          </mat-error>
+        </mat-form-field>
+        <div *ngIf="inReferralReviewMode">
+          <div class="spacertiny"></div>
+          {{
+            requestorInformationFormGroup.get(
+              requestorInformationFormFieldNames.REQUESTOR_ROLE
+            ).value
+          }}
+        </div>
+      </div>
+
+      <div>
+        <div
+          class="overhead-label"
+          id="requestor-information-form-requestor-name-label"
+        >
+          REQUESTOR NAME<span
+            *ngIf="
+              hasRequiredValidator(
+                requestorInformationFormFieldNames.REQUESTOR_NAME
+              )
+            "
+            class="required-text"
+            >*</span
+          >
+        </div>
+        <mat-form-field class="field-shared" *ngIf="!inReferralReviewMode">
+          <input
+            [formControlName]="
+              requestorInformationFormFieldNames.REQUESTOR_NAME
+            "
+            matInput
+            placeholder="Enter Name"
+            id="requestor-information-form-requestor-name-input"
+          />
+          <mat-error>Requestor Name is required</mat-error>
+        </mat-form-field>
+
+        <div *ngIf="inReferralReviewMode">
+          <div class="spacertiny"></div>
+          {{
+            requestorInformationFormGroup.get(
+              requestorInformationFormFieldNames.REQUESTOR_NAME
+            ).value
+          }}
+        </div>
+      </div>
+
+      <div>
+        <div
+          class="overhead-label"
+          id="requestor-information-form-requestor-phone-label"
+        >
+          REQUESTOR PHONE NUMBER<span
+            *ngIf="
+              hasRequiredValidator(
+                requestorInformationFormFieldNames.REQUESTOR_PHONE
+              )
+            "
+            class="required-text"
+            >*</span
+          >
+        </div>
+        <mat-form-field class="field-shared" *ngIf="!inReferralReviewMode">
+          <input
+            [formControlName]="
+              requestorInformationFormFieldNames.REQUESTOR_PHONE
+            "
+            matInput
+            placeholder="Enter Phone Number"
+            id="requestor-information-form-requestor-phone-input"
+            mask="(000) 000-0000"
+          />
+          <mat-error>Requestor Phone Number is required</mat-error>
+        </mat-form-field>
+        <div *ngIf="inReferralReviewMode">
+          <div class="spacertiny"></div>
+          {{
+            requestorInformationFormGroup.get(
+              requestorInformationFormFieldNames.REQUESTOR_PHONE
+            ).value
+          }}
+        </div>
+      </div>
+
+      <div *ngIf="formOptions?.intakeMethods?.length > 0">
+        <div
+          class="overhead-label"
+          id="requestor-information-form-requestor-intakeMethod-label"
+        >
+          INTAKE METHOD<span
+            *ngIf="
+              hasRequiredValidator(
+                requestorInformationFormFieldNames.INTAKE_METHOD
+              )
+            "
+            class="required-text"
+            >*</span
+          >
+        </div>
+        <mat-form-field class="field-shared" *ngIf="!inReferralReviewMode">
+          <mat-select
+            [formControlName]="requestorInformationFormFieldNames.INTAKE_METHOD"
+            healtheSelect
+            placeholder="Select Method"
+            id="requestor-information-form-requestor-intakeMethod-select"
+          >
+            <mat-option
+              [value]="option"
+              *ngFor="
+                let option of formOptions.intakeMethods;
+                let index$ = index
+              "
+              id="requestor-information-form-requestor-intakeMethod-option-{{index$}}"
+            >
+              {{ option }}
+            </mat-option>
+            <mat-option
+              id="requestor-information-form-requestor-intakeMethod-option-none"
+            >
+              None
+            </mat-option>
+          </mat-select>
+          <mat-error>Intake Method is required</mat-error>
+        </mat-form-field>
+        <div *ngIf="inReferralReviewMode">
+          <div class="spacertiny"></div>
+          {{
+            requestorInformationFormGroup.get(
+              requestorInformationFormFieldNames.INTAKE_METHOD
+            ).value
+          }}
+        </div>
+      </div>
+    </div>
+
+    <div class="spacermedium"></div>
+    <div fxLayout="row wrap" fxLayoutGap="20px">
+      <div>
+        <div
+          class="overhead-label"
+          id="requestor-information-form-requestor-email-label"
+        >
+          REQUESTOR EMAIL<span
+            *ngIf="
+              hasRequiredValidator(
+                requestorInformationFormFieldNames.REQUESTOR_EMAIL
+              )
+            "
+            class="required-text"
+            >*</span
+          >
+        </div>
+        <mat-form-field class="field-shared" *ngIf="!inReferralReviewMode">
+          <input
+            [formControlName]="
+              requestorInformationFormFieldNames.REQUESTOR_EMAIL
+            "
+            matInput
+            placeholder="Enter Email"
+            id="requestor-information-form-requestor-email-input"
+          />
+          <mat-error>Requestor Email is required</mat-error>
+        </mat-form-field>
+        <div *ngIf="inReferralReviewMode">
+          <div class="spacertiny"></div>
+          {{
+            requestorInformationFormGroup.get(
+              requestorInformationFormFieldNames.REQUESTOR_EMAIL
+            ).value
+          }}
+        </div>
+      </div>
+
+      <div *ngIf="formOptions?.providers?.length > 0">
+        <div
+          class="overhead-label"
+          id="requestor-information-form-requestor-provider-label"
+        >
+          PASSPORT PROVIDER TAX ID<span
+            *ngIf="
+              hasRequiredValidator(
+                requestorInformationFormFieldNames.PASSPORT_PROVIDER_TAX_ID
+              )
+            "
+            class="required-text"
+            >*</span
+          >
+        </div>
+        <mat-form-field class="field-shared" *ngIf="!inReferralReviewMode">
+          <mat-select
+            [formControlName]="
+              requestorInformationFormFieldNames.PASSPORT_PROVIDER_TAX_ID
+            "
+            healtheSelect
+            placeholder="Select Provider"
+            id="requestor-information-form-requestor-provider-select"
+          >
+            <mat-option
+              [value]="option"
+              *ngFor="let option of formOptions.providers; let index$ = index"
+              id="requestor-information-form-requestor-provider-option-{{index$}}"
+            >
+              {{ option }}
+            </mat-option>
+            <mat-option
+              id="requestor-information-form-requestor-provider-option-none"
+            >
+              None
+            </mat-option>
+          </mat-select>
+          <mat-error>Passport Provider Tax ID is required</mat-error>
+        </mat-form-field>
+        <div *ngIf="inReferralReviewMode">
+          <div class="spacertiny"></div>
+          {{
+            requestorInformationFormGroup.get(
+              requestorInformationFormFieldNames.PASSPORT_PROVIDER_TAX_ID
+            ).value
+          }}
+        </div>
+      </div>
+
+      <div *ngIf="formOptions?.uros?.length > 0">
+        <div
+          class="overhead-label"
+          id="requestor-information-form-requestor-uro-label"
+        >
+          REQUESTOR URO<span
+            *ngIf="hasRequiredValidator(requestorInformationFormFieldNames.URO)"
+            class="required-text"
+            >*</span
+          >
+        </div>
+        <mat-form-field class="field-shared" *ngIf="!inReferralReviewMode">
+          <mat-select
+            [formControlName]="requestorInformationFormFieldNames.URO"
+            healtheSelect
+            placeholder="Select URO"
+            id="requestor-information-form-requestor-uro-select"
+          >
+            <mat-option
+              [value]="option"
+              *ngFor="let option of formOptions.uros; let index$ = index"
+              id="requestor-information-form-requestor-uro-option-{{index$}}"
+            >
+              {{ option }}
+            </mat-option>
+            <mat-option
+              id="requestor-information-form-requestor-uro-option-none"
+            >
+              None
+            </mat-option>
+          </mat-select>
+          <mat-error>Requestor URO is required</mat-error>
+        </mat-form-field>
+        <div *ngIf="inReferralReviewMode">
+          <div class="spacertiny"></div>
+          {{
+            requestorInformationFormGroup.get(
+              requestorInformationFormFieldNames.URO
+            ).value
+          }}
+        </div>
+      </div>
+
+      <div>
+        <div
+          class="overhead-label"
+          id="requestor-information-form-requestor-customer-tracking-number-label"
+        >
+          CUSTOMER TRACKING NUMBER<span
+            *ngIf="
+              hasRequiredValidator(
+                requestorInformationFormFieldNames.CUSTOMER_TRACKING_NUMBER
+              )
+            "
+            class="required-text"
+            >*</span
+          >
+        </div>
+        <mat-form-field class="field-shared" *ngIf="!inReferralReviewMode">
+          <input
+            [formControlName]="
+              requestorInformationFormFieldNames.CUSTOMER_TRACKING_NUMBER
+            "
+            matInput
+            placeholder="Enter Tracking Number"
+            id="requestor-information-form-requestor-customer-tracking-number-input"
+          />
+          <mat-error>Customer Tracking Number is required</mat-error>
+        </mat-form-field>
+        <div *ngIf="inReferralReviewMode">
+          <div class="spacertiny"></div>
+          {{
+            requestorInformationFormGroup.get(
+              requestorInformationFormFieldNames.CUSTOMER_TRACKING_NUMBER
+            ).value
+          }}
+        </div>
+      </div>
+
+      <div>
+        <div
+          class="overhead-label"
+          id="requestor-information-form-requestor-healthe-tracking-number-label"
+        >
+          HEALTHE TRACKING ID<span
+            *ngIf="
+              hasRequiredValidator(
+                requestorInformationFormFieldNames.HEALTHE_TRACKING_NUMBER
+              )
+            "
+            class="required-text"
+            >*</span
+          >
+        </div>
+        <mat-form-field class="field-shared" *ngIf="!inReferralReviewMode">
+          <input
+            [formControlName]="
+              requestorInformationFormFieldNames.HEALTHE_TRACKING_NUMBER
+            "
+            matInput
+            placeholder="Enter Tracking Number"
+            id="requestor-information-form-requestor-healthe-tracking-number-input"
+          />
+          <mat-error>Healthe Tracking ID is required</mat-error>
+        </mat-form-field>
+        <div *ngIf="inReferralReviewMode">
+          <div class="spacertiny"></div>
+          {{
+            requestorInformationFormGroup.get(
+              requestorInformationFormFieldNames.HEALTHE_TRACKING_NUMBER
+            ).value
+          }}
+        </div>
+      </div>
+    </div>
+  </div>
+</mat-expansion-panel>

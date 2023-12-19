@@ -1,0 +1,42 @@
+<div
+  class="referral-activity-wrapper"
+  *ngIf="!(isReferralActivityLoading$ | async)"
+>
+  <healthe-confirmation-banner
+    #alert206
+    [alertType]="alertType.DANGER"
+    [id]="'alert206'"
+  ></healthe-confirmation-banner>
+
+  <div class="spacersmall "></div>
+
+  <healthe-summary-bar
+    [referralId]="referralId$ | async"
+    [referralType$]="referralType$"
+  ></healthe-summary-bar>
+
+  <div class="spacersmall"></div>
+
+  <healthe-all-contacts-alert
+    *ngIf="(hasAdditionalContactAttempts$ | async)"
+  ></healthe-all-contacts-alert>
+
+  <div
+    class="spacersmall"
+    *ngIf="(hasAdditionalContactAttempts$ | async)"
+  ></div>
+
+  <router-outlet></router-outlet>
+</div>
+
+<ng-container *ngIf="(isReferralActivityLoading$ | async)">
+  <div
+    fxLayout="column"
+    fxLayoutAlign="center center"
+    fxLayoutGap="35px"
+    class="loader"
+  >
+    <mat-spinner [diameter]="55" id="mar-loadingResultsSpinner"></mat-spinner>
+    <h2 id="mar-loadingResultsMessage">Loading Referral Activity...</h2>
+  </div>
+</ng-container>

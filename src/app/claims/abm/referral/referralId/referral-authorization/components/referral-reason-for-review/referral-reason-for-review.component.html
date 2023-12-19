@@ -1,0 +1,39 @@
+<mat-expansion-panel
+  #matExpansionPanel
+  [expanded]="panelExpanded"
+  class="authReasonsBox"
+>
+  <mat-expansion-panel-header
+    [collapsedHeight]="panelHeaderHeight"
+    [expandedHeight]="panelHeaderHeight"
+    style="cursor: pointer; padding-top: 10px !important;  padding-bottom: 15px !important;"
+  >
+    <div style="width: 100%;margin-top: 5px;">
+      <div fxLayout="row" fxLayoutAlign="space-between">
+        <div>
+          <fa-icon
+            [icon]="faClipboardList"
+            class="secondary"
+            style="margin-right: 10px; font-size: 22px;   font-weight: bold;"
+            id="auth-information-transportation-seeReasons-button-icon-{{idIndex}}"
+          ></fa-icon>
+          <span *ngIf="false === matExpansionPanel.expanded"
+            >There are {{ reasons?.length }} reasons that require your review in
+            order to authorize. Click to expand.</span
+          >
+        </div>
+        <div class="secondary" style="margin-right: 20px;">
+          <span *ngIf="false === matExpansionPanel.expanded">See All</span>
+          <span *ngIf="true === matExpansionPanel.expanded">Collapse</span>
+          Reasons <span class="tag reasonCount">{{ reasons?.length }}</span>
+        </div>
+      </div>
+    </div>
+  </mat-expansion-panel-header>
+  <ul style="margin:0px;">
+    <ng-container *ngFor="let item of reasons">
+      <li>{{ item }}</li>
+      <div class="spacertiny"></div>
+    </ng-container>
+  </ul>
+</mat-expansion-panel>

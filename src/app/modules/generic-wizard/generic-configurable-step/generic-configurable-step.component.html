@@ -1,0 +1,34 @@
+<form
+  style="--gap-width: 32px"
+  class="healthe-layout healthe-layout__column healthe-layout__column--gap"
+  healtheFormValidationExtractor
+  [parentPath]="parentPath"
+  [formGroup]="parentFormGroup"
+>
+  <section *ngFor="let formSection of config?.formSections">
+    <h3 class="primary">{{ formSection.formSectionTitle }}</h3>
+    <div
+      class="healthe-layout healthe-layout__column healthe-layout__column--gap"
+    >
+      <div
+        *ngFor="let row of formSection?.formFieldConfigs"
+        class="healthe-layout healthe-layout__row healthe-layout__row--gap"
+      >
+        <ng-container
+          *ngFor="let field of row"
+          [ngSwitch]="field.formFieldType"
+        >
+          <healthe-textarea
+            *ngSwitchCase="GenericFormFieldType.TextArea"
+            class="healthe-layout--width-fill"
+            healtheFormValidationExtractor
+            [formLabel]="field.label"
+            [formControlName]="field.formControlName"
+            [placeholder]="field.placeholder"
+            [maxLength]="field?.options?.maxLength"
+          ></healthe-textarea>
+        </ng-container>
+      </div>
+    </div>
+  </section>
+</form>

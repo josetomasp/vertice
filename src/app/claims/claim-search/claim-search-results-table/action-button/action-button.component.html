@@ -1,0 +1,41 @@
+<button
+  mat-icon-button
+  id="actionButton-{{index}}"
+  class="ellipsis-button"
+  [disabled]="!interventions || interventions.length === 0"
+  [matMenuTriggerFor]="actionMenu"
+>
+  <i class="fal fa-ellipsis-h fa-lg"></i>
+</button>
+<mat-menu #actionMenu>
+  <div
+    class="menu-wrapper"
+    (click)="$event.stopPropagation()"
+    fxLayout="column"
+    fxLayoutGap="15px"
+    [formGroup]="requestActionForm"
+  >
+    <div class="label" id="actionPanel-title-{{index}}">REQUEST ACTIONS</div>
+    <mat-radio-group
+      fxLayout="column"
+      fxLayoutGap="15px"
+      formControlName="actionUrl"
+    >
+      <mat-radio-button
+        *ngFor="let int of interventions"
+        [id]="'action-radioButton-' + int.type + '-' + index"
+        [value]="int.url"
+        >{{ int.action }}</mat-radio-button
+      >
+    </mat-radio-group>
+    <button
+      id="action-submit-{{index}}"
+      (click)="requestAction()"
+      [disabled]="requestActionForm.pristine"
+      mat-flat-button
+      class="primary-button"
+    >
+      REQUEST ACTION(S)
+    </button>
+  </div>
+</mat-menu>

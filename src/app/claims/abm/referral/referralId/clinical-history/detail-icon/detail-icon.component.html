@@ -1,0 +1,13 @@
+<ng-container *ngIf="selectionType">
+  <i
+    *ngIf="selectionType.icon[0] !== 'image'"
+    id="physicalMedicine-selection-{{ selectionType.label}}-card-icon"
+    [ngClass]="selectionType.icon"
+    class="fa-2x text-center unselectable"
+  ></i>
+  <img
+    *ngIf="selectionType.icon[0] === 'image'"
+    [src]="selectionType.icon[1]"
+    [class]="selectionType.icon[2] + ' detail-icon'"
+  />
+</ng-container>

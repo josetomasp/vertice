@@ -1,0 +1,267 @@
+<div>
+  <span class="sectionLabel" id="lodging-wizard-lodging-information-label"
+    >Lodging Information</span
+  >
+</div>
+<div class="spacersmall"></div>
+<div
+  [formGroup]="stepForm"
+  class="matFormFieldWidthFix"
+  *ngIf="transportationOptions"
+>
+  <div fxLayout="column" fxLayoutAlign="start" fxLayoutGap="35px">
+    <div fxLayout="row wrap" fxLayoutAlign="start" fxLayoutGap="35px">
+      <div>
+        <span class="overhead-label" id="lodging-wizard-destinationField-label"
+          >DESTINATION<span class="required-text">*</span></span
+        >
+        <mat-form-field class="show-one-error">
+          <healthe-places-autocomplete
+            formControlName="destination"
+            placeholder="City or Airport"
+            #destination
+            type="BOTH"
+            id="lodging-wizard-destinationField-input"
+          ></healthe-places-autocomplete>
+          <mat-error
+            id="lodging-wizard-destinationField-error-required"
+            *ngIf="stepForm.controls['destination'].hasError('required')"
+            >Destination cannot be empty
+          </mat-error>
+          <mat-error
+            id="lodging-wizard-destinationField-error-wasValuePicked"
+            *ngIf="stepForm.controls['destination'].hasError('wasValuePicked')"
+            >No locations matched your search
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <div>
+        <span
+          class="overhead-label"
+          id="lodging-wizard-numberOfGuestsField-label"
+          >NUMBER OF GUESTS</span
+        >
+        <mat-form-field>
+          <mat-select
+            class="ieFixNumberOfGuests"
+            healtheSelect
+            formControlName="numberOfGuests"
+            id="lodging-wizard-numberOfGuestsField-input"
+          >
+            <mat-option
+              *ngFor="let count of countSelections"
+              [value]="count"
+              id="lodging-wizard-numberOfGuestsField-option-{{count}}"
+              >{{ count }}</mat-option
+            >
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div>
+        <span
+          class="overhead-label"
+          id="lodging-wizard-numberOfRoomsField-label"
+          >NUMBER OF ROOMS</span
+        >
+        <mat-form-field>
+          <mat-select
+            class="ieFixNumberOfRooms"
+            healtheSelect
+            formControlName="numberOfRooms"
+            id="lodging-wizard-numberOfRoomsField-input"
+          >
+            <mat-option
+              *ngFor="let count of countSelections"
+              [value]="count"
+              id="lodging-wizard-numberOfRoomsField-option-{{count}}"
+              >{{ count }}</mat-option
+            >
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </div>
+    <div fxLayout="row wrap" fxLayoutAlign="start" fxLayoutGap="35px">
+      <div>
+        <span class="overhead-label" id="lodging-wizard-checkInDateField-label"
+          >CHECK IN DATE<span class="required-text">*</span></span
+        >
+        <mat-form-field class="show-one-error">
+          <healthe-datepicker
+            formControlName="checkInDate"
+            id="lodging-wizard-checkInDate-input"
+            (blur)="updateValidityOnBlur()"
+          >
+          </healthe-datepicker>
+          <mat-error
+            id="lodging-wizard-checkInDate-error-required"
+            *ngIf="stepForm.controls['checkInDate'].hasError('required')"
+            >Check In Date cannot be empty
+          </mat-error>
+          <mat-error
+            id="lodging-wizard-checkInDate-error-checkinDateAfterCheckoutDate"
+            *ngIf="
+              stepForm.controls['checkInDate'].hasError(
+                'checkinDateAfterCheckoutDate'
+              )
+            "
+            >Check In Date must be before the Check Out Date
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div>
+        <span class="overhead-label" id="lodging-wizard-checkOutDateField-label"
+          >CHECK OUT DATE<span class="required-text">*</span></span
+        >
+        <mat-form-field class="show-one-error">
+          <healthe-datepicker
+            formControlName="checkOutDate"
+            id="lodging-wizard-checkOutDate-input"
+            (blur)="updateValidityOnBlur()"
+          >
+          </healthe-datepicker>
+          <mat-error
+            id="lodging-wizard-checkOutDate-error-required"
+            *ngIf="stepForm.controls['checkOutDate'].hasError('required')"
+            >Check Out Date cannot be empty
+          </mat-error>
+          <mat-error
+            id="lodging-wizard-checkOutDate-error-checkinDateAfterCheckoutDate"
+            *ngIf="
+              stepForm.controls['checkOutDate'].hasError(
+                'checkinDateAfterCheckoutDate'
+              )
+            "
+            >Check In Date must be before the Check Out Date
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <div>
+        <span
+          class="overhead-label"
+          style="width: 145px;"
+          id="lodging-wizard-priceOfRoomField-label"
+        >
+          PRICE OF ROOM
+        </span>
+        <mat-form-field>
+          <mat-select
+            class="ieFixPriceOfRooms"
+            healtheSelect
+            formControlName="priceOfRoom"
+            id="lodging-wizard-priceOfRoomField-input"
+          >
+            <mat-option
+              *ngFor="let price of priceSelections"
+              [value]="price"
+              id="lodging-wizard-priceOfRoomField-option-{{price}}"
+              >{{ price }}</mat-option
+            >
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div>
+        <div>
+          <span class="overhead-label" id="lodging-wizard-numberOfNights-label"
+            >NUMBER OF NIGHTS</span
+          >
+
+          <p id="lodging-numberOfNights">{{ numberOfNights }}</p>
+        </div>
+      </div>
+    </div>
+    <div fxLayout="row wrap" fxLayoutAlign="start" fxLayoutGap="35px">
+      <div
+        fxLayout="row wrap"
+        fxLayoutAlign="start"
+        fxLayoutGap="35px"
+        [ngClass]="errorBoxClass"
+      >
+        <div>
+          <span
+            class="overhead-label"
+            id="lodging-wizard-appointmentTypeField-label"
+            >APPOINTMENT TYPE</span
+          >
+          <mat-form-field style="width: 230px">
+            <mat-select
+              placeholder="Choose Appointment Type"
+              healtheSelect
+              formControlName="appointmentType"
+              id="lodging-wizard-appointmentTypeField-input"
+            >
+              <mat-option
+                *ngFor="let type of transportationOptions?.appointmentTypes"
+                [value]="type"
+                id="lodging-wizard-specific-dates-appointmentTypeField-option-{{type}}"
+                >{{ type }}</mat-option
+              >
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div>
+          <span
+            class="overhead-label"
+            id="lodging-wizard-appointmentDateField-label"
+            >APPOINTMENT DATE</span
+          >
+          <mat-form-field class="show-one-error">
+            <healthe-datepicker
+              formControlName="appointmentDate"
+              id="lodging-wizard-appointmentDate-input"
+              class="appointmentDate"
+            >
+            </healthe-datepicker>
+          </mat-form-field>
+        </div>
+        <div>
+          <span
+            class="overhead-label"
+            id="lodging-wizard-appointmentTimeField-label"
+            >APPOINTMENT TIME</span
+          >
+          <mat-form-field>
+            <mat-select
+              placeholder="Choose Time"
+              healtheSelect
+              formControlName="appointmentTime"
+              id="lodging-wizard-appointmentTimeField-input"
+              style="width: 105px;"
+            >
+              <mat-option
+                *ngFor="let time of timeDropdownValues"
+                [value]="time.value"
+                id="lodging-wizard-appointmentTimeField-option-{{time.label}}"
+                >{{ time.label }}</mat-option
+              >
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="secondary clearAppointments" (click)="clearAppointments()">
+          Clear Appointments
+        </div>
+      </div>
+    </div>
+    <mat-error
+      *ngIf="stepForm.hasError('allOrNothing') && allTouched()"
+      class="appointmentErrorMessage"
+    >
+      {{ ERROR_MESSAGES.appointment_allOrNothing }}
+    </mat-error>
+
+    <div>
+      <span class="overhead-label" id="lodging-wizard-notes-label"
+        >NOTES (optional)</span
+      >
+      <mat-form-field>
+        <textarea
+          matInput
+          placeholder="Enter notes"
+          formControlName="notes"
+          id="lodging-wizard-notes-input"
+        ></textarea>
+      </mat-form-field>
+    </div>
+  </div>
+</div>

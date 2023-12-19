@@ -1,0 +1,53 @@
+<div
+  fxLayout="column"
+  id="riskLevelIndicator-{{index}}"
+  *ngIf="riskLevelNumber && riskLevelNumber > 0"
+  class="healthe-header-bar-tag"
+  data-testid="riskLevelViewButton"
+  (click)="openTrendingRiskModal()"
+  [matTooltip]="
+    'Risk: ' +
+    riskLevelNumber +
+    ' - ' +
+    riskLevel +
+    '\n' +
+    getRiskTrend() +
+    ' ' +
+    getDaysSinceDisplay() +
+    ' ago'
+  "
+>
+  <div fxLayout="row" fxLayoutGap="10px">
+    <span
+      id="riskLevelIndicator-tag-{{index}}"
+      [ngClass]="getColor()"
+      class="tag"
+      >Risk: {{ riskLevelNumber }} - {{ riskLevel }}
+      <span class="viewText">(VIEW)</span></span
+    >
+  </div>
+  <div fxLayout="row" style="margin-top: 3px" *ngIf="uppyDownyEnabled">
+    <i
+      fxFlexOffset="10px"
+      id="riskLevelIndicator-arrow-{{index}}"
+      [ngClass]="getIconClass()"
+    ></i>
+    <span fxFlexOffset="10px" id="riskLevelIndicator-daysSince-{{index}}">{{
+      getDaysSinceDisplay()
+    }}</span>
+    <i
+      id="results-card-list-header-riskLevel-info-icon"
+      [matTooltip]="
+        'Represents current risk level, upward/downward trend and number of days at that level'
+      "
+      class="fal fa-info-circle riskLevelInfoIcon"
+    ></i>
+  </div>
+</div>
+<div
+  *ngIf="!riskLevelNumber || riskLevelNumber === 0"
+  id="riskLevelIndicator-noRiskIdentified-{{index}}"
+  [matTooltip]="'Risk: Unidentified'"
+>
+  <span [ngClass]="getColor()" class="tag">Risk: Unidentified </span>
+</div>

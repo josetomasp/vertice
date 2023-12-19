@@ -1,0 +1,26 @@
+<div style="height: 180px">
+  <div
+    fxLayout="row"
+    class="title-container"
+    fxLayoutAlign="space-between center"
+    mat-dialog-title
+  >
+    <span id="pbm-submit-success-modal-title">{{modalConfig.title}}</span>
+    <button mat-icon-button mat-dialog-close id="pbm-submit-success-modal--header-widget">
+      <i class="fal fa-times modal-close-widget"></i>
+    </button>
+  </div>
+  <div mat-dialog-content fxLayout="column" fxLayoutAlign="space-between space-between" style="margin-top: 15px; height: 104px" >
+    <div>
+    <h2 style="margin: 0">{{modalConfig.bodyText}}</h2>
+    </div>
+    <div fxLayout="row" fxLayoutAlign="space-between end" fxLayoutGap="35px">
+      <button mat-flat-button [ngClass]="modalConfig.buttonClass"
+        (click)="remainOnAuth()">{{modalConfig.remainLabel | uppercase }}</button>
+      <button mat-flat-button [ngClass]="modalConfig.buttonClass"
+        (click)="returnToQueue()">{{modalConfig.returnToLabel | uppercase }}</button>
+      <button mat-flat-button [ngClass]="modalConfig.buttonClass"
+        (click)="CopyToClipboard()">{{modalConfig.copyToClipboardLabel | uppercase }}</button>
+    </div>
+  </div>
+</div>

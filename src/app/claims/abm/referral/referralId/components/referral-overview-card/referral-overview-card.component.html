@@ -1,0 +1,212 @@
+<mat-expansion-panel #matExpansionPanel [expanded]="panelExpanded">
+  <mat-expansion-panel-header
+    [collapsedHeight]="panelHeaderHeight"
+    [expandedHeight]="panelHeaderHeight"
+    style="cursor: pointer; padding-top: 10px !important;  padding-bottom: 20px !important;"
+  >
+    <div style="width: 100%;" *ngIf="!(isLoading$ | async)">
+      <div
+        fxLayout="row"
+        fxLayoutAlign="start center"
+        style="margin-right: -10px"
+      >
+        <h3
+          fxFlex="20%"
+          fxFlex.lt-lg="25%"
+          fxFlex.lt-md="33.33%"
+          fxFlex.lt-sm="50%"
+        >
+          Referral Details
+        </h3>
+
+        <section
+          fxFlex="calc(20% - 35px)"
+          fxFlex.lt-lg="calc(25% - 35px)"
+          fxFlex.lt-md="calc(33.33% - 35px)"
+          fxFlex.lt-sm="calc(50% - 35px)"
+          *ngFor="let pair of (referralOverviewHeaderValuePair$ | async)"
+          [id]="'referral-overview-card-value-pair--' + pair.label"
+        >
+          <label
+            class="overhead-label"
+            [id]="'referral-overview-card-value-pair--' + pair.label + '-label'"
+            >{{ pair.label }}</label
+          >
+          <div
+            #overviewValue
+            [matTooltip]="pair.value"
+            class="standard-text ellipsis-text"
+            [id]="'referral-overview-card-value-pair--' + pair.label + '-value'"
+          >
+            <ng-container *ngIf="pair.hasModalData">
+              <a class="cursor-pointer" (click)="invokeModal(pair)">{{
+                pair.value
+              }}</a>
+            </ng-container>
+            <ng-container *ngIf="!pair.hasModalData">{{
+              pair.value
+            }}</ng-container>
+          </div>
+        </section>
+      </div>
+    </div>
+
+    <div
+      fxLayout="row "
+      fxLayoutAlign="center center"
+      class="loaderContainer"
+      *ngIf="(isLoading$ | async)"
+    >
+      Loading Referral Details...
+    </div>
+  </mat-expansion-panel-header>
+  <div fxLayout="column" fxLayoutAlign="start start">
+    <ng-container *ngIf="(hasData$ | async)">
+      <main
+        class="referral-overview-content"
+        fxLayout="row wrap"
+        fxLayoutAlign="start"
+        fxLayoutGap="35px grid"
+      >
+        <ng-container
+          *ngFor="let pair of (referralOverviewBodyValuePair$ | async)"
+        >
+          <!--
+            Currently using that LabelValuePairWithModalData.shouldDisplay is optional and not
+          -->
+          <!--
+            set for existing fields to indicate that we can ignore that we don't get a true
+          -->
+          <!--
+            from the expected observable to pass the ngIf that will include that particular pair
+          -->
+          <section
+            fxFlex="calc(20% - 35px)"
+            fxFlex.lt-lg="calc(25% - 35px)"
+            fxFlex.lt-md="calc(33.33% - 35px)"
+            fxFlex.lt-sm="calc(50% - 35px)"
+            *ngIf="
+              (pair.shouldDisplay | async) === null ||
+              (pair.shouldDisplay | async)
+            "
+            [id]="'referral-overview-card-value-pair--' + pair.label"
+          >
+            <label
+              class="overhead-label"
+              [id]="
+                'referral-overview-card-value-pair--' + pair.label + '-label'
+              "
+              >{{ pair.label }}</label
+            >
+            <div
+              #overviewValue
+              [matTooltip]="pair.value"
+              class="standard-text ellipsis-text"
+              [id]="
+                'referral-overview-card-value-pair--' + pair.label + '-value'
+              "
+            >
+              <ng-container *ngIf="pair.hasModalData">
+                <a class="cursor-pointer" (click)="invokeModal(pair)">{{
+                  pair.modalConfig.linkDisplayText
+                }}</a>
+              </ng-container>
+              <ng-container *ngIf="!pair.hasModalData">{{
+                pair.value
+              }}</ng-container>
+            </div>
+          </section>
+        </ng-container>
+      </main>
+      <aside style="padding-top: 35px; width: 100%">
+        <section>
+          <div class="float-left">
+            <label
+              [id]="'referral-overview-card-value-pair--Diagnosis Code-label'"
+              class="overhead-label"
+              >DIAGNOSIS CODE</label
+            >
+            <span fxLayout="row"
+              ><span
+                class="ellipsis-text"
+                [id]="'referral-overview-card-value-pair--Diagnosis Code-value'"
+                style="font-size: 14px; font-weight: 500"
+              >
+                <span
+                  *ngFor="
+                    let desc of (diagnosisCodesAndDescriptions$ | async);
+                    let last = last;
+                    let first = first
+                  "
+                  style="padding-right: 4px"
+                  >{{ desc + (!last ? ',' : '') }}</span
+                >
+              </span>
+              <a
+                *ngIf="archeType !== 'kinect'"
+                [id]="
+                  'referral-overview-card-value-pair--Diagnosis Code-viewAllButton'
+                "
+                mat-button
+                style="min-width: 20px;"
+                (click)="openViewAllModal()"
+                >View/Edit all</a
+              ></span
+            >
+          </div>
+          <div class="float-right" *ngIf="archeType == 'language'">
+            <label
+              [id]="'referral-overview-card-modal-link'"
+              class="overhead-label"
+              >REFERRAL LOCATIONS</label
+            >
+            <span fxLayout="row">
+              <a
+                [id]="'referral-overview-card-modal-link-viewAllButton'"
+                mat-button
+                style="min-width: 20px;"
+                (click)="openReferralLocationsModal()"
+                >View Referral Locations</a
+              ></span
+            >
+          </div>
+        </section>
+      </aside>
+    </ng-container>
+
+    <!-- Fusion Body Parts -->
+    <healthe-referral-authorization-body-parts-history
+      [fusionReferralAuthorizations$]="fusionReferralAuthorizations$"
+      [archeType]="archeType"
+    >
+    </healthe-referral-authorization-body-parts-history>
+
+    <ng-container *ngIf="!(hasData$ | async) && !(isLoading$ | async)">
+      <div fxLayout="column" fxLayoutAlign="center center">
+        <img src="assets/img/NoDataIcon.svg" />
+        <p class="standard-text" id="tableVerbiage">
+          {{ getVerbage(tableCondition.NoReferralOverviewData) }}
+        </p>
+      </div>
+    </ng-container>
+    <ng-container *ngIf="(isLoading$ | async)">
+      <div fxLayout="row" fxLayoutAlign="center center">
+        <div
+          class="healthe-table--centered-container"
+          fxLayout="column"
+          fxLayoutAlign="center center"
+          id="referralActivityDetailsLoadingDataSpinner"
+        >
+          <mat-spinner [diameter]="55"></mat-spinner>
+          <h2>Loading results...</h2>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+</mat-expansion-panel>
+
+<div class="loaderContainer" *ngIf="(isLoading$ | async)">
+  <div fxLayout="row " fxLayoutAlign="center start">
+    <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+  </div>
+</div>

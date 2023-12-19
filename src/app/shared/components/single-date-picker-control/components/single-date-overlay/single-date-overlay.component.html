@@ -1,0 +1,46 @@
+<div
+  [@transformPickerOverlay]="shouldAnimate"
+  class="single-date-calendar-container"
+>
+  <div class="single-date-calendar-item">
+    <healthe-single-date-calendar-wrapper
+      (selectedDateChange)="updateToDate($event)"
+      [id]="getID('toCalendar')"
+      [maxDate]="toMaxDate"
+      [minDate]="toMinDate"
+      [prefixLabel]="startDatePrefix"
+      [selectedDate]="toDate"
+      [fromDate]="fromDate"
+    >
+    </healthe-single-date-calendar-wrapper>
+  </div>
+  <div class="single-date-calendar-item">
+    <div class="single-date-menu">
+      <healthe-single-date-presets
+        (presetChanged)="updateRangeByPreset($event)"
+        [id]="getID('dateRangePreset')"
+        [presets]="presets"
+      ></healthe-single-date-presets>
+      <div [id]="getID('controls')" class="single-date-controls">
+        <button
+          mat-stroked-button
+          class="info-button uppercase"
+          (click)="discardNewDates($event)"
+          [id]="getID('controls-cancel')"
+          style="padding-right: 13px;"
+        >
+          {{ cancelLabel }}
+        </button>
+        <button
+          mat-flat-button
+          class="primary-button uppercase"
+          (click)="applyNewDates($event)"
+          [id]="getID('controls-apply')"
+          [disabled]="shouldSubmitBeDisabled()"
+        >
+          {{ applyLabel }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

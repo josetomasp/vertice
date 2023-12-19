@@ -1,0 +1,43 @@
+<div>
+  <div
+    [id]="getID('wrapper')"
+    class="healthe-drp-input-wrapper"
+    [class]="'healthe-drp-input-wrapper ' + (isDisabled ? 'is-disabled' : '')"
+    (click)="touch()"
+  >
+    <input
+      #calendarInput
+      (keyup)="submitDateRange(calendarInput.value)"
+      (blur)="submitDateRange(calendarInput.value)"
+      [id]="getID('input')"
+      [matTooltipPosition]="'above'"
+      [matTooltipShowDelay]="500"
+      [matTooltip]="'Enter date or click calendar icon'"
+      [placeholder]="options.placeholder"
+      [value]="selectedDate"
+      [disabled]="isDisabled"
+      class="single-date-date-input"
+    />
+    <div
+      (click)="openCalendar()"
+      [id]="getID('iconTrigger-wrapper')"
+      [class]="'single-date-calendar ' + (isDisabled ? 'open-disabled' : '')"
+    >
+      <fa-icon
+        [icon]="faCalendarAlt"
+        class="fa-lg"
+        [id]="getID('iconTrigger-icon')"
+      ></fa-icon>
+    </div>
+  </div>
+  <span class="single-date-error-label" *ngIf="control?.hasError('invalidDate')"
+    >{{ DATE_INVALID_ERROR }}
+  </span>
+
+  <span
+    *ngIf="control?.invalid"
+    [id]="getID('error-label')"
+    class="single-date-error-label"
+    >{{ control.errors['message'] }}</span
+  >
+</div>

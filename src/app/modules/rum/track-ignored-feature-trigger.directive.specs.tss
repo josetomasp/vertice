@@ -1,0 +1,57 @@
+import { Component } from '@angular/core';
+import { fireEvent, screen, render } from '@testing-library/angular';
+import { TrackIgnoredFeatureTriggerDirective } from './track-ignored-feature-trigger.directive';
+import {
+  ITrackIgnoredFeatureService,
+  TrackIgnoredFeatureService
+} from '@modules/rum/track-ignored-feature.service';
+const MOCK_TRACK_IGNORED_FEATURE_SERVICE: ITrackIgnoredFeatureService = {
+  markFeatureInteracted(featureName: string): void {
+    throw new Error(
+      'not used by the TrackIgnoredFeatureTriggerDirective :: Checkout the TrackIgnoredFeatureDirective'
+    );
+  },
+  registerFeature(featureName: string) {
+    throw new Error(
+      'not used by the TrackIgnoredFeatureTriggerDirective :: Checkout the TrackIgnoredFeatureDirective'
+    );
+  },
+  sendTrackEvent(eventName: string): void {}
+};
+@Component({
+  selector: 'healthe-directive-test',
+  template:
+    '<div><button data-testid="test-feature-trigger" trackIgnoredFeatureTrigger="test-feature-event-name">Submit</button></div>'
+})
+class TrackIgnoredFeatureTriggerDirectiveTestComponent {}
+describe('TrackIgnoredFeatureTriggerDirective', () => {
+  async function setup(features: object = {}) {
+    return await render(TrackIgnoredFeatureTriggerDirectiveTestComponent, {
+      providers: [
+        {
+          provide: TrackIgnoredFeatureService,
+          useValue: features
+            ? { ...MOCK_TRACK_IGNORED_FEATURE_SERVICE, features }
+            : MOCK_TRACK_IGNORED_FEATURE_SERVICE
+        }
+      ],
+      declarations: [
+        TrackIgnoredFeatureTriggerDirectiveTestComponent,
+        TrackIgnoredFeatureTriggerDirective
+      ]
+    });
+  }
+
+  test('init', async () => {
+    await setup();
+  });
+  test('trigger', async () => {
+    const sendEvenSpy = jest.spyOn(
+      MOCK_TRACK_IGNORED_FEATURE_SERVICE,
+      'sendTrackEvent'
+    );
+    await setup();
+    fireEvent.click(screen.getByTestId('test-feature-trigger'));
+    expect(sendEvenSpy).toBeCalledWith('test-feature-event-name');
+  });
+});

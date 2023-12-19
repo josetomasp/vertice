@@ -1,0 +1,207 @@
+<mat-card>
+  <mat-card-title>
+    <div fxLayout="row" fxLayoutAlign="space-between">
+      <h3 style="margin-top: 0">Authorization Submitted</h3>
+      <button
+        mat-flat-button
+        class="primary-button"
+        id="referral-auth-review-copyToClipboard-button"
+        (click)="copyToClipboard()"
+      >
+        COPY AUTHORIZATION TO CLIPBOARD
+      </button>
+    </div>
+  </mat-card-title>
+  <mat-card-content id="referral-auth-review-section-copy-section">
+    <div class="inset-card secondary">
+      <fa-icon
+        [icon]="faCheck"
+        id="referral-auth-review-success-check-icon"
+        size="lg"
+        style="margin-right: 20px"
+      ></fa-icon>
+      <b id="referral-auth-review-success-note"
+        >You have successfully actioned this authorization.</b
+      >
+    </div>
+    <div class="spacersmall"></div>
+    <mat-card>
+      <mat-card-title>
+        <h3 style="margin: 0" id="referral-auth-review-transportation-title">
+          Transportation Authorization
+        </h3></mat-card-title
+      >
+    </mat-card>
+    <div class="spacertiny"></div>
+    <mat-card>
+      <mat-card-content>
+        <div>
+          <div class="primary">
+            <fa-icon
+              [icon]="referralAuthorizationItem.icon"
+              size="lg"
+              style="margin-right: 10px"
+            ></fa-icon>
+            {{ referralAuthorizationItem.title }}
+          </div>
+          <div
+            class="text-hint"
+            style="margin-top: 5px"
+            id="referral-auth-review-mileage-note"
+          >
+            May consist of mileage, wait time, or other miscellaneous fees.
+          </div>
+        </div>
+        <div class="spacersmall"></div>
+        <healthe-referral-reason-for-review
+          [idIndex]="0"
+          [reasons]="referralAuthorizationItem.reasonsReviewIsNeeded"
+        ></healthe-referral-reason-for-review>
+        <div class="spacermedium"></div>
+        <ng-container [ngSwitch]="approvalType">
+          <div
+            *ngSwitchCase="AuthApprovalState.Approve"
+            class="success"
+            id="referral-auth-review-approve"
+          >
+            <fa-icon
+              [icon]="statusIcon"
+              size="lg"
+              style="margin-right: 10px"
+              id="referral-auth-review-approve-icon"
+            ></fa-icon>
+            {{ approvalTypeName }}
+          </div>
+
+          <div *ngSwitchCase="AuthApprovalState.Deny">
+            <div fxLayout="row" fxLayoutAlign="start" fxLayoutGap="35px">
+              <div class="danger" id="referral-auth-review-deny-type">
+                <fa-icon
+                  [icon]="statusIcon"
+                  size="lg"
+                  style="margin-right: 10px"
+                  id="referral-auth-review-deny-type-icon"
+                ></fa-icon>
+                {{ approvalTypeName }}
+              </div>
+              <div fxLayout="column">
+                <div
+                  class="overhead-label"
+                  id="referral-auth-review-deny-label"
+                >
+                  <healthe-customer-configs-label
+                    defaultText="Denial"
+                    elementName="denial"
+                    [forcedCapitalization]="false"
+                  ></healthe-customer-configs-label>
+                  Reason
+                </div>
+                <div id="referral-auth-review-deny-reason">
+                  {{ approvalReason }}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div *ngSwitchCase="AuthApprovalState.Pending">
+            <div fxLayout="row" fxLayoutAlign="start" fxLayoutGap="35px">
+              <div class="primary" id="referral-auth-review-pendType-type">
+                <fa-icon
+                  [icon]="statusIcon"
+                  size="lg"
+                  style="margin-right: 10px"
+                  id="referral-auth-review-pendType-type-icon"
+                ></fa-icon>
+                {{ approvalTypeName }}
+              </div>
+              <div fxLayout="column">
+                <div
+                  class="overhead-label"
+                  id="referral-auth-review-pendType-label"
+                >
+                  PEND TYPE
+                </div>
+                <div id="referral-auth-review-pendType-reason">
+                  {{ approvalReason }}
+                </div>
+              </div>
+            </div>
+          </div>
+        </ng-container>
+        <div class="spacersmall"></div>
+        <div>
+          <div
+            class="overhead-label"
+            id="referral-auth-review-approvedLocations-label"
+            style="margin-bottom: 10px"
+          >
+            APPROVED LOCATIONS
+          </div>
+          <div
+            *ngFor="let location of locations; let i = index"
+            style="margin-top:5px"
+            class="standard-text"
+          >
+            <div id="referral-auth-review-approvedLocation-{{i}}">
+              {{ location }}
+            </div>
+          </div>
+        </div>
+        <div class="spacersmall"></div>
+        <div fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="35px">
+          <div fxLayout="column" fxLayoutAlign="start start" fxLayoutGap="5px">
+            <div
+              class="overhead-label"
+              id="referral-auth-review-startDate-label"
+            >
+              START DATE
+            </div>
+            <div id="referral-auth-review-startDate" class="standard-text">
+              {{ authItem0['startDate'] | date: 'MM/dd/yyyy' }}
+            </div>
+          </div>
+
+          <div fxLayout="column" fxLayoutAlign="start start" fxLayoutGap="5px">
+            <div class="overhead-label" id="referral-auth-review-endDate-label">
+              END DATE
+            </div>
+            <div id="referral-auth-review-endDate" class="standard-text">
+              {{ authItem0['endDate'] | date: 'MM/dd/yyyy' }}
+            </div>
+          </div>
+
+          <div fxLayout="column" fxLayoutAlign="start start" fxLayoutGap="5px">
+            <div class="overhead-label" id="referral-auth-review-trips-label">
+              TOTAL # OF TRIPS
+            </div>
+            <div id="referral-auth-review-trips" class="standard-text">
+              {{ totalNumberOfTrips }}
+            </div>
+          </div>
+        </div>
+
+        <div class="spacersmall"></div>
+        <div fxLayout="column" fxLayoutAlign="start start" fxLayoutGap="5px">
+          <div class="overhead-label" id="referral-auth-review-notes-label">
+            NOTES
+          </div>
+          <div id="referral-auth-notes-additionalNotes" class="standard-text">
+            {{ formValues['additionalNotes'] }}
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+    <div class="spacersmall"></div>
+    <mat-divider [inset]="true"></mat-divider>
+    <div class="spacersmall"></div>
+    <div fxLayout="row" fxLayoutAlign="end start">
+      <button
+        mat-flat-button
+        class="primary-button"
+        id="referral-auth-review-returnToAuthQueue-button"
+      >
+        RETURN TO AUTHORIZATION QUEUE
+      </button>
+    </div>
+  </mat-card-content>
+</mat-card>

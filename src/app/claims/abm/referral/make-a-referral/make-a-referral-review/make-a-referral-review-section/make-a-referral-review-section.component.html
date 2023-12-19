@@ -1,0 +1,77 @@
+<mat-expansion-panel
+  class="section-expansion-panel"
+  #expansionPanel
+  [expanded]="true"
+  [hideToggle]="true"
+  disabled
+>
+  <mat-expansion-panel-header
+    style="padding-top: 20px !important; padding-bottom: 20px !important;"
+  >
+    <div
+      fxLayout="row"
+      fxLayoutAlign="space-between center"
+      style="width:100%;"
+    >
+      <div fxLayout="column">
+        <h3
+          class="unselectable"
+          id="review-a-referral-service-{{service}}"
+          style="margin:4px;"
+        >
+          {{ service }}
+        </h3>
+      </div>
+      <div fxLayout="row" fxLayoutAlign="start center">
+        <button
+          (click)="expansionPanel.expanded = !expansionPanel.expanded"
+          class="primary-button"
+          id="review-a-referral-{{service}}-viewDetails"
+          mat-flat-button
+          style="margin-right: 16px;"
+        >
+          VIEW DETAILS
+
+          <i
+            [ngClass]="{
+              'fa-chevron-up': expansionPanel.expanded,
+              'fa-chevron-down': !expansionPanel.expanded
+            }"
+            class="far"
+            style="font-size: 14px; padding-left: 8px"
+          ></i>
+        </button>
+      </div>
+    </div>
+  </mat-expansion-panel-header>
+  <ng-container [ngSwitch]="service">
+    <ng-container *ngSwitchCase="'Transportation'">
+      <healthe-transportation-review-wizard
+        [usingReturnedFormState]="true"
+      ></healthe-transportation-review-wizard>
+    </ng-container>
+    <ng-container *ngSwitchCase="'Language'">
+      <healthe-language-review-wizard
+        [usingReturnedFormState]="true"
+      ></healthe-language-review-wizard>
+    </ng-container>
+    <ng-container *ngSwitchCase="'Diagnostics'">
+      <healthe-diagnostics-review-wizard
+        [inReferralReviewMode]="true"
+      ></healthe-diagnostics-review-wizard>
+    </ng-container>
+    <ng-container *ngSwitchCase="'Physical Medicine'">
+      <healthe-physical-medicine-review
+        [inReferralReviewMode]="true"
+      ></healthe-physical-medicine-review>
+    </ng-container>
+    <ng-container *ngSwitchCase="'Home Health'">
+      <healthe-home-health-review
+        [inReferralReviewMode]="true"
+      ></healthe-home-health-review>
+    </ng-container>
+    <ng-container *ngSwitchCase="'DME'">
+      <healthe-dme-review [inReferralReviewMode]="true"></healthe-dme-review>
+    </ng-container>
+  </ng-container>
+</mat-expansion-panel>

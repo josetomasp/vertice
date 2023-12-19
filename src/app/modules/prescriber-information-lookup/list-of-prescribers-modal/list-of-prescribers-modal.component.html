@@ -1,0 +1,152 @@
+<div style="height: 780px">
+  <div fxLayout="row" fxLayoutAlign="space-between center" mat-dialog-title>
+    <span id="listOfPresriberModal-title">Find Prescriber</span>
+    <button
+      mat-icon-button
+      mat-dialog-close
+      id="listOfPresriberModal-header-widget"
+    >
+      <i class="fal fa-times modal-close-widget"></i>
+    </button>
+  </div>
+
+  <div
+    style="height: 560px;overflow-x: hidden; margin-bottom: 0px"
+    mat-dialog-content
+  >
+    <div fxLayout="row wrap" fxLayoutGap="35px grid">
+      <ng-container>
+        <div>
+          Multiple records found for the prescriber ID. Plesase select the
+          correct prescriber.
+        </div>
+        <div class="spacersmall"></div>
+        <table mat-table [dataSource]="tableDataSource">
+          <ng-container matColumnDef="select">
+            <th
+              mat-header-cell
+              *matHeaderCellDef
+              style="width: 55px"
+              id="listOfPresriberModal-outerTable-header-select"
+            >
+              SELECT
+            </th>
+            <td
+              mat-cell
+              *matCellDef="let element; let outerIx = index"
+              class="standard-text ellipsis-text cell-underline"
+              id="listOfPresriberModal-outerTable-cellData-select-{{outerIx}}"
+            >
+              <mat-radio-button
+                (click)="$event.stopPropagation()"
+                (change)="selectedRadio(element)"
+              ></mat-radio-button>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="prescriberID">
+            <th
+              mat-header-cell
+              *matHeaderCellDef
+              style="width: 120px;"
+              id="listOfPresriberModal-outerTable-header-prescriberID"
+            >
+              PRESCRIBER ID
+            </th>
+            <td
+              mat-cell
+              *matCellDef="let element; let outerIx = index"
+              id="listOfPresriberModal-outerTable-cellData-prescriberID-{{outerIx}}"
+            >
+              {{ element.npi }}
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="name">
+            <th
+              mat-header-cell
+              *matHeaderCellDef
+              style="width: 150px;"
+              id="listOfPresriberModal-outerTable-header-name"
+            >
+              NAME
+            </th>
+            <td
+              mat-cell
+              *matCellDef="let element; let outerIx = index"
+              id="listOfPresriberModal-outerTable-cellData-name-{{outerIx}}"
+            >
+              {{ element.name }}
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="address">
+            <th
+              mat-header-cell
+              *matHeaderCellDef
+              style="width: 150px;"
+              id="listOfPresriberModal-outerTable-header-address"
+            >
+              ADDRESS
+            </th>
+            <td
+              mat-cell
+              *matCellDef="let element; let outerIx = index"
+              id="listOfPresriberModal-outerTable-cellData-address-{{outerIx}}"
+            >
+              {{ element.primaryAddress | slice: 0:2 }}
+            </td>
+          </ng-container>
+          <tr mat-header-row *matHeaderRowDef="tableColumnList"></tr>
+          <tr mat-row *matRowDef="let row; columns: tableColumnList"></tr>
+        </table>
+
+        <div *ngIf="isResultLoading" class="margin-auto">
+          <div class="spacersmall"></div>
+          <healthe-loading-spinner
+            loadingVerbiage="Loading Prescribers Data..."
+          ></healthe-loading-spinner>
+        </div>
+        <div
+          *ngIf="
+            !isResultLoading &&
+            ((result$ | async) === null || (result$ | async)?.length === 0)
+          "
+          id="listOfPresriberModal-noData"
+          class="margin-auto"
+        >
+          <div class="spacersmall"></div>
+          <img alt="No Data Indicator" src="assets/img/NoDataIcon.svg" />
+          <p class="standard-text">No results are found.</p>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+  <mat-paginator
+    id="dataTable-paginator"
+    [pageSize]="pageSize"
+    [pageSizeOptions]="pageSizeOptions"
+    #paginator
+    showFirstLastButtons="true"
+  ></mat-paginator>
+  <mat-dialog-actions style="padding-right: 20px;">
+    <div fxFlex="row" fxLayoutAlign="end start" fxLayoutGap="35px">
+      <button
+        id="listOfPresriberModal-cancelButton"
+        class="info-button"
+        mat-dialog-close
+      >
+        CANCEL
+      </button>
+      <button
+        id="listOfPresriberModal-closeButton"
+        class="primary-button mat-flat-button mat-primary"
+        (click)="closeDialog()"
+        [disabled]="
+          !isResultLoading &&
+          ((result$ | async) === null || (result$ | async)?.length === 0)
+        "
+      >
+        ADD PRESCRIBER
+      </button>
+    </div>
+  </mat-dialog-actions>
+</div>

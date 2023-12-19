@@ -1,0 +1,28 @@
+<div class='fatal-server-error--backdrop' fxLayout='column'
+     fxLayoutAlign='center center'>
+  <div fxLayout='column' fxLayoutAlign='space-between center'
+       fxLayoutGap='10px'>
+    <fa-icon [icon]='faAlert'></fa-icon>
+    <h3>Server Error</h3>
+    <div fxLayout='column' fxLayoutAlign='center center'>
+      <div>The server has returned an error and is not able to process your
+        request.
+      </div>
+      <div>Please retry or contact Healthesystems for assistance</div>
+    </div>
+    <div>
+      <div *ngFor='let errorMessage of data.errorMessages; let index = index'
+           id='server-error-message-{{index}}'
+           style='font-style: italic'>{{errorMessage}}</div>
+    </div>
+    <div class='spacertiny'></div>
+    <button
+      mat-stroked-button
+      class='secondary-button'
+      (click)='data.retryCallback()'
+      id='server-error-retry-button'
+    >
+      RETRY
+    </button>
+  </div>
+</div>

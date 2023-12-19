@@ -1,0 +1,99 @@
+@import 'variables';
+
+.matCardTitle {
+  margin: 15px 24px;
+}
+
+.lomn-step {
+  &_title {
+    font-size: 16px;
+  }
+  &--container {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+  }
+  &--check-box-form {
+    &--container {
+      display: flex;
+      flex-direction: column;
+      min-width: 33vw;
+      & > .lomn-step--check-box-form--input-wrapper {
+        margin-bottom: 16px;
+      }
+    }
+    &--input-wrapper {
+      padding: 16px;
+      background-color: $gray-100;
+    }
+  }
+}
+.lomn-wizard {
+  &--action-bar {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    &_actions {
+      display: flex;
+      align-content: space-between;
+      align-items: center;
+      justify-content: space-evenly;
+      & > button {
+        margin-right: 24px;
+      }
+    }
+  }
+}
+
+mat-step-header.mat-step-header.mat-horizontal-stepper-header.stepperStateClass_visitedInvalid {
+  & .mat-step-icon {
+    border-color: $danger;
+
+    & .mat-step-icon-content {
+      color: $danger;
+    }
+  }
+  & .mat-step-label {
+    color: $danger;
+  }
+}
+
+mat-step-header.mat-step-header.mat-horizontal-stepper-header.stepperStateClass_visitedNever {
+  & .mat-step-icon {
+    border-color: $dark-grey;
+
+    & .mat-step-icon-content {
+      color: $dark-grey;
+    }
+  }
+  & .mat-step-label {
+    color: $dark-grey;
+  }
+}
+
+mat-step-header.mat-step-header.mat-horizontal-stepper-header.stepperStateClass_visitedValid {
+  & .mat-step-icon {
+    border-color: $success;
+
+    & .mat-step-icon-content {
+      color: $success;
+    }
+  }
+  & .mat-step-label {
+    color: $success;
+  }
+}
+
+mat-step-header.mat-step-header.mat-horizontal-stepper-header.stepperStateClass_activeStep {
+  & .mat-step-icon {
+    border-color: $primary;
+
+    & .mat-step-icon-content {
+      color: $primary;
+    }
+  }
+  & .mat-step-label {
+    color: $primary;
+  }
+}

@@ -1,0 +1,101 @@
+<mat-expansion-panel
+  class="risk-trending--details"
+  [hideToggle]="isLoading$ | async"
+>
+  <mat-expansion-panel-header
+    fxLayout="row"
+    collapsedHeight="30px"
+    expandedHeight="30px"
+  >
+    <div
+      id="riskTrending--body-claimantDetails--topSection"
+      fxFlex="90%"
+      fxLayout="row wrap"
+      fxLayoutAlign="space-between"
+      *ngIf="!(isLoading$ | async)"
+    >
+      <section
+        fxLayout="column"
+        fxLayoutGap="6px"
+        fxLayoutAlign="space-between"
+        *ngFor="let info of (claimantInformationTopFields$ | async)"
+        [id]="
+          'riskTrending--body-claimantDetails--topSection--section-' +
+          info.label
+        "
+      >
+        <label
+          class="overhead-label"
+          [id]="
+            'riskTrending--body-claimantDetails--topSection--label-' +
+            info.label
+          "
+          >{{ info.label }}</label
+        >
+        <span
+          *ngIf="info.key !== 'riskLevel'"
+          [id]="
+            'riskTrending--body-claimantDetails--topSection--value-' +
+            info.label
+          "
+          >{{ info.value }}</span
+        >
+        <span
+          *ngIf="info.key == 'riskLevel'"
+          [id]="
+            'riskTrending--body-claimantDetails--topSection--value-' +
+            info.label
+          "
+          ><i
+            [id]="
+              'riskTrending--body-claimantDetails--topSection--value-' +
+              info.label +
+              '--arrow'
+            "
+            style="padding-right: 6px;"
+            class="far"
+            [ngClass]="{
+              'fa-arrow-up danger': info.value.riskIncreased,
+              'fa-arrow-down success': !info.value.riskIncreased
+            }"
+          ></i
+          >{{ info.value.trendScoreDuration }} days</span
+        >
+      </section>
+    </div>
+  </mat-expansion-panel-header>
+  <div
+    id="riskTrending--body-claimantDetails--bottomSection"
+    fxFlex="90%"
+    fxLayout="row wrap"
+    fxLayoutAlign="space-between"
+  >
+    <section
+      fxFlex="calc(33% - 30px)"
+      fxLayout="column"
+      fxLayoutGap="6px"
+      style="margin: 30px 0 30px 0"
+      *ngFor="let info of (claimantInformationBottomFields$ | async)"
+      [id]="
+        'riskTrending--body-claimantDetails--bottomSection--section-' +
+        info.label
+      "
+    >
+      <label
+        class="overhead-label"
+        [id]="
+          'riskTrending--body-claimantDetails--bottomSection--label-' +
+          info.label
+        "
+        >{{ info.label }}</label
+      >
+      <span
+        [id]="
+          'riskTrending--body-claimantDetails--bottomSection--value-' +
+          info.label
+        "
+        >{{ info.value }}</span
+      >
+    </section>
+  </div>
+</mat-expansion-panel>

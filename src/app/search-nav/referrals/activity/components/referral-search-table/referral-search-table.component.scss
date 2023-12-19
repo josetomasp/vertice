@@ -1,0 +1,73 @@
+@import 'variables';
+@import 'cardList';
+
+@mixin card-list-column-cell($width) {
+  width: $width;
+  white-space: pre-line;
+  &:not(:last-child) {
+    padding-right: 25px;
+  }
+}
+
+.nav-search-table {
+  padding-top: 1.5rem;
+
+  &__loading-wrapper {
+    padding-left: 10px;
+  }
+}
+
+// For Table
+.card-list-wrapper {
+  max-height: 500px;
+  padding: 0;
+  left: 0;
+  width: 100%;
+  overflow-x: auto;
+
+  &::-webkit-scrollbar-thumb {
+    box-shadow: inset 0 0 10px 10px rgba(52, 58, 64, 0.2);
+    border: 5px solid transparent;
+    border-radius: 15px;
+  }
+
+  &::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 10px 10px transparent;
+    border: 5px solid transparent;
+    border-radius: 0 2px 2px 0;
+    background-color: $gray-50;
+  }
+
+  & .card-list-container {
+    background-color: transparent;
+    table-layout: fixed;
+    min-width: 1500px;
+    & .card-list-row {
+      // Someone put !important on .mat-row !!
+      height: 75px !important;
+      background-color: transparent;
+
+      & .card-list-cell {
+        background-color: white;
+        &:first-child {
+          border-radius: 4px 0 0 4px;
+        }
+
+        &:last-child {
+          border-radius: 0 4px 4px 0;
+        }
+      }
+    }
+
+    th.mat-header-cell,
+    td.mat-cell {
+      &:last-child {
+        text-overflow: fade;
+      }
+
+      &:first-of-type {
+        padding-left: 20px;
+      }
+    }
+  }
+}

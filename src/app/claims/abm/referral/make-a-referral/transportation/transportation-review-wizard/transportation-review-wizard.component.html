@@ -1,0 +1,109 @@
+<healthe-confirmation-banner
+  *ngIf="!stepperCompleted && !usingReturnedFormState"
+  [id]="'transportation-transportation-review-wizard-fail'"
+  [alertType]="alertType.DANGER"
+  [title]="
+    'You have incompleted tabs in this section. Review incomplete tabs for this referral, complete another section, or make changes.'
+  "
+  [isVisible]="true"
+></healthe-confirmation-banner>
+<healthe-confirmation-banner
+  *ngIf="stepperCompleted && !usingReturnedFormState"
+  [id]="'transportation-transportation-review-wizard-success'"
+  [alertType]="alertType.SUCCESS"
+  [title]="
+    'You have completed this section. Review and submit the referral, complete another section, or make changes.'
+  "
+  [isVisible]="true"
+  [showCloseButton]="false"
+></healthe-confirmation-banner>
+
+<div
+  *ngFor="
+    let selectedServiceDetailTypes of (selectedServiceDetailTypes$ | async)
+  "
+>
+  <div class="spacersmall"></div>
+  <ng-container [ngSwitch]="selectedServiceDetailTypes">
+    <p style="margin: 0;" *ngSwitchCase="sedanStepName">
+      <healthe-sedan-review
+        [usingReturnedFormState]="usingReturnedFormState"
+      ></healthe-sedan-review>
+    </p>
+    <p style="margin: 0;" *ngSwitchCase="wheelchairStepName">
+      <healthe-wheelchair-review
+        [usingReturnedFormState]="usingReturnedFormState"
+      ></healthe-wheelchair-review>
+    </p>
+    <p style="margin: 0;" *ngSwitchCase="flightStepName">
+      <healthe-flight-review
+        [usingReturnedFormState]="usingReturnedFormState"
+      ></healthe-flight-review>
+    </p>
+    <p style="margin: 0;" *ngSwitchCase="lodgingStepName">
+      <healthe-lodging-review
+        [usingReturnedFormState]="usingReturnedFormState"
+      ></healthe-lodging-review>
+    </p>
+    <p style="margin: 0;" *ngSwitchCase="otherStepName">
+      <healthe-other-review
+        [usingReturnedFormState]="usingReturnedFormState"
+      ></healthe-other-review>
+    </p>
+  </ng-container>
+  <div class="spacersmall"></div>
+  <mat-divider [inset]="true"></mat-divider>
+</div>
+<div class="spacersmall"></div>
+<p style="margin: 0;">
+  <healthe-review-section-header
+    [offsetForNonSelectedServiceDetailTypes]="1"
+    [sectionName]="sectionName"
+    [sectionTitle]="'Documents'"
+    [step]="documentsStepName"
+    columnCount="7"
+  ></healthe-review-section-header>
+</p>
+<div
+  *ngFor="
+    let document of (transportationDocuments$ | async)['documents'];
+    index as index
+  "
+  id="transportation-review-documents-{{index}}-link"
+>
+  {{ document.fileName }}
+</div>
+<div class="spacersmall"></div>
+<mat-divider [inset]="true"></mat-divider>
+<div class="spacersmall"></div>
+<p style="margin: 0;">
+  <healthe-transportation-vendor-review
+    [usingReturnedFormState]="usingReturnedFormState"
+  ></healthe-transportation-vendor-review>
+</p>
+<div class="spacermedium"></div>
+<div *ngIf="usingReturnedFormState === false">
+  <span class="overhead-label" id="transportation-review-wizard-notes-label"
+    >NOTES (optional)</span
+  >
+  <mat-form-field>
+    <textarea
+      matInput
+      placeholder="Enter notes"
+      id="transportation-review-wizard-notes-input"
+      [formControl]="notesForm"
+    >{{referralLevelNotes$ | async}}</textarea>
+  </mat-form-field>
+</div>
+<div *ngIf="usingReturnedFormState === true">
+  <p
+    style="margin: 0;"
+    id="transportation-review-note-label"
+    class="overhead-label"
+  >
+    NOTES
+  </p>
+  <div id="transportation-review-note" class="standard-text">
+    {{ referralLevelNotes$ | async }}
+  </div>
+</div>

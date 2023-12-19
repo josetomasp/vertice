@@ -1,0 +1,112 @@
+<div
+  fxLayout="row wrap"
+  fxLayoutAlign="space-between center"
+  style="margin-bottom: 10px"
+>
+  <div fxLayout="column">
+    <span
+      class="overhead-label"
+      id="{{idPrefix}}-wizard-date-range-approvedLocations-label"
+      >APPROVED LOCATIONS<span class="required-text">*</span></span
+    >
+    <div
+      class="mat-error"
+      id="{{idPrefix}}-wizard-date-range-approvedLocation-error"
+      [ngStyle]="{
+        visibility:
+          (allLocationsFormGroup.touched ||
+            parentFormGroup.get('noLocationRestrictions').touched ||
+            step.interacted) &&
+          parentFormGroup.hasError('invalidLocationSelection')
+            ? 'visible'
+            : 'hidden'
+      }"
+    >
+      <ng-container *ngIf="!withTwoLocations; else: twoLocations">
+        Select at least one location or choose 'No Location Restrictions'
+      </ng-container>
+      <ng-template #twoLocations
+        >Select at least two locations or choose 'No Location
+        Restrictions'</ng-template
+      >
+    </div>
+  </div>
+  <button
+    mat-stroked-button
+    class="secondary-button"
+    id="{{idPrefix}}-wizard-date-range-add-location-button"
+    (click)="showAddLocationModal()"
+  >
+    <fa-icon [icon]="faPlus" class="fa-lg inline-left-icon"></fa-icon>
+    ADD LOCATION
+  </button>
+</div>
+<div
+  class="healthe-approved-locations-wrapper"
+  fxLayout="column"
+  fxLayoutGap="10px"
+>
+  <div fxLayout="row wrap" fxLayoutGap="10px">
+    <div fxFlex="1 1 calc(50% - 10px)">
+      <mat-expansion-panel
+        class="healthe-expansion--grey-header small-header"
+        [hideToggle]="true"
+      >
+        <mat-expansion-panel-header
+          collapsedHeight="25px"
+          expandedHeight="25px"
+          #panelHeaderSelectAll
+          (click)="$event.stopPropagation(); panelHeaderSelectAll._toggle()"
+        >
+          <mat-checkbox
+            id="{{idPrefix}}-wizard-date-range-selectAll-checkbox"
+            #selectAllCheckbox
+            (change)="toggleAllCheckboxes(selectAllCheckbox.checked)"
+            ><span id="{{idPrefix}}-wizard-date-range-selectAll-label"
+              >Select All
+            </span>
+          </mat-checkbox>
+        </mat-expansion-panel-header>
+      </mat-expansion-panel>
+    </div>
+
+    <div fxFlex="1 1 calc(50% - 10px)" [formGroup]="parentFormGroup">
+      <mat-expansion-panel
+        class="healthe-expansion--grey-header small-header"
+        [hideToggle]="true"
+      >
+        <mat-expansion-panel-header
+          collapsedHeight="25px"
+          expandedHeight="25px"
+          #panelHeaderNoRestrictions
+          (click)="
+            $event.stopPropagation(); panelHeaderNoRestrictions._toggle()
+          "
+        >
+          <mat-checkbox
+            id="{{idPrefix}}-wizard-date-range-noRestrictions-checkbox"
+            #noLocationRestrictionsCheckbox
+            formControlName="noLocationRestrictions"
+            (change)="toggleSectionDisable($event.checked)"
+            ><span id="{{idPrefix}}-wizard-date-range-noRestrictions-label"
+              >No Location Restrictions
+            </span>
+          </mat-checkbox>
+        </mat-expansion-panel-header>
+      </mat-expansion-panel>
+    </div>
+  </div>
+  <div>
+    <div fxLayout="row wrap" fxLayoutGap="10px grid">
+      <healthe-checkbox-expansion
+        fxFlex="1 1 calc(50% - 10px)"
+        *ngFor="let type of Object.keys(allLocationsFormGroup.controls)"
+        [headerText]="type"
+        [formGroup]="allLocationsFormGroup.controls[type]"
+        [serviceActionType]="serviceActionType"
+        [locations]="this.approvedLocations$ | async"
+      >
+      </healthe-checkbox-expansion>
+    </div>
+  </div>
+</div>

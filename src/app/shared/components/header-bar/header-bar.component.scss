@@ -1,0 +1,13 @@
+@import 'variables';
+
+.healthe-header-bar {
+  &-title {
+    & a {
+      color: $secondary;
+    }
+
+    text-decoration: none;
+    font-weight: normal;
+    font-size: 28px;
+  }
+}

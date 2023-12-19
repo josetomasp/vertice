@@ -1,0 +1,69 @@
+import { Component } from '@angular/core';
+import { fireEvent, screen, render } from '@testing-library/angular';
+import { TrackIgnoredFeatureDirective } from './track-ignored-feature.directive';
+import {
+  ITrackIgnoredFeatureService,
+  TrackIgnoredFeatureService
+} from '@modules/rum/track-ignored-feature.service';
+
+const MOCK_TRACK_IGNORED_FEATURE_SERVICE: ITrackIgnoredFeatureService = {
+  markFeatureInteracted(featureName: string): void {
+    console.log(featureName + ' interacted');
+    if (this.features) {
+      this.features[featureName] = true;
+    }
+  },
+  sendTrackEvent(eventName: string): void {
+    throw new Error(
+      'not used by the TrackIgnoredFeatureDirective :: Checkout the TrackIgnoredFeatureTriggerDirective'
+    );
+  },
+  registerFeature(featureName: string) {
+    console.log(featureName + ' Registered');
+  }
+};
+@Component({
+  selector: 'healthe-directive-test',
+  template:
+    '<div><button data-testid="test-feature" trackIgnoredFeature="test-feature">Click ME!</button></div>'
+})
+class TrackIgnoredFeatureDirectiveTestComponent {}
+describe('TrackIgnoredFeatureDirective', () => {
+  async function setup(features: object = {}) {
+    return await render(TrackIgnoredFeatureDirectiveTestComponent, {
+      providers: [
+        {
+          provide: TrackIgnoredFeatureService,
+          useValue: features
+            ? { ...MOCK_TRACK_IGNORED_FEATURE_SERVICE, features }
+            : MOCK_TRACK_IGNORED_FEATURE_SERVICE
+        }
+      ],
+      declarations: [
+        TrackIgnoredFeatureDirectiveTestComponent,
+        TrackIgnoredFeatureDirective
+      ]
+    });
+  }
+
+  test('init', async () => {
+    await setup();
+  });
+  test('registration', async () => {
+    const registerSpy = jest.spyOn(
+      MOCK_TRACK_IGNORED_FEATURE_SERVICE,
+      'registerFeature'
+    );
+    await setup();
+    expect(registerSpy).toBeCalledWith('test-feature');
+  });
+  test('interaction', async () => {
+    const registerSpy = jest.spyOn(
+      MOCK_TRACK_IGNORED_FEATURE_SERVICE,
+      'markFeatureInteracted'
+    );
+    await setup({ 'test-feature': false });
+    fireEvent.click(screen.getByTestId('test-feature'));
+    expect(registerSpy).toBeCalledWith('test-feature');
+  });
+});

@@ -1,0 +1,40 @@
+<div [formGroup]="stepForm">
+  <div class="spacersmall"></div>
+  <healthe-specific-date-form-array
+    [config]="specificDateConfig"
+    [formArray]="stepForm.get('schedulingForm')"
+    [selectedService]="selectedService"
+  ></healthe-specific-date-form-array>
+  <div class="spacersmall"></div>
+  <div>
+    <span
+      class="overhead-label"
+      id="{{selectedService}}-wizard-{{stepName}}-rush-label"
+      >RUSH SERVICES (NEEDED WITHIN 24 HOURS)?</span
+    >
+    <mat-radio-group
+      formControlName="rush"
+      fxLayout="row"
+      fxLayoutGap="30px"
+      class="{{stepName}}-radio-group"
+    >
+      <mat-radio-button
+        [value]="false"
+        id="{{selectedService}}-wizard-{{stepName}}-rush-button-no"
+        >No
+      </mat-radio-button>
+      <mat-radio-button
+        [value]="true"
+        id="{{selectedService}}-wizard-{{stepName}}-rush-button-yes"
+        >Yes
+      </mat-radio-button>
+    </mat-radio-group>
+  </div>
+
+  <div class="spacersmall"></div>
+
+  <!-- Prescriber Information -->
+  <healthe-ordering-prescriber-information
+    [parentFormGroup]="wizard.sharedForm"
+  ></healthe-ordering-prescriber-information>
+</div>

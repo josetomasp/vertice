@@ -1,0 +1,69 @@
+<div
+  mat-dialog-title
+  fxLayoutAlign="space-between"
+  class="create-new-auth-dialog-title"
+>
+  <span class="modal-header" id="createNewAuthModal-headerText"
+    >Create New Auth - Select Member ID</span
+  >
+  <button
+    mat-icon-button
+    mat-dialog-close
+    class="closeX-button"
+    id="createNewAuthModal-closeX"
+  >
+    <i class="fal fa-times modal-close-widget"></i>
+  </button>
+</div>
+<div mat-dialog-content class="create-new-auth-dialog-content">
+  <span id="createNewAuthModal-userPromptText"
+    >What Member ID would you like to use to create this auth?</span
+  >
+  <div class="spacersmall"></div>
+  <div class="overhead-label" id="createNewAuthModal-memberIdLabel">
+    MEMBER ID
+  </div>
+  <input
+    #memberIdInput
+    cdkFocusInitial
+    [(ngModel)]="memberId"
+    matInput
+    type="text"
+    placeholder="Enter Member ID"
+    class="mat-input-element member-id-input"
+    id="createNewAuthModal-memberIdInput"
+  />
+  <div
+    *ngIf="errorText"
+    class="mat-error"
+    style="margin-left: 15px;"
+    id="createNewAuthModal-memberIdInput-error"
+  >
+    {{ errorText }}
+  </div>
+</div>
+<div
+  mat-dialog-actions
+  fxLayout="row"
+  fxLayoutAlign="end center"
+  fxLayoutGap="20px"
+  class="create-new-auth-actions"
+>
+  <button
+    class="info-button"
+    mat-stroked-button
+    mat-dialog-close
+    id="createNewAuthModal-cancelButton"
+  >
+    CANCEL
+  </button>
+  <button
+    class="success-button"
+    mat-flat-button
+    [disabled]="!memberIdInput.value"
+    (click)="newAuthNextButton()"
+    id="createNewAuthModal-nextButton"
+  >
+    NEXT
+  </button>
+</div>

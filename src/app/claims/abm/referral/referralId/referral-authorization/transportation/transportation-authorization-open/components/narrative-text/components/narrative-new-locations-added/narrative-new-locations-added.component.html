@@ -1,0 +1,18 @@
+<ng-container *ngIf="authNarrativeMode !== 'PostSubmit'">
+  <div *ngIf="narrativeTextItem.hasNewOpenAuth">
+    Would you like to approve these new location(s)?
+  </div>
+  <div *ngIf="!narrativeTextItem.hasNewOpenAuth">
+    You are being asked to authorize the addition of the following location(s).
+    Would you like to approve these new location(s)?
+  </div>
+  <p><b>New Location(s)</b></p>
+  <div
+    class="narrativeCheckBox"
+    *ngFor="let location of locations; let i = index"
+  >
+    <mat-checkbox [formControl]="formArray[i]">
+      <b class="locationText">{{ location }}</b></mat-checkbox
+    >
+  </div>
+</ng-container>

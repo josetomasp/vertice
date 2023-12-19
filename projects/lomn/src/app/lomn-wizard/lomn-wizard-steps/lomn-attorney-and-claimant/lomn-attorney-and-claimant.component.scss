@@ -1,0 +1,17 @@
+.lomn-step_title {
+  display: inline-block;
+}
+
+.lomn-step_title_help {
+  font-style: italic;
+  margin-left: 10px;
+  font-size: small;
+}
+
+.input-style, .input-style > mat-form-field {
+  width: 335px;
+}
+
+.input-style-small, .input-style-small > mat-form-field, .input-style-small mat-select, .input-style-small .mat-form-field-infix {
+  width: 150px;
+}

@@ -1,0 +1,98 @@
+<healthe-review-section-header
+  [sectionTitle]="sectionTitle"
+  columnCount="7"
+  [step]="stepName"
+  [sectionName]="sectionName"
+></healthe-review-section-header>
+
+<div fxLayout="row wrap" fxLayoutGap="30px grid">
+  <div>
+    <div class="overhead-label" id="{{stepName}}-review-destination-label">
+      {{ displayData['destination'].label }}
+    </div>
+    <div id="{{stepName}}-review-destination-value">
+      {{ displayData['destination'].value }}
+    </div>
+  </div>
+  <div>
+    <div class="overhead-label" id="{{stepName}}-review-checkInDate-label">
+      {{ displayData['checkInDate'].label }}
+    </div>
+    <div id="{{stepName}}-review-checkInDate-value">
+      {{ displayData['checkInDate'].value }}
+    </div>
+  </div>
+  <div>
+    <div class="overhead-label" id="{{stepName}}-review-checkOutDate-label">
+      {{ displayData['checkOutDate'].label }}
+    </div>
+    <div id="{{stepName}}-review-checkOutDate-value">
+      {{ displayData['checkOutDate'].value }}
+    </div>
+  </div>
+  <div>
+    <div class="overhead-label" id="{{stepName}}-review-numberOfGuests-label">
+      {{ displayData['numberOfGuests'].label }}
+    </div>
+    <div id="{{stepName}}-review-numberOfGuests-value">
+      {{ displayData['numberOfGuests'].value }}
+    </div>
+  </div>
+  <div>
+    <div class="overhead-label" id="{{stepName}}-review-numberOfRooms-label">
+      {{ displayData['numberOfRooms'].label }}
+    </div>
+    <div id="{{stepName}}-review-numberOfRooms-value">
+      {{ displayData['numberOfRooms'].value }}
+    </div>
+  </div>
+  <div>
+    <div class="overhead-label" id="{{stepName}}-review-priceOfRoom-label">
+      {{ displayData['priceOfRoom'].label }}
+    </div>
+    <div id="{{stepName}}-review-priceOfRoom-value">
+      {{ displayData['priceOfRoom'].value }}
+    </div>
+  </div>
+  <div>
+    <div class="overhead-label" id="{{stepName}}-review-numberOfNights-label">
+      {{ displayData['numberOfNights'].label }}
+    </div>
+    <div id="{{stepName}}-review-numberOfNights-value">
+      {{ displayData['numberOfNights'].value }}
+    </div>
+  </div>
+  <div *ngIf="displayData['appointmentType']">
+    <div class="overhead-label" id="{{stepName}}-review-appointmentType-label">
+      {{ displayData['appointmentType'].label }}
+    </div>
+    <div id="{{stepName}}-review-appointmentType-value">
+      {{ displayData['appointmentType'].value }}
+    </div>
+  </div>
+  <div>
+    <div class="overhead-label" id="{{stepName}}-review-appointmentDate-label">
+      {{ displayData['appointmentDate'].label }}
+    </div>
+    <div id="{{stepName}}-review-appointmentDate-value">
+      {{ displayData['appointmentDate'].value }}
+    </div>
+  </div>
+  <div>
+    <div class="overhead-label" id="{{stepName}}-review-appointmentTime-label">
+      {{ displayData['appointmentTime'].label }}
+    </div>
+    <div id="{{stepName}}-review-appointmentTime-value">
+      {{ displayData['appointmentTime'].value }}
+    </div>
+  </div>
+</div>
+<div class="spacersmall"></div>
+<div>
+  <div class="overhead-label" id="{{stepName}}-review-notes-label">
+    {{ displayData['notes'].label }}
+  </div>
+  <div id="{{stepName}}-review-notes-value">
+    {{ displayData['notes'].value }}
+  </div>
+</div>

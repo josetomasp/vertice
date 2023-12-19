@@ -1,0 +1,78 @@
+<div class="spacersmall"></div>
+<mat-card>
+  <mat-card-title fxLayout="row" fxLayoutAlign="space-between"
+    ><h3>Authorization Submitted</h3>
+    <button
+      mat-flat-button
+      class="primary-button"
+      id="referral-auth-review-copyToClipboard-button"
+      (click)="copyToClipboard()"
+    >
+      COPY AUTHORIZATION TO CLIPBOARD
+    </button></mat-card-title
+  >
+
+  <mat-card-content id="fusion-referral-auth-post-submit">
+    <mat-card class="mat-elevation-z0 submitted-banner">
+      <fa-icon [icon]="faCheck"></fa-icon>
+      You have successfully submitted this authorization.
+    </mat-card>
+    <div class="spacersmall"></div>
+
+    <mat-card>
+      <mat-card-title style="align-items: center;"
+        >{{ archetypeTitle$ | async }} Authorization
+        <div fxFlex="1 1 auto" class="spacer"></div>
+        <button
+          mat-stroked-button
+          class="secondary-button"
+          (click)="openDocumentsModal()"
+        >
+          VIEW DOCUMENTS
+        </button>
+      </mat-card-title>
+    </mat-card>
+    <div class="spacersmall"></div>
+    <ng-container [ngSwitch]="referralArchetype$ | async">
+      <healthe-language-post-submit
+        [fusionReferralAuthorizations$]="fusionSubmittedReferralAuthorizations$"
+        *ngSwitchCase="referralAuthorizationArchetype.Language"
+      ></healthe-language-post-submit>
+      <healthe-diagnostics-post-submit
+        [fusionReferralAuthorizations$]="fusionSubmittedReferralAuthorizations$"
+        *ngSwitchCase="referralAuthorizationArchetype.Diagnostics"
+      ></healthe-diagnostics-post-submit>
+      <healthe-physical-medicine-post-submit
+        *ngSwitchCase="referralAuthorizationArchetype.PhysicalMedicine"
+        [fusionReferralAuthorizations$]="fusionSubmittedReferralAuthorizations$"
+      ></healthe-physical-medicine-post-submit>
+      <healthe-home-health-post-submit
+        *ngSwitchCase="referralAuthorizationArchetype.HomeHealth"
+        [fusionReferralAuthorizations$]="fusionSubmittedReferralAuthorizations$"
+      ></healthe-home-health-post-submit>
+      <healthe-dme-post-submit
+        *ngSwitchCase="referralAuthorizationArchetype.Dme"
+        [fusionReferralAuthorizations$]="fusionSubmittedReferralAuthorizations$"
+      ></healthe-dme-post-submit>
+      <div *ngSwitchDefault>
+        {{ referralArchetype$ | async }} referral not compatible
+      </div>
+    </ng-container>
+
+    <span class="overhead-label">NOTES</span>
+    <healthe-auth-notes-list [notes$]="fusionAuthorizationNotes$">
+    </healthe-auth-notes-list>
+    <div class="spacersmall"></div>
+    <mat-divider></mat-divider>
+    <div class="spacersmall"></div>
+    <div fxLayout="row" fxLayoutAlign="end">
+      <button
+        mat-flat-button
+        class="primary-button"
+        (click)="goToAuthorizationQueue()"
+      >
+        RETURN TO AUTHORIZATION QUEUE
+      </button>
+    </div>
+  </mat-card-content>
+</mat-card>

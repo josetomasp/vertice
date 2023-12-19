@@ -1,0 +1,55 @@
+<div
+  class="authorization--notes--vendor--notes"
+  *ngFor="let note of (notes$ | async); let index = index"
+>
+  <div
+    fxLayout="column"
+    [fxLayoutAlign]="
+      'start ' +
+      (note.noteOrigination === NoteOriginator.VERTICE ? 'end' : 'start')
+    "
+  >
+    <div class="overhead-label" fxLayout="row" fxLayoutGap="6px">
+      <span
+        [id]="
+          'authorization--notes--' +
+          note.noteOrigination +
+          '-createdBy-' +
+          index
+        "
+        >{{
+          note.noteOrigination === NoteOriginator.VERTICE
+            ? note.createdBy
+            : 'VENDOR'
+        }}</span
+      >
+      <span
+        [id]="
+          'authorization--notes--' +
+          note.noteOrigination +
+          '-dateCreated-' +
+          index
+        "
+        >{{ getDateFromDateTime(note) }}</span
+      >
+
+      <span
+        [id]="
+          'authorization--notes--' +
+          note.noteOrigination +
+          '-timeCreated-' +
+          index
+        "
+        >{{ getTimeFromDateTime(note) }}</span
+      >
+    </div>
+    <div
+      class="standard-text"
+      style="max-width: 50%"
+      [id]="'authorization--notes--' + note.noteOrigination + '-note-' + index"
+    >
+      {{ note.description }}
+    </div>
+  </div>
+  <div class="spacertiny"></div>
+</div>

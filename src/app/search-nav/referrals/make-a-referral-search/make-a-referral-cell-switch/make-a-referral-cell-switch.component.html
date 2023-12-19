@@ -1,0 +1,35 @@
+<ng-container [ngSwitch]="name">
+  <button
+    *ngSwitchCase="'makeAReferral'"
+    (click)="goToMakeAReferral(element)"
+    id="makeReferral-button--{{index}}"
+    class="primary-button"
+    mat-flat-button
+  >
+    MAKE A REFERRAL
+  </button>
+  <span *ngSwitchCase="'claimNumber'" class="standard-text ellipsis-text"
+    ><a
+      id="claimNumber-button--{{index}}"
+      (click)="goToClaimView(element)"
+      mat-button
+      class="standard-text ellipsis-text"
+      [matTooltip]="element[name]"
+      >{{ element[name] }}</a
+    >
+  </span>
+  <p
+    *ngSwitchCase="'ssn'"
+    class="standard-text ellipsis-text"
+    [matTooltip]="element[name] | ssnmask: 4"
+  >
+    {{ element[name] | ssnmask: 4 }}
+  </p>
+  <p
+    *ngSwitchDefault
+    class="standard-text ellipsis-text"
+    [matTooltip]="element[name]"
+  >
+    {{ element[name] }}
+  </p>
+</ng-container>

@@ -1,0 +1,17 @@
+@import 'variables';
+
+.locationText {
+  color: $secondary;
+}
+
+.mat-form-field {
+  height: initial;
+
+  .mat-form-field-wrapper {
+    height: initial;
+
+    .mat-form-field-flex {
+      height: initial;
+    }
+  }
+}

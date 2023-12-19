@@ -1,0 +1,39 @@
+<!-- Header -->
+<div fxLayout="row" fxLayoutAlign="space-between center">
+  <h1 id="activity-referrals-title" class="activity-referrals__header">
+    Referral Activity
+  </h1>
+  <healthe-user-menu
+    id="userMenu"
+    style="padding-right: 1.5rem;"
+  ></healthe-user-menu>
+</div>
+<div class="spacertiny"></div>
+
+<div class="activity-referrals__search-box">
+  <healthe-error-banner
+    [errorMessages]="errorsMessages$ | async"
+    bannerTitle="Search Results Errors"
+  ></healthe-error-banner>
+  <healthe-referral-search-box
+    [username]="username"
+    [defaultStatus]="defaultStatus"
+    [defaultServiceType]="defaultServiceType"
+    [resultsLoadedFirstTime]="resultsLoadedFirstTime"
+    [serviceTypes]="serviceTypes$ | async"
+    [users]="null"
+    [customers]="customers$ | async"
+    [statuses]="statuses$ | async"
+    [form]="searchformGroup"
+    (searchForm)="search($event)"
+    [helperText]="searchHelperText"
+    title="Referral Activity Search"
+    [hideAdjustersDropdown]="true"
+  ></healthe-referral-search-box>
+
+  <healthe-referral-search-table
+    [results]="results$ | async"
+    [isLoading$]="isLoadingResults$"
+    [searchTableConfig]="searchTableConfig"
+  ></healthe-referral-search-table>
+</div>

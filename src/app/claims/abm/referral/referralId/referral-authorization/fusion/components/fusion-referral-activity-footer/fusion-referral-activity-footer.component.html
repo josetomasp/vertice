@@ -1,0 +1,198 @@
+<div [formGroup]="formGroup" class="sticky-footer">
+  <div fxLayout="row wrap-reverse" fxLayoutAlign="space-between center">
+    <div fxLayout="column" fxLayoutAlign="start start">
+      <button
+        mat-stroked-button
+        id="auth-information-actions-authQueue-button"
+        class="info-button"
+        (click)="goToAuthorizationQueue()"
+      >
+        GO TO AUTHORIZATION QUEUE
+      </button>
+    </div>
+    <div fxLayout="column" fxLayoutAlign="start end">
+      <div fxLayout="row" fxLayoutAlign="end start">
+        <div style="margin-right: 140px">
+          <div
+            id="auth-information-actions-all-option-label"
+            class="overhead-label"
+          >
+            ACTION ALL (Optional)
+          </div>
+
+          <mat-radio-group
+         formLabel="ACTION"
+         healtheFormValidationExtractor
+         formControlName="action"
+          >
+            <mat-radio-button
+              class="radio-spacing"
+              id="auth-information-actions-all-option-approve"
+              style="margin-bottom: 34px"
+              [value]="AUTH_INFO_ACTION_TYPE_APPROVE_ALL"
+              >Approve All</mat-radio-button
+            >
+            <mat-radio-button
+              class="radio-spacing"
+              id="auth-information-actions-all-option-deny"
+              [value]="AUTH_INFO_ACTION_TYPE_DENY_ALL"
+            >
+              <healthe-customer-configs-label
+                defaultText="Deny"
+                elementName="deny"
+                [forcedCapitalization]="false"
+              ></healthe-customer-configs-label>
+              All</mat-radio-button
+            >
+
+            <mat-radio-button
+              class="radio-spacing"
+              id="auth-information-actions-all-option-pend"
+              [value]="AUTH_INFO_ACTION_TYPE_PEND_ALL"
+              >Pend All</mat-radio-button
+            >
+          </mat-radio-group>
+        </div>
+
+        <div style="margin-right: 50px; min-height: 60px">
+          <ng-container
+            *ngIf="
+              formGroup.controls['action'].value ===
+                AUTH_INFO_ACTION_TYPE_APPROVE_ALL && showApprovedReasons
+            "
+          >
+            <div
+              id="auth-information-approvalReason-all-select-label"
+              class="overhead-label"
+            >
+              APPROVAL REASON
+            </div>
+            <mat-select
+              id="auth-information-approvalReason-all-select"
+              style="min-width: 200px;"
+              formLabel="APPROVAL REASON"
+              healtheFormValidationExtractor
+              formControlName="approvalReason"
+              placeholder="Select Approval Reason"
+              [compareWith]="compareWithReason"
+            >
+              <mat-option
+                *ngFor="let reason of (approvalReasons$ | async); let i = index"
+                [value]="reason"
+                id="auth-information-approvalReason-all-select-option-{{i}}"
+                >{{ reason.explanationDescription }}</mat-option
+              >
+            </mat-select>
+          </ng-container>
+          <ng-container
+            *ngIf="
+              formGroup.controls['action'].value ===
+              AUTH_INFO_ACTION_TYPE_DENY_ALL
+            "
+          >
+            <div
+              id="auth-information-denialReason-all-select-label"
+              class="overhead-label"
+            >
+              <healthe-customer-configs-label
+                defaultText="DENIAL"
+                elementName="denial"
+                [forcedCapitalization]="false"
+              ></healthe-customer-configs-label>
+              REASON
+            </div>
+            <mat-select
+              id="auth-information-denialReason-all-select"
+              style="min-width: 200px;"
+              formLabel="REASON"
+              healtheFormValidationExtractor
+              formControlName="denialReason"
+              [placeholder]="denialReasonSelectionPlaceholder"
+              [compareWith]="compareWithReason"
+            >
+              <mat-option
+                *ngFor="let reason of (denialReasons$ | async); let i = index"
+                [value]="reason"
+                id="auth-information-denialReason-all-select-option-{{i}}"
+                >{{ reason.explanationDescription }}</mat-option
+              >
+            </mat-select>
+          </ng-container>
+          <ng-container
+            *ngIf="
+              formGroup.controls['action'].value ===
+              AUTH_INFO_ACTION_TYPE_PEND_ALL
+            "
+          >
+            <div
+              id="auth-information-pendReason-all-select-label"
+              class="overhead-label"
+            >
+              PEND REASON
+            </div>
+            <mat-select
+              id="auth-information-pendReason-all-select"
+              style="min-width: 200px;"
+              healtheFormValidationExtractor
+              formControlName="pendReason"
+              formLabel="PEND REASON"
+              placeholder="Select Pend Reason"
+              [compareWith]="compareWithPendReason"
+            >
+              <mat-option
+                *ngFor="let reason of (pendReasons$ | async); let i = index"
+                [value]="reason"
+                id="auth-information-pendReason-all-select-option-{{i}}"
+                >{{ reason.actionDescription }}</mat-option
+              >
+            </mat-select>
+          </ng-container>
+
+          <ng-container *ngIf="showPendExpirationDatepicker">
+            <div class="spacersmall"></div>
+            <div
+              id="auth-information-pendReasonExpiresDate-all-datepicker-label"
+              class="overhead-label"
+            >
+              PENDING STATUS EXPIRES ON
+            </div>
+            <healthe-datepicker
+              formControlName="pendReasonExpirationDate"
+              id="auth-information-pendReasonExpiresDate-all-datepicker"
+            >
+            </healthe-datepicker>
+            <mat-error
+              *ngIf="
+                formGroup
+                  .get('pendReasonExpirationDate')
+                  .getError('dateAboveMaxDate')
+              "
+              id="auth-information-pendReasonExpiresDate-all-datepicker-futureValidation"
+              >Expiration date must be within 60 days from today's date.
+            </mat-error>
+            <mat-error
+              *ngIf="
+                formGroup
+                  .get('pendReasonExpirationDate')
+                  .getError('dateMustBeInFuture')
+              "
+              id="auth-information-pendReasonExpiresDate-all-datepicker-pastValidation"
+              >Please enter a date in the future.
+            </mat-error>
+            <div class="spacersmall"></div>
+          </ng-container>
+        </div>
+
+        <button
+          mat-flat-button
+          class="success-button"
+          style="margin-top: 20px"
+          id="auth-information-actions-submit-button"
+          (click)="submit()"
+        >
+          SUBMIT
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

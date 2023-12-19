@@ -1,0 +1,23 @@
+@import 'variables';
+
+.quickLink-row-padding {
+  padding-left: 50px;
+  padding-right: 50px;
+}
+
+.quickLink {
+  cursor: pointer;
+  margin-bottom: 40px;
+
+  mat-card {
+    width: 135px;
+    height: 135px;
+    background-color: $gray-50;
+    box-shadow: 5px 5px 10px 0 rgba(0, 0, 0, 0.5) !important;
+
+    img {
+      width: 120px;
+      height: 120px;
+    }
+  }
+}

@@ -1,0 +1,120 @@
+<healthe-error-banner
+  [errorMessages]="submitErrors"
+  bannerTitle="The Letter(s) of Medical Necessity submission has failed with the following errors. Please try again or contact Healthesystems for assistance."
+>
+</healthe-error-banner>
+<div class="spacersmall"></div>
+<mat-card>
+  <h3 class="matCardTitle">Send Letter of Medical Necessity (LOMN)</h3>
+  <mat-stepper
+    [formGroup]="lomnFormGroup"
+    #lomnStepper
+    healtheStepState
+    [hasVendorStep]="false"
+    [hasDocumentsStep]="false"
+    [hasReviewStep]="false"
+    [linear]="this.medListForm.hasError('hasNoSelection')"
+  >
+    <mat-step
+      label="Select Prescription(s)"
+      [stepControl]="medListForm"
+      #matPrescriptionStep
+      [ngClass]="getStepStatusClass(matPrescriptionStep, lomnSteps.MedList)"
+      [hasError]="this.medListForm.hasError('hasNoSelection')"
+    >
+      <healthe-lomn-medication-list
+        [showValidationMessage]="
+          this.medListForm.invalid && userClickedWithoutPrescriptionSelected
+        "
+        [medicationListOptions$]="medListOptions$"
+        [medicationListFormControl]="medListForm"
+        [selectedDrugNdc$]="selectedDrugNdc$"
+      ></healthe-lomn-medication-list>
+    </mat-step>
+
+    <mat-step
+      *ngIf="(areExparteCopiesRequired$ | async)"
+      label="Review Attorney & Claimant Info"
+      [stepControl]="attorneyAndClaimantInformationForm"
+      #matAttorneyStep
+      [ngClass]="
+        getStepStatusClass(matAttorneyStep, lomnSteps.AttorneyAndClaimantInfo)
+      "
+      [hasError]="attorneyAndClaimantInformationForm.invalid"
+    >
+      <healthe-lomn-attorney-and-claimant
+        [attorneyAndClaimantInformationFormGroup]="
+          attorneyAndClaimantInformationForm
+        "
+        [claimInfo$]="claimInfo$"
+        [exParteCopiesRequired$]="areExparteCopiesRequired$"
+      ></healthe-lomn-attorney-and-claimant>
+    </mat-step>
+    <mat-step
+      label="Preview & Submit"
+      #matPreviewStep
+      [ngClass]="getStepStatusClass(matPreviewStep, lomnSteps.PreviewAndSubmit)"
+      [stepControl]="medListForm"
+      [hasError]="medListForm.invalid"
+    >
+      <healthe-lomn-preview-submit
+        [letterTypes]="letterTypes$ | async"
+        [medicationListFormArray]="medListForm"
+        [claimNumber]="claimNumber$ | async"
+        [customerId]="customerId$ | async"
+        [claimantContactInfo]="claimantContactInfo"
+        [attorneyInfo]="attorneyContactInfo"
+        [ndcToLineItemMap]="ndcToLineItemMap$ | async"
+        (previewLomn)="previewLomn($event)"
+      >
+      </healthe-lomn-preview-submit>
+    </mat-step>
+
+    <ng-template matStepperIcon="error" let-index="index">
+      {{ index }}
+    </ng-template>
+  </mat-stepper>
+  <div class="lomn-wizard--action-bar">
+    <div class="lomn-wizard--action-bar_actions">
+      <button
+        mat-stroked-button
+        class="info-button"
+        [routerLink]="'../authorizationInformation'"
+      >
+        CANCEL
+      </button>
+      <button
+        *ngIf="showPrevious"
+        (click)="previousStep()"
+        mat-flat-button
+        class="primary-button"
+      >
+        BACK
+      </button>
+      <button
+        *ngIf="
+          lomnStepper.selected?.label !== 'Preview & Submit';
+          else: lastStepSubmit
+        "
+        (click)="nextStep()"
+        [disabled]="
+          (this.medListForm.invalid && userClickedWithoutPrescriptionSelected) || (this.lomnFormGroup.get('attorneyAndClaimantInformation').invalid && lomnStepper.selectedIndex === 1)
+        "
+        mat-flat-button
+        class="primary-button"
+      >
+        NEXT
+      </button>
+      <ng-template #lastStepSubmit>
+        <button
+          (click)="submitLOMN()"
+          mat-flat-button
+          class="primary-button"
+          [disabled] = "isFormInvalid()"
+        >
+          SEND LETTERS
+        </button>
+      </ng-template>
+    </div>
+  </div>
+</mat-card>

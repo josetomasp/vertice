@@ -1,0 +1,49 @@
+@import 'variables';
+
+::ng-deep .mat-drawer-container {
+  position: static !important;
+}
+
+::ng-deep .mat-drawer-content {
+  position: fixed !important;
+  right: 0;
+  left: 0;
+}
+
+::ng-deep .mat-list-item {
+  cursor: pointer;
+}
+
+::ng-deep .mat-list-item-disabled {
+  background-color: $blue-50 !important;
+  cursor: default;
+
+  & .mat-list-item-content {
+    color: $gray-400;
+  }
+}
+
+::ng-deep .mat-list-item-content {
+  user-select: none;
+}
+
+::ng-deep .mat-sidenav-content {
+  padding: 0;
+}
+
+::ng-deep {
+  .mat-form-field {
+    width: 100%;
+
+    .mat-select {
+      width: calc(100% - 32px);
+    }
+  }
+}
+
+:host {
+  background-color: $gray-100;
+}
+::ng-deep .mat-menu-panel.sideNavMenus {
+  top: -50px;
+}

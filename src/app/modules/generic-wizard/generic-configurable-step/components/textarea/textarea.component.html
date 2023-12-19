@@ -1,0 +1,20 @@
+<div class="healthe-kinect-textarea healthe-kinect-textarea__container">
+  <label class="overhead-label"
+    >{{ formLabel }} <i *ngIf="isRequired" class="text-danger">*</i>
+  </label>
+  <mat-form-field>
+    <textarea
+      class="healthe-kinect-textarea__input"
+      (change)="onChange(formControl.value)"
+      (click)="onTouched()"
+      matInput
+      [formControl]="formControl"
+      [placeholder]="placeholder"
+      [maxlength]="maxLength"
+    ></textarea>
+    <mat-error></mat-error>
+  </mat-form-field>
+  <span *ngIf="maxLength" class="healthe-kinect-textarea__character-hint"
+    >{{ maxLength - formControl.value.length }} characters left</span
+  >
+</div>

@@ -1,0 +1,233 @@
+<mat-card style="margin-bottom: 10px;" [formGroup]="pmAuthFormGroup">
+  <header>
+    <h3
+      class="PmExtension-modal-authtitle"
+      id="pmextension--card--inset--header--title--{{index}}"
+    >
+      {{ authorization.authorizationUnderReview.categoryDesc }}
+    </h3>
+  </header>
+  <mat-card-content>
+    <div fxLayout="row wrap" fxLayoutAlign="start start" fxLayoutGap="20px">
+      <!-- start date -->
+      <div class="ieDatePickerFix flex-column">
+        <span
+          class="overhead-label"
+          id="PmExtension-modal--date-range-startDateField-label--{{index}}"
+          >START DATE<span class="required-text">*</span></span
+        >
+        <mat-form-field class="show-one-error">
+          <healthe-datepicker
+            formControlName="startDate"
+            id="PmExtension-modal--date-range-startDateField-input--{{index}}"
+          >
+          </healthe-datepicker>
+          <mat-error
+            *ngIf="pmAuthFormGroup.get('startDate').hasError('required')"
+            id="PmExtension-modal--date-range-startDateRequired-invalid-error--{{index}}"
+            >Start Date is required
+          </mat-error>
+          <mat-error
+            *ngIf="pmAuthFormGroup.get('startDate').hasError('invalidDate')"
+            id="PmExtension-modal--date-range-startDate-invalid-error--{{index}}"
+            >The date entered is invalid
+          </mat-error>
+          <mat-error
+            *ngIf="
+              pmAuthFormGroup.get('startDate').hasError('invalidDateRange')
+            "
+            id="PmExtension-modal--date-range-startDate-invalidrange-error--{{index}}"
+            >End Date cannot be before Start Date
+          </mat-error>
+          <mat-error
+            *ngIf="
+              pmAuthFormGroup.get('startDate').hasError('startDateOnlyInPast')
+            "
+            id="PmExtension-modal--date-range-startDate-notInPast-error--{{index}}"
+            >Start Date must be on or before the original Start Date
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <!-- end date -->
+      <div class="ieDatePickerFix flex-column">
+        <span
+          class="overhead-label"
+          id="PmExtension-modal--date-range-endDateField-label--{{index}}"
+          >END DATE<span class="required-text">*</span></span
+        >
+        <mat-form-field class="show-one-error">
+          <healthe-datepicker
+            formControlName="endDate"
+            id="PmExtension-modal--date-range-endDateField-input--{{index}}"
+          >
+          </healthe-datepicker>
+          <mat-error
+            *ngIf="pmAuthFormGroup.get('endDate').hasError('required')"
+            id="PmExtension-modal--date-range-endDateRequired-invalid-error--{{index}}"
+            >End Date is required
+          </mat-error>
+          <mat-error
+            *ngIf="pmAuthFormGroup.get('endDate').hasError('invalidDate')"
+            id="PmExtension-modal--date-range-endDate-invalid-error--{{index}}"
+            >The date entered is invalid
+          </mat-error>
+          <mat-error
+            *ngIf="pmAuthFormGroup.get('endDate').hasError('invalidDateRange')"
+            id="PmExtension-modal--date-range-endDate-invalidrange-error--{{index}}"
+            >End Date cannot be before Start Date
+          </mat-error>
+          <mat-error
+            *ngIf="pmAuthFormGroup.get('endDate').hasError('endDateTodayOrLaterValidator')"
+            id="PmExtension-modal--date-range-endDate-invalidrange-error--{{index}}"
+          >End Date must be on or after Today's Date
+          </mat-error>
+          <mat-error
+            *ngIf="
+              pmAuthFormGroup
+                .get('endDate')
+                .hasError('endDateAfterLastServiceDateValidator')
+            "
+            id="PmExtension-modal--date-range-endDate-lastServiceDate-error--{{index}}"
+            >End Date cannot be before the Last Service Date of
+            {{ formatDate(pmAuthFormGroup.get('lastServiceDate').value) }}
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <!-- Additional approved visits -->
+      <div class="flex-column">
+        <span
+          class="overhead-label"
+          id="PmExtension-modal-additionalVisits-label--{{index}}"
+        >ADDITIONAL APPROVED VISITS<span class="required-text">*</span></span>
+        <mat-form-field class="show-one-error"
+        ><input
+          matInput
+          formControlName="additionalVisits"
+          id="PmExtension-modal-additionalVisits-input--{{index}}"
+          type="number"
+          min="0"
+        />
+          <mat-error
+            *ngIf="pmAuthFormGroup.get('additionalVisits').hasError('required')"
+            id="PmExtension-modal-additionalVisits-error-required--{{index}}"
+          >Additional Visits is required
+          </mat-error>
+          <mat-error
+            *ngIf="pmAuthFormGroup.get('additionalVisits').hasError('min')"
+            id="PmExtension-modal-additionalVisits-error-positiveValue--{{index}}"
+          >Additional Visits must be a positive integer
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <!-- Total approved visits -->
+      <div class="flex-column">
+        <span
+          class="overhead-label"
+          id="PmExtension-modal-totalApproved-label--{{index}}"
+          >TOTAL APPROVED VISITS</span>
+        <p>{{ pmAuthFormGroup.get('totalApproved').value }}</p>
+      </div>
+
+      <!-- Prior approved visits -->
+      <div class="flex-column">
+        <span
+          class="overhead-label"
+          id="PmExtension-modal-prior-approved-visits--{{index}}"
+          >PRIOR APPROVED VISITS</span
+        >
+        <p>{{ pmAuthFormGroup.get('priorApprovedQuantity').value }}</p>
+      </div>
+    </div>
+
+    <div class="spacersmall"></div>
+
+    <div fxLayout="row wrap" fxLayoutAlign="start start" fxLayoutGap="20px">
+      <!-- provider name -->
+      <div class="flex-column">
+        <span
+          class="overhead-label"
+          id="PmExtension-modal-providerName-label--{{index}}"
+          >ORDERING PHYSICIAN NAME</span
+        >
+        <mat-form-field
+          ><input
+            matInput
+            formControlName="orderingProviderName"
+            id="PmExtension-modal-providerName-input--{{index}}"
+            placeholder="Enter Name"
+          />
+        </mat-form-field>
+      </div>
+
+      <!-- provider phone -->
+      <div class="flex-column">
+        <span
+          class="overhead-label"
+          id="PmExtension-modal-providerName-label--{{index}}"
+          >ORDERING PHYSICIAN PHONE</span
+        >
+        <mat-form-field
+          ><input
+            matInput
+            formControlName="orderingProviderPhone"
+            id="PmExtension-modal-providerPhone-input--{{index}}"
+            placeholder="Enter Phone Number"
+            mask="(000) 000-0000"
+          />
+        </mat-form-field>
+      </div>
+
+      <!-- body parts -->
+      <div class="flex-column">
+        <span
+          class="overhead-label"
+          id="PmExtension-modal-providerName-label--{{index}}"
+          >BODY PART(S)<span class="required-text">*</span></span
+        >
+        <mat-form-field
+          ><mat-select
+            multiple
+            placeholder="Please select body part(s)"
+            healtheSelect
+            [formControl]="pmAuthFormGroup.get('bodyParts')"
+            [compareWith]="compareBodyParts"
+            id="body-parts-multiselect-modal--{{index}}"
+          >
+            <mat-optgroup label="Select Body Parts">
+              <mat-option
+                *ngFor="
+                  let option of (bodyParts$ | async);
+                  index as $optionIndex
+                "
+                [disabled]="option.disabled"
+                [value]="option"
+                id="body-parts-multioption-{{option}}-{{$optionIndex}}--{{index}}"
+                >{{
+                  getBodyPartDisplayName(option.description, option.sideOfBody)
+                }}</mat-option
+              >
+            </mat-optgroup>
+          </mat-select>
+          <mat-error
+            id="body-parts-multiselect-modal--required-{{index}}"
+            *ngIf="pmAuthFormGroup.controls['bodyParts'].hasError('required')"
+          >
+            Please select at least one body part.
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+
+    <div class="spacersmall"></div>
+
+    <!-- ICD Codes and modal -->
+    <healthe-auth-icd-codes-display
+      [icdCodesFormControl]="pmAuthFormGroup.get('icdCodes')"
+      [fusionAuth]="authorization"
+    >
+    </healthe-auth-icd-codes-display>
+  </mat-card-content>
+</mat-card>

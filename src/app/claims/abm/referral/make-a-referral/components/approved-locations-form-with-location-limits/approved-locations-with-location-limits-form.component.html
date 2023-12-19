@@ -1,0 +1,92 @@
+<div
+  fxLayout="row wrap"
+  fxLayoutAlign="space-between center"
+  style="margin-bottom: 10px"
+>
+  <div
+    class="mat-error"
+    id="open-authorization-approvedLocation-error"
+    [ngStyle]="{
+      visibility:
+        (openAuthFormGroup.get('approvedLocations').touched ||
+          openAuthFormGroup.get('noLocationRestrictions').touched) &&
+        openAuthFormGroup.hasError('invalidLocationSelection')
+          ? 'visible'
+          : 'hidden'
+    }"
+  >
+    Select at least two locations or choose 'No Restrictions'
+  </div>
+</div>
+<div
+  class="healthe-approved-locations-limit-wrapper"
+  fxLayout="column"
+  fxLayoutGap="10px"
+>
+  <div fxLayout="row wrap" fxLayoutGap="10px">
+    <div fxFlex="1 1 calc(50% - 10px)">
+      <mat-expansion-panel
+        class="healthe-expansion--grey-header small-header"
+        [hideToggle]="true"
+      >
+        <mat-expansion-panel-header
+          collapsedHeight="25px"
+          expandedHeight="25px"
+          #panelHeaderSelectAll
+          (click)="$event.stopPropagation(); panelHeaderSelectAll._toggle()"
+        >
+          <mat-checkbox
+            id="open-authorization-selectAll-checkbox"
+            [disabled]="isReadOnlyForm"
+            #selectAllCheckbox
+            (change)="toggleAllCheckboxes(selectAllCheckbox.checked)"
+            ><span id="open-authorization-approvedLocation-selectAll-label"
+              >Select All
+            </span>
+          </mat-checkbox>
+        </mat-expansion-panel-header>
+      </mat-expansion-panel>
+    </div>
+
+    <div fxFlex="1 1 calc(50% - 10px)" [formGroup]="openAuthFormGroup">
+      <mat-expansion-panel
+        class="healthe-expansion--grey-header small-header"
+        [hideToggle]="true"
+      >
+        <mat-expansion-panel-header
+          collapsedHeight="25px"
+          expandedHeight="25px"
+          #panelHeaderNoRestrictions
+          (click)="
+            $event.stopPropagation(); panelHeaderNoRestrictions._toggle()
+          "
+        >
+          <mat-checkbox
+            id="open-authorization-approvedLocation-noRestrictions-checkbox"
+            #noLocationRestrictionsCheckbox
+            formControlName="noLocationRestrictions"
+            ><span id="open-authorization-approvedLocation-noRestrictions-label"
+              >No Restrictions
+            </span>
+          </mat-checkbox>
+        </mat-expansion-panel-header>
+      </mat-expansion-panel>
+    </div>
+  </div>
+  <div>
+    <div fxLayout="row wrap" fxLayoutGap="10px grid">
+      <healthe-checkbox-expansion-with-location-limits
+        fxFlex="1 1 calc(50% - 10px)"
+        *ngFor="let type of Object.keys(allLocationsFormGroup.controls)"
+        [headerText]="type"
+        [locationsFormGroup]="allLocationsFormGroup.controls[type]"
+        [specifyTripsByLocationControl]="
+          this.openAuthFormGroup.get('specifyTripsByLocation')
+        "
+        serviceActionType="open-auth"
+        [locations]="this.approvedLocations$ | async"
+      >
+      </healthe-checkbox-expansion-with-location-limits>
+    </div>
+  </div>
+</div>

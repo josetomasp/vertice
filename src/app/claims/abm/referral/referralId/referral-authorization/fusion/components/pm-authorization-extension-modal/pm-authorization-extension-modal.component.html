@@ -1,0 +1,106 @@
+<div
+  fxLayout="row"
+  class="title-container"
+  fxLayoutAlign="space-between center"
+  mat-dialog-title
+>
+  <span id="PmExtension-modal-title">Extend Physical Medicine Referral</span>
+  <button mat-icon-button mat-dialog-close id="PmExtension-modal-header-widget">
+    <i class="fal fa-times modal-close-widget"></i>
+  </button>
+</div>
+
+<mat-dialog-content [formGroup]="pmFormGroup">
+  <ng-container *ngIf="isAuthLoaded && !isAuthSubmitting">
+    <ng-container
+      *ngFor="
+        let authorization of (fusionReferralAuthorizations$ | async);
+        let index = index
+      "
+    >
+      <healthe-pm-authorization-extension-parent-card
+        [authorization]="authorization"
+        [index]="index"
+        [authsFormArray]="pmFormGroup.get('authorizations')"
+        [bodyParts$]="bodyParts$"
+      ></healthe-pm-authorization-extension-parent-card>
+    </ng-container>
+
+    <div class="spacersmall"></div>
+
+    <healthe-referral-documents
+      [dateOfService]="''"
+      [showCurrentDocs]="false"
+      [hesReferralDetailId]="hesReferralDetailIdForUploadDocuments"
+      isForPmExtension="true"
+    ></healthe-referral-documents>
+
+    <div class="spacersmall"></div>
+
+    <!-- notes -->
+    <div class="PmExtension-modal--notes--wrapper">
+      <label class="overhead-label">NOTES</label>
+      <mat-form-field>
+        <textarea
+          id="PmExtension-modal--notes--vendor--AdditionalNotes"
+          [formControl]="pmFormGroup.get('notes')"
+          matInput
+          placeholder="Enter notes"
+        ></textarea>
+      </mat-form-field>
+    </div>
+  </ng-container>
+
+  <ng-container *ngIf="!isAuthLoaded">
+    <div class="spacerlarge"></div>
+    <div fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="35px">
+      <mat-spinner
+        [diameter]="55"
+        id="PmExtension-modal-loadingResultsSpinner"
+      ></mat-spinner>
+      <h2 id="PmExtension-modal-loadingResultsMessage">
+        Loading Authorization Items...
+      </h2>
+    </div>
+    <div class="spacerlarge"></div>
+  </ng-container>
+
+  <ng-container *ngIf="isAuthSubmitting">
+    <div class="spacerlarge"></div>
+    <div fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="35px">
+      <mat-spinner
+        [diameter]="55"
+        id="PmExtension-modal-SubmittingSpinner"
+      ></mat-spinner>
+      <h2 id="PmExtension-modal-SubmittingResultsMessage">
+        Submitting Authorization Extension...
+      </h2>
+    </div>
+    <div class="spacerlarge"></div>
+  </ng-container>
+</mat-dialog-content>
+
+<mat-dialog-actions
+  *ngIf="isAuthLoaded && !isAuthSubmitting"
+  class="button-container"
+>
+  <div fxLayout="row" fxLayoutGap="20px" style="margin-right: 20px;">
+    <button
+      mat-flat-button
+      class="info-button"
+      id="PmExtension-modal--cancel"
+      (click)="closeModal()"
+    >
+      CANCEL
+    </button>
+    <button
+      mat-flat-button
+      class="primary-button"
+      id="PmExtension-modal--extend"
+      (click)="submitExtension()"
+      [disabled]="pmFormGroup.invalid"
+    >
+      EXTEND
+    </button>
+  </div>
+</mat-dialog-actions>

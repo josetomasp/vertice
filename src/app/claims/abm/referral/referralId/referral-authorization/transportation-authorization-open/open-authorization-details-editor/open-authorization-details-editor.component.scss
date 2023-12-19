@@ -1,0 +1,15 @@
+@import 'variables';
+
+.matErrorFix {
+  white-space: normal;
+}
+
+.input-readonly {
+  background-color: $gray-250;
+  border: 1px transparent solid;
+  color: $gray-500;
+}
+
+.secondary-button {
+  margin-top: 20px;
+}

@@ -1,0 +1,116 @@
+<div fxLayout="row" fxLayoutGap="30px" [formGroup]="filterFormGroup">
+  <!-- Stage Filter -->
+  <div>
+    <label class="overhead-label">STAGE</label>
+    <mat-form-field>
+      <mat-select
+        [matTooltip]="getTooltipText(stageSelect)"
+        id="referralActivityTableFilter-stageFilter"
+        formControlName="stage"
+        [placeholder]="getTriggerText(stageSelect, 'Stages')"
+        #stageSelect
+        healtheSelect
+        multiple
+      >
+        <mat-select-trigger>{{
+          getTriggerText(stageSelect, 'Stages')
+        }}</mat-select-trigger>
+        <healthe-select-all-option
+          id="stageSelect-select-all"
+          [select]="stageSelect"
+          >All Stages
+        </healthe-select-all-option>
+        <mat-divider></mat-divider>
+        <mat-option
+          *ngFor="let option of stageOptions"
+          [id]="'referralActivityTableFilter-stageFilter-option' + option.value"
+          [value]="option.value"
+          >{{ option.label }}</mat-option
+        >
+      </mat-select>
+    </mat-form-field>
+  </div>
+  <!-- Status Filter -->
+  <div>
+    <label class="overhead-label">STATUS</label>
+    <mat-form-field>
+      <mat-select
+        id="referralActivityTableFilter-statusFilter"
+        formControlName="status"
+        #statusSelect="matSelect"
+        [matTooltip]="getTooltipText(statusSelect)"
+        [placeholder]="getTriggerText(statusSelect, 'Statuses')"
+        healtheSelect
+        multiple
+      >
+        <mat-select-trigger>{{
+          getTriggerText(statusSelect, 'Statuses')
+        }}</mat-select-trigger>
+        <healthe-select-all-option
+          id="status-select-all"
+          [select]="statusSelect"
+          >All Statuses
+        </healthe-select-all-option>
+        <mat-divider></mat-divider>
+        <mat-option
+          *ngFor="let option of (statusOptions$ | async)"
+          [id]="
+            'referralActivityTableFilter-statusFilter-option' + option.value
+          "
+          [value]="option.value"
+        >
+          <div class="ellipsis-text" #optionText [matTooltip]="option.label">
+            {{ option.label }}
+          </div>
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+  <!-- Date Filter -->
+  <div>
+    <label class="overhead-label">SELECT DATE RANGE</label>
+    <healthe-daterange
+      formControlName="date"
+      [options]="dateRangeOptions"
+    ></healthe-daterange>
+  </div>
+  <!-- Spacer -->
+  <span fxFlex="1 1 auto"></span>
+  <button
+    (click)="resetFilters()"
+    style="width: 120px"
+    class="secondary-button export-button"
+    id="referralActivityTable-filterBox-resetButton"
+    mat-stroked-button
+  >
+    RESET
+  </button>
+  <button
+    (menuClosed)="exportMenuOpened = false"
+    (menuOpened)="exportMenuOpened = true"
+    [mat-menu-trigger-for]="exportMenu"
+    class="primary-button export-button"
+    id="referralActivityTable-filterBox-exportButton"
+    mat-flat-button
+    style="width: 120px"
+  >
+    EXPORT
+    <i
+      class="inline-right-icon far"
+      [ngClass]="{
+        'fa-chevron-up': exportMenuOpened,
+        'fa-chevron-down': !exportMenuOpened
+      }"
+    ></i>
+  </button>
+  <mat-menu #exportMenu="matMenu" [overlapTrigger]="false" yPosition="below">
+    <button
+      *ngFor="let exportOption of exportDropdownOptions"
+      mat-menu-item
+      [id]="'referralActivityTable-filterBox-exportOptions-' + exportOption"
+      (click)="doExport(exportOption)"
+    >
+      {{ exportOption }}
+    </button>
+  </mat-menu>
+</div>

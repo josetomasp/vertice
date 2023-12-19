@@ -1,0 +1,15 @@
+@import 'variables';
+
+.ellipsis-button {
+  color: $secondary;
+  opacity: 1;
+}
+
+.menu-wrapper {
+  margin: 10px;
+
+  .label {
+    font-size: 12px;
+  }
+}
+

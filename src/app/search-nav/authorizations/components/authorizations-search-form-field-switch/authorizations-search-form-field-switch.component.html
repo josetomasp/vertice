@@ -1,0 +1,105 @@
+<ng-container [ngSwitch]="searchFormFieldConfig.type">
+  <span
+    class="overhead-label {{searchFormFieldConfig.formControlName}}-field--label"
+    id="{{searchFormFieldConfig.formControlName}}-label"
+    >{{ searchFormFieldConfig.label }}
+  </span>
+  <div *ngSwitchCase="SpecificDateFormFieldType.Select">
+    <mat-form-field
+      class="{{searchFormFieldConfig.formControlName}}-field--form-field"
+      [style.width.px]="
+        searchFormFieldConfig.width ? searchFormFieldConfig.width : null
+      "
+    >
+      <mat-select
+        class="{{searchFormFieldConfig.formControlName}}-field--select"
+        panelClass="{{searchFormFieldConfig.selectPanelClass}}"
+        healtheSelect
+        [placeholder]="searchFormFieldConfig.placeholder"
+        [formControl]="searchFormFieldConfig.formState"
+        id="{{searchFormFieldConfig.formControlName}}-select"
+      >
+        <mat-option
+          class="{{searchFormFieldConfig.formControlName}}-field--option"
+          *ngFor="
+            let option of (searchFormFieldConfig.options | async);
+            let i = index
+          "
+          value="{{option.value}}"
+          id="{{searchFormFieldConfig.formControlName}}-selectOption-{{i}}"
+          >{{ option.label }}</mat-option
+        >
+      </mat-select>
+      <mat-error class="{{searchFormFieldConfig.formControlName}}-field--error">
+        {{
+          searchFormFieldConfig.errorMessages
+            ? getErrorMessage(searchFormFieldConfig.errorMessages)
+            : ''
+        }}</mat-error
+      >
+    </mat-form-field>
+  </div>
+  <div *ngSwitchCase="SpecificDateFormFieldType.SelectVirtualScroll">
+    <mat-form-field>
+      <mat-select
+        class="{{searchFormFieldConfig.formControlName}}-field--select"
+        panelClass="{{searchFormFieldConfig.selectPanelClass}}"
+        style="width: 150px;"
+        [placeholder]="searchFormFieldConfig.placeholder"
+        [formControl]="searchFormFieldConfig.formState"
+        (openedChange)="selectOpenChange($event)"
+        (keydown)="selectKeyPressed($event)"
+        id="{{searchFormFieldConfig.formControlName}}-selectLargeValueList"
+      >
+        <cdk-virtual-scroll-viewport
+          [itemSize]="40"
+          [style.height.px]="5 * 40"
+          style="width: 375px;margin-right: -29px"
+        >
+          <mat-option
+            class="{{searchFormFieldConfig.formControlName}}-field--option"
+            *cdkVirtualFor="
+              let option of (searchFormFieldConfig.options | async);
+              let i = index
+            "
+            value="{{option.value}}"
+            id="{{searchFormFieldConfig.formControlName}}-selectLargeValueListOption-{{i}}"
+            >{{ option.label }}</mat-option
+          >
+        </cdk-virtual-scroll-viewport>
+      </mat-select>
+      <mat-error>
+        {{
+          searchFormFieldConfig.errorMessages
+            ? getErrorMessage(searchFormFieldConfig.errorMessages)
+            : ''
+        }}</mat-error
+      >
+    </mat-form-field>
+  </div>
+  <div *ngSwitchCase="SpecificDateFormFieldType.Text">
+    <mat-form-field
+      class="{{searchFormFieldConfig.formControlName}}-field--form-field"
+    >
+      <input
+        class="{{searchFormFieldConfig.formControlName}}-field--input"
+        matInput
+        [formControl]="searchFormFieldConfig.formState"
+        placeholder="{{searchFormFieldConfig.placeholder}}"
+        id="{{searchFormFieldConfig.formControlName}}-input"
+      />
+    </mat-form-field>
+  </div>
+  <div *ngSwitchCase="SpecificDateFormFieldType.DateRange">
+    <healthe-daterange
+      class="{{searchFormFieldConfig.formControlName}}-field--date-range"
+      [hasSubmit]="false"
+      [options]="
+        searchFormFieldConfig.componentConfig || dateRangerPickerOptions
+      "
+      [formControl]="searchFormFieldConfig.formState"
+      id="{{searchFormFieldConfig.formControlName}}-dateRange"
+    >
+    </healthe-daterange>
+  </div>
+</ng-container>

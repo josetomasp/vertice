@@ -1,0 +1,12 @@
+:host {
+  padding-bottom: 16px;
+}
+
+.auth-history-expansion-panel {
+  & > .view-reasons_icon {
+    font-size: 18px;
+  }
+  &--header_view-details {
+    font-size: 14px !important;
+  }
+}

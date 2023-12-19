@@ -1,0 +1,74 @@
+<div
+  fxLayout="row"
+  fxLayoutAlign="start start"
+  fxLayoutGap="20px"
+  style="margin-top: 20px; margin-bottom: -5px;"
+>
+  <div fxFlex="30" class="overhead-label" id="flightTrip-flyingFrom-label">
+    FLYING FROM
+  </div>
+  <div fxFlex="30" class="overhead-label" id="flightTrip-flyingTo-label">
+    FLYING TO
+  </div>
+  <div fxFlex="10" class="overhead-label" id="flightTrip-departure-label">
+    DEPARTURE
+  </div>
+  <div fxFlex="10" class="overhead-label" id="flightTrip-arrival-label">
+    ARRIVAL
+  </div>
+  <div fxFlex="10" class="overhead-label" id="flightTrip-carrier-label">
+    CARRIER
+  </div>
+  <div fxFlex="10" class="overhead-label" id="flightTrip-flightNumber-label">
+    FLIGHT NUMBER
+  </div>
+</div>
+
+<div
+  fxLayout="row"
+  fxLayoutAlign="start start"
+  fxLayoutGap="20px"
+  style="margin-bottom: 10px"
+  *ngFor="let leg of itineraryData.legData; let i = index"
+>
+  <div fxFlex="30" id="flightTrip-flyingFrom-value-{{i}}">
+    {{ leg.flyingFrom }}
+  </div>
+  <div fxFlex="30" id="flightTrip-flyingTo-value-{{i}}">{{ leg.flyingTo }}</div>
+  <div fxFlex="10" id="flightTrip-departure-value-{{i}}">
+    {{ leg.departure }}
+  </div>
+  <div fxFlex="10" id="flightTrip-arrival-value-{{i}}">{{ leg.arrival }}</div>
+  <div fxFlex="10" id="flightTrip-carrier-value-{{i}}">{{ leg.carrier }}</div>
+  <div fxFlex="10" id="flightTrip-flightNumber-value-{{i}}">
+    {{ leg.flightNumber }}
+  </div>
+</div>
+
+<div class="spacersmall"></div>
+<div fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="35px">
+  <div fxLayout="column">
+    <div class="overhead-label" id="flightTrip-appointmentType-label">
+      APPOINTMENT TYPE
+    </div>
+    <div id="flightTrip-appointmentType-value">
+      {{ itineraryData.appointmentInfo.appointmentType }}
+    </div>
+  </div>
+  <div fxLayout="column">
+    <div class="overhead-label" id="flightTrip-appointmentDateAndTime-label">
+      APPT. DATE & TIME
+    </div>
+    <div id="flightTrip-appointmentDateAndTime-value">
+      {{ itineraryData.appointmentInfo.appointmentDateAndTime }}
+    </div>
+  </div>
+  <div fxLayout="column">
+    <div class="overhead-label" id="flightTrip-doctorNameAndSpecialty-label">
+      DOCTOR NAME & SPECIALTY
+    </div>
+    <div id="flightTrip-doctorNameAndSpecialty-value">
+      {{ itineraryData.appointmentInfo.doctorNameAndSpec }}
+    </div>
+  </div>
+</div>

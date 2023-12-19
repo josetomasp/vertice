@@ -1,0 +1,17 @@
+<ng-container *ngIf="isInactiveDate()">
+  <a mat-button class="eligibility-btn" (click)="editEligibilityElement()"
+    >Set Claim to Inactive</a
+  >
+</ng-container>
+<ng-container *ngIf="!isInactiveDate()">
+  <a
+    *healtheRemoveElementIfTrue="
+      'eligibility';
+      elementName: linkId.concat('EditLink')
+    "
+    mat-button
+    class="eligibility-btn"
+    (click)="editEligibilityElement()"
+    >Edit</a
+  >
+</ng-container>

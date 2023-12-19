@@ -1,0 +1,22 @@
+@import 'variables';
+.add-lodging {
+  &__title {
+    color: $primary;
+  }
+  &__icon {
+    margin-right: 10px;
+    font-size: 22px;
+  }
+  &--width-125 {
+    width: 125px;
+  }
+}
+
+::ng-deep fa-icon.ieSvgFix > svg {
+  width: 28px;
+}
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}

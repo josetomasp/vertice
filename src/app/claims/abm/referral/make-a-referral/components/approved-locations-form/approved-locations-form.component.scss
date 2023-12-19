@@ -1,0 +1,14 @@
+::ng-deep {
+  .healthe-approved-locations-wrapper
+    mat-expansion-panel.healthe-expansion--grey-header
+    span.mat-content {
+    position: relative;
+    height: 100%;
+  }
+
+  .healthe-approved-locations-wrapper
+    mat-expansion-panel.small-header
+    mat-expansion-panel-header {
+    padding: 15px !important;
+  }
+}

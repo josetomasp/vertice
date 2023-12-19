@@ -1,0 +1,111 @@
+<!--
+  hidden healthe-authorization-actions it the one who hooks the formGroup.value changes up to saving to redux
+-->
+<healthe-authorization-actions
+  [referralAuthorizationItem]="
+    referralAuthorizationSet.referralAuthorization.authorizationItems[0]
+  "
+  [idIndex]="0"
+  hidden
+></healthe-authorization-actions>
+<div class="auth-open">
+  <div class="inset-card">
+    <div fxLayout="row">
+      <div
+        id="transportation-auth-open-actions-title"
+        class="auth-open__title"
+        fxFlex="60%"
+      >
+        <fa-icon
+          [icon]="
+            referralAuthorizationSet.referralAuthorization.authorizationItems[0]
+              .icon
+          "
+          class="ieSvgFix auth-open__text"
+          id="transportation-auth-open-actions-title-icon"
+        ></fa-icon>
+        {{
+          referralAuthorizationSet.referralAuthorization.authorizationItems[0]
+            .title
+        }}
+        <ng-container
+          *ngIf="
+            referralAuthorizationSet.referralAuthorization.authorizationItems[0]
+              .title == 'Other Transportation'
+          "
+        >
+          -
+          {{
+            referralAuthorizationSet.referralAuthorization.authorizationItems[0]
+              .authData.typeOfTransportation
+          }}
+        </ng-container>
+        <p class="auth-open__sub-text">
+          {{ referralAuthorizationSet.referralAuthorization.subHeaderNote }}
+        </p>
+      </div>
+    </div>
+    <healthe-referral-reason-for-review
+      [idIndex]="0"
+      [reasons]="
+        referralAuthorizationSet.referralAuthorization.authorizationItems[0]
+          .reasonsReviewIsNeeded
+      "
+      *ngIf="isAuthorizeMode()"
+    ></healthe-referral-reason-for-review>
+    <healthe-narrative-text
+      *ngIf="formFinished"
+      [referralAuthorization]="referralAuthorizationSet.referralAuthorization"
+      [authNarrativeMode]="authNarrativeMode"
+      [formGroup]="narrativeCloneFormGroup"
+      [authNarrativeConfig]="authNarrativeConfig"
+      [claimLocations]="transportationLocations$ | async"
+      [openAuthValidationFormGroup]="
+        referralAuthorizationSet.referralAuthorization.authorizationItems[0]
+          .formGroup
+      "
+      [isOpenAuthDetailedExpanded]="isOpenAuthDetailsExpanded"
+    ></healthe-narrative-text>
+    <healthe-change-summary
+      *ngIf="formFinished"
+      (resetForm)="resetFormValues()"
+      [originalValues]="originalValues"
+      [undoConfirmationModalData]="undoConfirmationModalData"
+      [formGroup]="
+        this.referralAuthorizationSet.referralAuthorization
+          .authorizationItems[0].formGroup
+      "
+    ></healthe-change-summary>
+    <mat-error
+      *ngIf="
+        this.referralAuthorizationSet.referralAuthorization.authorizationItems[0].formGroup.hasError(
+          'invalidLocationSelection'
+        )
+      "
+      >Select at least two locations or choose 'No Location Restrictions'.
+      Please expand the details below to modify the locations.</mat-error
+    >
+  </div>
+  <div class="spacermedium"></div>
+  <div class="auth-open__details">
+    <button
+      mat-stroked-button
+      id="transportation-auth-open-addDocuments-viewEditButton"
+      class="primary-button"
+      (click)="promptUserForViewEditToggle()"
+    >
+      VIEW/EDIT TRANSPORTATION DETAILS
+      <fa-icon class="inline-right-icon" [icon]="exportMenuIcon"></fa-icon>
+    </button>
+    <div class="spacermedium"></div>
+    <healthe-open-authorization-details-editor
+      *ngIf="formFinished"
+      [hidden]="!isOpenAuthDetailsExpanded"
+      [isReadOnlyForm]="isReadOnlyForm"
+      [openAuthFormGroup]="
+        this.referralAuthorizationSet.referralAuthorization
+          .authorizationItems[0].formGroup
+      "
+    ></healthe-open-authorization-details-editor>
+  </div>
+</div>

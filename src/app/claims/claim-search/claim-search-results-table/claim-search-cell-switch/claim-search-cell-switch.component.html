@@ -1,0 +1,79 @@
+<ng-container [ngSwitch]="name">
+  <!-- Claim Number -->
+  <span
+    *ngSwitchCase="'claimNumber'"
+    #resultsCardListClaimNumber
+    class="standard-text ellipsis-text"
+    ><a
+      (click)="goToClaimView(element)"
+      mat-button
+      class="no-padding"
+      id="results-card-list-claimNumber-{{ index }}"
+      [matTooltip]="element.claimNumber"
+      >{{ element.claimNumber }}</a
+    ></span
+  >
+
+  <!-- Risk Level -->
+  <span
+    *ngSwitchCase="'riskLevel'"
+    class="standard-text ellipsis-text"
+    id="results-card-list-riskLevel-{{ index }}"
+    ><healthe-risk-level-indicator
+      [index]="index"
+      [daysSinceRiskLevelChange]="element.daysSinceRiskLevelChange"
+      [riskLevel]="element.riskLevel"
+      [riskLevelNumber]="element.riskLevelNumber"
+      [riskIncreased]="element.riskIncreased"
+      [claimNumber]="element.claimNumber"
+    ></healthe-risk-level-indicator
+  ></span>
+
+  <!-- Risk Category -->
+  <span
+    *ngSwitchCase="'riskCategory'"
+    #resultsCardListRiskCategory
+    class="standard-text"
+    id="results-card-list-riskCategory-{{ index }}"
+    [matTooltip]="element.riskCategory.join(', ')"
+    >{{ element.riskCategory.join(', ') }}</span
+  >
+
+  <!-- Previous Actions -->
+  <span
+    *ngSwitchCase="'previousActions'"
+    class="standard-text ellipsis-text"
+    id="results-card-list-previousActions-{{ index }}"
+  >
+    <healthe-previous-actions-display
+      [index]="index"
+      [previousActions]="element.previousActions"
+    ></healthe-previous-actions-display
+  ></span>
+  <!-- Interventions -->
+  <healthe-interventions-cell
+    *ngSwitchCase="'interventions'"
+    [claim]="element"
+    class="standard-text"
+    id="results-card-list-interventions-{{ index }}"
+  ></healthe-interventions-cell>
+
+  <!-- Action Column -->
+  <span *ngSwitchCase="'action'">
+    <healthe-action-button
+      [index]="index"
+      [claimNumber]="element.claimNumber"
+      [interventions]="element.interventions"
+    ></healthe-action-button>
+  </span>
+
+  <!-- Basic Cell -->
+  <span
+    *ngSwitchDefault
+    #basicCell
+    class="standard-text ellipsis-text"
+    id="results-card-list-{{name}}-{{ index }}"
+    [matTooltip]="element[name]"
+    >{{ element[name] }}</span
+  >
+</ng-container>

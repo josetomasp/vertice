@@ -1,0 +1,36 @@
+<div
+  fxLayout="row"
+  fxLayoutAlign="space-between center"
+  fxLayout.lt-md="column"
+  fxLayoutGap.lt-md="35px"
+  class="healthe-header-bar-wrapper"
+>
+  <div
+    fxLayout="row"
+    [fxLayoutGap]="gapSize + 'px'"
+    fxLayoutAlign="start center"
+  >
+    <a
+      *ngIf="link"
+      [id]="id"
+      class="healthe-header-bar-title nowrap"
+      [routerLink]="link"
+      >{{ title }}</a
+    >
+    <span *ngIf="!link" [id]="id" class="healthe-header-bar-title nowrap">{{
+      title
+    }}</span>
+    <ng-content></ng-content>
+  </div>
+  <div
+    *healtheRemoveElementIfTrue="
+      componentGroupName;
+      elementName: 'preferencesStore'
+    "
+    fxLayout="row"
+    fxLayoutAlign.lt-md="end"
+    fxLayoutGap="20px"
+  >
+    <healthe-user-menu id="userMenu" ></healthe-user-menu>
+  </div>
+</div>

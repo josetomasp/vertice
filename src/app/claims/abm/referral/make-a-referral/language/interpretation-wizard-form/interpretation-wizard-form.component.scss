@@ -1,0 +1,17 @@
+@import 'variables';
+@import 'text';
+
+.interpretation-icons {
+  @extend .inline-left-icon;
+  font-size: 1.33333em; // fa-2x
+  position: relative;
+  left: 3px;
+}
+
+.mat-tooltip {
+  white-space: pre-line;
+}
+
+::ng-deep .mat-tooltip.interpretationTooltip {
+  text-align: left;
+}

@@ -1,0 +1,72 @@
+import { MatCardModule } from '@angular/material/card';
+import { render, screen } from '@testing-library/angular';
+import { ReferralSearchTableComponent } from './referral-search-table.component';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatSortModule } from '@angular/material/sort';
+import { MatTableModule } from '@angular/material/table';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { SearchResultsCountComponent } from '../../../../components/search-results-count/search-results-count.component';
+import { FlexLayoutModule } from '@angular/flex-layout';
+import { NavReferral } from '../../../../store/models/nav-referral.model';
+import { fromEvent, of } from 'rxjs';
+import {
+  GenericWizardComponent
+} from '@modules/generic-wizard/generic-wizard/generic-wizard.component';
+
+describe('ReferralSearchTableComponent', () => {
+  async function setup(results?: NavReferral[]) {
+    if (!results) {
+      results = [];
+    }
+    return await render(ReferralSearchTableComponent, {
+      declarations: [SearchResultsCountComponent],
+      imports: [
+        MatCardModule,
+        MatPaginatorModule,
+        MatSortModule,
+        MatTableModule,
+        MatProgressSpinnerModule,
+        FlexLayoutModule
+      ],
+      componentProperties: {
+        results: results,
+        searchTableConfig: {
+          customerID: '',
+          noDataForQuery: '',
+          noSearchPerformedText: 'Click search for results',
+          pagerSizeOptions: [10, 25],
+          pageSize: 25,
+          username: ''
+        },
+        isLoading$: of(false)
+      }
+    });
+  }
+
+  test.skip('render', async () => {
+    await setup();
+      //Make sure the user directions are showing on initial load
+      
+      
+      screen.queryByTestId("results-card-list-header-referralId-0");
+      screen.queryByTestId("results-card-list-header-claimNumber-1");
+      screen.queryByTestId("results-card-list-header-claimantName-2");
+      screen.queryByTestId("results-card-list-header-dateReceived-3");
+      screen.queryByTestId("results-card-list-header-requestorRoleName-4");
+      screen.queryByTestId("results-card-list-header-status-5");
+      screen.queryByTestId("results-card-list-header-serviceType-6");
+      screen.queryByTestId("results-card-list-header-vendor-7");
+  });
+
+  
+  test.skip('render', async () => {
+    await setup();
+    //Make sure the user directions are showing on initial load
+    screen.getByText(/Click search for results/i);
+  });
+
+  test('arrows paginator disabled', async () => {
+    await setup();
+    const prevButton = screen.getAllByRole("button", {name :"Previous page"})[0];
+  });
+});

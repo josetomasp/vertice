@@ -1,0 +1,12 @@
+@import 'variables';
+.title {
+  color: $primary;
+}
+
+.radio-spacing {
+  margin-right: 15px;
+}
+
+::ng-deep fa-icon.ieSvgFix > svg {
+  width: 28px;
+}

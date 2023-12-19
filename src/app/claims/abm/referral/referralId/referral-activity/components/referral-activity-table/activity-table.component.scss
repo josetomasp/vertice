@@ -1,0 +1,13 @@
+@import 'variables';
+
+.columnPadding {
+  padding-right: 15px;
+}
+
+.failureStatus {
+  color: $danger;
+}
+
+::ng-deep thead tr th div.mat-sort-header-container {
+  margin-bottom: 20px;
+}

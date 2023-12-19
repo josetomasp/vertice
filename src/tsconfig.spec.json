@@ -1,0 +1,22 @@
+{
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "outDir": "../out-tsc/spec",
+    "types": [
+      "node",
+      "googlemaps",
+      "jest",
+      "@testing-library/jest-dom"
+    ],
+    "module": "commonjs",
+    "emitDecoratorMetadata": true,
+    "allowJs": true
+  },
+  "files": [
+    "polyfills.ts"
+  ],
+  "include": [
+    "**/*.spec.ts",
+    "**/*.d.ts"
+  ]
+}

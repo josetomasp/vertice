@@ -1,0 +1,117 @@
+@import 'variables';
+@import 'text';
+// All the !important-s are needed because whoever originally did the expansion panel styling must have had a bad day and
+// just wanted to get things over with...
+
+::ng-deep .details-location-expansion-panel {
+  box-shadow: none !important;
+  border-radius: 0;
+  mat-expansion-panel-header.details-expansion-panel--header {
+    padding: 5px 15px 5px 0 !important;
+    display: flex;
+    align-items: center;
+    background-color: #f2f2f2;
+    box-shadow: none;
+  }
+  mat-expansion-panel-header:hover {
+    background-color: #d9d9d9 !important;
+  }
+  mat-expansion-panel-header:focus {
+    background-color: #f2f2f2 !important;
+  }
+  mat-expansion-panel-header:focus:hover {
+    background-color: #d9d9d9 !important;
+  }
+
+  mat-expansion-panel-header.mat-expanded:hover {
+    background-color: #d9d9d9 !important;
+  }
+  mat-expansion-panel-header.mat-expanded:focus {
+    background-color: #f2f2f2 !important;
+  }
+  mat-expansion-panel-header.mat-expanded:focus:hover {
+    background-color: #d9d9d9 !important;
+  }
+
+  mat-expansion-panel-header mat-checkbox {
+    margin-left: 10px;
+  }
+
+  mat-panel-title.details-expansion-panel--header--title {
+    height: fit-content !important;
+    font-size: 14px !important;
+    font-weight: 600 !important;
+    display: flex;
+    align-items: center;
+  }
+
+  .detail-title-header {
+    margin: auto;
+    margin-left: 0;
+    display: inherit;
+    .header-text {
+      margin: auto 0;
+    }
+    .header-bold-text {
+      margin: auto 5px auto 0;
+      font-weight: 900;
+    }
+  }
+
+  fa-icon.details-expansion-panel_icon {
+    font-size: 24px !important;
+    padding-right: 10px;
+  }
+
+  &--see-details {
+    margin-right: 15px;
+    font-weight: 600;
+    align-self: center;
+  }
+
+  .mat-expansion-panel-body {
+    padding: 0 30px 30px 30px !important;
+    font-size: 14px !important;
+    font-weight: 600 !important;
+  }
+
+  .location-list-item {
+    padding: 15px 0 0 15px;
+  }
+
+  .detail--input {
+    width: 60px;
+    margin: auto 15px auto 0;
+    padding: 10px;
+    text-align: center;
+  }
+}
+
+::ng-deep mat-checkbox {
+  .mat-checkbox-inner-container {
+    background-color: white !important;
+  }
+  .mat-checkbox-inner-container .mat-checkbox-frame {
+    z-index: 1 !important;
+  }
+}
+
+mat-error {
+  margin: auto;
+}
+
+.tag-secondary {
+  height: 10px;
+  margin-right: 15px;
+  align-self: center;
+}
+
+.approval-indicator {
+  margin: 16px;
+  &--approved {
+    @extend .text-success;
+  }
+  &--disapproved {
+    @extend .text-danger;
+  }
+}

@@ -1,0 +1,35 @@
+<div class="healthe-card-column-grid" id="card-grid">
+  <div
+    class="healthe-card-column"
+    *ngFor="let laneIndex = index; let lane; of: lanes"
+    [id]="'card-grid-column' + laneIndex"
+    fxFlex="1 0 200px"
+  >
+    <mat-card
+      [id]="'card-grid-column-header' + laneIndex"
+      class="card-column-title mat-card-dark overhead-label"
+    >
+      {{ lane.header }}
+    </mat-card>
+    <ng-container *ngIf="(authorizationArchType$ | async) === ReferralAuthorizationArchetype.Kinect
+    && ReferralStage.VENDOR_ASSIGNMENT !== lane.lane">
+      <div class="kinect-referral-info-text">Further referral updates are not available for Referral-only services. Please contact the referral's assigned vendor.</div>
+    </ng-container>
+
+    <div
+      *ngFor="
+        let cardState of (getCards$(lane.lane) | async);
+        index as cardIndex;
+        trackBy: trackByFn
+      "
+    >
+      <healthe-grid-card
+        [clickable]="lane.clickable"
+        [cardState]="cardState"
+        [laneIndex]="laneIndex"
+        [cardIndex]="cardIndex"
+      ></healthe-grid-card>
+    </div>
+
+  </div>
+</div>

@@ -1,0 +1,44 @@
+.healthe-layout {
+  display: flex;
+  &__container {
+    display: flex;
+  }
+  &__row {
+    flex-direction: row;
+    &--gap > * {
+      &:not(:first-child) {
+        margin-left: var(--gap-width);
+      }
+    }
+  }
+  &__column {
+    flex-direction: column;
+    width: 100%;
+    &--gap > * {
+      &:not(:first-child) {
+        margin-top: var(--gap-width);
+      }
+    }
+  }
+  &--main-axis--center {
+    justify-content: center;
+  }
+  &--main-axis--space-between {
+    justify-content: space-between;
+  }
+  &--cross-axis--center {
+    align-items: center;
+  }
+  &--cross-axis--start {
+    align-items: start;
+  }
+  &--width-fill {
+    width: 100%;
+  }
+  &--align-start {
+    align-items: flex-start;
+  }
+  &--justify-space-between {
+    justify-content: space-between;
+  }
+}

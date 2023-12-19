@@ -1,0 +1,55 @@
+<mat-card class="assign-first-fill-notes-card">
+  <mat-card-title class="assign-first-fill-notes-card--header--title">
+    <fa-icon
+      [icon]="faFile"
+      class="assign-first-fill-notes-card-panel_icon"
+    ></fa-icon>
+    Web User Notes
+  </mat-card-title>
+
+  <mat-form-field>
+    <textarea
+      #notesInput
+      matInput
+      id="auth-info-notes-input"
+      rows="3"
+      [formControl]="noteFormControl"
+      style="resize: none"
+      [maxlength]="maxNoteLength"
+    ></textarea>
+  </mat-form-field>
+  <div class="textarea-input-count">
+    Characters left: {{ maxNoteLength - noteFormControl?.value?.length }}
+  </div>
+
+  <div class="spacersmall"></div>
+  <div fxLayout="row" fxLayoutGap="6px" fxLayoutAlign="end end">
+    <button
+      mat-flat-button
+      id="assign-first-fill-notes-card-save-notes-btn"
+      class="primary-button"
+      (click)="saveNotes()"
+      [disabled]="areNotesEmpty() || noteFormControl.pristine"
+    >
+      SAVE NOTES
+    </button>
+    <button
+      mat-flat-button
+      id="assign-first-fill-notes-card-move-btn"
+      class="primary-button"
+      (click)="moveToNextQueue()"
+      [disabled]="!areNotesEmpty() && !noteFormControl.pristine"
+    >
+      MOVE TO NEXT QUEUE
+    </button>
+    <button
+      mat-flat-button
+      id="assign-first-fill-notes-card-save-and-move-btn"
+      class="primary-button"
+      (click)="saveNotesAndMoveToNextQueue()"
+      [disabled]="areNotesEmpty() || noteFormControl.pristine"
+    >
+      SAVE NOTES & MOVE TO NEXT QUEUE
+    </button>
+  </div>
+</mat-card>

@@ -1,0 +1,25 @@
+<div>
+  <!-- <mat-divider></mat-divider> -->
+  <span [id]="getID('dateLabelWrapper')" class="single-date-date-label">
+    <label [id]="getID('dateLabelPrefix')">{{ prefixLabel }}</label>
+    <label
+      [id]="getID('dateLabel-selectedDate')"
+      class="single-date-selected-date-label"
+      >{{ fromDate | date: 'MMM dd, yyyy' }}</label
+    >
+  </span>
+  <!-- <mat-divider></mat-divider> -->
+
+  <mat-calendar
+    (_userSelection)="onUserSelection($event)"
+    (selectedChange)="onSelectedChange($event)"
+    (yearSelected)="onYearSelected($event)"
+    [dateFilter]="weekendFilter"
+    [id]="getID('datePicker')"
+    [maxDate]="maxDate"
+    [minDate]="minDate"
+    [selected]="selectedDate"
+    [startAt]="selectedDate"
+  >
+  </mat-calendar>
+</div>

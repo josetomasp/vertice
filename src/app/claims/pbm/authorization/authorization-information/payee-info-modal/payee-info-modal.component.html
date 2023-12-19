@@ -1,0 +1,41 @@
+<div fxLayout="row" fxLayoutAlign="space-between center" mat-dialog-title>
+  <h1 id="payee-modal-title">Payee Information</h1>
+  <button mat-icon-button mat-dialog-close id="payee-modal--header-closeButton">
+    <i class="fal fa-times modal-close-widget"></i>
+  </button>
+</div>
+<mat-dialog-content id="payee-modal-body" class="payee-modal-bodyClass">
+  <div fxLayout="row" fxLayoutAlign="space-between">
+    <div>
+      <div class="overhead-label" id="payee-modal-name-label">PAYEE NAME</div>
+      <div id="payee-modal-name">{{ data.name }}</div>
+    </div>
+    <div>
+      <div class="overhead-label" id="payee-modal-address-label">
+        PAYEE ADDRESS
+      </div>
+      <div id="payee-modal-address">
+        {{ data.address1 }} <br />
+        <span *ngIf="data.address2">{{ data.address2 }}<br /></span>
+        <span *ngIf="data.city">{{ data.city }},</span>
+        <span *ngIf="data.state">{{ data.state }},</span> {{ data.zipCode }}
+      </div>
+    </div>
+    <div>
+      <div class="overhead-label" id="payee-modal-taxId-label">
+        PAYEE TAX ID
+      </div>
+      <div id="payee-modal-taxId">{{ data.taxId }}</div>
+    </div>
+  </div>
+</mat-dialog-content>
+<div mat-dialog-actions fxLayout="row" class="payee-modal-actions" dir="rtl">
+  <button
+    id="payee-modal-okay-button"
+    mat-raised-button
+    class="primary-button"
+    [mat-dialog-close]="false"
+  >
+    CLOSE
+  </button>
+</div>

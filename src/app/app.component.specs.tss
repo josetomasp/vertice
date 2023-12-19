@@ -1,0 +1,5 @@
+describe('AppComponent', () => {
+  test('sanity', async () => {
+    expect(1).toBe(1);
+  });
+});

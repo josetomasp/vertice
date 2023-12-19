@@ -1,0 +1,17 @@
+@import 'variables';
+
+:host {
+  padding: 30px 20px 0 20px;
+}
+
+.header {
+  &-separator {
+    width: 2px;
+    background-color: $gray-300;
+    height: 20px;
+  }
+
+  &-authorization-type {
+    font-weight: normal;
+  }
+}

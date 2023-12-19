@@ -1,0 +1,41 @@
+<div
+  *ngIf="previousActions.length > 1"
+  style="width: 70px; white-space: normal !important;"
+  [id]="'multipleActionsDisplay-' + index"
+>
+  Multiple Actions
+  <i
+    [matTooltip]="getTooltip()"
+    style="transform: translateX(10px); position: absolute;"
+    class="fal fa-info-circle"
+    [id]="'multipleActionsDisplay-icon-' + index"
+  ></i>
+</div>
+<div
+  *ngIf="previousActions.length === 1"
+  id="singleAction-display-{{index}}"
+  [matTooltip]="
+    previousActions[0].type.toUpperCase() +
+    '\n' +
+    previousActions[0].status +
+    '\n' +
+    previousActions[0].date
+  "
+>
+  <div [id]="'singleAction-display-type' + index">
+    {{ previousActions[0].type.toUpperCase() }}
+  </div>
+  <div [id]="'singleAction-display-status' + index">
+    ({{ previousActions[0].status }})
+  </div>
+  <div [id]="'singleAction-display-date' + index">
+    ({{ previousActions[0].date }})
+  </div>
+</div>
+<div
+  id="noAction-display-{{index}}"
+  *ngIf="!previousActions || previousActions.length === 0"
+  [matTooltip]="'None'"
+>
+  None
+</div>

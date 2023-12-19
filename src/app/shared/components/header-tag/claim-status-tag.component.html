@@ -1,0 +1,7 @@
+<span
+  [ngClass]="getTagColor(claimStatus)"
+  [hidden]="!claimStatus"
+  class="tag unselectable"
+  [id]="'headerBar-' + statusType + 'ClaimStatusTag'"
+  >{{ getStatusTypeVerbiage() }}: {{ claimStatus }}</span
+>

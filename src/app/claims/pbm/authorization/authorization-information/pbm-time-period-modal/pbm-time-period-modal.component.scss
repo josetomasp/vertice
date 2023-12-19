@@ -1,0 +1,61 @@
+@import 'variables';
+
+::ng-deep .mat-dialog-title {
+  margin-top: 10px;
+}
+
+::ng-deep .time-frame-modal-container .mat-form-field,
+.time-frame-modal-container .mat-form-field-wrapper,
+.time-frame-modal--container .mat-form-field-flex {
+  height: 0 !important;
+}
+
+.time-frame-modal-container {
+  max-height: inherit;
+}
+
+.time-frame-modal-container .disclaimer-note {
+  font-size: 12px;
+  color: $gray-400;
+  font-weight: 500;
+}
+
+.time-period-primary-info-container {
+  padding: 15px;
+  background-color: $gray-100;
+  margin: 15px;
+}
+
+.cell-underline {
+  color: $secondary;
+  text-decoration: underline;
+}
+.sticky-footer {
+  left: 0;
+  right: 0;
+  bottom: 2px;
+  margin-top: 20px;
+  box-shadow: 0 0 5px 0 rgb(52 58 64 / 26%) !important;
+  position: sticky;
+}
+.mat-dialog-content {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.footer-buttons {
+  width: 100%;
+}
+
+.footer-buttons button {
+  margin-right: 15px;
+}
+::ng-deep .single-date-error-label {
+  top: 50px !important;
+  margin-top: 0 !important;
+}
+
+.datepickerContainer {
+  padding: 1px;
+}
+

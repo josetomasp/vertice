@@ -1,0 +1,78 @@
+<form
+  style="--gap-width: 32px"
+  class="healthe-layout__container healthe-layout_column"
+  healtheFormValidationExtractor
+  [parentPath]="parentPath"
+  [formGroup]="parentFormGroup"
+>
+  <section>
+    <h3 class="primary">Vendor Selection</h3>
+    <span class="note-text">{{ vendorsSelectionOptionsNote }}</span>
+    <div class="spacersmall"></div>
+    <div *ngIf="parentFormGroup.hasError('required')">
+      <div class="mat-error">You must select at least one vendor.</div>
+      <div class="spacersmall"></div>
+    </div>
+
+    <div
+      class="healthe-layout healthe-layout__column healthe-layout__column--gap"
+      style="width: 300px; --gap-width: 15px"
+    >
+      <ng-container *ngIf="!isReadOnly()">
+        <div
+          class="healthe-layout healthe-layout__row healthe-layout--align-start healthe-layout--justify-space-between"
+          *ngFor="let option of checkedList; let i = index"
+        >
+          <mat-checkbox
+            *ngIf="config.vendorChangeAllowed"
+            [formControl]="option.checkbox"
+            id="vendor-selector-{{ instanceID }}-{{ i }}-checkbox"
+          >
+            <span id="vendor-selector-{{ instanceID }}-{{ i }}-item-name">{{
+              option.value.label
+            }}</span></mat-checkbox
+          >
+          <div *ngIf="!config.vendorChangeAllowed">
+            <span id="vendor-selector-{{ instanceID }}-{{ i }}-item-name">{{
+              option.value.label
+            }}</span>
+          </div>
+          <div *ngIf="config.priorityChangeAllowed">
+            <fa-icon
+              [icon]="faChevronUp"
+              class="healthe-vendor-step__arrow"
+              (click)="moveUp(i)"
+              style="margin-right: 20px"
+              id="vendor-selector-{{ instanceID }}-{{ i }}-up"
+              [ngClass]="{ 'healthe-vendor-step__arrow--disabled': i === 0 }"
+            ></fa-icon>
+            <fa-icon
+              [icon]="faChevronDown"
+              class="healthe-vendor-step__arrow"
+              (click)="moveDown(i)"
+              [ngClass]="{
+                'healthe-vendor-step__arrow--disabled':
+                  i === checkedList.length - 1
+              }"
+              id="vendor-selector-{{ instanceID }}-{{ i }}-down"
+            ></fa-icon>
+          </div>
+        </div>
+      </ng-container>
+      <ng-container *ngIf="isReadOnly()">
+        <ol
+          class="healthe-layout healthe-layout__column healthe-layout__column--gap healthe-layout--align-start healthe-layout--justify-space-between"
+        >
+          <li
+            *ngFor="let option of checkedList; let i = index"
+            id="vendor-selector-{{ instanceID }}-{{ i }}-item"
+          >
+            <span id="vendor-selector-{{ instanceID }}-{{ i }}-item-name">{{
+              option.value.label
+            }}</span>
+          </li>
+        </ol>
+      </ng-container>
+    </div>
+  </section>
+</form>

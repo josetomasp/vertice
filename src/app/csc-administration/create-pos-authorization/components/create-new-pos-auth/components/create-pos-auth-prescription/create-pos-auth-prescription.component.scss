@@ -1,0 +1,45 @@
+@import 'variables';
+.header-bar {
+  background-color: $gray-600;
+  color: $teal;
+  padding: 20px 20px 40px 20px;
+
+  ::ng-deep a {
+    color: unset;
+    text-decoration: underline;
+    text-transform: uppercase;
+  }
+}
+
+.card-title {
+  color: $primary;
+  font-weight: bold;
+}
+
+.information-icon {
+  color: $secondary;
+  font-size: 15px;
+  cursor: pointer;
+  margin-left: 5px;
+}
+
+.note-icon {
+  color: $secondary;
+  font-size: 18px;
+  margin-right: 5px;
+}
+
+.prescriptionNotesBox {
+  border: solid 2px $secondary;
+}
+
+textarea {
+  resize: none;
+  width: 100%;
+  padding: 10px;
+}
+
+.prescriber-phone-number {
+  font-size: 15px;
+  min-height: 35px;
+}

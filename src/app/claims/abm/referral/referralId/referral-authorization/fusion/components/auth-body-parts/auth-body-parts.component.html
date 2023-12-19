@@ -1,0 +1,41 @@
+<div class="authorization--card--expansion--wrapper">
+  <ng-container *ngIf="!isReadOnly">
+    <span class="auth-body-requirement-text"
+      >At least one body part must be approved before referral is
+      approved.</span
+    >
+    <div class="spacersmall"></div>
+    <span
+      class="sectionLabel"
+      id="authorization--card-bodyparts-title-{{fusionAuthIndex}}"
+      >Body Parts(s)<span class="danger">*</span></span
+    >
+
+    <div class="spacersmall"></div>
+  </ng-container>
+
+  <healthe-body-part-section
+    [fusionAuth]="fusionAuth"
+    [selectedBodyParts]="selectedBodyParts[fusionAuthIndex]"
+    [bodyPartApprovalOptions]="bodyPartApprovalOptions"
+    [authBodyPartsFormArray]="authBodyPartsFormArray"
+    [originalBodyParts]="originalBodyParts"
+    [isReadOnly]="isReadOnly"
+  ></healthe-body-part-section>
+
+  <div class="spacersmall"></div>
+  <button
+    *ngIf="!isReadOnly"
+    (click)="openAddBodyPartsModal(originalBodyParts, fusionAuthIndex)"
+    class="secondary-button"
+    id="create-a-referral-{{fusionAuth.authorizationUnderReview.authorizationId}}-begin"
+    mat-flat-button
+    style="margin-right: 16px;"
+  >
+    <fa-icon
+      [icon]="faPlus"
+      class="authorization--card--inset--header_icon"
+    ></fa-icon>
+    ADD BODY PARTS
+  </button>
+</div>

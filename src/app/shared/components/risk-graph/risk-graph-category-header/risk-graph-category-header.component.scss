@@ -1,0 +1,30 @@
+@import 'variables';
+
+:host ::ng-deep {
+  .mat-card {
+    background-color: whitesmoke;
+    box-shadow: none !important;
+    margin-right: 15px;
+  }
+
+  .mat-button {
+    min-width: unset !important;
+  }
+
+  i {
+    padding-right: 4px;
+  }
+}
+
+.infoIcon {
+  color: $secondary;
+  font-size: 16px;
+}
+
+.category-metric {
+  padding-left: 15px;
+
+  &:not(:first-child) {
+    border-left: solid 1px $gray-300;
+  }
+}

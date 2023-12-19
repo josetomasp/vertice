@@ -1,0 +1,14 @@
+@import 'variables';
+@import 'text';
+
+.form-group-box {
+  background-color: $gray-50;
+  padding: 24px 11px 24px 11px;
+}
+
+.sedan-icons {
+  @extend .inline-left-icon;
+  font-size: 1.33333em; // fa-2x
+  position: relative;
+  left: 3px;
+}

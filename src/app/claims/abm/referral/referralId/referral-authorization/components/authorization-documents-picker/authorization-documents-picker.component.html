@@ -1,0 +1,183 @@
+<table mat-table style="min-width: 500px" [dataSource]="tableDataSource">
+  <ng-container matColumnDef="fileName">
+    <th
+      mat-header-cell
+      id="auth-add-documents-header-name"
+      class="healthe-table-cell tableHeader"
+      *matHeaderCellDef
+      style="width: 120px;"
+    >
+      FILE NAME
+    </th>
+    <td
+      mat-cell
+      class="healthe-table-cell"
+      [id]="'add-documents-cell-name-' + i"
+      *matCellDef="let data; let i = index"
+    >
+      <span *ngIf="!data.fileURL" [matTooltip]="data.fileName">
+        {{ i + 1 }}.
+        <span [matTooltip]="data.fileName"> {{ data.fileName }}</span></span
+      >
+      <span *ngIf="data.fileURL" [matTooltip]="data.fileName">
+        {{ i + 1 }}.
+        <span
+          class="fake-link"
+          (click)="downloadFile(i, data.fileURL)"
+          [matTooltip]="data.fileName"
+        >
+          {{ data.fileName }}</span
+        ></span
+      >
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="documentType">
+    <th
+      mat-header-cell
+      id="auth-add-documents-header-documentType"
+      class="healthe-table-cell tableHeader"
+      *matHeaderCellDef
+      style="width: 120px;"
+    >
+      DOCUMENT TYPE <span class="text-required">*</span>
+    </th>
+    <td
+      mat-cell
+      class="healthe-table-cell"
+      [id]="'add-documents-cell-documentType-' + i"
+      *matCellDef="let data; let i = index"
+    >
+      <mat-form-field
+        *ngIf="!data.readOnly"
+        style="width: 90%; margin-top: 15px;"
+      >
+        <mat-select
+          id="add-documents-cell-documentType-select-{{i}}"
+          [formControl]="formArray.controls[i]"
+        >
+          <mat-option
+            *ngFor="let option of documentTypes; let dti = index"
+            [value]="option"
+            id="add-documents-cell-documentType-option-{{i}}-{{dti}}"
+          >
+            {{ option }}
+          </mat-option>
+        </mat-select>
+        <mat-error id="add-documents-cell-documentType-required-error">
+          Please choose file type
+        </mat-error>
+      </mat-form-field>
+      <span *ngIf="data.readOnly" [matTooltip]="data.documentType">
+        {{ i + 1 }}.
+        <span [matTooltip]="data.documentType">
+          {{ data.documentType }}</span
+        ></span
+      >
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="submittedBy">
+    <th
+      mat-header-cell
+      id="auth-add-documents-header-submittedBy"
+      class="healthe-table-cell tableHeader"
+      *matHeaderCellDef
+      style="width: 120px;"
+    >
+      SUBMITTED BY
+    </th>
+    <td
+      mat-cell
+      class="healthe-table-cell"
+      [id]="'add-documents-cell-submittedBy-' + i"
+      *matCellDef="let data; let i = index"
+    >
+      <span [matTooltip]="data.submittedBy">{{ data.submittedBy }}</span>
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="submitDate">
+    <th
+      mat-header-cell
+      id="auth-add-documents-header-submitDate"
+      class="healthe-table-cell tableHeader"
+      *matHeaderCellDef
+      style="width: 50px;"
+    >
+      DATE RECEIVED
+    </th>
+    <td
+      mat-cell
+      class="healthe-table-cell"
+      [id]="'add-documents-cell-submitDate-' + i"
+      *matCellDef="let data; let i = index"
+    >
+      <span [matTooltip]="data.submitDate">{{ data.submitDate }}</span>
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="delete">
+    <th
+      mat-header-cell
+      id="add-documents-documents-header-delete"
+      class="healthe-table-cell tableHeader"
+      *matHeaderCellDef
+      style="width: 20px;"
+    ></th>
+    <td
+      mat-cell
+      class="healthe-table-cell"
+      style="text-overflow: unset;"
+      [id]="'add-documents-documents-cell-delete-' + i"
+      *matCellDef="let data; let i = index"
+    >
+      <a
+        *ngIf="!data.readOnly"
+        mat-icon-button
+        [id]="'add-documents-documents-cell-delete-button-' + i"
+        class="text-secondary"
+        (click)="confirmDelete(i)"
+      >
+        <fa-icon [icon]="faTrashAlt" size="lg"></fa-icon>
+      </a>
+    </td>
+  </ng-container>
+
+  <tr
+    mat-header-row
+    style="height: 50px !important;"
+    *matHeaderRowDef="tableColumns"
+  ></tr>
+  <tr mat-row *matRowDef="let row; columns: tableColumns; let i = index"></tr>
+</table>
+
+<ng-container *ngIf="!this.documents || this.documents.length === 0">
+  <p class="standard-text" style="text-align:center" id="add-documents-no-data">
+    No documents available
+  </p></ng-container
+>
+
+<div class="spacersmall"></div>
+<a
+  class="ALink"
+  id="add-documents-uploadDocuments-button"
+  (click)="launchDocumentInput()"
+>
+  <i class="far fa-plus"></i> Upload document(s)
+</a>
+<input
+  type="file"
+  multiple
+  #hiddenNativeFileInput
+  style="display: none"
+  id="add-documents-documents-upload-input-button"
+  (change)="handleFileInput($event)"
+/>
+
+<ng-container *ngIf="invalidDocumentsList?.length > 0">
+  <div class="document-picker__invalid-documents">
+    Unable to attach files that are larger than {{ maximumFileSizeInMb - 1 }}MB
+    <p *ngFor="let documentName of invalidDocumentsList">{{ documentName }}</p>
+  </div>
+</ng-container>

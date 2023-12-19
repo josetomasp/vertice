@@ -1,0 +1,113 @@
+<div
+  fxLayout="column"
+  fxLayoutGap="20px"
+  style="margin-top: 20px; margin-bottom: 20px"
+>
+  <div
+    *ngFor="let night of itineraryData; let i = index; let lastItem = last"
+    fxLayout="column"
+    fxLayoutGap="20px"
+  >
+    <div
+      *ngIf="stage === ReferralStage.RESULTS"
+      class="secondary"
+      style="font-weight: bold"
+    >
+      {{ getTitleLine(night, i) }}
+    </div>
+
+    <div fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="35px">
+      <div>
+        <div class="overhead-label" id="lodgingCardback-address-label-{{ i }}">
+          LODGING ADDRESS
+        </div>
+        <div
+          *ngFor="let line of night.address; let ix = index"
+          id="lodgingCardback-address{{ix}}-{{ i }}"
+        >
+          {{ line }}
+        </div>
+      </div>
+
+      <div>
+        <div
+          class="overhead-label"
+          id="lodgingCardback-contactInfo-label-{{ i }}"
+        >
+          CONTACT INFORMATION
+        </div>
+        <div id="lodgingCardback-contactInfo-{{ i }}">
+          {{ night.contactInfo }}
+        </div>
+      </div>
+
+      <div>
+        <div class="overhead-label" id="lodgingCardback-checkIn-label-{{ i }}">
+          CHECK-IN
+        </div>
+        <div id="lodgingCardback-checkIn-{{ i }}">{{ night.checkinDate }}</div>
+      </div>
+
+      <div>
+        <div class="overhead-label" id="lodgingCardback-checkout-label-{{ i }}">
+          CHECK-OUT
+        </div>
+        <div id="lodgingCardback-checkout-{{ i }}">
+          {{ night.checkoutDate }}
+        </div>
+      </div>
+
+      <div *ngIf="stage === ReferralStage.RESULTS">
+        <div
+          class="overhead-label"
+          id="lodgingCardback-nightlyCosts-label-{{ i }}"
+        >
+          NIGHTLY COSTS
+        </div>
+        <div id="lodgingCardback-nightlyCosts-{{ i }}">
+          {{ night.nightlyCost }}
+        </div>
+      </div>
+    </div>
+
+    <div fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="35px">
+      <div>
+        <div class="overhead-label" id="lodgingCardback-apptType-label-{{ i }}">
+          APPOINTMENT TYPE
+        </div>
+        <div id="lodgingCardback-apptType-{{ i }}">
+          {{ night.appointmentInfo.appointmentType }}
+        </div>
+      </div>
+
+      <div>
+        <div class="overhead-label" id="lodgingCardback-apptTime-label-{{ i }}">
+          APPT. DATE & TIME
+        </div>
+        <div
+          *ngFor="
+            let line of night.appointmentInfo.appointmentDateAndTime;
+            let ix = index
+          "
+          id="lodgingCardback-apptTime{{ix}}-{{ i }}"
+        >
+          {{ line }}
+        </div>
+      </div>
+
+      <div>
+        <div
+          class="overhead-label"
+          id="lodgingCardback-doctorNameAndSpec-label-{{ i }}"
+        >
+          DOCTOR NAME & SPECIALTY
+        </div>
+        <div id="lodgingCardback-doctorNameAndSpec-{{ i }}">
+          {{ night.appointmentInfo.doctorNameAndSpec }}
+        </div>
+      </div>
+    </div>
+
+    <mat-divider *ngIf="!lastItem"></mat-divider>
+  </div>
+</div>

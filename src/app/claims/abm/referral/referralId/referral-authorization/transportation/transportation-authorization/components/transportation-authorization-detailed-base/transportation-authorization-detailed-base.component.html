@@ -1,0 +1,159 @@
+<div [formGroup]="formGroup" class="matFormFieldWidthFix">
+  <div fxLayout="row wrap" fxLayoutAlign="start start" fxLayoutGap="35px">
+    <div>
+      <div
+        class="overhead-label"
+        id="detailed-{{idBase}}-fromAddress-label-{{idIndex}}"
+      >
+        FROM ADDRESS<span class="required-text">*</span>
+      </div>
+      <mat-form-field>
+        <mat-select
+          formControlName="fromAddress"
+          [matTooltip]="fromAddress.value | locationLabel"
+          style="width: 359px"
+          placeholder="Choose Pickup Location"
+          healtheSelect
+          [compareWith]="compareLocations"
+          id="detailed-{{idBase}}-fromAddress-select-{{idIndex}}"
+          #fromAddressSelect
+        >
+          <mat-option
+            *ngFor="
+              let location of (transportationLocations$ | async);
+              index as $fromAddressIndex
+            "
+            [value]="location.value"
+            id="detailed-{{idBase}}-fromAddress-select-option-{{$fromAddressIndex}}"
+            >{{ location.label }}</mat-option
+          >
+          <mat-option
+            (click)="showAddLocationModal(fromAddressSelect)"
+            id="detailed-{{idBase}}-fromAddress-select-option-addLocation"
+          >
+            <span
+              id="detailed-{{idBase}}-fromAddress-select-addLocation-button"
+            >
+              Add Location
+            </span>
+          </mat-option>
+        </mat-select>
+        <mat-error
+          id="detailed-{{idBase}}-date-fromAddress-error-duplicate{{idIndex}}"
+          *ngIf="formGroup.controls['fromAddress']?.hasError('duplicate')"
+          >From Address and To Address cannot be the same
+        </mat-error>
+        <mat-error
+          id="detailed-{{idBase}}-date-fromAddress-error-required{{idIndex}}"
+          *ngIf="formGroup.controls['fromAddress']?.hasError('required')"
+          >Select a value for 'From Address'
+        </mat-error>
+      </mat-form-field>
+    </div>
+
+    <div>
+      <div
+        class="overhead-label"
+        id="detailed-{{idBase}}-toAddress-label-{{idIndex}}"
+      >
+        TO ADDRESS<span class="required-text">*</span>
+      </div>
+      <mat-form-field>
+        <mat-select
+          formControlName="toAddress"
+          [matTooltip]="toAddress.value | locationLabel"
+          style="width: 359px"
+          placeholder="Choose Destination"
+          healtheSelect
+          [compareWith]="compareLocations"
+          id="detailed-{{idBase}}-toAddress-select-{{idIndex}}"
+          #toAddressSelect
+        >
+          <mat-option
+            *ngFor="
+              let location of (transportationLocations$ | async);
+              index as $fromAddressIndex
+            "
+            [value]="location.value"
+            id="detailed-{{idBase}}-toAddress-select-option-{{$fromAddressIndex}}"
+            >{{ location.label }}</mat-option
+          >
+
+          <mat-option (click)="showAddLocationModal(toAddressSelect)">
+            <span id="detailed-{{idBase}}-toAddress-select-addLocation-button">
+              Add Location
+            </span>
+          </mat-option>
+        </mat-select>
+        <mat-error
+          id="detailed-{{idBase}}-date-toAddress-error-duplicate{{idIndex}}"
+          *ngIf="formGroup.controls['toAddress']?.hasError('duplicate')"
+          >From Address and To Address cannot be the same
+        </mat-error>
+        <mat-error
+          id="detailed-{{idBase}}-date-toAddress-error-required{{idIndex}}"
+          *ngIf="formGroup.controls['toAddress']?.hasError('required')"
+          >Select a value for 'To Address'
+        </mat-error>
+      </mat-form-field>
+    </div>
+  </div>
+  <div class="spacersmall"></div>
+  <div fxLayout="row wrap" fxLayoutAlign="start start" fxLayoutGap="35px">
+    <div>
+      <div
+        class="overhead-label"
+        id="detailed-{{idBase}}-pickupDate-label-{{idIndex}}"
+      >
+        PICKUP DATE<span class="required-text">*</span>
+      </div>
+      <mat-form-field class="show-one-error">
+        <healthe-datepicker
+          id="detailed-{{idBase}}-pickupDate-datepicker"
+          formControlName="pickupDate"
+        ></healthe-datepicker>
+        <mat-error
+          id="detailed-{{idBase}}-pickupDate-datepicker-error-required-{{idIndex}}"
+          *ngIf="formGroup.controls['pickupDate'].hasError('required')"
+        >
+          Select a date for the trip
+        </mat-error>
+      </mat-form-field>
+    </div>
+
+    <div>
+      <div
+        class="overhead-label"
+        id="detailed-{{idBase}}-pickupTime-label-{{idIndex}}"
+      >
+        PICKUP TIME<span class="required-text">*</span>
+      </div>
+      <mat-form-field class="show-one-error">
+        <mat-select
+          formControlName="pickupTime"
+          style="width: 100px;"
+          placeholder="Choose Time"
+          id="detailed-{{idBase}}-pickupTime-select"
+        >
+          <mat-option
+            *ngFor="let option of timeDropdownValues; let i = index"
+            [value]="option.value"
+            id="detailed-{{idBase}}-pickupTime-option-{{i}}"
+            >{{ option.label }}</mat-option
+          >
+        </mat-select>
+        <mat-error
+          id="detailed-{{idBase}}-pickupTime-error-required-{{idIndex}}"
+          *ngIf="formGroup.controls['pickupTime'].hasError('required')"
+        >
+          Select a time for the trip
+        </mat-error>
+      </mat-form-field>
+    </div>
+    <healthe-appointment-info
+      [appointmentData]="authData"
+      sectionName="WheelchairAuth-{{idIndex}}"
+    ></healthe-appointment-info>
+  </div>
+  <div class="spacersmall"></div>
+</div>

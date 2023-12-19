@@ -1,0 +1,258 @@
+<div [formGroup]="stepForm">
+  <div fxLayout="row wrap" fxLayoutGap="30px">
+    <div>
+      <span
+        class="overhead-label"
+        id="interpretation-wizard-driverLanguage-label"
+        >LANGUAGE NEEDED<span class="required-text">*</span></span
+      >
+      <mat-form-field>
+        <mat-select
+          healtheSelect
+          placeholder="Choose language"
+          [formControl]="stepForm.get('language')"
+          id="interpretation-wizard-driverLanguage-select"
+        >
+          <mat-option
+            *ngFor="
+              let language of (languages$ | async);
+              index as $languageIndex
+            "
+            id="interpretation-wizard-language-option-{{$languageIndex}}"
+            [value]="language"
+            >{{ language }}</mat-option
+          >
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div>
+      <span
+        class="overhead-label"
+        id="interpretation-wizard-authorizationDateType-label"
+        >TYPE OF AUTHORIZATION</span
+      >
+      <mat-radio-group fxLayoutGap="15px" [value]="dateMode">
+        <mat-radio-button
+          *ngFor="let type of authorizationDateTypes"
+          id="interpretation-wizard-authorizationDateType-{{type}}"
+          [value]="type"
+          (click)="dateModeSwitch($event, type)"
+          >{{ type }}</mat-radio-button
+        >
+      </mat-radio-group>
+    </div>
+  </div>
+  <div class="spacersmall"></div>
+  <healthe-specific-date-form-array
+    [config]="specificDateConfig"
+    [formArray]="schedulingForm"
+    [selectedService]="LANGUAGE_ARCH_TYPE"
+    *ngIf="dateMode === authorizationDateTypes[0]"
+  ></healthe-specific-date-form-array>
+  <div
+    formGroupName="schedulingForm"
+    *ngIf="dateMode === authorizationDateTypes[1]"
+  >
+    <div fxLayout="row wrap" fxLayoutAlign="start start" fxLayoutGap="20px">
+      <div>
+        <span
+          class="overhead-label"
+          id="interpretation-date-range-startDateField-label"
+          >START DATE<span class="required-text">*</span></span
+        >
+        <mat-form-field class="show-one-error">
+          <healthe-datepicker
+            formControlName="startDate"
+            id="interpretation-date-range-startDateField-input"
+          >
+          </healthe-datepicker>
+          <mat-error
+            *ngIf="schedulingForm.get('startDate').getError('required')"
+            id="interpretation-date-range-startDate-required-error"
+            >Select a start date
+          </mat-error>
+          <mat-error
+            *ngIf="schedulingForm.get('startDate').getError('invalidDate')"
+            id="interpretation-date-range-startDate-invalid-error"
+            >The date entered is invalid
+          </mat-error>
+          <mat-error
+            *ngIf="schedulingForm.get('startDate').getError('invalidDateRange')"
+            id="interpretation-date-range-startDate-invalidrange-error"
+            >End Date cannot be before Start Date
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div>
+        <span
+          class="overhead-label"
+          id="interpretation-date-range-endDateField-label"
+          >END DATE<span class="required-text">*</span></span
+        >
+        <mat-form-field class="show-one-error">
+          <healthe-datepicker
+            formControlName="endDate"
+            id="interpretation-date-range-endDateField-input"
+          >
+          </healthe-datepicker>
+          <mat-error
+            *ngIf="schedulingForm.get('endDate').getError('required')"
+            id="interpretation-date-range-endDate-required-error"
+            >Select an end date
+          </mat-error>
+          <mat-error
+            *ngIf="schedulingForm.get('endDate').getError('invalidDate')"
+            id="interpretation-date-range-endDate-invalid-error"
+            >The date entered is invalid
+          </mat-error>
+          <mat-error
+            *ngIf="schedulingForm.get('endDate').getError('invalidDateRange')"
+            id="interpretation-date-range-endDate-invalidrange-error"
+            >End Date cannot be before Start Date
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div>
+        <span
+          class="overhead-label"
+          id="interpretation-date-range-tripsAuthorized-label"
+          ># OF INTERPRETATION SESSIONS AUTHORIZED<span class="required-text"
+            >*</span
+          ></span
+        >
+        <mat-form-field
+          ><input
+            matInput
+            formControlName="tripsAuthorized"
+            type="number"
+            id="interpretation-date-range-tripsAuthorized-input"
+            (blur)="validateTrips()"
+          />
+          <mat-error
+            id="interpretation-date-range-tripsAuthorized-error-required"
+            *ngIf="
+              schedulingForm.controls['tripsAuthorized'].hasError('required')
+            "
+          >
+            Please enter a number of sessions.
+          </mat-error>
+          <mat-error
+            id="interpretation-date-range-tripsAuthorized-error-min"
+            *ngIf="schedulingForm.controls['tripsAuthorized'].hasError('min')"
+          >
+            Please enter a valid number of sessions greater than 0.
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div>
+        <span
+          class="overhead-label"
+          id="interpretation-wizard-certification-label"
+          >CERTIFICATION<span class="required-text">*</span>
+          <fa-icon
+            [icon]="faInfoCircle"
+            class="interpretation-icons"
+            matTooltipClass="interpretationTooltip"
+            matTooltip="{{getCertificationTooltip()}}"
+          >
+          </fa-icon>
+        </span>
+        <mat-form-field>
+          <mat-select
+            healtheSelect
+            placeholder="Choose certification"
+            formControlName="certification"
+            [compareWith]="certificationCompare"
+            id="interpretation-wizard-certification-select"
+          >
+            <mat-option
+              *ngFor="
+                let certification of (certificationValues$ | async);
+                index as $certificationIndex
+              "
+              id="interpretation-wizard-certification-option-{{$certificationIndex}}"
+              [value]="certification.value"
+              >{{ certification.label }}</mat-option
+            >
+          </mat-select>
+          <mat-error
+            id="interpretation-wizard-certification-error"
+            *ngIf="schedulingForm.get('certification').hasError('required')"
+            >Select an option for 'Certification'
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="spacersmall"></div>
+    <healthe-approved-locations-form
+      [idPrefix]="stepName"
+      [parentFormGroup]="schedulingForm"
+      [serviceActionType]="'interpretation'"
+      [selectedService]="LANGUAGE_ARCH_TYPE"
+      [withTwoLocations]="false"
+      *ngIf="dateMode === authorizationDateTypes[1]"
+    ></healthe-approved-locations-form>
+    <div class="spacersmall"></div>
+    <div>
+      <span class="overhead-label" id="interpretation-date-range-notes-label"
+        >NOTES (optional)</span
+      >
+      <mat-form-field>
+        <textarea
+          matInput
+          placeholder="Enter notes"
+          formControlName="notes"
+          id="interpretation-date-range-notes-input"
+        ></textarea>
+      </mat-form-field>
+    </div>
+  </div>
+
+  <div class="spacermedium"></div>
+  <div fxLayout="row wrap" fxLayoutGap="30px">
+    <div>
+      <span
+        class="overhead-label"
+        id="interpretation-wizard-rushServiceNeeded-label"
+        >RUSH SERVICE (NEEDED WITHIN 24 HOURS)?</span
+      >
+      <mat-radio-group
+        fxLayout="row"
+        fxLayoutGap="15px"
+        [formControl]="stepForm.get('rushServiceNeeded')"
+      >
+        <mat-radio-button
+          *ngFor="let option of booleanRadioValues"
+          id="interpretation-wizard-rushServiceNeeded-option-{{option.label}}"
+          [value]="option.value"
+          >{{ option.label }}</mat-radio-button
+        >
+      </mat-radio-group>
+    </div>
+    <div>
+      <span
+        class="overhead-label"
+        id="interpretation-wizard-paidAsExpense-label"
+        >WILL THIS BE PAID AS EXPENSE?
+        <fa-icon
+          [icon]="faInfoCircle"
+          class="interpretation-icons"
+          matTooltip="Only select yes if this service is not related to medical and needs to be paid off the claim as expense related"
+        >
+        </fa-icon>
+      </span>
+      <mat-radio-group
+        fxLayout="row"
+        fxLayoutGap="15px"
+        [formControl]="stepForm.get('paidAsExpense')"
+      >
+        <mat-radio-button
+          *ngFor="let option of booleanRadioValues"
+          id="interpretation-wizard-paidAsExpense-option-{{option.label}}"
+          [value]="option.value"
+          >{{ option.label }}</mat-radio-button
+        >
+      </mat-radio-group>
+    </div>
+  </div>
+</div>

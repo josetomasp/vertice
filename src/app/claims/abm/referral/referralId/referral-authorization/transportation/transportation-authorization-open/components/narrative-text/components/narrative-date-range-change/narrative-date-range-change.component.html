@@ -1,0 +1,268 @@
+<div
+  fxLayout="row wrap"
+  fxLayoutAlign="start center"
+  [formGroup]="formGroup"
+  *ngIf="authNarrativeMode !== 'PostSubmit'"
+>
+  <div
+    class="textAlignmentDateRangeChange"
+    id="narrative-date-range-change-startText"
+  >
+    You {{ narrativeTextItem.actionDescriptor }}
+  </div>
+  <div
+    class="textAlignmentDateRangeChange"
+    id="narrative-date-range-change-startText-1"
+  >
+    <div
+      *ngIf="useOriginalEndDate; then: originalEndDate1; else: startDate1"
+    ></div>
+    <ng-template #originalEndDate1>the authorization end date</ng-template>
+    <ng-template #startDate1>a modification of the date range</ng-template>
+  </div>
+
+  <div
+    *ngIf="useOriginalEndDate; then: originalEndDate2; else: startDate2"
+  ></div>
+  <ng-template #originalEndDate2>
+    <div
+      class="textAlignmentDateRangeChange"
+      id="narrative-date-range-change-startText-3"
+    >
+      of
+    </div>
+    <div
+      class="textAlignmentDateRangeChange"
+      id="narrative-date-range-change-startText-3-{{i}}"
+      *ngFor="
+        let word of narrativeTextItem.quantityDescriptor.split(' ');
+        let i = index
+      "
+    >
+      <b>{{ word }}</b>
+    </div>
+  </ng-template>
+  <ng-template #startDate2>
+    <div
+      class="textAlignmentDateRangeChange"
+      id="narrative-date-range-change-startText-3"
+    >
+      to
+    </div>
+  </ng-template>
+  <div
+    *ngIf="useOriginalEndDate"
+    class="textAlignmentDateRangeChange"
+    id="narrative-date-range-change-startText-4"
+  >
+    from
+  </div>
+  <div
+    class="datePickerDateRangeChange"
+    *ngIf="authNarrativeMode !== 'PostSubmit'"
+  >
+    <mat-form-field class="show-one-error">
+      <healthe-datepicker
+        [formControlName]="firstDateConfig.controlName"
+        id="narrative-date-range-change-startDate"
+        [disabled]="
+          authNarrativeMode !== AuthNarrativeModeEnum.EditNarrative ||
+          firstDateConfig.isDisabled ||
+          formGroup.controls[firstDateConfig.controlName].disabled
+        "
+      ></healthe-datepicker>
+
+      <mat-error
+        id="narrative-date-range-change-startDate-error-startDateMustBeBeforeEndDate"
+        *ngIf="
+          formGroup.controls[firstDateConfig.controlName].hasError(
+            'startDateMustBeBeforeEndDate'
+          ) ||
+          formGroup.controls[firstDateConfig.controlName].hasError(
+            'invalidDateRange'
+          )
+        "
+        >{{ useOriginalEndDate ? 'New end' : 'End' }} date cannot be before
+        {{ firsDateNarrativeName | lowercase }} date
+      </mat-error>
+      <mat-error
+        id="narrative-date-range-change-startDate-error-required"
+        *ngIf="
+          formGroup.controls[
+            authNarrativeConfig.startDate.controlName
+          ].hasError('required')
+        "
+        >Please enter a valid date
+      </mat-error>
+      <mat-error
+        id="narrative-date-range-change-startDate-error-fromDateEqualsEndDate"
+        *ngIf="
+          formGroup.controls[
+            authNarrativeConfig.startDate.controlName
+          ].hasError('fromDateEqualsEndDate')
+        "
+        >{{ firsDateNarrativeName }} date must not be equal to the
+        {{ useOriginalEndDate ? 'new ' : '' }}end date
+      </mat-error>
+    </mat-form-field>
+  </div>
+  <div
+    class="textAlignmentDateRangeChange"
+    id="narrative-date-range-change-andText"
+  >
+    to
+  </div>
+  <div
+    class="datePickerDateRangeChange"
+    *ngIf="authNarrativeMode != 'PostSubmit'"
+  >
+    <mat-form-field class="show-one-error">
+      <healthe-datepicker
+        [formControlName]="authNarrativeConfig.endDate.controlName"
+        id="narrative-date-range-change-endDate"
+        [disabled]="
+          authNarrativeMode !== AuthNarrativeModeEnum.EditNarrative ||
+          authNarrativeConfig.endDate.isDisabled ||
+          formGroup.controls[authNarrativeConfig.endDate.controlName].disabled
+        "
+      ></healthe-datepicker>
+
+      <mat-error
+        id="narrative-date-range-change-endDate-error-startDateMustBeBeforeEndDate"
+        *ngIf="
+          formGroup.controls[authNarrativeConfig.endDate.controlName].hasError(
+            'startDateMustBeBeforeEndDate'
+          ) ||
+          formGroup.controls[authNarrativeConfig.endDate.controlName].hasError(
+            'invalidDateRange'
+          )
+        "
+        >{{ useOriginalEndDate ? 'New end' : 'End' }} date cannot be before
+        {{ firsDateNarrativeName | lowercase }} date
+      </mat-error>
+      <mat-error
+        id="narrative-date-range-change-endDate-error-endDateMustBeInFuture"
+        *ngIf="
+          formGroup.controls[authNarrativeConfig.endDate.controlName].hasError(
+            'endDateMustBeInFuture'
+          )
+        "
+        >End date must be a future date
+      </mat-error>
+      <mat-error
+        id="narrative-date-range-change-endDate-error-required"
+        *ngIf="
+          formGroup.controls[authNarrativeConfig.endDate.controlName].hasError(
+            'required'
+          )
+        "
+        >Please enter a valid date
+      </mat-error>
+      <mat-error
+        id="narrative-date-range-change-endDate-error-fromDateEqualsEndDate"
+        *ngIf="
+          formGroup.controls[authNarrativeConfig.endDate.controlName].hasError(
+            'fromDateEqualsEndDate'
+          )
+        "
+        >{{ firsDateNarrativeName }} date must not be equal to the
+        {{ useOriginalEndDate ? 'new ' : '' }}end date
+      </mat-error>
+      <mat-error
+        id="narrative-new-open-auth-endDate-error-dateMustBeEqualsOrGreaterThan"
+        *ngIf="
+          formGroup.controls[authNarrativeConfig.endDate.controlName].hasError(
+            'dateMustBeEqualsOrGreaterThan'
+          )
+        "
+        >Need to change the date to be equal or in the future of
+        {{ authNarrativeConfig.endDate.equalGreaterThan }}
+      </mat-error>
+    </mat-form-field>
+  </div>
+</div>
+<!-- Post submit -->
+<div
+  fxLayout="row wrap"
+  fxLayoutAlign="start center"
+  [formGroup]="formGroup"
+  *ngIf="authNarrativeMode == 'PostSubmit'"
+>
+  <div
+    class="textAlignmentDateRangeChange"
+    id="narrative-date-range-change-startText_post-submit"
+  >
+    You have {{ getFormattedAction() }}
+  </div>
+  <div
+    class="textAlignmentDateRangeChange"
+    id="narrative-date-range-change-startText_post-submit-1"
+  >
+    <div
+      *ngIf="
+        useOriginalEndDate;
+        then: originalEndDateRedOnly1;
+        else: startDateRedOnly1
+      "
+    ></div>
+    <ng-template #originalEndDateRedOnly1
+      >a change to the authorization end date
+    </ng-template>
+    <ng-template #startDateRedOnly1
+      >a modification of the date range
+    </ng-template>
+  </div>
+
+  <div
+    *ngIf="
+      useOriginalEndDate;
+      then: originalEndDateRedOnly2;
+      else: startDateRedOnly2
+    "
+  ></div>
+  <ng-template #originalEndDateRedOnly2>
+    <div
+      class="textAlignmentDateRangeChange"
+      id="narrative-date-range-change-startText_post-submit-3"
+    >
+      of
+    </div>
+    <div
+      class="textAlignmentDateRangeChange"
+      id="narrative-date-range-change-startText_post-submit-3-{{i}}"
+      *ngFor="
+        let word of narrativeTextItem.quantityDescriptor.split(' ');
+        let i = index
+      "
+    >
+      <b>{{ word }}</b>
+    </div>
+  </ng-template>
+  <ng-template #startDateRedOnly2>
+    <div
+      class="textAlignmentDateRangeChange"
+      id="narrative-date-range-change-startText_post-submit-3"
+    >
+      to
+    </div>
+  </ng-template>
+  <div
+    *ngIf="useOriginalEndDate"
+    class="textAlignmentDateRangeChange"
+    id="narrative-date-range-change-startText_post-submit-4"
+  >
+    from
+  </div>
+  <b class="textAlignmentDateRangeChange">
+    {{ getFormattedDate(firstDateConfig.controlName) }}
+  </b>
+  <div
+    class="textAlignmentDateRangeChange"
+    id="narrative-date-range-change-andText_post-submit"
+  >
+    to
+  </div>
+  <b class="textAlignmentDateRangeChange">
+    {{ getFormattedDate(authNarrativeConfig.endDate.controlName) }}
+  </b>
+</div>

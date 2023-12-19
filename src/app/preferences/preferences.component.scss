@@ -1,0 +1,15 @@
+@import 'variables';
+
+.preferences-wrapper {
+  padding: 20px 20px 96px 20px;
+  overflow: auto;
+  margin-top: 10px;
+}
+
+.footer {
+  position: sticky;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  min-height: 76px;
+}

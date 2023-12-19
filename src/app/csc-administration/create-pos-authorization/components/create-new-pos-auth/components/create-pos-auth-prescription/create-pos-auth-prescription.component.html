@@ -1,0 +1,420 @@
+<mat-card [formGroup]="row.addedPrescriptionsFG">
+  <mat-card-content>
+    <div fxLayout="row" fxLayoutAlign="space-between top" class="header-bar">
+      <healthe-info-lookup-launcher
+        [displayText]="index + 1 + '. ' + row.detail.prescriptionName"
+        id="create-pos-auth-prescription-{{index}}-title"
+        [drugLookup]="getDrugLookupParameters(row)"
+        [compoundDetails]="getCompoundModalDetails(row)"
+      ></healthe-info-lookup-launcher>
+      <div
+        *ngIf="!readonly"
+        style="cursor: pointer"
+        (click)="removeThis()"
+        id="create-pos-auth-prescription-{{index}}-remove-button"
+      >
+        <fa-icon [icon]="faTrashAlt" style="margin-right: 10px"></fa-icon>
+        Remove
+      </div>
+    </div>
+    <div class="spacersmall"></div>
+    <mat-card>
+      <mat-card-content>
+        <div
+          class="card-title"
+          id="create-pos-auth-prescription-{{index}}-prescription-details-title"
+        >
+          Prescription Details
+        </div>
+        <div class="spacertiny"></div>
+        <div fxLayout="column" fxLayoutAlign="start start">
+          <div
+            fxLayout="row"
+            fxLayoutAlign="start start"
+            fxLayoutGap="35px"
+            style="width: 100%"
+          >
+            <div>
+              <div
+                class="overhead-label"
+                id="create-pos-auth-prescription-{{index}}-prescription-details-medication-detail-label"
+              >
+                MEDICATION DETAIL
+                <fa-icon
+                  [icon]="faInfoCircle"
+                  class="information-icon"
+                  matTooltip="Some drugs may display a generic name before the generic drug is available."
+                  id="create-pos-auth-prescription-{{index}}-prescription-details-medication-detail-infoIcon"
+                ></fa-icon>
+              </div>
+              <healthe-info-lookup-launcher
+                [displayText]="row.detail.prescriptionName"
+                [drugLookup]="getDrugLookupParameters(row)"
+                [compoundDetails]="getCompoundModalDetails(row)"
+              ></healthe-info-lookup-launcher>
+            </div>
+
+            <div>
+              <div
+                class="overhead-label"
+                id="create-pos-auth-prescription-{{index}}-prescription-details-serviceDate-label"
+              >
+                SERVICE DATE<span class="required-text">*</span>
+              </div>
+              <mat-form-field *ngIf="!readonly">
+                <healthe-datepicker
+                  formControlName="dateOfService"
+                  healtheFormValidationExtractor
+                  [formLabel]="row.detail.prescriptionName + ' - Service Date'"
+                  id="create-pos-auth-prescription-{{index}}-prescription-details-dateOfService"
+                ></healthe-datepicker>
+                <mat-error
+                  *ngIf="
+                    getServiceDateFormControl().touched &&
+                    getServiceDateFormControl().hasError('required')
+                  "
+                  >Please select a service date
+                </mat-error>
+                <mat-error
+                  *ngIf="
+                    getServiceDateFormControl().touched &&
+                    getServiceDateFormControl().hasError('futureDate')
+                  "
+                  >Date must not be in the future
+                </mat-error>
+              </mat-form-field>
+              <span *ngIf="readonly">{{
+                getServiceDateFormControl()?.value | date: 'M/d/yyyy'
+              }}</span>
+            </div>
+
+            <div>
+              <div
+                class="overhead-label"
+                id="create-pos-auth-prescription-{{index}}-prescription-details-brand-generic-label"
+              >
+                BRAND/GENERIC
+                <fa-icon
+                  [icon]="faInfoCircle"
+                  class="information-icon"
+                  matTooltip="Authorized generics or single-source generics may show “No generic available” because there are no alternate generics available on the market."
+                  id="create-pos-auth-prescription-{{index}}-prescription-details-brand-generic-infoIcon"
+                ></fa-icon>
+              </div>
+              <div
+                style="max-width: 125px"
+                id="create-pos-auth-prescription-{{index}}-prescription-details-brand-generic"
+              >
+                {{ row.detail.brandGeneric }}
+              </div>
+            </div>
+
+            <div>
+              <div
+                class="overhead-label"
+                id="create-pos-auth-prescription-{{index}}-prescription-details-samaritanDose-label"
+              >
+                SAMARITAN DOSE
+              </div>
+              <mat-radio-group
+                *ngIf="!readonly"
+                formControlName="samaritanDoseApproved"
+                style="width: auto"
+              >
+                <mat-radio-button
+                  [value]="true"
+                  id="create-pos-auth-prescription-{{index}}-prescription-details-samaritanDoseApproved-yes"
+                  >Yes
+                </mat-radio-button>
+                <mat-radio-button
+                  [value]="false"
+                  style="margin-left: 10px;"
+                  id="create-pos-auth-prescription-{{index}}-prescription-details-samaritanDoseApproved-no"
+                  >No
+                </mat-radio-button>
+              </mat-radio-group>
+              <span *ngIf="readonly">
+                {{
+                  row.addedPrescriptionsFG?.get('samaritanDoseApproved').value
+                    ? 'Yes'
+                    : 'No'
+                }}</span
+              >
+            </div>
+            <div>
+              <div
+                class="overhead-label"
+                id="create-pos-auth-prescription-{{index}}-prescription-details-primaryRejectCode-label"
+              >
+                NCPDP REJECT CODE<span class="required-text">*</span>
+              </div>
+              <mat-form-field style="width: 290px" *ngIf="!readonly">
+                <mat-select
+                  formControlName="primaryRejectCode"
+                  healtheFormValidationExtractor
+                  [formLabel]="
+                    row.detail.prescriptionName + ' - NCPDP Reject Code'
+                  "
+                  #primaryRejectCode
+                  [matTooltip]="primaryRejectCode.value?.description"
+                  placeholder="Please select reject code"
+                  id="create-pos-auth-prescription-{{index}}-prescription-details-primaryRejectCodeSelect"
+                  (valueChange)="primaryRejectReasonChange($event)"
+                >
+                  <mat-option
+                    *ngFor="let rejectCode of rejectCodeOptions"
+                    [value]="rejectCode"
+                    id="create-pos-auth-prescription-{{index}}-prescription-details-primaryRejectCodeSelect-{{rejectCode.rejectCode}}Option"
+                    >{{ rejectCode.description }}</mat-option
+                  >
+                </mat-select>
+                <mat-error
+                  *ngIf="
+                    getPrimaryRejectCodeFormControl().touched &&
+                    getPrimaryRejectCodeFormControl().hasError('required')
+                  "
+                  >Please select reject code
+                </mat-error>
+              </mat-form-field>
+              <span *ngIf="readonly">
+                {{ getPrimaryRejectCodeFormControl().value.description }}</span
+              >
+            </div>
+
+            <div *ngIf="getSecondaryRejectCodeFormControl().enabled">
+              <div
+                class="overhead-label"
+                id="create-pos-auth-prescription-{{index}}-prescription-details-secondaryRejectCode-label"
+              >
+                NCPDP SECONDARY REJECT CODE<span class="required-text">*</span>
+              </div>
+              <mat-form-field style="width: 290px">
+                <mat-select
+                  formControlName="secondaryRejectCode"
+                  healtheFormValidationExtractor
+                  [formLabel]="
+                    row.detail.prescriptionName +
+                    ' - NCPDP Secondary Reject Code'
+                  "
+                  #secondaryRejectCode
+                  [matTooltip]="secondaryRejectCode.value?.description"
+                  placeholder="Please select reject code"
+                  id="create-pos-auth-prescription-{{index}}-prescription-details-secondaryRejectCodeSelect"
+                >
+                  <mat-option
+                    *ngFor="
+                      let rejectCode of getPrimaryRejectCodeFormControl().value
+                        .secondaryRejectCodes
+                    "
+                    [value]="rejectCode"
+                    id="create-pos-auth-prescription-{{index}}-prescription-details-secondaryRejectCodeSelect-{{rejectCode.rejectCode}}Option"
+                    >{{ rejectCode.description }}</mat-option
+                  >
+                </mat-select>
+                <mat-error
+                  *ngIf="
+                    getSecondaryRejectCodeFormControl().touched &&
+                    getSecondaryRejectCodeFormControl().hasError('required')
+                  "
+                  >Please select reject code
+                </mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+          <div
+            fxLayout="row"
+            fxLayoutAlign="start start"
+            fxLayoutGap="35px"
+            style="width: 100%; padding-top: 35px;"
+          >
+            <div>
+              <div
+                class="overhead-label"
+                id="create-pos-auth-prescription-{{index}}-prescription-details-quantity-label"
+              >
+                QTY<span class="required-text">*</span>
+              </div>
+              <mat-form-field style="width: 100px" *ngIf="!readonly">
+                <input
+                  matInput
+                  type="number"
+                  min="1"
+                  formControlName="quantity"
+                  healtheFormValidationExtractor
+                  [formLabel]="row.detail.prescriptionName + ' - Quantity'"
+                  id="create-pos-auth-prescription-{{index}}-prescription-details-quantity"
+                />
+                <mat-error
+                  *ngIf="
+                    getQuantityFormControl().touched &&
+                    getQuantityFormControl().hasError('min')
+                  "
+                  >Must be 1 or greater
+                </mat-error>
+              </mat-form-field>
+              <span style="width: 100px" *ngIf="readonly">{{
+                getQuantityFormControl().value
+              }}</span>
+            </div>
+            <div>
+              <div
+                class="overhead-label"
+                id="create-pos-auth-prescription-{{index}}-prescription-details-daysSupply-label"
+              >
+                DAYS SUPPLY<span class="required-text">*</span>
+              </div>
+              <mat-form-field style="width: 80px" *ngIf="!readonly">
+                <input
+                  matInput
+                  type="number"
+                  min="1"
+                  formControlName="daysSupply"
+                  healtheFormValidationExtractor
+                  [formLabel]="row.detail.prescriptionName + ' - Days Supply'"
+                  id="create-pos-auth-prescription-{{index}}-prescription-daysSupply-quantity"
+                />
+                <mat-error
+                  *ngIf="
+                    getDaysSupplyFormControl().touched &&
+                    getDaysSupplyFormControl().hasError('min')
+                  "
+                  >Must be 1 or greater
+                </mat-error>
+              </mat-form-field>
+              <span style="width: 80px" *ngIf="readonly">{{
+                getDaysSupplyFormControl().value
+              }}</span>
+            </div>
+
+            <div>
+              <div
+                class="overhead-label"
+                id="create-pos-auth-prescription-{{index}}-prescription-details-drugClass-label"
+              >
+                DEA DRUG CLASS
+              </div>
+              <div
+                id="create-pos-auth-prescription-{{index}}-prescription-details-drugClass"
+              >
+                {{ row.detail.deaDrugClass }}
+              </div>
+            </div>
+            <div>
+              <div
+                class="overhead-label"
+                id="create-pos-auth-prescription-{{index}}-prescription-details-totalAWP-label"
+              >
+                Total AWP
+              </div>
+              <div
+                id="create-pos-auth-prescription-{{index}}-prescription-details-totalAWP"
+              >
+                {{
+                  row.detail.awpUnitCost
+                    ? (row.detail.awpUnitCost * getQuantityFormControl().value
+                      | currency)
+                    : 'Not Available'
+                }}
+              </div>
+            </div>
+          </div>
+          <div class="spacersmall"></div>
+          <div *ngIf="!row.manuallyAdded && row.detail.previousDecision !== NOT_AVAILABLE"
+            fxLayout="row"
+            fxLayoutAlign="start start"
+            fxLayoutGap="35px"
+            style="width: 100%"
+          >
+            <div>
+              <div
+                class="overhead-label"
+                id="create-pos-auth-prescription-{{index}}-prescription-details-prevDecision-label"
+              >
+                PREVIOUS DECISION
+              </div>
+              <div
+                id="create-pos-auth-prescription-{{index}}-prescription-details-prevDecision"
+              >
+                {{ row.detail.previousDecision }}
+              </div>
+            </div>
+
+            <div>
+              <div
+                class="overhead-label"
+                id="create-pos-auth-prescription-{{index}}-prescription-details-prevDecisionDate-label"
+              >
+                PREV. DECISION DATE
+              </div>
+              <div
+                id="create-pos-auth-prescription-{{index}}-prescription-details-prevDecisionDate"
+              >
+                {{ row.detail.previousDecisionDate }}
+              </div>
+            </div>
+
+            <div>
+              <div
+                class="overhead-label"
+                id="create-pos-auth-prescription-{{index}}-prescription-details-prevRequestQty-label"
+              >
+                PREV. REQUEST QTY.
+              </div>
+              <div
+                id="create-pos-auth-prescription-{{index}}-prescription-details-prevRequestQty"
+              >
+                {{ row.detail.previousDecisionRequestedQuantity }}
+              </div>
+            </div>
+
+            <div>
+              <div
+                class="overhead-label"
+                id="create-pos-auth-prescription-{{index}}-prescription-details-prevRequestDays-label"
+              >
+                PREV. REQUESTED DAYS SUPPLY
+              </div>
+              <div
+                id="create-pos-auth-prescription-{{index}}-prescription-details-prevRequestDays"
+              >
+                {{ row.detail.previousDecisionRequestedDaysSupply }}
+              </div>
+            </div>
+
+            <div>
+              <div
+                class="overhead-label"
+                id="create-pos-auth-prescription-{{index}}-prescription-details-daysSupplyOnHand-label"
+              >
+                DAYS SUPPLY ON HAND
+              </div>
+              <div
+                id="create-pos-auth-prescription-{{index}}-prescription-details-daysSupplyOnHand"
+              >
+                {{ row.detail.estimatedDaysSupplyOnHand }}
+              </div>
+            </div>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+    <div class="spacersmall"></div>
+
+    <healthe-prescriber-information-lookup
+      [readonly]="readonly"
+      formGroupName="prescriberInfoFG"
+      healtheFormValidationExtractor
+      [formLabel]="row.detail.prescriptionName"
+      [fieldValues]="row.prescriberInformationLookupInitialValues"
+      [index]="index"
+
+    ></healthe-prescriber-information-lookup>
+    <div class="spacersmall"></div>
+
+    <healthe-notes
+      sectionTitle="Prescription Notes"
+      textAreaPlaceholder="Enter Healthe Notes"
+      formControlName="prescriptionNote"
+    ></healthe-notes>
+  </mat-card-content>
+</mat-card>

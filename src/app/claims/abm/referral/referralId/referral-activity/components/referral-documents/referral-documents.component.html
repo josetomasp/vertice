@@ -1,0 +1,128 @@
+<span id="documents-label" class="sectionLabel">Documents</span>
+
+<table mat-table style="min-width: 500px" [dataSource]="dataSource">
+  <ng-container matColumnDef="name">
+    <th
+      mat-header-cell
+      id="referralDocumentTable-header-name"
+      class="healthe-table-cell tableHeader"
+      *matHeaderCellDef
+      style="width: 75px;"
+    >
+      FILE NAME
+    </th>
+    <td
+      #fileName
+      mat-cell
+      class="healthe-table-cell"
+      [id]="'referralDocumentTable-cell-name-' + i"
+      *matCellDef="let data; let i = index"
+    >
+      <ng-container *ngIf="data.linkToDownloadAttachment != null">
+        <span
+          [matTooltip]="data.documentType"
+          class="ALink"
+          (click)="downloadDocument(data)"
+        >
+          {{ data.documentType }}
+        </span>
+      </ng-container>
+      <ng-container *ngIf="data.linkToDownloadAttachment === null">
+        <span [matTooltip]="data.documentType">
+          <b>{{ data.documentType }}</b>
+        </span>
+      </ng-container>
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="attachmentSource">
+    <th
+      mat-header-cell
+      id="referralDocumentTable-header-attachmentSource"
+      class="healthe-table-cell tableHeader"
+      *matHeaderCellDef
+      style="width: 75px;"
+    >
+      SUBMITTED BY
+    </th>
+    <td
+      #submittedBy
+      mat-cell
+      class="healthe-table-cell"
+      [id]="'referralDocumentTable-cell-attachmentSource-' + i"
+      *matCellDef="let data; let i = index"
+    >
+      <span [matTooltip]="data.attachmentSource">
+        {{ data.attachmentSource }}
+      </span>
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="dateTimeCreated">
+    <th
+      mat-header-cell
+      id="referralDocumentTable-header-dateTimeCreated"
+      class="healthe-table-cell tableHeader"
+      *matHeaderCellDef
+      style="width: 75px;"
+    >
+      DATE ATTACHED
+    </th>
+    <td
+      #dateReceived
+      mat-cell
+      class="healthe-table-cell"
+      [id]="'referralDocumentTable-cell-dateTimeCreated-' + i"
+      *matCellDef="let data; let i = index"
+    >
+      <span [matTooltip]="data.dateTimeCreated">
+        {{ data.dateTimeCreated | date: 'MM/dd/yyyy' }}
+      </span>
+    </td>
+  </ng-container>
+
+  <tr
+    mat-header-row
+    style="height: 50px !important;"
+    *matHeaderRowDef="tableColumns"
+  ></tr>
+  <tr mat-row *matRowDef="let row; columns: tableColumns; let i = index"></tr>
+</table>
+
+<ng-container *ngIf="documents?.length === 0">
+  <p
+    class="standard-text"
+    style="text-align:center"
+    id="serviceScheduled-no-data"
+  >
+    No documents available
+  </p></ng-container
+>
+
+<div class="spacersmall"></div>
+<p class="note-text">
+  Depending on file size, documents could take a few minutes to upload. Please
+  refresh your browser to view the most recent list of documents.
+</p>
+<a
+  *ngIf="false == isUploading"
+  class="ALink"
+  [ngClass]="{'disable-documents-upload': ( authorizationArchType$ | async) === ReferralAuthorizationArchetype.Kinect}"
+  id="uploadDocuments-button"
+  (click)="uploadDocument()"
+>
+  <i class="far fa-plus"></i> Upload document
+</a>
+<span *ngIf="true == isUploading">
+  <mat-spinner style="display: inline-block" [diameter]="14"></mat-spinner
+  ><span id="referral-document-isUploading" style="font-weight: 500;">
+    Uploading document</span
+  ></span
+>
+<input
+  type="file"
+  #HiddenFileInputButton
+  style="display: none"
+  id="referral-documents-upload-input-button"
+  (change)="chosenFile($event.target.files)"
+/>

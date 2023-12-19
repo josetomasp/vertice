@@ -1,0 +1,55 @@
+<div id="auth-information-transportation-actions-title" class="title">
+  <fa-icon
+    [icon]="faWheelchair"
+    class="ieSvgFix"
+    style="margin-right: 10px; font-size: 22px"
+    id="auth-information-transportation-actions-title-icon"
+  ></fa-icon>
+
+  Wheelchair Transportation
+</div>
+<div class="spacersmall"></div>
+<healthe-create-new-authorization-specific-date
+  [referralAuthorizationItem]="referralAuthorizationItem"
+  [dialogData]="dialogData"
+></healthe-create-new-authorization-specific-date>
+<div class="spacersmall"></div>
+<div
+  fxLayout="row"
+  fxLayoutAlign="start start"
+  fxLayoutGap="60px"
+  [formGroup]="formGroup"
+>
+  <div>
+    <div class="overhead-label" id="wheelchair-wheelchairType-label">
+      WHEELCHAIR TYPE<span class="required-text">*</span>
+    </div>
+    <mat-form-field class="show-one-error">
+      <mat-select
+        formControlName="wheelchairType"
+        style="width: 175px;"
+        placeholder="Choose Wheelchair"
+        [id]="'wheelchair-wheelchairType-select'"
+      >
+        <mat-option
+          *ngFor="let option of wheelchairTypes; let i = index"
+          [value]="option"
+          id="wheelchair-wheelchairType-option-{{i}}"
+          >{{ option }}</mat-option
+        >
+      </mat-select>
+
+      <mat-error
+        id="wheelchair-wheelchairType-error-required"
+        *ngIf="formGroup.controls['wheelchairType'].hasError('required')"
+      >
+        Select an option for 'Wheelchair'
+      </mat-error>
+    </mat-form-field>
+  </div>
+
+  <div>
+    <div class="overhead-label" id="wheelchair-steps-label">STAIRS/STEPS</div>
+    <input matInput formControlName="steps" type="number" style="width: 85px" />
+  </div>
+</div>

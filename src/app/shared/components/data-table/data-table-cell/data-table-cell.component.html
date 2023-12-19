@@ -1,0 +1,22 @@
+<div
+  *ngIf="!resultsColumnsConfig.clickEvent && !resultsColumnsConfig.linkProp"
+  class="standard-text ellipsis-text"
+  [matTooltip]="label"
+  [ngStyle]="resultsColumnsConfig.cellStyles"
+  [ngClass]="cellClasses"
+  [id]="generateHtmlId(rowData)"
+>
+  {{ label }}
+</div>
+<a
+    *ngIf="
+    (resultsColumnsConfig.clickEvent || resultsColumnsConfig.linkProp) && rowData[resultsColumnsConfig.name] !== ''
+  "
+    (click)="handleClick()"
+    class="standard-text ellipsis-text cell-underline"
+    [matTooltip]="label"
+    [ngStyle]="resultsColumnsConfig.cellStyles"
+    [ngClass]="resultsColumnsConfig.cellClasses"
+    [id]="generateHtmlId(rowData)"
+    [href]="rowData[resultsColumnsConfig.linkProp] || 'void(0);'"
+>{{ label }}</a>

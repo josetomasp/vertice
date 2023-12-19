@@ -1,0 +1,60 @@
+<div healtheFormValidationExtractor formLabel="Authorization Form" [formGroup]="fusionAuthorizationFormGroup">
+  <div healtheFormValidationExtractor  formArrayName="lineItems" formLabel="Authorization Information">
+    <div  *ngFor="let auth of (authorizations$ | async); index as $index">
+      <!-- Language -->
+      <healthe-language-authorization-card
+        *ngIf="archeType === ReferralAuthorizationArchetype.Language"
+        [authorization]="auth"
+        [$index]="$index"
+        [fusionAuthorizationReasons$]="fusionAuthorizationReasons$"
+        [formArray]="lineItemsFormArray"
+        healtheFormValidationExtractor
+        [formGroupName]="$index"
+        formLabel="{{ auth?.authorizationUnderReview?.categoryDesc }}"
+      >
+      </healthe-language-authorization-card>
+
+      <!-- Diagnostics -->
+      <healthe-diagnostics-authorization-card
+        *ngIf="archeType === ReferralAuthorizationArchetype.Diagnostics"
+        [authorization]="auth"
+        [$index]="$index"
+        [fusionAuthorizationReasons$]="fusionAuthorizationReasons$"
+        [formArray]="formArray"
+      >
+      </healthe-diagnostics-authorization-card>
+      <!-- Physical Medicine -->
+      <healthe-physical-medicine-authorization-card
+        *ngIf="archeType === ReferralAuthorizationArchetype.PhysicalMedicine"
+        [authorization]="auth"
+        [$index]="$index"
+        [fusionAuthorizationReasons$]="fusionAuthorizationReasons$"
+        [formArray]="formArray"
+      >
+      </healthe-physical-medicine-authorization-card>
+      <!-- Home Health -->
+      <healthe-home-health-authorization-card
+        *ngIf="archeType === ReferralAuthorizationArchetype.HomeHealth"
+        [authorization]="auth"
+        [$index]="$index"
+        [fusionAuthorizationReasons$]="fusionAuthorizationReasons$"
+        [formArray]="formArray"
+      ></healthe-home-health-authorization-card>
+      <div class="spacersmall"></div>
+      <!-- DME -->
+      <healthe-dme-substitution-tab
+        *ngIf="archeType === ReferralAuthorizationArchetype.Dme"
+        [authorization]="auth"
+        [$index]="$index"
+        [clinicalAlerts]="
+      getClinicalAlertsByAuthorizationID(
+        auth.authorizationUnderReview.authorizationId
+      )
+    "
+        [formArray]="formArray"
+        [fusionAuthorizationReasons$]="fusionAuthorizationReasons$"
+      >
+      </healthe-dme-substitution-tab>
+    </div>
+  </div>
+</div>

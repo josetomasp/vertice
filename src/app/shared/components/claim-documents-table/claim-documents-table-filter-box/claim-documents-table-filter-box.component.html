@@ -1,0 +1,222 @@
+<div *ngrxLet="viewModel$; let viewModel">
+<div
+  fxLayout="row wrap"
+  fxLayoutAlign="start center"
+  fxLayoutGap="30px grid"
+  [formGroup]="documentsFilterFormGroup"
+>
+  <div
+    fxFlex.xs="100%"
+    fxFlex.sm="50%"
+    fxFlex.md="33.333%"
+    fxFlex.lg="25%"
+    fxFlex="20%"
+  >
+    <div class="overhead-label" id="documents-filters-documentDescriptionLabel">
+      DESCRIPTION
+    </div>
+    <mat-form-field>
+      <mat-select
+        healtheSelect
+        formControlName="documentDescription"
+        multiple
+        [placeholder]="viewModel.documentsTriggerTexts.description"
+        id="documents-filters-documentDescriptionSelect"
+        #descriptionFilter
+      >
+        <mat-select-trigger>{{
+          viewModel.documentsTriggerTexts.description
+        }}</mat-select-trigger>
+        <healthe-select-all-option
+          [select]="descriptionFilter"
+          id="documents-filters-documentDescriptionFilter-allValues"
+          >All Values
+        </healthe-select-all-option>
+        <mat-divider></mat-divider>
+        <mat-option
+          *ngFor="
+            let option of viewModel.allDocumentsFilters.documentDescription
+          "
+          [value]="option"
+          id="documents-filters-documentDescriptionFilter-{{option}}_option"
+        >
+          {{ option }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  <div
+    fxFlex.xs="100%"
+    fxFlex.sm="50%"
+    fxFlex.md="33.333%"
+    fxFlex.lg="25%"
+    fxFlex="20%"
+  >
+    <div class="overhead-label" id="documents-filters-documentTypeLabel">
+      TYPE
+    </div>
+    <mat-form-field>
+      <mat-select
+        healtheSelect
+        formControlName="documentType"
+        multiple
+        [placeholder]="viewModel.documentsTriggerTexts.type"
+        id="documents-filters-documentTypeSelect"
+        #documentTypeFilter
+      >
+        <mat-select-trigger
+          >{{ viewModel.documentsTriggerTexts.type }}
+        </mat-select-trigger>
+        <healthe-select-all-option
+          [select]="documentTypeFilter"
+          id="documents-filters-documentTypeFilter-allValues"
+          >All Values
+        </healthe-select-all-option>
+        <mat-divider></mat-divider>
+        <mat-option
+          *ngFor="let option of viewModel.allDocumentsFilters.documentType"
+          [value]="option"
+          id="documents-filters-documentTypeFilter-{{option}}_option"
+        >
+          {{ option }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  <div
+    fxFlex.xs="100%"
+    fxFlex.sm="50%"
+    fxFlex.md="33.333%"
+    fxFlex.lg="25%"
+    fxFlex="20%"
+  >
+    <div class="overhead-label" id="documents-filters-documentServiceTypeLabel">
+      SERVICE
+    </div>
+    <mat-form-field>
+      <mat-select
+        healtheSelect
+        formControlName="serviceType"
+        multiple
+        [placeholder]="viewModel.documentsTriggerTexts.serviceType"
+        id="documents-filters-documentServiceTypeSelect"
+        #serviceTypeFilter
+      >
+        <mat-select-trigger
+          >{{ viewModel.documentsTriggerTexts.serviceType }}
+        </mat-select-trigger>
+        <healthe-select-all-option
+          [select]="serviceTypeFilter"
+          id="documents-filters-serviceTypeFilter-allValues"
+          >All Values
+        </healthe-select-all-option>
+        <mat-divider></mat-divider>
+        <mat-option
+          *ngFor="let option of viewModel.allDocumentsFilters.serviceType"
+          [value]="option"
+          id="documents-filters-serviceTypeFilter-{{option}}_option"
+        >
+          {{ option }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  <div
+    fxFlex.xs="100%"
+    fxFlex.sm="50%"
+    fxFlex.md="33.333%"
+    fxFlex.lg="25%"
+    fxFlex="20%"
+  >
+    <div class="overhead-label" id="documents-filters-submittedByLabel">
+      SUBMITTED BY
+    </div>
+    <mat-form-field>
+      <mat-select
+        healtheSelect
+        formControlName="submittedBy"
+        multiple
+        [placeholder]="viewModel.documentsTriggerTexts.submittedBy"
+        id="documents-filters-documentSubmittedBySelect"
+        #submittedByFilter
+      >
+        <mat-select-trigger
+          >{{ viewModel.documentsTriggerTexts.submittedBy }}
+        </mat-select-trigger>
+        <healthe-select-all-option
+          [select]="submittedByFilter"
+          id="documents-filters-submittedByFilter-allValues"
+          >All Values
+        </healthe-select-all-option>
+        <mat-divider></mat-divider>
+        <mat-option
+          *ngFor="let option of viewModel.allDocumentsFilters.submittedBy"
+          [value]="option"
+          id="documents-filters-submittedByFilter-{{option}}_option"
+        >
+          {{ option }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  <div
+    fxFlex.xs="100%"
+    fxFlex.sm="50%"
+    fxFlex.md="33.333%"
+    fxFlex.lg="25%"
+    fxFlex="20%"
+  >
+    <div class="overhead-label" id="documents-filters-productTypeLabel">
+      PRODUCT TYPE
+    </div>
+    <mat-form-field>
+      <mat-select
+        healtheSelect
+        formControlName="productType"
+        multiple
+        [placeholder]="viewModel.documentsTriggerTexts.productType"
+        id="documents-filters-documentProductTypeSelect"
+        #productTypeFilter
+      >
+        <mat-select-trigger
+          >{{ viewModel.documentsTriggerTexts.productType }}
+        </mat-select-trigger>
+        <healthe-select-all-option
+          [select]="productTypeFilter"
+          id="documents-filters-productTypeFilter-allValues"
+          >All Values
+        </healthe-select-all-option>
+        <mat-divider></mat-divider>
+        <mat-option
+          *ngFor="let option of viewModel.allDocumentsFilters.productType"
+          [value]="option"
+          id="documents-filters-productTypeFilter-{{option}}_option"
+        >
+          {{ option }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+  <div
+    fxLayoutAlign="end start"
+    fxFlex.xs="1 0 100%"
+    fxFlex.sm="1 0 50%"
+    fxFlex.md="1 0 33.333%"
+    fxFlex.lg="1 0 25%"
+    fxFlex="1 0 20%"
+  >
+    <button
+      (click)="clearFilters()"
+      id="documents-filters-clearFiltersButton"
+      class="secondary-button"
+      mat-stroked-button
+    >
+      RESET
+    </button>
+  </div>
+</div>
+</div>

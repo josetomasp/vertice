@@ -1,0 +1,19 @@
+@import 'variables';
+
+.vertical-rule {
+  color: $gray-400;
+  height: 13px;
+  transform: translateY(1px);
+  margin: 0 6px 0 6px;
+  width: 1px;
+  display: inline-block;
+  background-color: $gray-400;
+}
+
+.success {
+  color: $success;
+}
+
+.fail {
+  color: $danger;
+}

@@ -1,0 +1,29 @@
+@import 'variables';
+
+.modal {
+  &--margin-bottom {
+    margin-bottom: 1rem;
+  }
+
+  &--padding-left {
+    padding-left: 0.6rem;
+  }
+
+  &__inputInit {
+    padding-right: 1rem;
+  }
+
+  &__input {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  &__footer {
+    padding-right: 20px;
+  }
+
+  &__advanced-search {
+    display: inline;
+    padding-left: 1rem;
+  }
+}

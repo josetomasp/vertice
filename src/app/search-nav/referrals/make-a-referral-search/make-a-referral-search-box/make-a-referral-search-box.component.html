@@ -1,0 +1,230 @@
+<mat-card [formGroup]="formGroup" fxLayoutGap="18px">
+  <!-- Row: Header Text -->
+  <div fxLayout="row">
+    <span
+      id="filterBoxSummary"
+      class="search-claim__header-text-box"
+      [ngClass]="isEmptyForm ? 'search-claim--danger' : ''"
+      >Search for a claim to begin your referral. Fill out claim number or any
+      other combination of fields to search for the claim. (Claimant First Name
+      must be combined with Claimant Last Name, it cannot be searched
+      alone)</span
+    >
+  </div>
+  <!-- Row: Base Search -->
+  <div fxLayout="row" fxLayoutAlign="space-between" fxLayoutGap="20px">
+    <!-- Customer (For RIM) -->
+    <div fxFlex="20%" *ngIf="isInternal">
+      <div class="overhead-label" id="customer-label">
+        CUSTOMER<span class="required-text">*</span>
+      </div>
+      <mat-form-field>
+        <mat-select
+          healtheSelect
+          formControlName="customerCode"
+          placeholder="Choose Customer"
+          id="customer-select"
+          #customerSelect
+          required
+        >
+          <mat-option
+            [value]="option.value"
+            id="customer-select-{{option.label}}_option"
+            *ngFor="let option of (customers$ | async)"
+          >
+            {{ option.label }}
+          </mat-option>
+        </mat-select>
+        <mat-error>Please choose a Customer</mat-error>
+      </mat-form-field>
+    </div>
+
+    <!-- Claim Number -->
+    <div fxFlex="15%">
+      <div
+        for="claimNumber-input"
+        id="claimNumber-label"
+        class="overhead-label"
+      >
+        CLAIM NUMBER
+      </div>
+      <mat-form-field>
+        <input
+          id="claimNumber-input"
+          formControlName="claimNumber"
+          matInput
+          placeholder="Enter Claim"
+          type="text"
+        />
+      </mat-form-field>
+    </div>
+
+    <!-- Claimant Last Name -->
+    <div fxFlex="25%">
+      <div
+        for="claimantLastName-input"
+        class="overhead-label"
+        id="claimantLastName-label"
+      >
+        CLAIMANT LAST NAME
+      </div>
+      <mat-form-field>
+        <input
+          id="claimantLastName-input"
+          formControlName="claimantLastName"
+          matInput
+          placeholder="Enter Last Name"
+          type="text"
+        />
+      </mat-form-field>
+    </div>
+
+    <!-- Claimant First Name -->
+    <div fxFlex="25%">
+      <div
+        for="claimantFirstName-input"
+        class="overhead-label"
+        id="claimantFirstName-label"
+      >
+        CLAIMANT FIRST NAME
+      </div>
+      <mat-form-field>
+        <input
+          id="claimantFirstName-input"
+          formControlName="claimantFirstName"
+          matInput
+          placeholder="Enter First Name"
+          type="text"
+        />
+      </mat-form-field>
+    </div>
+
+    <!-- Search Button -->
+    <div  fxLayout="row"
+          fxLayoutGap="16px" class="search-claim__search-button">
+      <button
+        (click)="search()"
+        id="claimSearch-submitButton"
+        class="primary-button"
+        mat-flat-button
+        [disabled]="submitDisabled()"
+      >
+        SEARCH
+      </button>
+      <button
+        (click)="resetForm()"
+        class="secondary-button"
+        mat-stroked-button
+        id="resetButton"
+      >
+        RESET
+      </button>
+    </div>
+  </div>
+  <!-- Row: Button-Advanced Search -->
+  <div fxLayout="row" fxLayoutAlign="end">
+    <a id="advancedFiltersButton" (click)="advancedFilters.toggle()" mat-button>
+      Advanced Search
+      <i
+        class="search-claim--padding-left"
+        [ngClass]="
+          advancedFilters.expanded ? 'fas fa-chevron-up' : 'fas fa-chevron-down'
+        "
+        id="activityView-tableCard-header-advancedFilterPanelTrigger-chevron"
+      ></i>
+    </a>
+  </div>
+  <!-- Advanced Search -->
+  <mat-expansion-panel #advancedFilters class="search-claim__mat-expansion">
+    <div fxLayout="row" fxLayoutAlign="space-between" fxLayoutGap="20px">
+      <!-- Date of Injury -->
+      <div fxFlex="30%">
+        <div class="overhead-label" id="dateOfInjury-overheadLabel">
+          DATE OF INJURY
+        </div>
+        <div class="mat-form-field-wrapper">
+          <healthe-daterange
+            #dateOfInjury
+            [options]="datePickerOptions"
+            id="dateRange"
+            [triggerIcon]="faCalendarAlt"
+            (submit)="_dateRangeChange($event)"
+            [hasSubmit]="false"
+          >
+          </healthe-daterange>
+        </div>
+      </div>
+
+      <!-- State of Venue -->
+      <div fxFlex="20%">
+        <div id="stateOfVenue-label" class="overhead-label">STATE OF VENUE</div>
+        <mat-form-field>
+          <mat-select
+            healtheSelect
+            formControlName="stateOfVenue"
+            placeholder="Choose State"
+            id="stateOfVenue-select"
+          >
+            <mat-option
+              [value]="option.value"
+              id="stateOfVenue-select-{{option.label}}_option"
+              *ngFor="let option of (stateOfVenue$ | async)"
+            >
+              {{ option.label }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <!-- SSN -->
+      <div fxFlex="15%">
+        <div for="ssn-input" class="overhead-label" id="ssn-label">SSN</div>
+        <mat-form-field>
+          <input
+            id="ssn-input"
+            formControlName="ssn"
+            matInput
+            placeholder="Enter SSN"
+            type="text"
+          />
+        </mat-form-field>
+      </div>
+
+      <!-- Office Code -->
+      <div fxFlex="15%">
+        <div
+          for="officeCode-input"
+          class="overhead-label"
+          id="officeCode-label"
+        >
+          OFFICE CODE
+        </div>
+        <mat-form-field>
+          <input
+            id="officeCode-input"
+            formControlName="officeCode"
+            matInput
+            placeholder="Enter Code"
+            type="text"
+          />
+        </mat-form-field>
+      </div>
+
+      <!-- Employer -->
+      <div fxFlex="15%">
+        <div for="employer-input" class="overhead-label" id="employer-label">
+          Employer
+        </div>
+        <mat-form-field>
+          <input
+            id="employer-input"
+            formControlName="employer"
+            matInput
+            placeholder="Enter Employer"
+            type="text"
+          />
+        </mat-form-field>
+      </div>
+    </div>
+  </mat-expansion-panel>
+</mat-card>

@@ -1,0 +1,122 @@
+<div fxLayout="column" fxLayoutGap="40px" [formGroup]="expandForm">
+  <div>
+    <div class="overhead-label" id="claimViewBannerExpandControl-label">
+      DEFAULT BANNER DISPLAY UPON PAGE LOAD
+    </div>
+    <div>
+      <mat-radio-group id="expandControl" formControlName="expanded">
+        <mat-radio-button
+          id="claimViewBannerExpandControl-{{option.label}}"
+          *ngFor="let option of expandOptions"
+          [value]="option.value"
+          style="margin-right: 20px;"
+          ><span id="claimViewBannerExpandControl-{{option.label}}-label">{{
+            option.label
+          }}</span></mat-radio-button
+        >
+      </mat-radio-group>
+    </div>
+  </div>
+
+  <div>
+    <div id="claim-view-banner-settings-FieldsToDisplay" class="section-title">
+      Fields to Display In The Banner (Collapsed view)
+    </div>
+    <div [formGroup]="columnForm" fxLayout="row wrap" fxLayoutGap="30px">
+      <div fxLayout="column" *ngFor="let index of [0, 1, 2, 3, 4]">
+        <div
+          class="overhead-label"
+          id="claim-view-banner-settings-label{{index + 1}}"
+        >
+          LABEL {{ index + 1 }}
+        </div>
+        <mat-form-field style="width: 316px;">
+          <mat-select
+            healtheSelect
+            id="input{{index + 1}}"
+            formControlName="column{{index}}"
+            [placeholder]="'Select value'"
+            style="width: 284px;"
+          >
+            <ng-container *ngFor="let option of (selectOptions$ | async)">
+              <mat-option
+                id="input1-option-{{option.value}}"
+                *healtheRemoveElementIfTrue="
+                  componentGroupName;
+                  elementName: option.elementName
+                "
+                [disabled]="isDisabled(option.value)"
+                [value]="option.value"
+              >
+                <healthe-customer-configs-label
+                  [defaultText]="option.label"
+                  [elementName]="option.elementName"
+                  [forcedCapitalization]="false"
+                ></healthe-customer-configs-label>
+              </mat-option>
+            </ng-container>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <div id="claim-view-banner-settings-previewOfBanner" class="section-title">
+      Preview of Banner Display
+    </div>
+    <mat-card id="claim-view-banner-settings-claimBannerPreview">
+      <div fxLayout="row wrap" fxLayoutGap="30px grid">
+        <div
+          fxLayout="column"
+          *ngFor="let field of (getCardInfo$() | async)"
+          id="claim-view-banner-settings-cardInfo{{field.label}}"
+        >
+          <div
+            class="overhead-label"
+            style="width: 316px;"
+            id="claim-view-banner-settings-cardInfo{{field.label}}-label{{field.label}}"
+          >
+            {{ field.label | uppercase }}
+          </div>
+          <div
+            class="standard-text"
+            style="width: 316px;"
+            id="claim-view-banner-settings-cardInfo{{field.label}}-value{{field.label}}"
+          >
+            <healthe-customer-configs-label
+              [defaultText]="field.value"
+              [elementName]="field.elementName"
+              [forcedCapitalization]="false"
+            ></healthe-customer-configs-label>
+          </div>
+        </div>
+      </div>
+    </mat-card>
+  </div>
+
+  <div
+    fxLayout="row"
+    fxLayout.lt-md="column"
+    fxLayoutAlign="space-between"
+    fxLayoutGap.lt-md="40px"
+  >
+    <div fxLayout="column" fxLayoutAlign="center">
+      <span class="note-text" id="claimViewBanner-note"
+        >Note: The rest of the fields not selected for the claim banner will be
+        displayed in the expanded view</span
+      >
+    </div>
+    <div fxLayout="row" fxLayoutAlign="end">
+      <button
+        mat-stroked-button
+        (click)="resetToDefaults()"
+        class="secondary-button"
+        id="resetDefaultClaimBannerFieldsButton"
+        style="width: 204px;"
+      >
+        RESET TO DEFAULT SETTINGS
+      </button>
+    </div>
+  </div>
+</div>

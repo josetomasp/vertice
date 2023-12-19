@@ -1,0 +1,12 @@
+@import 'variables';
+
+.claimsSearch {
+  &-wrapper {
+    margin: 20px;
+  }
+}
+
+.danger-text {
+  color: $danger;
+  font-weight: bold;
+}

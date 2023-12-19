@@ -1,0 +1,142 @@
+<div *ngFor="let claimantTabInfo of [claimantTabInfo$ | async]">
+  <div class="spacersmall"></div>
+
+  <mat-card>
+    <mat-card-title>
+      <div fxLayout="row wrap" fxLayoutAlign="space-between">
+        <div id="claimant-Claimant Information">
+          <healthe-customer-configs-label
+            defaultText="Claimant Information"
+            elementName="claimantInformationLabel"
+            [forcedCapitalization]="false"
+          ></healthe-customer-configs-label>
+        </div>
+        <div class="standard-text" *ngIf="claimantTabInfo.attorneyName">
+          <i class="far fa-info-circle" style="margin-right: 10px"></i
+          ><span id="claimant-attorneyText"
+            ><healthe-customer-configs-label
+              defaultText="Claimant"
+              elementName="claimantRepByAttorney"
+              [forcedCapitalization]="false"
+            ></healthe-customer-configs-label>
+            is represented by attorney: </span
+          ><a mat-button id="claimant-attorneyName">{{
+            claimantTabInfo.attorneyName
+          }}</a>
+        </div>
+      </div>
+    </mat-card-title>
+
+    <mat-card-content>
+      <div fxLayout="row wrap" fxLayoutGap="35px grid">
+        <ng-container *ngFor="let item of claimantTabInfo.claimantDetails">
+          <ng-container
+            *healtheRemoveElementIfTrue="
+              componentGroupName;
+              elementName: item.elementName
+            "
+          >
+            <div
+              fxFlex="calc(25% - 35px)"
+              fxFlex.lt-lg="calc(25% - 35px)"
+              fxFlex.lt-md="calc(33.33% - 35px)"
+              fxFlex.lt-sm="calc(50% - 35px)"
+            >
+              <div
+                [id]="'claimant-' + item.label + '-label'"
+                class="overhead-label"
+              >
+                <healthe-customer-configs-label
+                  [defaultText]="item.label"
+                  [elementName]="item.elementName"
+                ></healthe-customer-configs-label>
+                <healthe-claim-edit-eligibility-link
+                  *ngIf="item.editable"
+                  [decodedClaimNumber]="decodedClaimNumber$ | async"
+                  [decodedCustomerId]="decodedCustomerId$ | async"
+                  [linkId]="item.elementName"
+                ></healthe-claim-edit-eligibility-link>
+              </div>
+              <div
+                #claimantDetail
+                [id]="'claimant-' + item.label + '-value'"
+                class="standard-text ellipsis-text"
+                style="white-space: pre-line;"
+              >
+                <ng-container *ngIf="isArray(item.value)">
+                  <span [matTooltip]="getArrayTooltip(item.value)">
+                    <div *ngFor="let i of item.value">{{ i }}</div>
+                  </span>
+                </ng-container>
+
+                <ng-container *ngIf="!isArray(item.value)">
+                  <span [matTooltip]="item.value"> {{ item.value }} </span>
+                </ng-container>
+              </div>
+            </div>
+          </ng-container>
+        </ng-container>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <div class="spacersmall"></div>
+
+  <mat-card
+    *healtheRemoveElementIfTrue="
+      componentGroupName;
+      elementName: 'employerInformationCard'
+    "
+  >
+    <mat-card-title id="claimant-Employer Information"
+      >Employer Information
+    </mat-card-title>
+    <mat-card-content>
+      <div fxLayout="row wrap" fxLayoutGap="35px grid">
+        <ng-container *ngFor="let item of claimantTabInfo.employerInfo">
+          <ng-container
+            *healtheRemoveElementIfTrue="
+              componentGroupName;
+              elementName: item.elementName
+            "
+          >
+            <div
+              fxFlex="calc(25% - 35px)"
+              fxFlex.lt-lg="calc(25% - 35px)"
+              fxFlex.lt-md="calc(33.33% - 35px)"
+              fxFlex.lt-sm="calc(50% - 35px)"
+            >
+              <div class="card-grid--wrap-md">
+                <div
+                  [id]="'claimant-' + item.label + '-label'"
+                  class="overhead-label"
+                >
+                  <healthe-customer-configs-label
+                    [defaultText]="item.label"
+                    [elementName]="item.elementName"
+                  ></healthe-customer-configs-label>
+                </div>
+                <div
+                  #employerDetail
+                  [id]="'claimant-' + item.label + '-value'"
+                  class="standard-text ellipsis-text"
+                  style="white-space: pre-line;"
+                >
+                  <ng-container *ngIf="isArray(item.value)">
+                    <span [matTooltip]="getArrayTooltip(item.value)">
+                      <div *ngFor="let i of item.value">{{ i }}</div>
+                    </span>
+                  </ng-container>
+
+                  <ng-container *ngIf="!isArray(item.value)">
+                    <span [matTooltip]="item.value"> {{ item.value }} </span>
+                  </ng-container>
+                </div>
+              </div>
+            </div>
+          </ng-container>
+        </ng-container>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>

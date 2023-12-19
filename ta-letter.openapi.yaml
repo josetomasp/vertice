@@ -1,0 +1,46 @@
+openapi: 3.0.3
+info:
+  title: TA Letter Authorization View Model
+  description: Clinical Service TA Letter authorization model and supporting structured
+  version: 1.0.0
+servers:
+paths:
+components:
+  schemas:
+    PrescriberLookupModal:
+      type: object
+      properties:
+        physicianName:
+          type: string
+          example: "John Doe"
+        prescriberId:
+          type: string
+          pattern: '/d{10}'
+        physicianPhoneNumber:
+          type: string
+          example: '(123)456-2323'
+          pattern: '\(/d{3}\)/d{3}-/d{4}'
+    PrescribingPhysicianTableItem:
+      type: object
+      properties:
+        physicianName:
+          type: string
+          example: "John Doe"
+        prescriberId:
+          type: string
+          pattern: '/d{10}'
+        physicianPhoneNumber:
+          type: string
+          example: '(123)456-2323'
+          pattern: '\(/d{3}\)/d{3}-/d{4}'
+        prescriberModalData:
+          $ref: '#/components/schemas/PrescriberLookupModal'
+    TALetterAuthorizationViewModel:
+      properties:
+        prescribingPhysicians:
+          type: array
+          items:
+            - $ref: '#/components/schemas/PrescribingPhysicianTableItem'
+        pharmacies:
+          type: array
+

@@ -1,0 +1,123 @@
+<div [formGroup]="otherForm">
+  <div fxLayout="row wrap" fxLayoutGap="30px">
+    <div>
+      <span class="overhead-label" id="other-wizard-typeOfTransportation-label"
+        >TYPE OF TRANSPORTATION<span class="required-text">*</span></span
+      >
+      <mat-form-field style="min-width: 230px">
+        <mat-select
+          healtheSelect
+          placeholder="Choose Transportation Type"
+          [formControl]="stepForm.get('typeOfTransportation')"
+          id="other-wizard-typeOfTransportation-select"
+        >
+          <mat-option
+            *ngFor="
+              let transportationType of (transportationTypes$ | async);
+              index as $transportationIndex
+            "
+            id="other-wizard-transportationTypes-option-{{$transportationIndex}}"
+            [value]="transportationType?.code"
+            >{{ transportationType?.code }}</mat-option
+          >
+        </mat-select>
+        <mat-error id="other-wizard-wheelchairType-error"
+          >Select 'Type of Transportation'
+        </mat-error>
+      </mat-form-field>
+    </div>
+    <div>
+      <span class="overhead-label" id="other-wizard-authorizationDateType-label"
+        >TYPE OF AUTHORIZATION</span
+      >
+      <mat-radio-group fxLayout="row" fxLayoutGap="15px" [value]="dateMode">
+        <mat-radio-button
+          *ngFor="let type of authorizationDateTypes"
+          id="other-wizard-authorizationDateType-{{type}}"
+          [value]="type"
+          (click)="dateModeSwitch($event, type)"
+          >{{ type }}</mat-radio-button
+        >
+      </mat-radio-group>
+    </div>
+  </div>
+  <div class="spacersmall"></div>
+  <healthe-specific-date-form-array
+    [formArray]="stepForm.get('schedulingForm')"
+    [config]="specificDateConfig"
+    *ngIf="dateMode === authorizationDateTypes[0]"
+  ></healthe-specific-date-form-array>
+  <healthe-date-range-form
+    [idPrefix]="stepName"
+    [serviceActionType]="'other'"
+    [parentFormGroup]="otherForm.get('schedulingForm')"
+    *ngIf="
+      otherForm.get('authorizationDateType').value === authorizationDateTypes[1]
+    "
+    withTwoLocations="true"
+  ></healthe-date-range-form>
+
+  <div class="spacermedium"></div>
+  <div fxLayout="row wrap" fxLayoutGap="30px">
+    <div>
+      <span class="overhead-label" id="other-wizard-driverLanguage-label"
+        >DRIVER LANGUAGE</span
+      >
+      <mat-form-field>
+        <mat-select
+          healtheSelect
+          placeholder="Choose language"
+          [formControl]="otherForm.get('driverLanguage')"
+          id="other-wizard-driverLanguage-select"
+        >
+          <mat-option
+            *ngFor="let language of _languages; index as $driverLanguageIndex"
+            id="other-wizard-driverLanguage-option-{{$driverLanguageIndex}}"
+            [value]="language"
+            >{{ language }}</mat-option
+          >
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div>
+      <span class="overhead-label" id="other-wizard-rushServiceNeeded-label"
+        >RUSH SERVICE (NEEDED WITHIN 24 HOURS)?</span
+      >
+      <mat-radio-group
+        fxLayout="row"
+        fxLayoutGap="15px"
+        [formControl]="otherForm.get('rushServiceNeeded')"
+      >
+        <mat-radio-button
+          *ngFor="let value of booleanRadioValues"
+          id="other-wizard-rushServiceNeeded-option-{{value}}"
+          [value]="value"
+          >{{ value }}</mat-radio-button
+        >
+      </mat-radio-group>
+    </div>
+    <div>
+      <span class="overhead-label" id="other-wizard-paidAsExpense-label"
+        >WILL THIS BE PAID AS EXPENSE?
+        <fa-icon
+          [icon]="faInfoCircle"
+          class="other-icons"
+          matTooltip="Only select yes if this service is not related to medical and needs to be paid off the claim as expense related"
+        >
+        </fa-icon>
+      </span>
+      <mat-radio-group
+        fxLayout="row"
+        fxLayoutGap="15px"
+        [formControl]="otherForm.get('paidAsExpense')"
+      >
+        <mat-radio-button
+          *ngFor="let value of booleanRadioValues"
+          id="other-wizard-paidAsExpense-option-{{value}}"
+          [value]="value"
+          >{{ value }}</mat-radio-button
+        >
+      </mat-radio-group>
+    </div>
+  </div>
+</div>

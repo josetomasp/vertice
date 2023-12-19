@@ -1,0 +1,17 @@
+<ng-container *ngIf="authNarrativeMode !== 'PostSubmit'">
+  <span id="narrative-quantity-used-text"
+    >You {{ narrativeTextItem.actionDescriptor }} an additional
+    <b
+      >{{ narrativeTextItem.limitChange }}
+      {{ narrativeTextItem.quantityDescriptor }} to the following location(s)</b
+    >, for a total of
+    <b
+      >{{ authItem.tripsAuthorized }} overall
+      {{ narrativeTextItem.quantityDescriptor }}</b
+    >.
+  </span>
+  <p><b>Locations</b></p>
+  <p class="locationText" *ngFor="let location of locations">
+    <b>{{ location }}</b>
+  </p>
+</ng-container>

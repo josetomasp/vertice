@@ -1,0 +1,267 @@
+<div>
+  <div
+    *ngFor="let rowConfig of grid"
+    [fxLayout]="container.flex.direction"
+    [fxLayoutAlign]="
+      container.flex.justifyContent + ' ' + container.flex.alignItems
+    "
+    [fxLayoutGap]="container.flex.gap ? container.flex.gap : '0px'"
+  >
+    <div
+      *ngFor="let columnConfig of rowConfig"
+      [fxFlex]="columnConfig.flexBasis"
+      [fxLayoutGap]="container.flexGap ? container.flexGap : '6px'"
+      [fxLayout]="'column'"
+    >
+      <!-- Label -->
+      <div
+        *ngIf="container.includeLabels"
+        class="overhead-label"
+        id="auth-info-{{ columnConfig.label | lowercase }}-label"
+      >
+        {{ columnConfig.label }}
+        <fa-icon
+          *ngIf="
+            columnConfig.informationIcon != null &&
+            columnConfig.informationIcon.tooltipMessage != '' &&
+            columnConfig.informationIcon.position === 'label'
+          "
+          class="information-icon"
+          [ngStyle]="columnConfig?.informationIcon?.ngStyle"
+          [icon]="faExclamationCircle"
+          [matTooltip]="columnConfig.informationIcon.tooltipMessage"
+        ></fa-icon>
+        <span *ngIf="columnConfig.value?.isRequired" class="required-text"
+          >*</span
+        >
+      </div>
+
+      <!-- Types: button/modals/etc -->
+      <ng-container [ngSwitch]="columnConfig.type">
+        <ng-container
+          *ngSwitchCase="componentType.Button"
+          [ngSwitch]="columnConfig.value.buttonType"
+        >
+          <button
+            *ngSwitchCase="buttonType.Primary"
+            mat-flat-button
+            class="primary-button"
+            (click)="columnConfig.value.action($event)"
+          >
+            {{ columnConfig.value.text | uppercase }}
+          </button>
+          <button
+            *ngSwitchCase="buttonType.Secondary"
+            mat-stroked-button
+            style="width: 100% !important;"
+            class="secondary-button"
+            (click)="columnConfig.value.action($event)"
+          >
+            {{ columnConfig.value.text | uppercase }}
+          </button>
+          <button
+            *ngSwitchCase="buttonType.Info"
+            mat-stroked-button
+            class="info-button"
+            (click)="columnConfig.value.action($event)"
+          >
+            {{ columnConfig.value.text | uppercase }}
+          </button>
+        </ng-container>
+
+        <!-- Pharmacy Modal -->
+        <ng-container *ngSwitchCase="componentType.Pharmacy">
+          <span
+            *ngSwitchCase="
+              columnConfig?.value?.displayText === null ||
+              columnConfig?.value?.displayText === ''
+            "
+          >
+            Not Available
+          </span>
+
+          <healthe-info-lookup-launcher
+            *ngSwitchCase="
+              columnConfig?.value?.displayText !== null &&
+              columnConfig?.value?.displayText !== ''
+            "
+            id="auth-info-pharmacy-value"
+            [nabp]="columnConfig?.value?.nabp"
+            [matTooltip]="columnConfig?.value?.displayText"
+            [displayText]="columnConfig?.value?.displayText"
+          >
+          </healthe-info-lookup-launcher>
+        </ng-container>
+
+        <ng-container *ngSwitchCase="componentType.DrugOrCompound">
+          <!-- Drug Modal -->
+          <healthe-info-lookup-launcher
+            *ngIf="!columnConfig.value.compound"
+            id="auth-info-drugModal-value"
+            [displayText]="columnConfig?.value?.displayText"
+            [drugLookup]="{
+              drugID: columnConfig?.value?.ndc,
+              quantity: columnConfig?.value?.quantity,
+              drugDate: columnConfig?.value?.createdDate
+            }"
+          ></healthe-info-lookup-launcher>
+
+          <!-- Compound Modal -->
+          <a
+            style="cursor: pointer;"
+            *ngIf="columnConfig.value.compound"
+            (click)="openCompoundModal(columnConfig?.value?.compoundModalData)"
+          >
+            {{ columnConfig.value.displayText }}
+          </a>
+        </ng-container>
+
+        <!-- Prescriber Modal -->
+
+        <ng-container *ngSwitchCase="componentType.Prescriber">
+          <span
+            *ngIf="
+              columnConfig?.value?.displayText === null ||
+              columnConfig?.value?.displayText === '' ||
+              columnConfig?.value?.displayText === 'Unknown'
+            "
+          >
+            <ng-container *ngIf="columnConfig?.value?.displayText !== 'Unknown'">Not Available</ng-container>
+            <ng-container *ngIf="columnConfig?.value?.displayText === 'Unknown'">Unknown</ng-container>
+          </span>
+
+          <healthe-info-lookup-launcher
+            *ngIf="
+              columnConfig?.value?.displayText !== null &&
+              columnConfig?.value?.displayText !== '' &&
+              columnConfig?.value?.displayText !== 'Unknown'
+            "
+            [prescriberID]="columnConfig?.value?.prescriberId"
+            [displayText]="columnConfig?.value?.displayText"
+          >
+          </healthe-info-lookup-launcher>
+        </ng-container>
+
+        <!-- Payee Modal -->
+        <ng-container *ngSwitchCase="componentType.Payee">
+          <span
+            *ngIf="
+              columnConfig?.value?.name === null ||
+              columnConfig?.value?.name === ''
+            "
+          >
+            Not Available
+          </span>
+
+          <a
+            *ngIf="
+              columnConfig?.value?.name !== null &&
+              columnConfig?.value?.name !== ''
+            "
+            id="auth-info-payee-value"
+            style="cursor: pointer;"
+            (click)="openPayeeModal(columnConfig?.value)"
+          >
+            {{ columnConfig.value.name }}
+          </a>
+        </ng-container>
+
+        <div
+          *ngSwitchCase="componentType.Html"
+          id="auth-info-{{ columnConfig.label | lowercase }}-value"
+          [ngStyle]="columnConfig?.ngStyle"
+          [innerHTML]="columnConfig?.value"
+        ></div>
+
+        <div
+          *ngSwitchCase="componentType.Input"
+          [formGroup]="componentConfig.formGroup"
+        >
+          <input
+            healtheFormValidationExtractor
+            matInput
+            [formLabel]="columnConfig?.label"
+            [type]="columnConfig?.value.type"
+            [formControlName]="columnConfig?.value.formControlName"
+            [id]="columnConfig?.value.id"
+            [ngStyle]='columnConfig?.ngStyle'
+            [ngClass]='columnConfig?.value.class'
+            placeholder="{{ columnConfig?.value.placeHolder }}"
+            value="{{ columnConfig?.value.value }}"
+            healtheFormValidationExtractor
+          />
+
+          <ng-container
+            *ngFor="let error of (columnConfig?.value.errorMessages | keyvalue)"
+          >
+            <mat-error
+              id="{{ columnConfig?.value.id + '-' + error.key }}"
+              *ngIf="
+                componentConfig.formGroup
+
+                  .get(columnConfig?.value.formControlName)
+
+                  .hasError(error.key)
+              "
+            >
+              {{ error.value }}
+            </mat-error>
+          </ng-container>
+        </div>
+        <div
+          *ngSwitchCase="componentType.PhoneNumber"
+          [formGroup]="componentConfig.formGroup"
+        >
+          <input
+            matInput
+            [formControlName]="columnConfig?.value.formControlName"
+            [id]="columnConfig?.value.id"
+            [ngStyle]="columnConfig?.ngStyle"
+            placeholder="(xxx) xxx-xxxx"
+            [formLabel]="columnConfig?.label"
+            mask="(000) 000-0000"
+            value="{{ columnConfig?.value.value }}"
+            healtheFormValidationExtractor
+          />
+          <ng-container
+            *ngFor="let error of (columnConfig?.value.errorMessages | keyvalue)"
+          >
+            <mat-error
+              id="{{ columnConfig?.value.id + '-' + error.key }}"
+              *ngIf="
+                componentConfig.formGroup
+                  .get(columnConfig?.value.formControlName)
+                  .hasError(error.key)
+              "
+            >
+              {{ error.value }}
+            </mat-error>
+          </ng-container>
+        </div>
+        <div
+          *ngSwitchDefault
+          id="auth-info-{{ columnConfig.label | lowercase }}-value"
+          [ngStyle]="columnConfig?.ngStyle"
+        >
+          {{
+            !columnConfig.value &&
+            container.noAvailableValueTag &&
+            columnConfig.label
+              ? 'Not Available'
+              : columnConfig.value
+          }}
+          <fa-icon
+            *ngIf="
+              columnConfig.informationIcon != null &&
+              columnConfig.informationIcon.tooltipMessage != '' &&
+              columnConfig.informationIcon.position === 'value'
+            "
+            class="information-icon"
+            [icon]="faExclamationCircle"
+            [matTooltip]="columnConfig.informationIcon.tooltipMessage"
+          ></fa-icon>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+</div>

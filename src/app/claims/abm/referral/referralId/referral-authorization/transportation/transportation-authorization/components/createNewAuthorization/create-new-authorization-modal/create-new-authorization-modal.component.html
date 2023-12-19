@@ -1,0 +1,122 @@
+<div fxLayout="row" fxLayoutAlign="space-between center" mat-dialog-title>
+  <span id="addTransportation-title">Add Transportation</span>
+  <button mat-icon-button mat-dialog-close id="addTransportation-header-widget">
+    <i class="fal fa-times modal-close-widget"></i>
+  </button>
+</div>
+<div class="spacersmall"></div>
+<mat-dialog-content style="height: 440px; margin-top:0px; margin-bottom: 0;">
+  <div
+    fxLayout="column"
+    fxLayoutAlign="start center"
+    fxLayoutGap="35px"
+    *ngIf="inServiceSelectionMode"
+  >
+    <div class="text-bold text-primary">
+      What transportation service would you like to add?
+    </div>
+    <mat-radio-group
+      [formControl]="radioButton"
+      fxLayout="row wrap"
+      fxLayoutAlign="center"
+      style="width: 100%; height: 375px"
+    >
+      <mat-card
+        (click)="toggleCheckboxAndUpdateForm(transportationType.name)"
+        *ngFor="let transportationType of transportationTypes"
+        [healtheTooltipAdvancedContent]="transportationType.help"
+        [healtheTooltipAdvancedDisabled]="!transportationType.help"
+        [healtheTooltipAdvancedTitle]="
+          transportationType.label + ' Transportation'
+        "
+        id="transportation-selection-{{ transportationType.label?.replace(' ', '-')}}-card"
+        [width]="'200px'"
+        healtheTooltipAdvanced
+        healtheTooltipAdvancedPosition="bottom"
+        healtheTooltipAdvancedYOffset="10"
+        fxLayout="column"
+        fxLayoutAlign="center center"
+        style="width: 150px; height: 150px; cursor:pointer; margin-right: 35px"
+      >
+        <div fxLayout="column" fxLayoutAlign="center center">
+          <i
+            id="transportation-selection-{{ transportationType.label}}-card-icon"
+            [ngClass]="transportationType.icon"
+            class="text-primary fa-2x text-center unselectable"
+          ></i>
+          <p
+            style="width: 90px;"
+            id="transportation-selection-{{ transportationType.label}}-card-label"
+            class="text-bold text-primary text-wrap text-center unselectable"
+          >
+            {{ transportationType.label }}
+          </p>
+        </div>
+        <mat-radio-button
+          id="transportation-selection-{{ transportationType.label}}-card-checkbox"
+          (click)="$event.preventDefault()"
+          [value]="transportationType.name"
+        ></mat-radio-button>
+      </mat-card>
+    </mat-radio-group>
+  </div>
+  <ng-container
+    [ngSwitch]="referralAuthorizationItem.authData.authorizationTypeCode"
+    *ngIf="false == inServiceSelectionMode"
+  >
+    <healthe-create-new-authorization-sedan
+      *ngSwitchCase="referralAuthorizationType.DETAILED_SEDAN"
+      [referralAuthorizationItem]="referralAuthorizationItem"
+      [dialogData]="dialogData"
+    ></healthe-create-new-authorization-sedan>
+
+    <healthe-create-new-authorization-wheelchair
+      *ngSwitchCase="referralAuthorizationType.DETAILED_WHEELCHAIR"
+      [referralAuthorizationItem]="referralAuthorizationItem"
+      [dialogData]="dialogData"
+    ></healthe-create-new-authorization-wheelchair>
+
+    <healthe-create-new-authorization-other
+      *ngSwitchCase="referralAuthorizationType.DETAILED_OTHER"
+      [referralAuthorizationItem]="referralAuthorizationItem"
+      [dialogData]="dialogData"
+    ></healthe-create-new-authorization-other>
+
+    <healthe-create-new-authorization-flight
+      *ngSwitchCase="referralAuthorizationType.DETAILED_FLIGHT"
+      [referralAuthorizationItem]="referralAuthorizationItem"
+      [dialogData]="dialogData"
+    ></healthe-create-new-authorization-flight>
+
+    <healthe-create-new-authorization-lodging
+      *ngSwitchCase="referralAuthorizationType.DETAILED_LODGING"
+      [referralAuthorizationItem]="referralAuthorizationItem"
+      [dialogData]="dialogData"
+    ></healthe-create-new-authorization-lodging>
+  </ng-container>
+</mat-dialog-content>
+
+<mat-dialog-actions
+  fxLayout="row"
+  fxLayoutAlign="end start"
+  fxLayoutGap="35px"
+  style="padding-right: 20px; padding-left: 20px;"
+>
+  <button
+    class="info-button"
+    mat-flat-button
+    mat-dialog-close
+    id="addTransportation-cancelButton"
+  >
+    CANCEL
+  </button>
+  <button
+    class="success-button"
+    mat-flat-button
+    id="addTransportation-addButton"
+    [disabled]="isAddButtonDisabled()"
+    (click)="addButtonClick()"
+  >
+    ADD
+  </button>
+</mat-dialog-actions>

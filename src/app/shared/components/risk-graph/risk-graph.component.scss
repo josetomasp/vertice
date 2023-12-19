@@ -1,0 +1,13 @@
+@import 'variables';
+
+:host ::ng-deep {
+  g {
+    text:first-child {
+      fill: $gray-400;
+    }
+  }
+}
+
+.hidden {
+  display: none !important;
+}

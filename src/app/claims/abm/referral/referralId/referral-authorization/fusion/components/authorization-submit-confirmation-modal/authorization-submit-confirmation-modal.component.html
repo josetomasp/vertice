@@ -1,0 +1,57 @@
+<div fxLayout="row" fxLayoutAlign="space-between center" mat-dialog-title>
+  <h1 id="confirmation-modal-submit-title">Submit</h1>
+  <button
+    mat-icon-button
+    mat-dialog-close
+    id="addBodyParts--header-closeButton"
+  >
+    <i class="fal fa-times modal-close-widget"></i>
+  </button>
+</div>
+<div
+  *ngIf="!(submitData.submittingAuthorizations$ | async)"
+  id="confirmation-modal-submit-modal"
+>
+  <mat-dialog-content id="confirmation-modal-submit-body">
+    Are you sure you want to submit this authorization? You won't be able to
+    undo this action.
+  </mat-dialog-content>
+  <div
+    mat-dialog-actions
+    fxLayout="row"
+    fxLayoutAlign="end"
+    fxLayoutGap="15px"
+    style="padding-right: 15px"
+  >
+    <button
+      id="confirmation-modal-submit-deny"
+      mat-stroked-button
+      class="info-button"
+      [mat-dialog-close]="false"
+    >
+      CANCEL
+    </button>
+    <button
+      id="confirmation-modal-submit-affirm"
+      mat-flat-button
+      [disabled]="submitData.submittingAuthorizations$ | async"
+      (click)="submit()"
+      class="success-button"
+    >
+      <span>SUBMIT</span>
+    </button>
+  </div>
+</div>
+
+<ng-container *ngIf="(submitData.submittingAuthorizations$ | async)">
+  <div
+    fxLayout="column"
+    fxLayoutAlign="center center"
+    fxLayoutGap="35px"
+    class="body-spinner"
+  >
+    <mat-spinner [diameter]="50" id="mar-loadingResultsSpinner"></mat-spinner>
+
+    <h2 id="mar-loadingResultsMessage">Submitting...</h2>
+  </div>
+</ng-container>

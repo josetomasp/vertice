@@ -1,0 +1,48 @@
+<healthe-error-banner
+  [errorMessages]="errorsMessages$ | async"
+  bannerTitle="Search Results Errors"
+></healthe-error-banner>
+
+<ng-container *ngIf='!searchInitialized'>
+  <div class='spacersmall'></div>
+  <healthe-loading-spinner
+    loadingVerbiage='Loading search options...'
+  ></healthe-loading-spinner>
+</ng-container>
+
+<mat-card
+  *ngIf="searchInitialized">
+  <mat-card-content>
+    <healthe-authorizations-search-form
+      [searchName]="searchName"
+      [displaySearchName]="displaySearchName"
+      [subTitle]="subTitle"
+      [subTitleListItems]="subTitleListItems"
+      [simpleSearchFormConfig]="simpleSearchFormConfig"
+      [advancedSearchFormConfig]="advancedSearchFormConfig"
+      [searchOptionsState$]="searchOptionsState$"
+      [userInfo]="userInfo$ | async"
+      [alwaysShowErrors]="alwaysShowErrors"
+      [warningMessage]="warningMessage"
+      [formGroupValidations]="searchBoxValidators"
+      [defaultSearchFormValues]="defaultSearchFormValues"
+      [formGroupValidationErrorMessages]="formGroupValidationErrorMessages"
+      (formValuesChange)="saveFormValues($event)"
+      (searchNow)="searchClicked()"
+    ></healthe-authorizations-search-form>
+  </mat-card-content>
+</mat-card>
+<healthe-authorizations-search-results
+  *ngIf="(resultsData$ | async)"
+  [simpleSearchFormConfig]="simpleSearchFormConfig"
+  [advancedSearchFormConfig]="advancedSearchFormConfig"
+  [resultsColumnsConfig]="resultsColumnsConfig"
+  [resultsDefaultSort]="resultsDefaultSort"
+  [pageSize$]="pageSize$"
+  [searchFormValues]="currentSearchFormValues"
+  [resultsData$]="resultsData$"
+  [isResultLoading$]="isResultLoading$"
+  [actionsConfig]="resultsActionsConfig"
+  [showExportButton]="enableExport"
+  (doExport)="doExport($event)"
+></healthe-authorizations-search-results>

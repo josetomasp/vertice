@@ -1,0 +1,22 @@
+@import 'variables';
+
+::ng-deep .mat-card-header-text {
+  margin: 0 !important;
+}
+
+:host ::ng-deep {
+  g {
+    text:first-child {
+      fill: $gray-400;
+    }
+  }
+}
+
+a {
+  width: 155px;
+  margin-top: 50px;
+
+  i {
+    padding-left: 10px;
+  }
+}

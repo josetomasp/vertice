@@ -1,0 +1,292 @@
+<mat-expansion-panel
+  #matExpansionPanel
+  [expanded]="claimBannerExpanded$ | async"
+>
+  <mat-expansion-panel-header
+    [collapsedHeight]="claimBannerPanelHeaderHeight"
+    [expandedHeight]="claimBannerPanelHeaderHeight"
+    (click)="expandPanel(matExpansionPanel, $event)"
+    style="cursor: auto; padding-top: 20px !important;  padding-bottom: 20px !important;"
+  >
+    <div
+      fxLayout="row"
+      fxLayoutGap="35px grid"
+      style="width: 90%;"
+      *ngIf="!(isClaimV3BannerLoading$ | async)"
+      class="claimOverviewBarHeader"
+    >
+      <ng-container *ngFor="let field of (claimBannerTopFields$ | async)">
+        <ng-container
+          *healtheRemoveElementIfTrue="
+            'claim-view';
+            elementName: field.elementName
+          "
+        >
+          <div
+            fxFlex="{{ field.width }} {{ field.width }} calc(20% - 35px)"
+            fxFlex.lt-lg="{{ field.width }} {{ field.width }} calc(25% - 35px)"
+            fxFlex.lt-md="{{ field.width }} {{ field.width }} calc(33.33% - 35px)"
+            fxFlex.lt-sm="{{ field.width }} {{ field.width }} calc(50% - 35px)"
+          >
+            <div *ngIf="field.type == null">
+              <div
+                [id]="'claimBannerTopFields-label-' + field.name"
+                class="overhead-label"
+              >
+                <healthe-customer-configs-label
+                  [defaultText]="field.label"
+                  [elementName]="field.elementName"
+                ></healthe-customer-configs-label>
+                <healthe-claim-copy [memberId]="field.value" *ngIf="field.canCopy">
+                </healthe-claim-copy>
+                <healthe-claim-edit-eligibility-link
+                  *ngIf="field.editable"
+                  [decodedClaimNumber]="decodedClaimNumber$ | async"
+                  [decodedCustomerId]="decodedCustomerId$ | async"
+                  [linkId]="field.elementName"
+                ></healthe-claim-edit-eligibility-link>
+              </div>
+              <div
+                #topField
+                [id]="'claimBannerTopFields-value-' + field.name"
+                [matTooltip]="field.value"
+                class="standard-text ellipsis-text"
+              >
+                {{ field.value }}
+              </div>
+            </div>
+
+            <div
+              *ngIf="field.type == 'RADIO'"
+              [id]="'claimBannerTopFields-longTermCare'"
+            >
+              <div
+                [id]="'claimBannerTopFields-label-' + field.name"
+                class="overhead-label"
+              >
+              <healthe-customer-configs-label
+                [defaultText]="field.label | uppercase"
+                [elementName]="field.elementName"
+              >
+              </healthe-customer-configs-label>
+                <healthe-claim-edit-eligibility-link
+                  *ngIf="field.editable"
+                  [decodedClaimNumber]="decodedClaimNumber$ | async"
+                  [decodedCustomerId]="decodedCustomerId$ | async"
+                  [linkId]="field.elementName"
+                ></healthe-claim-edit-eligibility-link>
+              </div>
+              <mat-radio-group
+                [ngModel]="field.value"
+                componentGroupName="claim-view"
+                elementName="longTermCare"
+                healtheDisableElementIfTrue
+              >
+                <mat-radio-button
+                  [value]="true"
+                  id="claimBannerTopFields-longTermCare-yes"
+                  >Yes
+                </mat-radio-button>
+                <mat-radio-button
+                  [value]="false"
+                  id="claimBannerTopFields-longTermCare-no"
+                  style="margin-left: 20px;"
+                  >No
+                </mat-radio-button>
+              </mat-radio-group>
+            </div>
+            <div *ngIf="field.type == 'APPORTIONMENT'">
+              <div
+                [id]="'claimBannerTopFields-label-' + field.name"
+                class="overhead-label"
+              >
+                {{ field.label | uppercase }}
+                <healthe-claim-edit-eligibility-link
+                  *ngIf="field.editable"
+                  [decodedClaimNumber]="decodedClaimNumber$ | async"
+                  [decodedCustomerId]="decodedCustomerId$ | async"
+                  linkId="apportionment"
+                ></healthe-claim-edit-eligibility-link>
+              </div>
+              <div
+                #topApportionment
+                [id]="'claimBannerTopFields-value-' + field.name"
+                [matTooltip]="getApportionmentDisplayText(field.value)"
+                class="standard-text ellipsis-text"
+              >
+                {{ getApportionmentDisplayText(field.value) }}
+              </div>
+            </div>
+          </div>
+        </ng-container>
+      </ng-container>
+    </div>
+    <ng-container *ngIf="!(isClaimV3BannerLoading$ | async)">
+      <div
+        style="width: 10%"
+        fxLayoutAlign="end center"
+        *healtheRemoveElementIfTrue="
+          componentGroupName;
+          elementName: 'requestButton'
+        "
+        class="claimRequestButton"
+      >
+        <button
+          mat-flat-button
+          id="claimBannerTopFields-menuDropdown-Request"
+          class="primary-button"
+          (click)="setOpenUntilClose(requestMenu)"
+          [mat-menu-trigger-for]="requestMenu"
+        >
+          REQUEST
+          <fa-icon class="inline-right-icon" [icon]="requestMenuIcon"></fa-icon>
+        </button>
+        <mat-menu #requestMenu [overlapTrigger]="false" yPosition="below">
+          <ng-container *ngFor="let requestOption of requestDropdownOptions">
+            <button
+              *ngIf="!requestOption.isHidden"
+              mat-menu-item
+              [id]="'claimBannerTopFields-requestOption-' + requestOption.text"
+              (click)="requestOption.action()"
+            >
+              {{ requestOption.text }}
+            </button>
+          </ng-container>
+        </mat-menu>
+      </div>
+    </ng-container>
+
+    <div
+      fxLayout="row "
+      fxLayoutAlign="center center"
+      class="loaderContainer"
+      *ngIf="(isClaimV3BannerLoading$ | async)"
+    >
+      Loading Claim Data...
+    </div>
+  </mat-expansion-panel-header>
+  <mat-divider
+    style="padding-bottom: 20px; margin-left: -30px; margin-right: -30px; border-top-width: 2px;"
+  ></mat-divider>
+
+  <div fxLayout="row wrap" fxLayoutGap="50px grid" style="width: 100%;">
+    <ng-container *ngFor="let field of (claimBannerBottomFields$ | async)">
+      <ng-container
+        *healtheRemoveElementIfTrue="
+          'claim-view';
+          elementName: field.elementName
+        "
+      >
+        <div
+          fxFlex="{{ field.width }} {{ field.width }} calc(20% - 35px)"
+          fxFlex.lt-lg="{{ field.width }} {{ field.width }} calc(25% - 35px)"
+          fxFlex.lt-md="{{ field.width }} {{ field.width }} calc(33.33% - 35px)"
+          fxFlex.lt-sm="{{ field.width }} {{ field.width }} calc(50% - 35px)"
+        >
+          <div *ngIf="field.type == null">
+            <div
+              [id]="'claimBannerBottomFields-label-' + field.name"
+              class="overhead-label"
+            >
+              <healthe-customer-configs-label
+                [defaultText]="field.label"
+                [elementName]="field.elementName"
+              ></healthe-customer-configs-label>
+              <a mat-button class="copy-btn" (click)="copyPharmacyMemberIdToClipBoard(field.value)" *ngIf="field.canCopy">
+                Copy
+              </a>
+            </div>
+            <div
+              #bottomField
+              [id]="'claimBannerBottomFields-value-' + field.name"
+              [matTooltip]="field.value"
+              class="standard-text ellipsis-text"
+            >
+              {{ field.value }}
+            </div>
+          </div>
+          <div
+            *ngIf="field.type == 'RADIO'"
+            id="claimBannerBottomFields-longTermCare"
+          >
+            <div
+              class="overhead-label"
+              id="claimBannerBottomFields-label-longTermCare"
+            >
+              <healthe-customer-configs-label
+                [defaultText]="field.label"
+                [elementName]="field.elementName"
+              ></healthe-customer-configs-label>
+              <healthe-claim-edit-eligibility-link
+                *ngIf="field.editable"
+                [decodedClaimNumber]="decodedClaimNumber$ | async"
+                [decodedCustomerId]="decodedCustomerId$ | async"
+                [linkId]="field.elementName"
+              ></healthe-claim-edit-eligibility-link>
+            </div>
+            <mat-radio-group
+              [ngModel]="field.value"
+              componentGroupName="claim-view"
+              elementName="longTermCare"
+              healtheDisableElementIfTrue
+            >
+              <mat-radio-button
+                [value]="true"
+                id="claimBannerBottomFields-longTermCare-yes"
+                >Yes
+              </mat-radio-button>
+              <mat-radio-button
+                [value]="false"
+                id="claimBannerBottomFields-longTermCare-no"
+                style="margin-left: 20px;"
+                >No
+              </mat-radio-button>
+            </mat-radio-group>
+          </div>
+          <div *ngIf="field.type == 'APPORTIONMENT'">
+            <div
+              [id]="'claimBannerBottomFields-label-' + field.name"
+              class="overhead-label"
+            >
+              <healthe-customer-configs-label
+                [defaultText]="field.label"
+                [elementName]="field.elementName"
+              ></healthe-customer-configs-label>
+              <healthe-claim-edit-eligibility-link
+                *ngIf="field.editable"
+                [decodedClaimNumber]="decodedClaimNumber$ | async"
+                [decodedCustomerId]="decodedCustomerId$ | async"
+                linkId="apportionment"
+              ></healthe-claim-edit-eligibility-link>
+            </div>
+            <div
+              #bottomApportionment
+              [id]="'claimBannerBottomFields-value-' + field.name"
+              [matTooltip]="getApportionmentDisplayText(field.value)"
+              class="standard-text ellipsis-text"
+            >
+              {{ getApportionmentDisplayText(field.value) }}
+            </div>
+          </div>
+        </div>
+      </ng-container>
+    </ng-container>
+  </div>
+</mat-expansion-panel>
+
+<div class="loaderContainer" *ngIf="(isClaimV3BannerLoading$ | async)">
+  <div fxLayout="row " fxLayoutAlign="center start">
+    <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+  </div>
+</div>
+
+<div *ngIf="!(isClaimV3BannerLoading$ | async)  && ( isEligibleForClaimantPortal$ | async)"  >
+<div class="spacersmall"></div>
+<div class="mobileInviteBanner">
+  <div class="mobileInviteBannerLeftItems">
+    <fa-icon [icon]="faIdCard" style="margin-right: 10px; font-size: 32px"></fa-icon>
+    <div style="margin-top: 10px;">Improve claimant experience, communication, and overall outcomes by inviting claimant to access our Mobile App.</div>
+  </div>
+  <div class="mobileInviteBannerRightItems"><button mat-flat-button (click)="openMobileInviteDialog()" class="mobileInviteBannerRightButton">SEND/VIEW MOBILE INVITE</button></div>
+</div>
+</div>

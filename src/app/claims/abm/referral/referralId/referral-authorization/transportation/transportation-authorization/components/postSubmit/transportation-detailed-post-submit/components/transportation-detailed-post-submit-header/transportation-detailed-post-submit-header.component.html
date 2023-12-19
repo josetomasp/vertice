@@ -1,0 +1,20 @@
+<div class="primary">
+  <fa-icon
+    [icon]="authItem['icon']"
+    size="lg"
+    style="margin-right: 10px"
+  ></fa-icon
+  >{{ authItem['title'] }}
+</div>
+<div class="spacersmall"></div>
+<healthe-referral-reason-for-review
+  [idIndex]="index"
+  [reasons]="authItem['reasonsReviewIsNeeded']"
+></healthe-referral-reason-for-review>
+<div class="spacersmall"></div>
+<healthe-transportation-detailed-post-submit-approval-status
+  [authItem]="authItem"
+></healthe-transportation-detailed-post-submit-approval-status>
+<div class="spacersmall"></div>
+<mat-divider [inset]="true"></mat-divider>
+<div class="spacersmall"></div>

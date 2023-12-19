@@ -1,0 +1,84 @@
+<mat-card
+  style="margin-bottom: 16px;"
+  *ngFor="
+    let authorization of (fusionReferralAuthorizations$ | async);
+    index as $index
+  "
+>
+  <div class="authorization--card--inset">
+    <header
+      class="authorization--card--inset--header"
+      fxLayout="row"
+      fxLayoutAlign="space-between"
+    >
+      <h3
+        class="text-primary"
+        id="authorization--card--inset--header--title--{{$index}}"
+      >
+        <ng-container
+          [ngSwitch]="
+            authorization.authorizationUnderReview.categoryDesc
+              ? authorization.authorizationUnderReview.categoryDesc.split(
+                  ' - '
+                )[0]
+              : ''
+          "
+        >
+          <img
+            src="assets/img/make-a-referral/home-health/in-home-therapy.png"
+            class="icon-img ng-star-inserted"
+            id="authorization--card--inset--header--image--{{$index}}"
+            *ngSwitchCase="'Therapy, In Home'"
+          />
+          <img
+            src="assets/img/make-a-referral/home-health/nursing.png"
+            class="icon-img ng-star-inserted"
+            id="authorization--card--inset--header--image--{{$index}}"
+            *ngSwitchCase="'Nurse'"
+          />
+          <img
+            src="assets/img/make-a-referral/home-health/aides.png"
+            class="icon-img ng-star-inserted"
+            id="authorization--card--inset--header--image--{{$index}}"
+            *ngSwitchCase="'Aids to Daily Living'"
+          />
+          <img
+            src="assets/img/make-a-referral/home-health/infusion.png"
+            class="icon-img ng-star-inserted"
+            id="authorization--card--inset--header--image--{{$index}}"
+            *ngSwitchCase="'Home Injection/Infusion Therapy'"
+          />
+          <i
+            class="icon-img text-primary fa-2x text-center unselectable fas fa-file-medical ng-star-inserted"
+            id="authorization--card--inset--header--icon--{{$index}}"
+            *ngSwitchCase="'Other'"
+          ></i>
+        </ng-container>
+
+        {{ authorization.authorizationUnderReview.categoryDesc }}
+      </h3>
+      <button
+        mat-stroked-button
+        class="secondary-button"
+        (click)="viewNotes(authorization)"
+      >
+        VIEW NOTES
+      </button>
+    </header>
+    <healthe-reasons-banner
+      [reasons]="authorization.reasonsReviewNeeded"
+    ></healthe-reasons-banner>
+    <div class="spacer-small"></div>
+    <healthe-action-reason-display
+      [approvalType]="authorization.action"
+      [reason]="authorization.reasonForAction"
+    ></healthe-action-reason-display>
+    <mat-divider></mat-divider>
+    <healthe-fusion-narrative-text
+      [fusionAuth]="authorization"
+      [authNarrativeMode]="narrativeMode"
+      [narrativeTextFormGroup]="narrativeTextFormGroup"
+      [authNarrativeConfig]="authNarrativeConfig"
+    ></healthe-fusion-narrative-text>
+  </div>
+</mat-card>

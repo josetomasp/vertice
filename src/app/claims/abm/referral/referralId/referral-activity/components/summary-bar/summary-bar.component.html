@@ -1,0 +1,141 @@
+<mat-card>
+  <mat-card-content fxLayout="row" fxLayoutGap="35px" class="summaryBarContent">
+    <div>
+      <label class="overhead-label">SERVICE TYPE(S)</label>
+      <mat-radio-group
+        fxLayout="column"
+        style="width: auto;"
+        [formControl]="servicesFormControl"
+        [value]="selectedServiceType"
+        id="serviceType-radioButtonGroup"
+      >
+        <mat-radio-button
+          *ngFor="let serviceType of (services$ | async); index as $index"
+          [value]="serviceType"
+          [id]="'serviceType-radioButton-' + serviceType + $index"
+          style="margin-bottom: 10px; width: 235px;"
+          [matTooltip]="serviceType"
+        >
+          <div class="ellipsis-text" style="width:225px;">
+            {{ serviceType }}
+          </div>
+        </mat-radio-button>
+      </mat-radio-group>
+    </div>
+
+    <div fxLayout="column">
+      <label class="overhead-label" style="margin-bottom: 7px;"
+        >AUTHORIZED</label
+      >
+      <div
+        *ngFor="let authorized of (authorized$ | async); index as $index"
+        [id]="'authorizedSum-' + $index"
+        class="rowItem"
+      >
+        {{ authorized }}
+      </div>
+    </div>
+
+    <div fxLayout="column">
+      <label class="overhead-label" style="margin-bottom: 7px;"
+        >SCHEDULED</label
+      >
+      <div
+        *ngFor="let scheduled of (scheduled$ | async); index as $index"
+        [id]="'scheduledSum-' + $index"
+        class="rowItem"
+      >
+        {{ scheduled }}
+      </div>
+    </div>
+
+    <div fxLayout="column">
+      <label class="overhead-label" style="margin-bottom: 7px;"
+        >COMPLETED</label
+      >
+      <div
+        *ngFor="let completed of (completed$ | async); index as $index"
+        [id]="'completedSum-' + $index"
+        class="rowItem"
+      >
+        {{ completed }}
+      </div>
+    </div>
+
+    <div fxLayout="column">
+      <label class="overhead-label" style="margin-bottom: 7px;">BILLED</label>
+      <div
+        *ngFor="let billed of (billed$ | async); index as $index"
+        [id]="'billedSum-' + $index"
+        class="rowItem"
+      >
+        {{ billed }}
+      </div>
+    </div>
+    <div fxLayout="column">
+      <label class="overhead-label" style="margin-bottom: 7px;"
+        >SERVICE DATE(S)</label
+      >
+      <div
+        *ngFor="let serviceDates of (serviceDates$ | async); index as $index"
+        [id]="'serviceDates-' + $index"
+        class="rowItem"
+      >
+        {{ serviceDates }}
+      </div>
+    </div>
+
+    <div fxLayout="row" fxFlex="auto" fxLayoutAlign="end center">
+      <div
+        fxLayout="column"
+        fxLayoutAlign="start"
+        style="align-self: center; margin-right: 15px;"
+        *healtheRemoveElementIfTrue="
+          'referral-activity';
+          elementName: 'extend-referral-button'
+        "
+      >
+        <button
+          class="secondary-button cancel--referral--button"
+          mat-stroked-button
+          (click)="openCancelReferralModal()"
+          *ngIf="showCancelButton"
+        >
+          CANCEL REFERRAL
+        </button>
+        <button
+          class="secondary-button extend--referral--button"
+          mat-stroked-button
+          (click)="openExtendReferralModal()"
+          *ngIf="showExtensionButton"
+        >
+          EXTEND REFERRAL
+        </button>
+      </div>
+      <div fxLayout="column" fxLayoutAlign="end">
+        <mat-label class="group-label">Viewing:</mat-label>
+      </div>
+      <div fxLayout="column" fxLayoutAlign="end">
+        <mat-button-toggle-group
+          id="gocTableViewToggleGroup"
+          class="button-toggle-round"
+          name="fontStyle"
+          aria-label="Font Style"
+          [formControl]="viewModeToggleFormControl"
+        >
+          <mat-button-toggle
+            style="margin-right: -13px;"
+            checked
+            value="grid"
+            id="gocTableViewToggle-grid"
+          >
+            <i class="fal fa-table fa-lg"></i>
+          </mat-button-toggle>
+          <mat-button-toggle value="table" id="gocTableViewToggle-table">
+            <i class="fal fa-list-alt fa-lg"></i>
+          </mat-button-toggle>
+        </mat-button-toggle-group>
+      </div>
+    </div>
+  </mat-card-content>
+</mat-card>

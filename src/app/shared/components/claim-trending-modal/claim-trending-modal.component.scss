@@ -1,0 +1,23 @@
+@import 'variables';
+
+.wrapper {
+  width: 50%;
+  height: 50%;
+}
+
+.close-widget {
+  font-size: 22px;
+  color: $gray-400;
+}
+
+.inline-form-field {
+  ::ng-deep {
+    .mat-form-field-wrapper {
+      height: auto !important;
+    }
+
+    .mat-form-field-flex {
+      padding-top: 0.72em !important;
+    }
+  }
+}

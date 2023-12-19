@@ -1,0 +1,93 @@
+<healthe-confirmation-banner
+  *ngIf="!stepperCompleted && !usingReturnedFormState"
+  [id]="'language-review-wizard-fail'"
+  [alertType]="alertType.DANGER"
+  [title]="
+    'You have incompleted tabs in this section. Review incomplete tabs for this referral, complete another section, or make changes.'
+  "
+  [isVisible]="true"
+></healthe-confirmation-banner>
+<healthe-confirmation-banner
+  *ngIf="stepperCompleted && !usingReturnedFormState"
+  [id]="'language-review-wizard-success'"
+  [alertType]="alertType.SUCCESS"
+  [title]="
+    'You have completed this section. Review and submit the referral, complete another section, or make changes.'
+  "
+  [isVisible]="true"
+  [showCloseButton]="false"
+></healthe-confirmation-banner>
+<div
+  *ngFor="
+    let selectedServiceDetailTypes of (selectedServiceDetailTypes$ | async)
+  "
+>
+  <div class="spacersmall"></div>
+  <ng-container [ngSwitch]="selectedServiceDetailTypes">
+    <div *ngSwitchCase="interpretationStepName">
+      <healthe-interpretation-review
+        [usingReturnedFormState]="usingReturnedFormState"
+      ></healthe-interpretation-review>
+    </div>
+    <div *ngSwitchCase="translateStepName">
+      <healthe-translation-review
+        [usingReturnedFormState]="usingReturnedFormState"
+      ></healthe-translation-review>
+    </div>
+  </ng-container>
+  <div class="spacersmall"></div>
+  <mat-divider [inset]="true"></mat-divider>
+</div>
+<div class="spacersmall"></div>
+<p style="margin: 0;">
+  <healthe-review-section-header
+    columnCount="5"
+    [step]="documentsStepName"
+    [sectionTitle]="'Documents'"
+    [sectionName]="sectionName"
+    [offsetForNonSelectedServiceDetailTypes]="1"
+  ></healthe-review-section-header>
+</p>
+<div
+  *ngFor="
+    let document of (languageDocuments$ | async)['documents'];
+    index as index
+  "
+  id="language-review-documents-{{index}}-link"
+>
+  {{ document.fileName }}
+</div>
+<div class="spacersmall"></div>
+<mat-divider [inset]="true"></mat-divider>
+
+<div class="spacersmall"></div>
+<healthe-language-vendor-review
+  [usingReturnedFormState]="usingReturnedFormState"
+></healthe-language-vendor-review>
+<div class="spacermedium"></div>
+<div *ngIf="usingReturnedFormState === false">
+  <span class="overhead-label" id="language-review-wizard-notes-label"
+    >NOTES (optional)</span
+  >
+  <mat-form-field>
+    <textarea
+      matInput
+      placeholder="Enter notes"
+      id="language-review-wizard-notes-input"
+      [formControl]="notesForm"
+    >{{referralLevelNotes$ | async}}</textarea>
+  </mat-form-field>
+</div>
+
+<div *ngIf="usingReturnedFormState === true">
+  <p
+    style="margin: 0;"
+    id="language-review-note-label"
+    class="overhead-label"
+  >
+    NOTES
+  </p>
+  <div id="language-review-note" class="standard-text">
+    {{ referralLevelNotes$ | async }}
+  </div>
+</div>

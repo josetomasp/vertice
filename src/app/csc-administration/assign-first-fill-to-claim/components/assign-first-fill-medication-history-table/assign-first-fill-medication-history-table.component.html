@@ -1,0 +1,169 @@
+<table
+  mat-table
+  [dataSource]="lineItemDetailsList$ | async"
+  id="assignFirstFill-lineItemDetails-table"
+>
+  <ng-container matColumnDef="firstFillTempId">
+    <th
+      mat-header-cell
+      *matHeaderCellDef
+      id="assignFirstFill-lineItemDetails-table-firstFillTempId-columnHeader"
+    >
+      FIRST FILL TEMP ID
+    </th>
+    <td
+      mat-cell
+      *matCellDef="let row; let index = index"
+      [matTooltip]="row.firstFillTempId"
+      id="assignFirstFill-lineItemDetails-table-firstFillTempId-value-{{index}}"
+    >
+      {{ row.firstFillTempId }}
+    </td>
+  </ng-container>
+  <ng-container matColumnDef="customer">
+    <th
+      mat-header-cell
+      *matHeaderCellDef
+      style="width: 125px"
+      id="assignFirstFill-lineItemDetails-table-customer-columnHeader"
+    >
+      CUSTOMER
+    </th>
+    <td
+      mat-cell
+      *matCellDef="let row; let index = index"
+      [matTooltip]="row.customer"
+      id="assignFirstFill-lineItemDetails-table-customer-value-{{index}}"
+    >
+      {{ row.customer }}
+    </td>
+  </ng-container>
+  <ng-container matColumnDef="claimantName">
+    <th
+      mat-header-cell
+      *matHeaderCellDef
+      id="assignFirstFill-lineItemDetails-table-claimant-columnHeader"
+    >
+      CLAIMANT
+    </th>
+    <td
+      mat-cell
+      *matCellDef="let row; let index = index"
+      [matTooltip]="row.claimantName"
+      id="assignFirstFill-lineItemDetails-table-claimant-value-{{index}}"
+    >
+      {{ row.claimantFirstName }} {{ row.claimantLastName }}
+    </td>
+  </ng-container>
+  <ng-container matColumnDef="employerName">
+    <th
+      mat-header-cell
+      *matHeaderCellDef
+      id="assignFirstFill-lineItemDetails-table-employer-columnHeader"
+    >
+      EMPLOYER
+    </th>
+    <td
+      mat-cell
+      *matCellDef="let row; let index = index"
+      [matTooltip]="row.employerName"
+      id="assignFirstFill-lineItemDetails-table-employer-value-{{index}}"
+    >
+      {{ row.employerName }}
+    </td>
+  </ng-container>
+  <ng-container
+    matColumnDef="dateOfInjury"
+    id="assignFirstFill-lineItemDetails-table-dateOfInjury-columnHeader"
+  >
+    <th mat-header-cell *matHeaderCellDef style="width: 125px">
+      DATE OF INJURY
+    </th>
+    <td
+      mat-cell
+      *matCellDef="let row; let index = index"
+      [matTooltip]="row.dateOfInjury"
+      id="assignFirstFill-lineItemDetails-table-dateOfInjury-value-{{index}}"
+    >
+      {{ row.dateOfInjury }}
+    </td>
+  </ng-container>
+  <ng-container matColumnDef="rxName">
+    <th
+      mat-header-cell
+      *matHeaderCellDef
+      id="assignFirstFill-lineItemDetails-table-rxName-columnHeader"
+    >
+      RX NAME
+    </th>
+    <td
+      mat-cell
+      *matCellDef="let row; let index = index"
+      [matTooltip]="row.rxName"
+      id="assignFirstFill-lineItemDetails-table-rxName-value-{{index}}"
+    >
+      {{ row.rxName }}
+    </td>
+  </ng-container>
+  <ng-container matColumnDef="submittedDate">
+    <th
+      mat-header-cell
+      *matHeaderCellDef
+      style="width: 125px"
+      id="assignFirstFill-lineItemDetails-table-submitted-columnHeader"
+    >
+      SUBMITTED
+    </th>
+    <td
+      mat-cell
+      *matCellDef="let row; let index = index"
+      [matTooltip]="row.submittedDate"
+      id="assignFirstFill-lineItemDetails-table-submitted-value-{{index}}"
+    >
+      {{ row.submittedDate }}
+    </td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="tableColumns"></tr>
+  <tr
+    mat-row
+    *matRowDef="let row; columns: tableColumns; let index = index"
+  ></tr>
+</table>
+
+<ng-container *ngIf="(isLoadingFirstFillLinesToAssign$ | async)">
+  <div
+    fxLayout="column"
+    fxLayoutAlign="center center"
+    fxLayoutGap="35px"
+    class="loader"
+    style="margin-top: 50px"
+  >
+    <mat-spinner
+      [diameter]="55"
+      id="assignFirstFill-lineItemDetails-table-loadingSpinner"
+    ></mat-spinner>
+    <h2 id="assignFirstFill-lineItemDetails-table-loadingMessage">
+      Loading first fills to assign...
+    </h2>
+  </div>
+</ng-container>
+
+<div
+  *ngIf="
+    !(isLoadingFirstFillLinesToAssign$ | async) &&
+    (lineItemDetailsList$ | async).length === 0
+  "
+  fxLayout="column"
+  fxLayoutAlign="center center"
+>
+  <div class="spacersmall"></div>
+  <img
+    alt="No Data Indicator"
+    src="assets/img/NoDataIcon.svg"
+    id="assignFirstFill-lineItemDetails-table-noDataAvailableIcon"
+  />
+  <p id="assignFirstFill-lineItemDetails-table-noDataAvailableMessage">
+    No lines to assign for this temporary member ID
+  </p>
+</div>

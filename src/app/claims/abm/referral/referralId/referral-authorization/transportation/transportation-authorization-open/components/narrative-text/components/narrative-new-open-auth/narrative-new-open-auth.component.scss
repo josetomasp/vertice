@@ -1,0 +1,57 @@
+@import 'variables';
+
+.datePicker {
+  width: 160px;
+  margin-top: 10px;
+  margin-right: 5px;
+}
+
+.textAlignment {
+  white-space: nowrap;
+  margin-top: 10px;
+  margin-right: 5px;
+}
+
+.quantityInput {
+  margin-right: 5px;
+  width: 60px;
+  margin-top: 10px;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+div.mat-form-field-subscript-wrapper {
+  overflow: visible;
+  white-space: nowrap;
+}
+
+.mat-form-field {
+  height: initial;
+
+  .mat-form-field-wrapper {
+    height: initial;
+
+    .mat-form-field-flex {
+      height: initial;
+    }
+  }
+}
+
+.healthe-datepicker {
+  .mat-form-field-flex {
+    align-items: start;
+  }
+
+  &-toggle {
+    & > .mat-icon-button {
+      background-color: white;
+      border-top: 1px solid $gray-300;
+      border-right: 1px solid $gray-300;
+      border-bottom: 1px solid $gray-300;
+    }
+  }
+}

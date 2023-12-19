@@ -1,0 +1,11 @@
+@import 'variables';
+
+fa-icon {
+  &.snoozed {
+    color: $secondary;
+  }
+
+  &.actioned {
+    color: $green;
+  }
+}

@@ -1,0 +1,174 @@
+<div
+  fxLayout="row"
+  fxLayoutAlign="space-between"
+  [formGroup]="openAuthFormGroup"
+>
+  <div fxLayout="row wrap" fxLayoutGap="25px">
+    <div>
+      <span class="overhead-label" id="open-auth-startDate-label"
+        >Start Date</span
+      >
+      <mat-form-field class="show-one-error">
+        <healthe-datepicker
+          width="175px"
+          formControlName="startDate"
+          id="open-auth-startDate-datePicker"
+        ></healthe-datepicker>
+        <mat-error
+          class="matErrorFix"
+          *ngIf="
+            openAuthFormGroup.get('startDate').hasError('fromDateEqualsEndDate')
+          "
+        >
+          Cannot have the same Start and End Dates
+        </mat-error>
+        <mat-error
+          class="matErrorFix"
+          *ngIf="
+            openAuthFormGroup.get('startDate').hasError('invalidDateRange')
+          "
+        >
+          End Date cannot be before Start Date
+        </mat-error>
+        <mat-error
+          class="matErrorFix"
+          id="open-auth-startDate-error"
+          *ngIf="openAuthFormGroup.get('startDate').hasError('required')"
+        >
+          Select a start date
+        </mat-error>
+      </mat-form-field>
+    </div>
+    <div>
+      <span class="overhead-label" id="open-auth-endDate-label">End Date</span>
+      <mat-form-field class="show-one-error">
+        <healthe-datepicker
+          width="175px"
+          formControlName="endDate"
+          id="open-auth-endDate-datePicker"
+        ></healthe-datepicker>
+        <mat-error
+          id="open-auth-endDate-error"
+          *ngIf="openAuthFormGroup.get('endDate').hasError('required')"
+        >
+          Select an end date
+        </mat-error>
+        <mat-error
+          class="matErrorFix"
+          *ngIf="
+            openAuthFormGroup.get('endDate').hasError('fromDateEqualsEndDate')
+          "
+        >
+          Cannot have the same Start and End Dates
+        </mat-error>
+
+        <mat-error
+          class="matErrorFix"
+          *ngIf="
+            openAuthFormGroup.get('endDate').hasError('endDateMustBeInFuture')
+          "
+        >
+          End date must be a future date
+        </mat-error>
+        <mat-error
+          class="matErrorFix"
+          *ngIf="openAuthFormGroup.get('endDate').hasError('invalidDateRange')"
+        >
+          To Date must be set to a value after the From Date
+        </mat-error>
+      </mat-form-field>
+    </div>
+    <div>
+      <span class="overhead-label" id="open-auth-specifyTripsAt-label"
+        >Specify # of trips at
+      </span>
+      <mat-form-field style="width: 210px">
+        <mat-select
+          [disabled]="isReadOnlyForm"
+          healtheSelect
+          placeholder="Choose a location type"
+          id="open-auth-specifyTripsAt-select"
+          #specifyTripsByLocationSelect
+          (selectionChange)="
+            promptForSpecifyTripsByLocationChange(specifyTripsByLocationSelect)
+          "
+        >
+          <mat-option
+            id="open-auth-specifyTripsAt-select-option-true"
+            [value]="true"
+          >
+            {{ getSpecifyTripsAtOptionsDisplay(true) }}
+          </mat-option>
+          <mat-option
+            id="open-auth-specifyTripsAt-select-option-false"
+            [value]="false"
+          >
+            {{ getSpecifyTripsAtOptionsDisplay(false) }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div style="width: 120px">
+      <span class="overhead-label" id="open-auth-tripsAuthorized-label"
+        >Total # of trips</span
+      >
+      <mat-form-field>
+        <input
+          type="number"
+          id="open-auth-tripsAuthorized-input"
+          formControlName="tripsAuthorized"
+          matInput
+          [ngClass]="totalOfTripsReadOnly ? 'input-readonly' : ''"
+          [readOnly]="totalOfTripsReadOnly"
+          (blur)="validateTrips()"
+        />
+      </mat-form-field>
+      <mat-error
+        id="open-auth-tripsAuthorized-error"
+        *ngIf="
+          openAuthFormGroup.controls['tripsAuthorized'].hasError(
+            'tripsOrUnlimited'
+          )
+        "
+      >
+        Please enter a number of trips or choose 'Unlimited # of trips'.
+      </mat-error>
+      <mat-error
+        id="wizard-date-range-tripsAuthorized-error-specifyTripsTotal"
+        *ngIf="openAuthFormGroup.hasError('specifyTripsTotal')"
+      >
+        Please enter location level trip counts or use 'All Locations Together'.
+      </mat-error>
+    </div>
+    <div>
+      <span
+        class="overhead-label"
+        id="open-auth-unlimitedTrips-label"
+        style="padding-bottom: 4px"
+        >UNLIMITED # OF TRIPS?<span class="required-text">*</span></span
+      >
+      <mat-checkbox
+        id="open-auth-unlimitedTrips-input"
+        formControlName="unlimitedTrips"
+        [disabled]="isReadOnlyForm"
+      >
+      </mat-checkbox>
+    </div>
+  </div>
+  <div>
+    <button
+      mat-stroked-button
+      class="secondary-button"
+      id="open-auth-add-location-button"
+      (click)="showAddLocationModal()"
+    >
+      <fa-icon [icon]="faPlus" class="fa-lg inline-left-icon"></fa-icon>
+      ADD LOCATION
+    </button>
+  </div>
+</div>
+<div class="spacersmall"></div>
+<healthe-approved-locations-with-location-limits
+  [openAuthFormGroup]="openAuthFormGroup"
+  [isReadOnlyForm]="isReadOnlyForm"
+></healthe-approved-locations-with-location-limits>

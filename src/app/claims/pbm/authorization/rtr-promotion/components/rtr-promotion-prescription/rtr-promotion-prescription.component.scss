@@ -1,0 +1,36 @@
+@import 'variables';
+
+.gray-box {
+  border-radius: 2px 2px 0 0;
+  background-color: $gray-600;
+  padding: 20px 20px;
+  color: $gray-200;
+}
+
+.drug-link {
+  color: $teal;
+  text-decoration: underline;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+.compound-icon {
+  font-size: 22px;
+  margin-right: 5px;
+  vertical-align: middle;
+}
+
+.compound-link {
+  color: $orange;
+  text-decoration: underline;
+  font-size: 18px;
+}
+
+.overhead-label,
+::ng-deep .banner-wrapper .mat-radio-label-content {
+  color: $gray-200 !important;
+}
+
+::ng-deep .banner-wrapper .mat-radio-outer-circle {
+  opacity: 1 !important;
+}

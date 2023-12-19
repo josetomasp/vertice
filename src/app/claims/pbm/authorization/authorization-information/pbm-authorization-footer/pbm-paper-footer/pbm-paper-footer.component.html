@@ -1,0 +1,295 @@
+<mat-card
+  *ngIf="pbmAuthFooterConfig.mode === pbmAuthFormMode.ReadWrite"
+  class="footer paperFooter"
+  [formGroup]="actionFooterFormGroup"
+>
+  <ng-container>
+    <div fxLayout="row" fxLayoutGap="35px" fxLayoutAlign="space-between center">
+      <div>
+        <button
+          mat-stroked-button
+          class="info-button actionBarButtonAdjust"
+          id="auth-info-cancel-button"
+          (click)="cancel()"
+        >
+          CANCEL
+        </button>
+      </div>
+      <div fxFlex>
+        <div
+          fxLayout="row wrap"
+          fxLayoutAlign="end start"
+          fxLayoutAlign.sm="start start"
+          fxLayoutGap="35px"
+          fxLayoutGap.sm="0px"
+        >
+          <div class="actionComponentContainer">
+            <div
+              id="paper-auth-information-actions-all-option-label"
+              class="overhead-label"
+              *ngIf="
+                canDoAction(actionOption.approve) ||
+                canDoAction(actionOption.deny) ||
+                canDoAction(actionOption.pend) ||
+                canDoAction(actionOption.recommendApprove)
+              "
+            >
+              ACTION ALL (Optional)
+            </div>
+            <mat-radio-group
+              class="paperFooterActionRadioGroup"
+              formControlName="action"
+            >
+              <mat-radio-button
+                *ngIf="
+                  canDoAction(actionOption.approve) ||
+                  canDoAction(actionOption.recommendApprove)
+                "
+                class="radio-spacing"
+                id="paper-auth-information-actions-all-option-approve"
+                [value]="actionOption.approve"
+                >Approve All</mat-radio-button
+              >
+              <mat-radio-button
+                *ngIf="canDoAction(actionOption.deny)"
+                class="radio-spacing"
+                id="paper-auth-information-actions-all-option-deny"
+                [value]="actionOption.deny"
+              >
+                <healthe-customer-configs-label
+                  defaultText="Deny"
+                  elementName="pbmDeny"
+                  [forcedCapitalization]="false"
+                ></healthe-customer-configs-label>
+                All</mat-radio-button
+              >
+
+              <mat-radio-button
+                *ngIf="canDoAction(actionOption.pend)"
+                class="radio-spacing"
+                id="paper-auth-information-actions-all-option-pend"
+                [value]="actionOption.pend"
+                >Pend All</mat-radio-button
+              >
+            </mat-radio-group>
+          </div>
+          <ng-container
+            *ngIf="
+              actionFooterFormGroup.get('action').value === actionOption.approve
+            "
+          >
+            <div class="denialReasonSelect actionComponentContainer">
+              <div>
+                <!--
+                  Commenting this, because its use nned to be defin by future stories
+                -->
+                <!-- prettier-ignore -->
+                <!--
+                  <span
+                    id="paper-auth-information-approval-period-radio-group-all-label"
+                    class="overhead-label"
+                    >  PHYSICIAN APPROVAL PERIOD (ALL)
+                  </span>
+                  <mat-radio-group
+                    id="paper-auth-information-approval-period-radio-group"
+                    formControlName="approvalPeriodType"
+                    healtheFormValidationExtractor
+                    formLabel="Approval Period"
+                  >
+                    <mat-radio-button
+                      class="radio-spacing"
+                      id="paper-auth-information-approval-period-one-time"
+                      [value]="
+                        approvalPeriodType.AUTH_INFO_APPROVAL_PERIOD_ONE_TIME"
+                      >One-Time
+                    </mat-radio-button>
+                    <mat-radio-button
+                      class="radio-spacing"
+                      id="paper-auth-information-approval-period-date"
+                      [value]="approvalPeriodType.AUTH_INFO_APPROVAL_PERIOD_DATE"
+                      >To Effective Date
+                    </mat-radio-button>
+                  </mat-radio-group>
+                -->
+              </div>
+            </div>
+          </ng-container>
+          <ng-container
+            *ngIf="
+              actionFooterFormGroup.get('action').value === actionOption.deny
+            "
+          >
+            <div class="denialReasonSelect actionComponentContainer">
+              <div>
+                <ng-container
+                  *ngIf="
+                    pbmAuthFooterConfig.authorizationDetails.showDenialReasons
+                  "
+                >
+                  <span
+                    id="paper-auth-information-primary-denialReason-all-select-label"
+                    class="overhead-label"
+                  >
+                    PRIMARY DENIAL REASON (ALL)<span class="required-text"
+                      >*</span
+                    >
+                  </span>
+
+                  <mat-select
+                    id="paper-auth-information-primary-denialReason-all-select"
+                    style="min-width: 200px;"
+                    formControlName="primaryDenialReason"
+                    placeholder="Select Primary Denial Reason"
+                    [compareWith]="compareWithReason"
+                    [disabled]="
+                      actionFooterFormGroup.get('action').value !==
+                        actionOption.deny ||
+                      !pbmAuthFooterConfig.authorizationDetails
+                        .showDenialReasons
+                    "
+                  >
+                    <mat-option
+                      *ngFor="
+                        let reason of (primaryDenialReasons$ | async);
+                        let i = index
+                      "
+                      [value]="reason.value"
+                      id="paper-auth-information-primary-DenialReason-all-select-option-{{i}}"
+                      >{{ reason.label }}</mat-option
+                    >
+                  </mat-select>
+                </ng-container>
+              </div>
+              <div>
+                <!--
+                  Commenting this, because its use nned to be defin by future stories
+                -->
+                <!-- prettier-ignore -->
+                <!--
+                  <span id="paper-auth-information-denial-period-radio-group-all-label"
+                    class="overhead-label"
+                  >
+                    PHYSICIAN DENIAL PERIOD (ALL)
+                  </span>
+                  <mat-radio-group
+                    id="paper-auth-information-denial-period-radio-group"
+                    formControlName="denialPeriodType"
+                    healtheFormValidationExtractor
+                    formLabel="Denial Period"
+                    [disabled]="
+                      actionFooterFormGroup.get('action').value !==
+                      actionOption.deny
+                    "
+                  >
+                    <mat-radio-button
+                      class="radio-spacing"
+                      id="paper-auth-information-denial-period-one-time"
+                      [value]="denialPeriodType.AUTH_INFO_DENIAL_PERIOD_ONE_TIME"
+                      >One-Time
+                    </mat-radio-button>
+                    <mat-radio-button
+                      class="radio-spacing"
+                      id="paper-auth-information-denial-period-date"
+                      [value]="denialPeriodType.AUTH_INFO_DENIAL_PERIOD_DATE"
+                      >To Effective Date
+                    </mat-radio-button>
+                  </mat-radio-group>
+                -->
+              </div>
+            </div>
+            <div class="denialReasonSelect actionComponentContainer">
+              <div>
+                <ng-container
+                  *ngIf="
+                    pbmAuthFooterConfig.authorizationDetails
+                      .showSecondDenialReason
+                  "
+                >
+                  <span
+                    id="paper-auth-information-primary-denialReason-all-select-label"
+                    class="overhead-label"
+                  >
+                    SECONDARY DENIAL REASON (ALL)
+                  </span>
+                  <mat-select
+                    id="paper-auth-information-secondary-denialReason-all-select"
+                    style="min-width: 200px;"
+                    formControlName="secondaryDenialReason"
+                    placeholder="Select Secondary Denial Reason"
+                    [compareWith]="compareWithReason"
+                    [disabled]="
+                      actionFooterFormGroup.get('action').value !==
+                        actionOption.deny ||
+                      !pbmAuthFooterConfig.authorizationDetails
+                        .showSecondDenialReason
+                    "
+                  >
+                    <mat-option
+                      *ngFor="
+                        let reason of (secondaryDenialReasons$ | async);
+                        let i = index
+                      "
+                      [value]="reason.value"
+                      id="paper-auth-information-secondary-DenialReason-all-select-option-{{i}}"
+                      >{{ reason.label }}</mat-option
+                    >
+                  </mat-select>
+                </ng-container>
+              </div>
+            </div>
+          </ng-container>
+        </div>
+      </div>
+      <div>
+        <div
+          fxLayout="row wrap"
+          fxLayoutAlign="end start"
+          fxLayoutGap="20px"
+          fxLayoutGap.sm="0px"
+        >
+          <button
+            *ngIf="!(userIsInternal$ | async)"
+            mat-stroked-button
+            class="success-button actionBarButtonAdjust"
+            id="auth-info-save-button"
+            (click)="save()"
+            [disabled]="saveButtonDisabled"
+          >
+            SAVE
+          </button>
+
+          <button
+            mat-stroked-button
+            class="success-button actionBarButtonAdjust"
+            id="auth-info-submit-button"
+            (click)="submit()"
+          >
+            {{ submitButtonLabel }}
+          </button>
+        </div>
+      </div>
+    </div>
+    <div fxLayout="row">
+      <div></div>
+    </div>
+  </ng-container>
+</mat-card>
+<mat-card
+  *ngIf="pbmAuthFooterConfig.mode === pbmAuthFormMode.ReadOnly"
+  class="footer paperFooter"
+>
+  <ng-container>
+    <div fxLayout="row" fxLayoutGap="35px" fxLayoutAlign="end center">
+      <div>
+        <button
+          mat-stroked-button
+          class="primary-button actionBarButtonAdjust"
+          id="return-to-queue-button"
+          (click)="returnToQueue()"
+        >
+          RETURN TO AUTHORIZATION QUEUE
+        </button>
+      </div>
+    </div>
+  </ng-container>
+</mat-card>

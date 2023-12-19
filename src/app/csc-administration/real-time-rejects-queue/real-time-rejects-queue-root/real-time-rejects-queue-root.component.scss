@@ -1,0 +1,52 @@
+@import 'variables';
+.innerTable {
+  background-color: $gray-100;
+  th {
+    white-space: break-spaces;
+  }
+
+  td {
+    padding-right: 5px;
+    white-space: break-spaces;
+  }
+}
+
+.refresh-queue-icon {
+  position: relative;
+  left: -5px;
+}
+
+.attention-required-count-tag {
+  position: absolute;
+  top: 20px;
+}
+
+.pharmacy-field {
+  width: 200px;
+}
+
+.column-picker {
+  width: 50px;
+
+  .list-icon {
+    position: absolute;
+    left: 15px;
+    top: 9px;
+    font-size: 18px;
+  }
+
+  .column-select {
+    width: 35px;
+
+    .select-menu {
+      height: 300px;
+      overflow-y: scroll;
+    }
+  }
+}
+
+.cell-underline {
+  color: $secondary !important;
+  text-decoration: underline;
+  cursor: pointer;
+}

@@ -1,0 +1,30 @@
+@import 'variables';
+.single-date-date-label {
+  background: transparent;
+  margin: 15px;
+  padding: 4px 2px 4px 2px;
+  width: 100%;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.single-date-selected-date-label {
+  color: transparentize($gray-800, 0.23);
+  padding-left: 5%;
+}
+
+::ng-deep .mat-calendar-previous-button {
+  border-radius: 50% !important;
+}
+
+::ng-deep .mat-calendar-previous-button::after {
+  height: 7px;
+}
+
+::ng-deep .mat-calendar-next-button {
+  border-radius: 50% !important;
+}
+
+::ng-deep .mat-calendar-next-button::after {
+  height: 7px;
+}

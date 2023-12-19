@@ -1,0 +1,24 @@
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "baseUrl": "./",
+    "downlevelIteration": true,
+    "importHelpers": true,
+    "outDir": "./dist/out-tsc",
+    "sourceMap": true,
+    "declaration": false,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "experimentalDecorators": true,
+    "target": "es5",
+    "typeRoots": ["node_modules/@types"],
+    "types": [],
+    "paths": {
+      "@modules/*": ["src/app/modules/*"],
+      "@shared": ["src/app/shared/index"],
+      "@shared/*": ["src/app/shared/*"],
+      "@columns": ["src/app/shared/models/columns"]
+    },
+    "lib": ["es2017", "dom"]
+  }
+}

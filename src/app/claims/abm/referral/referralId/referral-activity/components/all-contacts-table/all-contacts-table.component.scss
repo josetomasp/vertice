@@ -1,0 +1,28 @@
+@import 'variables';
+#all-contact-attempts {
+  &--header {
+    &-vendor {
+      width: 30px !important;
+    }
+    &-contactType {
+      width: 30px !important;
+    }
+    &-isContactSuccessful {
+      width: 10px !important;
+      word-wrap: break-word;
+    }
+    &-notes {
+      text-align: center;
+      color: $gray-400;
+      vertical-align: bottom;
+    }
+  }
+}
+
+.notes-table-cell {
+  white-space: break-spaces;
+}
+
+::ng-deep .mat-column-isContactSuccessful button.mat-sort-header-button {
+  text-align: start !important;
+}

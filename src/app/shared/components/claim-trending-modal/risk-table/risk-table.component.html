@@ -1,0 +1,111 @@
+<table mat-table matSort [dataSource]="tableData$">
+  <!-- Risk Level and Category -->
+  <ng-container matColumnDef="riskLevelAndCategory">
+    <th
+      [id]="'riskTrending--riskDetailsTable--header-riskLevelCategory'"
+      mat-header-cell
+      mat-sort-header
+      disabled="true"
+      *matHeaderCellDef
+    >
+      RISK LEVEL <br />
+      & CATEGORY
+    </th>
+    <td mat-cell *matCellDef="let element">
+      <span
+        ><i class="tag" [ngClass]="getTagColor(element.riskLevelNumber)">{{
+          element.riskLevelNumber
+        }}</i
+        ><span>
+          {{ element.riskLevel }} <br />
+          {{ element.riskCategory }}</span
+        ></span
+      >
+    </td>
+  </ng-container>
+  <!-- Risk Subcategory -->
+  <ng-container matColumnDef="riskSubcategory">
+    <th
+      [id]="'riskTrending--riskDetailsTable--header-riskSubcategory'"
+      mat-header-cell
+      mat-sort-header
+      disabled="true"
+      *matHeaderCellDef
+    >
+      RISK <br />
+      SUBCATEGORY
+    </th>
+    <td
+      mat-cell
+      *matCellDef="let element; let i = index"
+      [id]="'riskTrending--riskDetailsTable--cell-' + i + '-riskSubcategory'"
+    >
+      {{ element.riskSubcategory }}
+    </td>
+  </ng-container>
+  <!-- Risk Indicator -->
+  <ng-container matColumnDef="riskIndicator">
+    <th
+      [id]="'riskTrending--riskDetailsTable--header-riskIndicator'"
+      mat-header-cell
+      mat-sort-header
+      disabled="true"
+      *matHeaderCellDef
+    >
+      RISK INDICATOR
+    </th>
+    <td
+      mat-cell
+      *matCellDef="let element; let i = index"
+      [id]="'riskTrending--riskDetailsTable--cell-' + i + '-riskIndicator'"
+    >
+      {{ element.riskIndicator }}
+    </td>
+  </ng-container>
+  <!-- Risk Description -->
+  <ng-container matColumnDef="riskDescription">
+    <th
+      [id]="'riskTrending--riskDetailsTable--header-riskDescription'"
+      mat-header-cell
+      mat-sort-header
+      disabled="true"
+      *matHeaderCellDef
+    >
+      RISK DESCRIPTION
+    </th>
+    <td
+      mat-cell
+      *matCellDef="let element; let i = index"
+      [id]="'riskTrending--riskDetailsTable--cell-' + i + '-riskDescription'"
+    >
+      {{ element.riskDescription }}
+    </td>
+  </ng-container>
+  <!-- At Risk Of -->
+  <ng-container matColumnDef="atRiskOf">
+    <th
+      [id]="'riskTrending--riskDetailsTable--header-atRiskOf'"
+      mat-header-cell
+      mat-sort-header
+      disabled="true"
+      *matHeaderCellDef
+    >
+      AT RISK OF
+    </th>
+    <td
+      mat-cell
+      *matCellDef="let element; let i = index"
+      [id]="'riskTrending--riskDetailsTable--cell-' + i + '-atRiskOf'"
+    >
+      {{ element.atRiskOf }}
+    </td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="tableColumnList; sticky: true"></tr>
+  <tr
+    mat-row
+    [id]="'riskTrending--riskDetailsTable--row-' + i"
+    [style.display]="(isLoadingData$ | async) ? 'none' : 'table-row'"
+    *matRowDef="let row; columns: tableColumnList; let i = index"
+  ></tr>
+</table>

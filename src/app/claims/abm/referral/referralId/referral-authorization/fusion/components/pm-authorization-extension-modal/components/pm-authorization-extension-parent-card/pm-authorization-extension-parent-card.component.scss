@@ -1,0 +1,21 @@
+.mat-card {
+  background-color: #f2f2f2;
+}
+
+.flex-column {
+  display: flex;
+  flex-direction: column;
+  flex-basis: 100%;
+  flex: 1;
+}
+
+.PmExtension-modal-authtitle,
+.title-container {
+  margin-top: 5px !important;
+}
+
+@media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+  .ieDatePickerFix {
+    margin-right: 90px !important;
+  }
+}

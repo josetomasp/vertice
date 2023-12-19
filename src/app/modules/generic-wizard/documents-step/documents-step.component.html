@@ -1,0 +1,14 @@
+<form
+  style="--gap-width: 32px"
+  class="healthe-layout__container healthe-layout_column"
+  healtheFormValidationExtractor
+  [parentPath]="parentPath"
+  [formGroup]="parentFormGroup"
+>
+  <section>
+    <h3 class="primary">Would you like to upload any documents?</h3>
+    <healthe-generic-document-picker
+      [formControl]="$any(parentFormGroup)"
+    ></healthe-generic-document-picker>
+  </section>
+</form>

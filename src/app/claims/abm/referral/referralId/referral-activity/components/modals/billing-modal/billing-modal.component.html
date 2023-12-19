@@ -1,0 +1,190 @@
+<div fxFlexLayout="row" fxLayoutAlign="space-between" class="modalContent">
+  <span class="modal-header" id="referral-billing-modal-title">{{
+    modalData['title']
+  }}</span
+  ><button mat-icon-button mat-dialog-close id="referral-billing-modal-closeX">
+    <i class="fal fa-times modal-close-widget"></i>
+  </button>
+</div>
+<mat-divider></mat-divider>
+<div fxFlexLayout="column" class="modalContent">
+  <div class="modalSectionTitle" id="referral-billing-modal-overviewHeader">
+    Billing Overview
+  </div>
+  <div style="max-height: 488px; overflow-y: scroll">
+    <healthe-authorization-overview
+      [stage]="modalData['stage']"
+      [modalType]="modalData['modalType']"
+      [overviewData]="modalData.overview"
+    ></healthe-authorization-overview>
+
+    <div fxLayout="column" style="margin-top: 20px; margin-bottom: 20px">
+      <div
+        *ngFor="
+          let billingSet of itineraryData.billingSet;
+          let i = index;
+          let lastItem = last
+        "
+        fxLayout="column"
+        fxLayoutGap="10px"
+      >
+        <div
+          *ngIf="
+            modalData['modalType'] === TransportationModalType.GROUND_SERVICE
+          "
+          class="secondary"
+          style="font-weight: bold"
+          id="billingCardBack-titleLine-{{i}}"
+        >
+          {{ getTitleLine(i) }}
+        </div>
+        <div style="width: 66%">
+          <div fxLayout="row" fxLayoutAlign="space-between start">
+            <div
+              class="overhead-label"
+              fxFlex="25"
+              id="billingCardBack-table-service-{{i}}"
+            >
+              SERVICE
+            </div>
+            <div
+              class="overhead-label"
+              fxFlex="25"
+              id="billingCardBack-table-quantity-{{i}}"
+            >
+              QUANTITY
+            </div>
+            <div
+              class="overhead-label"
+              fxFlex="25"
+              id="billingCardBack-table-uom-{{i}}"
+            >
+              UNIT OF MEASURE
+            </div>
+            <div
+              class="overhead-label"
+              fxFlex="25"
+              id="billingCardBack-table-cost-{{i}}"
+            >
+              COST
+            </div>
+          </div>
+          <div
+            fxLayout="row"
+            fxLayoutAlign="space-between start"
+            *ngFor="let line of billingSet.lineItems; let lineIX = index"
+            style="margin-bottom: 5px"
+          >
+            <div
+              fxFlex="25"
+              id="billingCardBack-table-{{i}}-line-{{lineIX}}-service"
+            >
+              {{ line.service }}
+            </div>
+            <div
+              fxFlex="25"
+              id="billingCardBack-table-{{i}}-line-{{lineIX}}-quantity"
+            >
+              {{ line.quantity }}
+            </div>
+            <div
+              fxFlex="25"
+              id="billingCardBack-table-{{i}}-line-{{lineIX}}-uom"
+            >
+              {{ line.unitOfMeasure }}
+            </div>
+            <div
+              fxFlex="25"
+              id="billingCardBack-table-{{i}}-line-{{lineIX}}-cost"
+            >
+              {{ line.cost }}
+            </div>
+          </div>
+          <mat-divider style="margin-bottom: 5px"></mat-divider>
+          <div
+            fxLayout="row"
+            fxLayoutAlign="space-between start"
+            style="margin-bottom: 20px;"
+          >
+            <div fxFlex="25" id="billingCardBack-table-{{i}}-total-label">
+              TOTAL
+            </div>
+            <div fxFlex="50"></div>
+            <div fxFlex="25" id="billingCardBack-table-{{i}}-total-cost">
+              {{ billingSet.total }}
+            </div>
+          </div>
+        </div>
+      </div>
+      <h4>Status Dates</h4>
+      <div fxLayout="row" fxLayoutAlign="space-between start">
+        <div
+          class="overhead-label"
+          fxFlex="20"
+          id="billingCardBack-statusDates-billRequested-label"
+        >
+          BILL REQUESTED
+        </div>
+        <div
+          class="overhead-label"
+          fxFlex="20"
+          id="billingCardBack-statusDates-billSubmitted-label"
+        >
+          BILL SUBMITTED
+        </div>
+        <div
+          class="overhead-label"
+          fxFlex="20"
+          id="billingCardBack-statusDates-healthePaid-label"
+        >
+          HEALTHE PAID
+        </div>
+        <div
+          class="overhead-label"
+          fxFlex="20"
+          id="billingCardBack-statusDates-vendorPaid-label"
+        >
+          VENDOR PAID
+        </div>
+
+        <div
+          class="overhead-label"
+          fxFlex="20"
+          id="billingCardBack-statusDates-providerPaid-label"
+        >
+          PROVIDER PAID
+        </div>
+      </div>
+      <mat-divider style="margin-bottom: 5px"></mat-divider>
+      <div
+        fxLayout="row"
+        fxLayoutAlign="space-between start"
+        style="margin-bottom: 5px"
+      >
+        <div fxFlex="20" id="billingCardBack-statusDates-billRequested">
+          {{ itineraryData.billRequestedDate }}
+        </div>
+        <div fxFlex="20" id="billingCardBack-statusDates-billSubmitted">
+          {{ itineraryData.billSubmittedDate }}
+        </div>
+        <div fxFlex="20" id="billingCardBack-statusDates-healthePaid">
+          {{ itineraryData.healthePaidDate }}
+        </div>
+        <div fxFlex="20" id="billingCardBack-statusDates-vendorPaid">
+          {{ itineraryData.vendorPaidDate }}
+        </div>
+
+        <div fxFlex="20" id="billingCardBack-statusDates-providerPaid">
+          {{ itineraryData.providerPaid }}
+        </div>
+      </div>
+      <mat-divider></mat-divider>
+    </div>
+  </div>
+  <div class="spacersmall"></div>
+  <healthe-authorization-actions-bar
+    [stage]="modalData['stage']"
+    [dateOfService]="modalData.overview['dateOfService']"
+    [vendorCode]="modalData['vendorCode']"
+  ></healthe-authorization-actions-bar>
+</div>

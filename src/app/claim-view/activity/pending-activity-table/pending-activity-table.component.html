@@ -1,0 +1,390 @@
+<mat-expansion-panel
+  #expansionPanel="matExpansionPanel"
+  [expanded]="true"
+  id="pendingActivityTable-expansionPanel"
+  class="pending-table--padding"
+>
+  <mat-expansion-panel-header
+    id="pendingActivityTable-expansionPanelHeader"
+    collapsedHeight="20px"
+    expandedHeight="20px"
+  >
+    <mat-panel-title style="z-index: 101" id="pendingActivityTable-panelTitle"
+      ><span
+        >Pending
+        <healthe-customer-configs-label
+          [defaultText]="activeTabName"
+          [elementName]="activeTabName.toLowerCase() + 'ActivityTab'"
+          [forcedCapitalization]="false"
+        ></healthe-customer-configs-label>
+        Activity</span
+      ></mat-panel-title
+    >
+    <a
+      class="expansion-panel--header-expandable--text"
+      id="pendingActivityTable-expandText"
+      >{{ expansionPanel.expanded ? 'Collapse' : 'Expand' }}</a
+    >
+  </mat-expansion-panel-header>
+  <div style="overflow-x: scroll; margin-top: -34px; z-index: 90;">
+    <table
+      mat-table
+      style="min-width: 1500px"
+      [dataSource]="pendingDataSource"
+      matSortActive="creationDate"
+      matSort
+    >
+      <ng-container matColumnDef="rush">
+        <th
+          [disabled]="true"
+          mat-header-cell
+          mat-sort-header
+          style="width: 64px;"
+          id="pendingActivity-header-rush"
+          class="healthe-table-cell"
+          *matHeaderCellDef
+        >
+          {{ getLabel$('rush') | async }}
+        </th>
+        <td
+          mat-cell
+          style="width: 64px; padding-left: 10px !important;"
+          class="healthe-table-cell"
+          [id]="'pendingTable-cell-rush-' + i"
+          *matCellDef="let data; let i = index"
+        >
+          <span>
+            <i *ngIf="data.rush" class="far fa-exclamation-triangle danger"></i>
+          </span>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="type">
+        <th
+          [disabled]="true"
+          mat-header-cell
+          mat-sort-header
+          id="pendingActivity-header-type"
+          class="healthe-table-cell"
+          *matHeaderCellDef
+        >
+          {{ getLabel$('type') | async }}
+        </th>
+        <td
+          #activityTypeRow
+          mat-cell
+          class="healthe-table-cell"
+          [id]="'pendingTable-cell-activityType-' + i"
+          *matCellDef="let data; let i = index"
+        >
+          <span [matTooltip]="data.type"> {{ data.type }} </span>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="descriptionOrReason">
+        <th
+          [disabled]="true"
+          mat-header-cell
+          mat-sort-header
+          id="pendingActivity-header-descriptionOrReason"
+          class="healthe-table-cell"
+          *matHeaderCellDef
+        >
+          DESCRIPTION / REASON
+        </th>
+        <td
+          #descriptionOrReasonRow
+          mat-cell
+          class="healthe-table-cell"
+          [id]="'pendingTable-cell-descriptionOrReason-' + i"
+          *matCellDef="let data; let i = index"
+        >
+          <span [matTooltip]="data.descriptionOrReason">
+            {{ data.descriptionOrReason }}
+          </span>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="modifiedDate">
+        <th
+          [disabled]="true"
+          mat-header-cell
+          mat-sort-header
+          id="pendingActivity-header-modifiedDate"
+          class="healthe-table-cell"
+          *matHeaderCellDef
+        >
+          MODIFIED DATE
+        </th>
+        <td
+          #modifiedDateRow
+          mat-cell
+          class="healthe-table-cell"
+          [id]="'pendingTable-cell-modifiedDate-' + i"
+          *matCellDef="let data; let i = index"
+        >
+          <span [matTooltip]="data.modifiedDate">
+            {{ data.modifiedDate }}
+          </span>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="creationDate">
+        <th
+          [disabled]="true"
+          mat-header-cell
+          mat-sort-header
+          id="pendingActivity-header-creationDate"
+          class="healthe-table-cell"
+          *matHeaderCellDef
+        >
+          CREATION DATE
+        </th>
+        <td
+          #creationDateRow
+          mat-cell
+          class="healthe-table-cell"
+          [id]="'pendingTable-cell-creationDate-' + i"
+          *matCellDef="let data; let i = index"
+        >
+          <span [matTooltip]="data.creationDate">
+            {{ data.creationDate }}
+          </span>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="itemName">
+        <th
+          [disabled]="true"
+          mat-header-cell
+          mat-sort-header
+          id="pendingActivity-header-itemName"
+          class="healthe-table-cell"
+          *matHeaderCellDef
+        >
+          ITEM NAME
+        </th>
+        <td
+          mat-cell
+          class="healthe-table-cell"
+          [id]="'pendingTable-cell-itemName-' + i"
+          *matCellDef="let data; let i = index"
+        >
+          <ng-container *ngIf="data.itemName.length < 2">
+            <span
+              *ngIf="data.ndc === ''"
+              [matTooltip]="data.itemName.join(', ')"
+            >
+              {{ data.itemName.join(', ') }}
+            </span>
+            <healthe-info-lookup-launcher
+              *ngIf="data.ndc !== ''"
+              [displayText]="data.itemName.join(', ')"
+              [matTooltip]="data.itemName.join(', ')"
+              [drugLookup]="{
+                drugID: data.ndc,
+                quantity: !!data.quantity ? data.quantity : 0,
+                drugDate: data.creationDate
+              }"
+            ></healthe-info-lookup-launcher>
+          </ng-container>
+          <ng-container *ngIf="data.itemName.length > 1">
+            <span>Multiple Items </span>
+            <i
+              class="far fa-info-circle itemIcon"
+              [matTooltip]="data.itemName.join(', ')"
+            ></i>
+          </ng-container>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="prescriber">
+        <th
+          [disabled]="true"
+          mat-header-cell
+          mat-sort-header
+          id="pendingActivity-header-prescriber"
+          class="healthe-table-cell"
+          *matHeaderCellDef
+        >
+          PRESCRIBER
+        </th>
+        <td
+          #prescriberNameRow
+          mat-cell
+          class="healthe-table-cell"
+          [id]="'pendingTable-cell-prescriberName-' + i"
+          *matCellDef="let data; let i = index"
+        >
+          <ng-container *ngIf="data.prescriber.length < 2">
+            <span
+              *ngIf="data.presciberId === ''"
+              [matTooltip]="data.prescriber.join(',')"
+            >
+              {{ data.itemName.join(',') }}
+            </span>
+            <healthe-info-lookup-launcher
+              *ngIf="data.presciberId !== ''"
+              [prescriberID]="data.prescriberId"
+              [matTooltip]="data.prescriber.join(', ')"
+              [displayText]="data.prescriber.join(', ')"
+            ></healthe-info-lookup-launcher>
+          </ng-container>
+          <ng-container *ngIf="data.prescriber.length > 1">
+            <span>Multiple Prescribers </span>
+            <i
+              class="far fa-info-circle itemIcon"
+              [matTooltip]="data.prescriber.join(',')"
+              ></i>
+          </ng-container>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="pharmacyOrVendor">
+        <th
+          [disabled]="true"
+          mat-header-cell
+          mat-sort-header
+          id="pendingActivity-header-pharmacy"
+          class="healthe-table-cell"
+          *matHeaderCellDef
+        >
+          {{ getLabel$('pharmacyOrVendor') | async }}
+        </th>
+        <td
+          #pharmacyOrVendorRow
+          mat-cell
+          class="healthe-table-cell"
+          [id]="'pendingTable-cell-pharmacyOrVendor-' + i"
+          *matCellDef="let data; let i = index"
+        >
+          <!--This element has to be removed when the ABM endpoint its created VER-8513-->
+          <span [matTooltip]="data.pharmacyOrVendor.join(', ')">
+              {{ data.pharmacyOrVendor.join(', ') }}
+          </span>
+          <!--This element has to be uncommented when the ABM endpoint its created VER-8513-->
+          <!-- <healthe-info-lookup-launcher
+             [nabp]="data.nabp"
+             [matTooltip]="data.pharmacyOrVendor.join(', ')"
+             [displayText]="data.pharmacyOrVendor.join(', ')"
+           ></healthe-info-lookup-launcher>-->
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="productType">
+        <th
+          [disabled]="true"
+          mat-header-cell
+          mat-sort-header
+          id="pendingActivity-header-productType"
+          class="healthe-table-cell"
+          *matHeaderCellDef
+        >
+          PRODUCT TYPE
+        </th>
+        <td
+          #productTypeRow
+          mat-cell
+          class="healthe-table-cell"
+          [id]="'pendingTable-cell-productType-' + i"
+          *matCellDef="let data; let i = index"
+        >
+          <span [matTooltip]="data.productType"> {{ data.productType }} </span>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="requestorRole">
+        <th
+          [disabled]="true"
+          mat-header-cell
+          mat-sort-header
+          id="pendingActivity-header-requestorRole"
+          class="healthe-table-cell"
+          *matHeaderCellDef
+        >
+          REQUESTOR / ROLE
+        </th>
+        <td
+          #requestorRoleRow
+          mat-cell
+          class="healthe-table-cell"
+          [id]="'pendingTable-cell-requestorRole-' + i"
+          *matCellDef="let data; let i = index"
+        >
+          <span [matTooltip]="data.requestorRole">
+            {{ data.requestorRole }}
+          </span>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="action">
+        <th
+          [disabled]="true"
+          mat-header-cell
+          mat-sort-header
+          id="pendingActivity-header-action"
+          class="healthe-table-cell"
+          *matHeaderCellDef
+        >
+          <healthe-customer-configs-label
+            defaultText="ACTION"
+            elementName="actionLabel"
+          ></healthe-customer-configs-label>
+        </th>
+        <td
+          mat-cell
+          class="healthe-table-cell"
+          [id]="'pendingTable-cell-action-' + i"
+          *matCellDef="let data; let i = index"
+        >
+          <a (click)="openActivityLink(data)" href="javascript:void(0)">
+            <button
+              style="height: 26px; vertical-align: middle;"
+              mat-stroked-button
+              [id]="'pendingActivity-actionButton-' + i"
+              class="secondary-button"
+            >
+              <healthe-customer-configs-label
+                defaultText="AUTHORIZE / DENY"
+                elementName="actionButton"
+              ></healthe-customer-configs-label>
+            </button>
+          </a>
+        </td>
+      </ng-container>
+
+      <tr
+        mat-header-row
+        style="height: 50px !important;"
+        *matHeaderRowDef="(tableColumns$ | async); sticky: true"
+      ></tr>
+      <tr
+        mat-row
+        [hidden]="isLoading$ | async"
+        *matRowDef="let row; columns: (tableColumns$ | async); let i = index"
+      ></tr>
+    </table>
+  </div>
+
+  <div
+    *ngIf="!hideNoDataVerbiage || (isLoading$ | async)"
+    class="noPendingActivity"
+  >
+    <div
+      id="no-pending-activity-message"
+      *ngIf="pendingDataSource.data.length == 0 && !(isLoading$ | async)"
+    >
+      <div
+        fxLayout="column"
+        fxLayoutAlign="center center"
+        style="padding:25px;"
+      >
+        <img
+          src="assets/img/NoDataIcon.svg"
+          style="height: 75px; width: 75px"
+        />
+        <span> No Pending {{ activeTabName }} Activity for Claim </span>
+      </div>
+    </div>
+    <div
+      id="claimActivityLoadingDataSpinner"
+      *ngIf="(isLoading$ | async)"
+      class="healthe-table--centered-container"
+      fxLayout="column"
+      fxLayoutAlign="center center"
+    >
+      <mat-spinner [diameter]="55"></mat-spinner>
+      <h2>Loading results...</h2>
+    </div>
+  </div>
+</mat-expansion-panel>

@@ -1,0 +1,80 @@
+<mat-card
+  style="margin-bottom: 16px;"
+  *ngFor="
+    let authorization of (fusionReferralAuthorizations$ | async);
+    index as $index
+  "
+>
+  <div class="authorization--card--inset">
+    <header
+      class="authorization--card--inset--header"
+      fxLayout="row"
+      fxLayoutAlign="space-between"
+    >
+      <h3 class="text-primary">
+        <fa-icon
+          [icon]="faUsers"
+          class="authorization--card--inset--header_icon"
+        ></fa-icon>
+        {{ authorization.authorizationUnderReview.categoryDesc }}
+      </h3>
+      <button
+        mat-stroked-button
+        class="secondary-button"
+        (click)="viewNotes(authorization)"
+      >
+        VIEW NOTES
+      </button>
+    </header>
+    <healthe-reasons-banner
+      [reasons]="authorization.reasonsReviewNeeded"
+    ></healthe-reasons-banner>
+    <div class="spacer-small"></div>
+    <healthe-action-reason-display
+      [approvalType]="authorization.action"
+      [reason]="authorization.reasonForAction"
+    ></healthe-action-reason-display>
+    <healthe-fusion-narrative-text
+      [fusionAuth]="authorization"
+      [authNarrativeMode]="narrativeMode"
+      [narrativeTextFormGroup]="narrativeTextFormGroup"
+      [authNarrativeConfig]="authNarrativeConfig"
+    ></healthe-fusion-narrative-text>
+  </div>
+  <div class="spacersmall"></div>
+  <div
+    class="authorization--card--expansion--wrapper"
+    *ngIf="
+      authorization?.authorizationUnderReview?.locations &&
+      authorization?.authorizationUnderReview?.locations.length > 0
+    "
+  >
+    <mat-expansion-panel
+      class="mat-elevation-z0"
+      style="box-shadow: 0 0 0 !important"
+      hideToggle="true"
+      expanded="false"
+      #expansionPanel
+    >
+      <mat-expansion-panel-header
+        class="mat-elevation-z0"
+        style="height: 24px !important;"
+        expandedHeight="24px"
+        collapsedHeight="24px"
+        ><button mat-flat-button class="primary-button">
+          {{ expansionPanel.expanded ? 'COLLAPSE' : 'VIEW' }} DETAILS
+        </button></mat-expansion-panel-header
+      >
+      <healthe-interpretation-details-editor
+        [locations]="authorization?.authorizationUnderReview?.locations"
+        [authChanges]="authorization?.authorizationChangeSummary"
+        [authIndex]="$index"
+        [locationDetailsFormGroup]="locationDetailsFormGroup"
+        [categoryDesc]="authorization.authorizationUnderReview.categoryDesc"
+        [minInput]="minDetailsInput"
+        [readOnly]="true"
+      ></healthe-interpretation-details-editor>
+      <div class="spacersmall"></div>
+    </mat-expansion-panel>
+  </div>
+</mat-card>

@@ -1,0 +1,5 @@
+@import 'variables';
+
+::ng-deep .mat-checkbox.ng-invalid:not(.ng-untouched) .mat-checkbox-frame {
+  border-color: $danger;
+}

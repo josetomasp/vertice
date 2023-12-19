@@ -1,0 +1,174 @@
+<mat-expansion-panel
+  class="healthe-expansion--grey-header small-header"
+  #expansionPanel
+  [disabled]="expansionGroupDisabled"
+>
+  <mat-expansion-panel-header collapsedHeight="45px" expandedHeight="45px">
+    <div fxLayout="row" fxLayoutAlign="space-between center">
+      <mat-checkbox
+        id="{{serviceActionType}}_allLocationTypeSelected_{{ headerText }}_checkbox"
+        [ngStyle]="{
+          display: expandWidgetHidden ? 'none' : 'inherit'
+        }"
+        #selectAllCheckbox
+        (click)="toggleAll($event)"
+        [disabled]="primaryCheckbox.disabled"
+        >{{ headerText }}</mat-checkbox
+      >
+    </div>
+    <div
+      *ngIf="Object.keys(locationsFormGroup.controls).length === 1"
+      fxLayout="row"
+      fxLayoutAlign="space-between center"
+      style="width: 100%"
+    >
+      <div
+        fxFlex="70"
+        style="margin-right: 20px; cursor:pointer"
+        class="headerTextColor ellipsis-text"
+        fxLayout="row"
+        fxLayoutAlign="start center"
+      >
+        <mat-checkbox
+          [id]="primaryCheckBoxId"
+          [formControl]="primaryCheckbox"
+          [disabled]="primaryCheckbox.disabled"
+        >
+        </mat-checkbox>
+
+        <div
+          (click)="toggleCheckBox(primaryCheckbox)"
+          style="margin-bottom: 15px"
+          [matTooltip]="
+            getAddressDisplayFromID(
+              Object.keys(this.locationsFormGroup.controls)[0]
+            )
+          "
+        >
+          {{
+            getAddressDisplayFromID(
+              Object.keys(this.locationsFormGroup.controls)[0]
+            )
+          }}
+        </div>
+      </div>
+
+      <div
+        style="min-width: 130px;"
+        fxLayout="column"
+        class="headerTextColor"
+        *ngIf="
+          this.primaryCheckbox.value && specifyTripsByLocationControl.value
+        "
+      >
+        <div fxLayout="row" fxLayoutAlign="start center">
+          <input
+            id="{{serviceActionType}}_singleLocationTripCount_{{ headerText }}-{{replaceAllWhiteSpaces(getBodyControlDisplayText(Object.keys(this.locationsFormGroup.controls)[0]), '_')}}_input"
+            type="number"
+            min="0"
+            [formControl]="
+              getLocationTripCountFormControl(
+                Object.keys(this.locationsFormGroup.controls)[0]
+              )
+            "
+            class="numberOfTrips"
+            matInput
+          />
+          <span># of Trips</span>
+        </div>
+        <span
+            class="mat-error"
+            id="{{serviceActionType}}_singleLocationTripCount_{{ headerText }}-{{replaceAllWhiteSpaces(getBodyControlDisplayText(Object.keys(this.locationsFormGroup.controls)[0]), '_')}}_error"
+            [ngStyle]="{
+              visibility:
+                this.locationsFormGroup
+                  .get(Object.keys(this.locationsFormGroup.controls)[0])
+                  .get('locationTripCount').touched &&
+                this.locationsFormGroup
+                  .get(Object.keys(this.locationsFormGroup.controls)[0])
+                  .hasError('mustBeGreaterThanZeroIfSelected')
+                  ? 'visible'
+                  : 'hidden'
+            }"
+          >
+            Trips must be greater than zero
+        </span>
+      </div>
+    </div>
+  </mat-expansion-panel-header>
+  <div
+    style="padding-top: 15px"
+    *ngIf="Object.keys(locationsFormGroup.controls).length > 1"
+  >
+    <div
+      *ngFor="let controlKey of Object.keys(locationsFormGroup.controls)"
+      style="margin-top: 0; min-width: 130px; height: 51px"
+      fxLayout="row"
+      fxLayoutAlign="space-between center"
+    >
+      <div
+        fxFlex="70"
+        style="margin-right: 20px; cursor:pointer"
+        class="headerTextColor ellipsis-text"
+        fxLayout="row"
+        fxLayoutAlign="start center"
+      >
+        <mat-checkbox
+          [id]="subItemCheckBoxIDs[controlKey]"
+          [formControl]="getLocationSelectedFormControl(controlKey)"
+        >
+        </mat-checkbox>
+        <div
+          (click)="
+            toggleCheckBox(
+              this.locationsFormGroup.get(controlKey).get('locationSelected')
+            )
+          "
+          style="margin-bottom: 15px;text-overflow: ellipsis"
+          [matTooltip]="
+            getBodyControlDisplayText(getAddressDisplayFromID(controlKey))
+          "
+        >
+          {{ getBodyControlDisplayText(getAddressDisplayFromID(controlKey)) }}
+        </div>
+      </div>
+
+      <div
+        *ngIf="
+          this.locationsFormGroup.get(controlKey).get('locationSelected')
+            .value && specifyTripsByLocationControl.value
+        "
+        fxLayout="column"
+        style="min-width: 130px"
+      >
+        <div fxLayout="row" fxLayoutAlign="start center">
+          <input
+            id="{{serviceActionType}}_locationTripCount_{{ replaceAllWhiteSpaces(getBodyControlDisplayText(controlKey), '_') }}_input"
+            type="number"
+            min="0"
+            [formControl]="getLocationTripCountFormControl(controlKey)"
+            class="numberOfTrips"
+            matInput
+          />
+          <span># of Trips</span>
+        </div>
+        <span
+          class="mat-error"
+          id="{{serviceActionType}}_locationTripCount_{{ replaceAllWhiteSpaces(getBodyControlDisplayText(controlKey), '_') }}_error"
+          [ngStyle]="{
+            visibility:
+              this.locationsFormGroup.get(controlKey).get('locationTripCount')
+                .touched &&
+              this.locationsFormGroup
+                .get(controlKey)
+                .hasError('mustBeGreaterThanZeroIfSelected')
+                ? 'visible'
+                : 'hidden'
+          }"
+        >
+          Trips must be greater than zero
+        </span>
+      </div>
+    </div>
+  </div>
+</mat-expansion-panel>

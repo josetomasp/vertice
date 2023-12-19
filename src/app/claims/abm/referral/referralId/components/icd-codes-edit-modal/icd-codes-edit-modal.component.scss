@@ -1,0 +1,36 @@
+@import 'variables';
+@import '../../referral-activity/components/referral-components';
+
+.icdCodeItem {
+  max-width: 600px;
+}
+
+.isDeleted {
+  color: $danger;
+}
+
+.isDeletedIcon {
+  color: $danger;
+  font-weight: 500;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+.isNew {
+  color: $success;
+}
+
+.deletedText {
+  color: $danger;
+}
+
+.addedText {
+  color: $success;
+}
+
+.trashCan {
+  color: $secondary;
+  font-weight: 500;
+  font-size: 18px;
+  cursor: pointer;
+}

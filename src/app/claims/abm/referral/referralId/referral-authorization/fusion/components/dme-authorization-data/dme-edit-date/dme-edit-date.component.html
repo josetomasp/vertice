@@ -1,0 +1,116 @@
+<div fxLayout="row" fxLayoutGap="35px" class="dmeEditDateContainer">
+  <div
+    fxFlex="0 0 calc(100% -35px)"
+    *ngIf="!isDateRange || narrativeMode === 'PostSubmit'; else: editDateRange"
+  >
+    <div
+      class="overhead-label"
+      id="{{index}}-{{isSubstitutionCard?'subs':'original'}}-date-of-service-label"
+    >
+      DATE OF SERVICE
+    </div>
+    <div
+      class="standard-text"
+      id="{{index}}-{{isSubstitutionCard?'subs':'original'}}-date-of-service"
+    >
+      {{ readOnlyDisplayDate }}
+    </div>
+  </div>
+  <ng-template #editDateRange>
+    <div fxFlex="0 0 calc(50% -15px)">
+      <div
+        class="overhead-label"
+        id="{{index}}-{{isSubstitutionCard?'subs':'original'}}-date-of-service-label"
+      >
+        START DATE
+      </div>
+      <div class="datePicker">
+        <mat-form-field class="show-one-error">
+          <healthe-datepicker
+            [formControl]="formGroup.controls['startDate']"
+            id="{{index}}-{{isSubstitutionCard?'subs':'original'}}-date-change-startDate"
+            [disabled]="
+              !initialAuthNarrative || formGroup.controls['startDate'].disabled
+            "
+          ></healthe-datepicker>
+
+          <mat-error
+            id="{{index}}-{{isSubstitutionCard?'subs':'original'}}-date-change-startDate-error-startDateMustBeBeforeEndDate"
+            *ngIf="
+              formGroup.controls['startDate'].hasError(
+                'startDateMustBeBeforeEndDate'
+              ) || formGroup.controls['startDate'].hasError('invalidDateRange')
+            "
+            >Start date must be earlier than the end date
+          </mat-error>
+
+          <mat-error
+            id="{{index}}-{{isSubstitutionCard?'subs':'original'}}--date-change-startDate-error-required"
+            *ngIf="formGroup.controls['startDate'].hasError('required')"
+            >Please enter a valid date
+          </mat-error>
+          <mat-error
+            id="{{index}}-{{isSubstitutionCard?'subs':'original'}}--date-change-startDate-error-fromDateEqualsEndDate"
+            *ngIf="
+              formGroup.controls['startDate'].hasError('fromDateEqualsEndDate')
+            "
+            >Start date must not be equal to the end date
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+    <div fxFlex="0 0 calc(50% -15px)">
+      <div
+        class="overhead-label"
+        id="{{index}}-{{isSubstitutionCard?'subs':'original'}}-date-of-service-label"
+      >
+        END DATE
+      </div>
+      <div class="datePicker">
+        <mat-form-field class="show-one-error">
+          <healthe-datepicker
+            [formControl]="formGroup.controls['endDate']"
+            id="{{index}}-{{isSubstitutionCard?'subs':'original'}}--date-change-endDate"
+          ></healthe-datepicker>
+
+          <mat-error
+            id="{{index}}-{{isSubstitutionCard?'subs':'original'}}--date-change-endDate-error-startDateMustBeBeforeEndDate"
+            *ngIf="
+              formGroup.controls['endDate'].hasError(
+                'startDateMustBeBeforeEndDate'
+              ) || formGroup.controls['endDate'].hasError('invalidDateRange')
+            "
+            >Start date must be earlier than the end date
+          </mat-error>
+          <mat-error
+            id="{{index}}-{{isSubstitutionCard?'subs':'original'}}--date-change-endDate-error-endDateMustBeInFuture"
+            *ngIf="
+              formGroup.controls['endDate'].hasError('endDateMustBeInFuture')
+            "
+            >End date must be a future date
+          </mat-error>
+          <mat-error
+            id="{{index}}-{{isSubstitutionCard?'subs':'original'}}--date-change-endDate-error-required"
+            *ngIf="formGroup.controls['endDate'].hasError('required')"
+            >Please enter a valid date
+          </mat-error>
+          <mat-error
+            id="{{index}}-{{isSubstitutionCard?'subs':'original'}}--date-change-endDate-error-fromDateEqualsEndDate"
+            *ngIf="
+              formGroup.controls['endDate'].hasError('fromDateEqualsEndDate')
+            "
+            >Start date must not be equal to the end date
+          </mat-error>
+          <mat-error
+            id="narrative-new-open-auth-endDate-error-dateMustBeEqualsOrGreaterThan"
+            *ngIf="
+              formGroup.get('endDate').hasError('dateMustBeEqualsOrGreaterThan')
+            "
+            >Need to change the date to be equal or in the future of
+            {{ fusionAuth.authorizationUnderReview.lastServiceDate }}
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+  </ng-template>
+</div>

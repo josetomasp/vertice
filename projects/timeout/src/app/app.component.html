@@ -1,0 +1,50 @@
+<div id="timeoutWrapper" class="timeout--wrapper">
+  <section id="timeoutContent" class="timeout--centered-content">
+    <i
+      id="timeoutContent--exclamation"
+      class="fal fa-exclamation-triangle timeout-exclamation"
+      style="color: white;"
+    ></i>
+    <h1 id="timeoutContent--h1">Session Expired</h1>
+    <ng-container *ngIf="isSSOUser">
+      <p id="timeoutContent--p1">
+        The server has timed out and your session has ended.
+      </p>
+      <p id="timeoutContent--p2">
+        Please return to your system to reauthenticate.
+      </p>
+    </ng-container>
+    <ng-container *ngIf="!isSSOUser">
+      <p id="timeoutContent--notSSO">
+        The server has timed out and your session has ended.
+      </p>
+      <div>
+        <button
+          class="primary-button"
+          mat-flat-button
+          (click)="toLogin()"
+          style="margin-top: 20px;"
+        >
+          RETURN TO LOGIN SCREEN
+        </button>
+      </div>
+    </ng-container>
+  </section>
+  <footer id="timeout--footer" class="timeout--footer">
+    <img
+      id="timeout--footer--logo"
+      src="assets/img/healthesystems-logo-KO-notag-INVERSE.svg"
+      alt="Healthe Systems"
+    />
+    <span id="timeout--footer--copywrite" class="timeout--footer--copywrite"
+      >Copyright &copy; 2018 Healthesystems, LLC. All rights reserved.</span
+    >
+    <a
+      id="timeout--footer--TOS"
+      href="https://www.healthesystems.com/privacy-terms-of-use"
+      target="_blank"
+      class="timeout--footer--privacy"
+      >Privacy Statement & Terms of Use</a
+    >
+  </footer>
+</div>

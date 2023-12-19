@@ -1,0 +1,25 @@
+<div>
+  <label
+    [id]="'referral-overview-card-value-pair--Diagnosis Code-label'"
+    class="overhead-label"
+    >DIAGNOSIS CODE</label
+  >
+  <span fxLayout="row"
+    ><span
+      class="ellipsis-text"
+      [id]="'referral-overview-card-value-pair--Diagnosis Code-value'"
+      style="font-size: 14px; font-weight: 500; max-width: 96%; display: block"
+    >
+      <span style="padding-right: 4px">{{
+        diagnosisCodesAndDescriptionsCsv
+      }}</span>
+    </span>
+    <a
+      [id]="'referral-overview-card-value-pair--Diagnosis Code-viewAllButton'"
+      mat-button
+      style="min-width: 20px;"
+      (click)="openICDCodesModal()"
+      >{{ openICDCodesModalLabel }}</a
+    ></span
+  >
+</div>

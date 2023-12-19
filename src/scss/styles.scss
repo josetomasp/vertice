@@ -1,0 +1,452 @@
+@import './fonts';
+@import './theme/healthe-theme.scss';
+@import 'variables';
+@import './stepper.scss';
+@import './flex';
+$fa-font-path: '~@fortawesome/fontawesome-pro/webfonts';
+@import '~@fortawesome/fontawesome-pro/scss/fontawesome';
+@import '~@fortawesome/fontawesome-pro/scss/light';
+@import '~@fortawesome/fontawesome-pro/scss/regular';
+@import '~@fortawesome/fontawesome-pro/scss/solid.scss';
+
+html {
+  background-color: $gray-200;
+  font-family: 'Libre Franklin', 'Segoe UI', 'Helvetica Neue', 'Open Sans',
+    sans-serif !important;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-shadow: rgba(0, 0, 0, 0.01) 0 0 1px;
+}
+
+body {
+  padding: 0;
+  margin: 0;
+  height: 100%;
+  min-height: 100%;
+  font-family: 'Libre Franklin', 'Segoe UI', 'Helvetica Neue', 'Open Sans',
+    sans-serif;
+  color: $gray-900;
+  overflow-x: hidden;
+  font-size: 14px;
+}
+
+::-webkit-scrollbar {
+  width: 16px;
+  background-color: transparent;
+  min-height: 16px;
+}
+
+::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 10px 10px transparent;
+  border: solid 5px transparent;
+  border-radius: 15px;
+}
+
+::-webkit-scrollbar-thumb {
+  box-shadow: inset 0 0 10px 10px rgba(52, 58, 64, 0.2);
+  border: solid 5px transparent;
+  border-radius: 15px;
+}
+
+.tag.activity {
+  color: $white;
+  background-color: $primary;
+  margin-left: 5px;
+  font-weight: 900;
+}
+
+.sectionLabel {
+  color: $primary;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 20px;
+}
+
+.mat-select-panel.column-panel-size {
+  width: 212px !important;
+  max-height: 100%;
+}
+
+// Risk Graph and Tag Colors
+$highest: $red;
+$high: $danger;
+$medium: $yellow-orange;
+$low: $medium-green;
+$lowest: $success;
+$unidentified: $gray-600;
+
+.tag.highest-risk {
+  color: white;
+  background-color: $highest;
+}
+
+.tag.high-risk {
+  color: white;
+  background-color: $high;
+}
+
+.tag.medium-risk {
+  color: $gray-900;
+  background-color: $medium;
+}
+
+.tag.low-risk {
+  color: $gray-900;
+  background-color: $low;
+}
+
+.tag.lowest-risk {
+  color: white;
+  background-color: $lowest;
+}
+
+.tag.unidentified-risk {
+  color: $gray-900;
+  background-color: white;
+}
+
+.tag.highest-risk.extended {
+  color: $highest;
+  border: 1px solid $highest;
+}
+
+.tag.high-risk.extended {
+  color: $high;
+  border: 1px solid $high;
+}
+
+.tag.medium-risk.extended {
+  color: $medium;
+  border: 1px solid $medium;
+}
+
+.tag.low-risk.extended {
+  color: $low;
+  border: 1px solid $low;
+}
+
+.tag.lowest-risk.extended {
+  color: $lowest;
+  border: 1px solid $lowest;
+}
+
+.tag.unidentified-risk.extended {
+  color: $unidentified;
+  cursor: default;
+  border: 1px solid $unidentified;
+}
+
+.tag.extended {
+  border-radius: 30px;
+  background-color: transparent;
+  cursor: pointer;
+}
+
+.danger {
+  color: $danger;
+}
+
+.tableDangerText {
+  color: $danger !important;
+}
+
+.success {
+  color: $success;
+}
+
+.tableSuccessText {
+  color: $success !important;
+}
+
+.primary {
+  color: $primary;
+}
+
+.secondary {
+  color: $secondary;
+}
+
+.snackbar {
+  &.danger {
+    background-color: $danger;
+  }
+
+  &.success {
+    background-color: $success;
+  }
+
+  &.prewrap {
+    white-space: pre-wrap;
+  }
+}
+
+.clickable {
+  cursor: pointer;
+
+  &:hover {
+    background-color: $gray-100 !important;
+  }
+}
+
+// This is a fix for a dismissable "operation failed" snack-bar so that the button with the X isn't so fat.
+.danger.snackbar .mat-button {
+  min-width: 0;
+  padding: 0;
+}
+
+.danger.snackbar span {
+  color: white !important;
+}
+
+.healthe {
+  &-table {
+    &--centered-container {
+      height: 250px;
+
+      & p {
+        white-space: pre-line;
+        text-align: center;
+      }
+    }
+  }
+}
+
+// This will change the date range input font size (was 14)
+.healthe-drp-input-wrapper input.ngx-mat-drp-date-input {
+  font-size: 12px;
+}
+
+input.mat-input-element {
+  margin-top: 0;
+}
+
+@mixin colored-text($color) {
+  color: $color;
+  & > .mat-button-wrapper {
+    color: $color;
+  }
+  &:disabled > .mat-button-wrapper {
+    color: $gray-400;
+  }
+}
+
+.text {
+  &-primary {
+    @include colored-text($primary);
+  }
+
+  &-secondary {
+    @include colored-text($secondary);
+  }
+
+  &-required {
+    @include colored-text($red);
+  }
+
+  &-hint {
+    @include colored-text($gray-300);
+  }
+
+  &-subtext {
+    @include colored-text($gray-600);
+  }
+
+  &-bold {
+    font-weight: bold;
+  }
+
+  &-wrap {
+    text-wrap: normal;
+    word-break: break-word;
+  }
+
+  &-center {
+    text-align: center;
+  }
+}
+
+.required-text {
+  color: $red;
+  margin-left: 5px;
+}
+
+.unselectable {
+  -webkit-user-select: none;
+
+  /* Safari */
+  -moz-user-select: none;
+  /* Firefox */
+  -ms-user-select: none; /* IE10+/Edge */
+  user-select: none; /* Standard */
+}
+
+.nowrap {
+  white-space: nowrap;
+}
+
+.matFormFieldWidthFix
+  .mat-form-field-wrapper
+  .mat-form-field-flex
+  .mat-form-field-infix {
+  width: auto;
+}
+
+.inset-card {
+  background-color: $gray-50;
+  padding: 20px;
+  margin-top: 10px;
+}
+
+.modal-header {
+  font-weight: 600;
+  font-size: 22px;
+}
+
+.modal-close-widget {
+  font-size: 22px;
+  color: $gray-400;
+}
+
+.modalContent {
+  padding: 20px;
+}
+
+// Much like _text.scss section-title, but without bottom padding
+.modalSectionTitle {
+  color: $primary;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 20px;
+}
+
+#atlwdg-trigger {
+  z-index: 1000;
+}
+
+// TODO: Remove _textarea.scss border color style targetting
+//  `.mat-form-field-infix > textarea.mat-input-element` from vertice-library.
+// This resets it to Material red for when the field has an error message
+.mat-form-field-infix > textarea.mat-input-element.ng-invalid.ng-touched {
+  border-color: #ea6852;
+}
+
+// To provided that shadowed box look for tab bars in modals. apply "modalTabBar" class to mat-tab-group: <mat-tab-group class="modalTabBar">
+.modalTabBar mat-tab-header {
+  box-shadow: 0 3px 5px 0 rgba(52, 58, 64, 0.26) !important;
+  margin-bottom: 20px;
+}
+
+.dashboard-chart {
+  height: 100%;
+}
+
+.main-nav-wrapper {
+  margin: 22px 20px 20px 20px;
+  width: calc(100% - 55px);
+}
+
+.error-snackbar button {
+  color: white;
+  background-color: transparent;
+  font-weight: bold;
+  border: 2px solid;
+}
+
+.error-snackbar button span {
+  margin: 10px 9px 10px 10px;
+}
+
+.standard-text,
+td span,
+.standard-text span {
+  touch-action: initial !important;
+  user-select: initial !important;
+}
+
+.mat-dialog-actions div[fxflex='row'][fxlayoutalign~='end'] {
+  flex: 1 1 100%;
+}
+
+.information-icon {
+  color: $secondary;
+  font-size: 15px;
+  cursor: pointer;
+  margin-left: 5px;
+}
+
+// Put this class on the mat-form field tag or some parent tag above a mat-error to allow longer error message to show
+// You still need to add a width to the mat-error it self to tell it how long the error text should be allowed to get.
+.enableLongMatErrors div.mat-form-field-subscript-wrapper {
+  overflow: visible;
+}
+
+.fatal-server-error {
+  &--backdrop {
+    z-index: 999;
+
+    background-color: $gray-200;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  &--content {
+    & > fa-icon {
+      font-size: 64px;
+      color: $secondary;
+    }
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+}
+
+.mat-select-value {
+  min-height: 10px;
+}
+
+.ALink {
+  color: $secondary;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 18px;
+  text-decoration-line: none;
+  cursor: pointer;
+}
+
+mat-step-header {
+  &.default > div.mat-step-icon {
+    //color: $gray-400;
+    border: 1px solid $gray-400 !important;
+  }
+  &.default
+    > div.mat-step-icon.mat-step-icon-selected.mat-step-icon-state-number {
+    //color: $gray-400;
+    border: 1px solid $gray-400 !important;
+  }
+  &.valid > div.mat-step-icon {
+    //color: $success;
+    border: 1px solid $success !important;
+  }
+  &.valid
+    > div.mat-step-icon.mat-step-icon-selected.mat-step-icon-state-number {
+    //color: $success;
+    border: 1px solid $success;
+  }
+  &.invalid > div.mat-step-icon {
+    //color: $danger;
+    border: 1px solid $danger !important;
+  }
+  &.invalid
+    > div.mat-step-icon.mat-step-icon-selected.mat-step-icon-state-number {
+    //color: $danger;
+    border: 1px solid $danger !important;
+  }
+}

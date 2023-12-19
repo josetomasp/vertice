@@ -1,0 +1,46 @@
+<div fxLayout="row" fxLayoutAlign="space-between center" mat-dialog-title>
+  <span>View/Edit Documents & Notes</span>
+  <button
+    mat-icon-button
+    mat-dialog-close
+    id="referralOverviewModal--header-closeButton"
+  >
+    <i class="fal fa-times modal-close-widget"></i>
+  </button>
+</div>
+<div mat-dialog-content>
+  <healthe-referral-notes-widget
+    #referralNotesWidgetComponent
+    [showSubmitButton]="false"
+    autoFocusNoteTextArea="true"
+  ></healthe-referral-notes-widget>
+  <div class="spacersmall"></div>
+  <healthe-referral-documents
+    [dateOfService]="modalData.dateOfService"
+    [hesReferralDetailId]="hesReferralDetailIdForUploadDocuments"
+  ></healthe-referral-documents>
+</div>
+<div
+  mat-dialog-actions
+  fxLayout="row-reverse"
+  fxLayoutAlign="start center"
+  fxLayoutGap="24px"
+>
+  <button
+    id="sendNote-button"
+    mat-flat-button
+    [disabled]="referralNotesWidgetComponent.isInvalid() || (authorizationArchType$ | async) === ReferralAuthorizationArchetype.Kinect"
+    class="primary-button"
+    (click)="referralNotesWidgetComponent.addNoteEvent.next($event)"
+  >
+    SEND NOTE
+  </button>
+  <button
+    id="bottomCancel-button"
+    class="info-button"
+    mat-stroked-button
+    (click)="closeModal()"
+  >
+    CANCEL
+  </button>
+</div>

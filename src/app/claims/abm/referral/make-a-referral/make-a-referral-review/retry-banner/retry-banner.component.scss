@@ -1,0 +1,30 @@
+@import 'variables';
+.retry {
+  background: $danger;
+  margin: 1rem;
+
+  &__action {
+    text-decoration: underline;
+    cursor: pointer;
+  }
+  &__column1 {
+    max-width: 3rem;
+  }
+  &__column2 {
+    max-width: 50rem;
+  }
+  &__message {
+    padding: 0.9rem 2rem;
+  }
+  &__triangle-icon {
+    text-align: center;
+    padding: 1rem 2rem;
+  }
+  &--white {
+    color: $white;
+  }
+}
+
+p {
+  display: inline;
+}

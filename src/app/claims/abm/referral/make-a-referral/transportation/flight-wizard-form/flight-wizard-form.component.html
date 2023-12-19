@@ -1,0 +1,269 @@
+<div [formGroup]="flightFormGroup" class="matFormFieldWidthFix">
+  <div class="flightInfo" id="flight-title">Flight Information</div>
+  <div class="spacermedium"></div>
+  <div fxLayout="row wrap" fxLayoutAlign="start start" fxLayoutGap="35px grid">
+    <div>
+      <div
+        class="overhead-label"
+        id="flight-flyingFrom-autocomplete-input-label"
+      >
+        FLYING FROM<span class="required-text">*</span>
+      </div>
+      <mat-form-field class="show-one-error" style="min-width: 300px">
+        <input
+          matInput
+          type="text"
+          class="mat-input-element"
+          formControlName="flyingFrom"
+          placeholder="Airport"
+          id="flight-flyingFrom-autocomplete-input"
+          style="width: 100%"
+        />
+        <div
+          [matMenuTriggerFor]="flyingFromAutoCompleteMenu"
+          #flyingFromMenuAutocompleteTrigger="matMenuTrigger"
+        ></div>
+        <mat-menu
+          #flyingFromAutoCompleteMenu
+          class="section-autocomplete-panel"
+        >
+          <mat-option
+            [value]="option.value"
+            [id]="'placesSuggestion' + i"
+            (click)="
+              selectOption(
+                option.value,
+                flyingFromAutocompleteTrigger,
+                'flyingFrom'
+              )
+            "
+            *ngFor="
+              let option of (flyingFromSuggestions$ | async);
+              let i = index
+            "
+          >
+            <fa-icon
+              class="text-secondary"
+              style="font-size: 16px; margin-right: 10px"
+              [icon]="option.icon"
+            ></fa-icon>
+            {{ option.value }}
+          </mat-option>
+        </mat-menu>
+        <mat-error
+          id="flight-flyingFrom-autocomplete-error-required"
+          *ngIf="flightFormGroup.controls['flyingFrom'].hasError('required')"
+          >Flying From cannot be empty
+        </mat-error>
+
+        <mat-error
+          id="flight-flyingFrom-autocomplete-error-wasValuePicked"
+          *ngIf="
+            flightFormGroup.controls['flyingFrom'].hasError('wasValuePicked')
+          "
+          >No airports matched your search
+        </mat-error>
+        <mat-error
+          id="flight-flyingFrom-autocomplete-error-duplicate"
+          *ngIf="flightFormGroup.controls['flyingFrom'].hasError('duplicate')"
+          >Flying From and Flying To cannot be the same airport
+        </mat-error>
+      </mat-form-field>
+    </div>
+    <div>
+      <div class="overhead-label" id="flight-flyingTo-autocomplete-input-label">
+        FLYING TO<span class="required-text">*</span>
+      </div>
+      <mat-form-field class="show-one-error" style="min-width: 300px">
+        <input
+          matInput
+          type="text"
+          class="mat-input-element"
+          formControlName="flyingTo"
+          placeholder="Airport"
+          id="flight-flyingTo-autocomplete-input"
+          style="width: 100%"
+        />
+        <div
+          [matMenuTriggerFor]="flyingToAutoCompleteMenu"
+          #flyingToMenuAutocompleteTrigger="matMenuTrigger"
+        ></div>
+        <mat-menu #flyingToAutoCompleteMenu class="section-autocomplete-panel">
+          <mat-option
+            [value]="option.value"
+            [id]="'placesSuggestion' + i"
+            (click)="
+              selectOption(
+                option.value,
+                flyingToAutocompleteTrigger,
+                'flyingTo'
+              )
+            "
+            *ngFor="let option of (flyingToSuggestions$ | async); let i = index"
+          >
+            <fa-icon
+              class="text-secondary"
+              style="font-size: 16px; margin-right: 10px"
+              [icon]="option.icon"
+            ></fa-icon>
+            {{ option.value }}
+          </mat-option>
+        </mat-menu>
+
+        <mat-error
+          id="flight-flyingTo-autocomplete-error-required"
+          *ngIf="flightFormGroup.controls['flyingTo'].hasError('required')"
+          >Flying To cannot be empty
+        </mat-error>
+
+        <mat-error
+          id="flight-flyingTo-autocomplete-error-wasValuePicked"
+          *ngIf="
+            flightFormGroup.controls['flyingTo'].hasError('wasValuePicked')
+          "
+          >No airports matched your search
+        </mat-error>
+
+        <mat-error
+          id="flight-flyingTo-autocomplete-error-duplicate"
+          *ngIf="flightFormGroup.controls['flyingTo'].hasError('duplicate')"
+          >Flying From and Flying To cannot be the same airport
+        </mat-error>
+      </mat-form-field>
+    </div>
+    <div>
+      <div class="overhead-label" id="flight-departureDate-label">
+        DEPARTURE DATE<span class="required-text">*</span>
+      </div>
+      <mat-form-field class="show-one-error">
+        <healthe-datepicker
+          [id]="'flight-departuredate-datepicker'"
+          formControlName="departureDate"
+        ></healthe-datepicker>
+
+        <mat-error
+          id="flight-departure-datepicker-error-departureBeforeReturn"
+          *ngIf="
+            flightFormGroup.controls['departureDate'].hasError(
+              'departureBeforeReturn'
+            )
+          "
+        >
+          Departure Date" should be same or before "Return Date"
+        </mat-error>
+        <mat-error
+          id="flight-departure-datepicker-error-required"
+          *ngIf="flightFormGroup.controls['flyingTo'].hasError('required')"
+        >Departure Date cannot be empty
+        </mat-error>
+      </mat-form-field>
+    </div>
+    <div>
+      <div class="overhead-label" id="flight-returnDate-label">RETURN DATE</div>
+      <mat-form-field class="show-one-error">
+        <healthe-datepicker
+          [id]="'flight-return-datepicker'"
+          formControlName="returnDate"
+        ></healthe-datepicker>
+        <mat-error
+          id="flight-return-datepicker-error-departureBeforeReturn"
+          *ngIf="
+            flightFormGroup.controls['returnDate'].hasError(
+              'departureBeforeReturn'
+            )
+          "
+        >
+          Departure Date" should be same or before "Return Date"
+        </mat-error>
+      </mat-form-field>
+    </div>
+    <div class="spacermedium"></div>
+    <div>
+      <div
+        fxLayout="row wrap"
+        fxLayoutAlign="start center"
+        fxLayoutGap="20px"
+        [ngClass]="errorBoxClass"
+      >
+        <div>
+          <div id="flight-APPOINTMENT_TYPE-label" class="overhead-label">
+            APPOINTMENT TYPE
+          </div>
+          <mat-form-field style="width: 230px">
+            <mat-select
+              healtheSelect
+              formControlName="appointmentType"
+              placeholder="Choose Appointment Type"
+              id="flight-appointmentType"
+            >
+              <mat-option
+                [value]="option"
+                id="flight-appointmentType-{{option}}_option"
+                *ngFor="let option of (appointmentTypes$ | async)"
+              >
+                {{ option }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div>
+          <div id="flight-APPOINTMENT_DATE-label" class="overhead-label">
+            APPOINTMENT DATE
+          </div>
+          <mat-form-field class="show-one-error">
+            <healthe-datepicker
+              [id]="'flight-appointment-datepicker'"
+              formControlName="appointmentDate"
+            ></healthe-datepicker>
+          </mat-form-field>
+        </div>
+        <div>
+          <div id="flight-APPOINTMENT_TIME-label" class="overhead-label">
+            APPOINTMENT TIME
+          </div>
+          <mat-form-field>
+            <mat-select
+              healtheSelect
+              formControlName="appointmentTime"
+              placeholder="Choose Time"
+              id="flight-appointmentTime"
+              style="width: 115px"
+            >
+              <mat-option
+                *ngFor="let option of timeByHalfHour"
+                [value]="option.value"
+                id="flight-appointmentTime-{{option}}_option"
+              >
+                {{ option.label }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="secondary clearAppointments" (click)="clearAppointments()">
+          Clear Appointments
+        </div>
+      </div>
+      <mat-error
+        *ngIf="flightFormGroup.hasError('allOrNothing') && allTouched()"
+      >
+        {{ ERROR_MESSAGES.appointment_allOrNothing }}
+      </mat-error>
+    </div>
+  </div>
+  <div class="spacersmall"></div>
+  <div>
+    <div id="flight-AddNoteTextarea-label" class="overhead-label">
+      NOTES (optional)
+    </div>
+    <mat-form-field>
+      <textarea
+        matInput
+        placeholder="Enter notes"
+        formControlName="notes"
+        style="width: 100%; resize: none"
+        rows="3"
+        id="flight-AddNoteTextarea"
+      ></textarea>
+    </mat-form-field>
+  </div>
+</div>

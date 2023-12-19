@@ -1,0 +1,26 @@
+@import 'variables';
+.auth-open {
+  margin-bottom: 2em;
+
+  &--float-right {
+    float: right;
+  }
+  &__add-documents {
+    margin-left: 1em;
+  }
+  &__sub-text {
+    color: $gray-600;
+    font-style: italic;
+    margin-top: 0.5em;
+  }
+  &__text {
+    margin-right: 10px;
+    font-size: 22px;
+  }
+  &__title {
+    color: $primary;
+  }
+  &__details {
+    margin-left: 20px;
+  }
+}

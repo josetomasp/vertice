@@ -1,0 +1,14 @@
+@import 'variables';
+
+.document-picker {
+  &__invalid-documents {
+    padding-top: 1rem;
+    color: $danger;
+  }
+}
+
+.fake-link {
+  color: #00b3e3;
+  text-decoration: underline;
+  cursor: pointer;
+}

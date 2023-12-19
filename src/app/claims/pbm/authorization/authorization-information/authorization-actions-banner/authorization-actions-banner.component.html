@@ -1,0 +1,667 @@
+<div class="gray-wrapper" [formGroup]="_formGroup">
+  <div class="auth-actions-banner-wrapper">
+    <div fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="20px">
+      <!-- Drug/component name & modals -->
+      <!-- canItOpenLookupModal defined by canMedicationLabelOpenLookupModal function in each service config file -->
+      <a
+        *ngIf='pbmInfoAndActionsData.drugDisplayName.canItOpenLookupModal'
+        mat-button
+        [class]='pbmInfoAndActionsData.drugDisplayName.class'
+        (click)='openDrugOrCompoundModal(pbmInfoAndActionsData)'
+      >
+        <fa-icon
+          *ngIf='pbmInfoAndActionsData.drugDisplayName.isCompound'
+          class='compound-icon'
+          [icon]='faExclamationCircle'
+        >
+        </fa-icon>
+        {{ index + 1 }}.
+        {{ pbmInfoAndActionsData.drugDisplayName.label }}
+      </a>
+      <div
+        *ngIf='!pbmInfoAndActionsData.drugDisplayName.canItOpenLookupModal'>
+        {{ index + 1 }}.
+        {{ pbmInfoAndActionsData.drugDisplayName.label }}
+      </div>
+      <!-- TransactionalMME -->
+      <ng-container
+        *ngIf="
+          lineItem.transactionalMme != null && lineItem.transactionalMme >= 0
+        "
+      >
+        <div *ngIf="lineItem.transactionalMme == 0" class="tag">
+          MME INFORMATION NOT AVAILABLE
+        </div>
+        <div *ngIf="lineItem.transactionalMme > 0" class="tag mme-info">
+          MME INFORMATION
+          <a mat-button (click)="openMMEModal()" data-testid="mmeViewbutton" trackIgnoredFeature="mme" class="mme-info-view-link"
+            >view</a
+          >
+        </div>
+      </ng-container>
+
+      <!-- New to claim tag -->
+      <ng-container *ngIf="lineItem.isRxNewToClaim">
+        <div class="tag success">NEW TO CLAIM</div>
+      </ng-container>
+
+      <ng-container *ngIf="showStatusIndicators">
+        <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="20px">
+          <div *ngFor=" let message of lineItem.statusIndicators" class="tag success">
+            {{ message }}
+          </div>
+        </div>
+      </ng-container>
+
+      <!-- Drug class label -->
+      <div
+        class="float-right"
+        *ngIf="pbmInfoAndActionsData.slrMessage"
+      >
+        <div>
+          Second Level Review Required For:
+          <strong>{{ pbmInfoAndActionsData.slrMessage}}</strong>
+        </div>
+        <div
+          *ngIf="
+            mode === PbmAuthFormMode.ReadWrite &&
+            lineItem.currentStateName === 'AWAITING_SECOND_DECISION'
+          "
+        >
+          <strong
+            class="slr-recommendation"
+            [innerHTML]="pbmInfoAndActionsData.lastDesicionNarrative"
+          ></strong>
+        </div>
+      </div>
+
+      <div
+        class="float-right text-warning"
+        *ngIf="pbmInfoAndActionsData.specialWorkflowMessage">
+        Warning: Special Workflow for {{pbmInfoAndActionsData.specialWorkflowMessage}}
+      </div>
+
+      <!-- PRIOR AUTH DECISION -->
+      <div class="float-right" *ngIf="true === userIsInternal">
+        <div *ngIf="lineItem.currentStateName.includes('AWAITING_CALL')">
+          <strong class="slr-recommendation">{{
+            cleanLastDecisionNarrative
+          }}</strong>
+        </div>
+      </div>
+    </div>
+
+    <div class="spacersmall"></div>
+    <ng-container *ngIf="showActionMessages">
+      <div fxLayout="column" fxLayoutAlign="start start" fxLayoutGap="20px">
+      <div *ngFor="let message of lineItem.actionMessages" class ="tag danger" style="font-size: 14px"> {{ message }}</div>
+      </div>
+      <div class="spacersmall"></div>
+    </ng-container>
+
+    <div fxLayout="row" fxLayoutAlign="space-between start">
+      <div fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="35px">
+        <!-- Action radio buttons -->
+        <div
+          class="approval-period-container"
+          *ngIf="mode === PbmAuthFormMode.ReadWrite"
+        >
+          <div
+            id="{{ index }}-auth-information-actions-option-label-action"
+            class="overhead-label"
+          >
+            {{ actionLabel }}<span class="text-required"> *</span>
+          </div>
+          <mat-radio-group
+            id="{{ index }}-auth-information-actions-group"
+            formControlName="action"
+            healtheFormValidationExtractor
+            formLabel="Action"
+            [attr.data-index]="index"
+          >
+            <mat-radio-button
+              *ngIf="canDoAction(actionOption.approve)"
+              class="radio-spacing"
+              id="{{ index }}-auth-information-actions-option-approve"
+              [value]="actionOption.approve"
+              (click)="resetPaperFooter()"
+              >Approve
+            </mat-radio-button>
+            <mat-radio-button
+              *ngIf="canDoAction(actionOption.recommendApprove)"
+              class="radio-spacing"
+              id="{{ index }}-auth-information-actions-option-Recommend-approve"
+              [value]="actionOption.recommendApprove"
+              (click)="resetPaperFooter()"
+              >Recommend Approval
+            </mat-radio-button>
+            <mat-radio-button
+              *ngIf="canDoAction(actionOption.deny)"
+              class="radio-spacing"
+              id="{{ index }}-auth-information-actions-option-deny"
+              [value]="actionOption.deny"
+              (click)="resetPaperFooter()"
+            >
+              <healthe-customer-configs-label
+                defaultText="Deny"
+                elementName="pbmDeny"
+                [forcedCapitalization]="false"
+              >
+              </healthe-customer-configs-label>
+            </mat-radio-button>
+
+            <!-- Deny Indefinitely Start -->
+            <mat-radio-button
+              *ngIf="canDoAction(actionOption.denyIndefinitely)"
+              class="radio-spacing"
+              id="{{ index }}-auth-information-actions-option-denyIndefinitely"
+              [value]="actionOption.denyIndefinitely"
+            >
+              <healthe-customer-configs-label
+                defaultText="Deny Indefinitely"
+                elementName="pbmDenyIndefinitely"
+                [forcedCapitalization]="false"
+              >
+              </healthe-customer-configs-label>
+            </mat-radio-button>
+            <!-- Deny Indefinitely End -->
+
+            <mat-radio-button
+              *ngIf="canDoAction(actionOption.pend)"
+              class="radio-spacing"
+              id="{{ index }}-auth-information-actions-option-pend"
+              [value]="actionOption.pend"
+              (click)="resetPaperFooter()"
+              >Pend
+            </mat-radio-button>
+          </mat-radio-group>
+        </div>
+
+        <!-- Save Decision & Reset Decision -->
+        <div
+          *ngIf="
+            mode === PbmAuthFormMode.ReadWrite &&
+            (showResetOriginalDecision$ | async)
+          "
+          style="display: inline-block"
+        >
+          <button
+            mat-flat-button
+            (click)="saveChangeDecision()"
+            class="primary-button"
+          >
+            Save Change Decision
+          </button>
+        </div>
+        <div
+          *ngIf="
+            mode === PbmAuthFormMode.ReadWrite &&
+            (showResetOriginalDecision$ | async)
+          "
+          style="display: inline-block"
+        >
+          <button
+            mat-flat-button
+            (click)="resetToOriginalDecision()"
+            class="primary-button"
+          >
+            Reset to Original Decision
+          </button>
+        </div>
+        <!--
+          There nothing to action for the current user because the authorization has a replacemente message
+        -->
+        <div *ngIf="pbmInfoAndActionsData.actionMessageReplacement">
+          <p>{{ pbmInfoAndActionsData.actionMessageReplacement }}</p>
+        </div>
+        <!-- Result of submission -->
+        <div
+          fxLayout="row"
+          fxLayoutAlign="space-around center"
+          *ngIf="mode === PbmAuthFormMode.ReadOnly"
+        >
+          <!-- Approved Post submit -->
+          <div
+            fxLayout="row"
+            fxLayoutAlign="space-around center"
+            *ngIf="
+              formGroup.get('action')?.value === actionOption.approve ||
+              formGroup.get('action')?.value === actionOption.recommendApprove
+            "
+          >
+            <div class="approved-btn">
+              <i class="far fa-check"></i>
+              {{
+                formGroup.get('action').value === actionOption.approve
+                  ? 'Approved'
+                  : 'Approval Recommended'
+              }}
+            </div>
+            <div
+              class="action-date"
+              [innerHTML]="pbmInfoAndActionsData.lastDesicionNarrative"
+            ></div>
+          </div>
+          <!-- Deny Post submit -->
+          <div
+            fxLayout="row"
+            fxLayoutAlign="space-around center"
+            *ngIf="
+              formGroup.get('action')?.value === actionOption.deny ||
+              formGroup.get('action')?.value === actionOption.denyOneTime ||
+              formGroup.get('action')?.value === actionOption.denyIndefinitely
+            "
+          >
+            <div class="denied-btn"><i class="far fa-ban"></i> Denied</div>
+            <div class="action-date">
+              <div
+                class="action-date"
+                [innerHTML]="pbmInfoAndActionsData.lastDesicionNarrative"
+              ></div>
+            </div>
+          </div>
+          <div
+            fxLayout="row"
+            fxLayoutAlign="space-around center"
+            *ngIf="formGroup.get('action')?.value === actionOption.pend"
+          >
+            <div class="pended-btn"><i class="far fa-clock"></i> Pended</div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <!-- Initial / Final review labels -->
+        <div
+          fxLayoutAlign="end end"
+          fxLayoutGap="20px"
+          *ngIf="pbmInfoAndActionsData.slrMessage"
+        >
+          <div
+            #initialReview
+            (mouseover)="showTooltip()"
+            (mouseleave)="hideTooltip()"
+            [ngClass]="{
+              'review-btn': true,
+              'review-btn-disabled': !pbmInfoAndActionsData.approveButtons.displayInitial
+            }"
+          >
+            <i
+              class="far fa-check"
+              *ngIf="pbmInfoAndActionsData.approveButtons.displayInitial"
+            ></i>
+            Initial Review
+          </div>
+          <div
+            class="review-btn"
+            [ngClass]="{
+              'review-btn': true,
+              'review-btn-disabled': !pbmInfoAndActionsData.approveButtons.displayFinal
+            }"
+          >
+            <i
+              class="far fa-check"
+              *ngIf="pbmInfoAndActionsData.approveButtons.displayFinal"
+            ></i>
+            Final Review
+          </div>
+        </div>
+        <!-- PRIOR AUTH LOAD BUTTON -->
+        <div class="float-right" *ngIf="true === userIsInternal">
+          <span
+            *ngIf="
+              disablePriorLoadButton || lineItem.isPriorAuthPreviouslyLoaded
+            "
+            >Prior Auth Successfully Loaded!</span
+          >
+          <button
+            *ngIf="showPriorLoadButton"
+            mat-flat-button
+            [disabled]="
+              disablePriorLoadButton || lineItem.isPriorAuthPreviouslyLoaded
+            "
+            class="prior-auth-load primary-button"
+            style="padding-left: 41px; padding-right: 41px"
+            (click)="submitPriorAuthLoad()"
+          >
+            PRIOR AUTH LOAD
+          </button>
+        </div>
+
+        <!-- SAMARITAN DOSE -->
+        <div
+          fxLayoutAlign="start strech"
+          fxLayoutGap="10px"
+          fxLayout="column"
+          *ngIf="showSamaritanDoseButton"
+          class="samDoseContainer"
+        >
+          <button
+            mat-flat-button
+            [disabled]="userHasNotAcknowledgedSamDoseWarnings()"
+            [ngClass]="userHasNotAcknowledgedSamDoseWarnings()? 'disabledLoadSamDoseButton': null"
+            class="primary-button"
+            id="{{ index }}-auth-information-actions-load-samaritanDose-button"
+            (click)="loadSamaritanDose()"
+          >
+            LOAD SAMARITAN DOSE PA
+          </button>
+        </div>
+      </div>
+
+    </div>
+    <ng-container
+      *ngIf="showSamaritanDoseButton && lineItem.samaritanDoseWarnings?.length > 0">
+      <div class="spacersmall"></div>
+      <div class="samDose-warning"
+           style="display: flex; flex-wrap: nowrap; flex-direction: row; justify-content: space-between; align-items: center">
+        <div
+          style="display: flex; flex-wrap: nowrap; flex-direction: row; justify-content: flex-start; align-items: center">
+          <fa-icon
+            class="compound-icon"
+            style="margin-right: 20px;"
+            [icon]="faFlag"
+          >
+          </fa-icon>
+          <div style="font-size: 18px">
+            <div *ngFor="let message of lineItem.samaritanDoseWarnings">
+              Samaritan
+              Dose Warning: {{message}}</div>
+          </div>
+        </div>
+        <mat-checkbox [formControl]="samaritanDoseAcknowledgeCheckBox">Acknowledged</mat-checkbox>
+      </div>
+    </ng-container>
+
+    <div class="spacersmall"></div>
+
+    <div fxLayout="row" fxLayoutAlign="space-between" fxLayoutGap="35px">
+      <div *ngIf="!displayDoActions()"></div>
+      <div fxLayout="row" *ngIf="displayDoActions()">
+        <!-- Approve Action Form -->
+        <div
+          class="approval-period-container"
+          *ngIf="
+            showAuthorizationPeriod &&
+            (formGroup.get('action').value === actionOption.approve ||
+              formGroup.get('action')?.value ===
+                actionOption.recommendApprove) &&
+            !isOneTimeOnly
+          "
+        >
+          <div
+            id="{{ index }}-auth-information-actions-option-label-approval"
+            class="overhead-label"
+          >
+            APPROVAL PERIOD <span class="text-required">*</span>
+          </div>
+          <mat-radio-group
+            id="auth-information-approval-period-radio-group-{{ index }}"
+            healtheFormValidationExtractor
+            formLabel="Approval Period"
+            formControlName="approvalPeriodType"
+            [attr.data-index]="index"
+          >
+            <mat-radio-button
+              class="radio-spacing"
+              id="auth-information-approval-period-one-time-{{ index }}"
+              [value]="approvalPeriodType.AUTH_INFO_APPROVAL_PERIOD_ONE_TIME"
+              (click)="resetPaperFooter()"
+              >One-Time
+            </mat-radio-button>
+            <mat-radio-button
+              class="radio-spacing"
+              id="{{ index }}-auth-information-approval-period-date"
+              [value]="approvalPeriodType.AUTH_INFO_APPROVAL_PERIOD_DATE"
+              (click)="resetPaperFooter()"
+              >To Effective Date
+            </mat-radio-button>
+          </mat-radio-group>
+        </div>
+
+        <!-- Deny Action Form -->
+        <div *ngIf="formGroup.get('action').value === actionOption.deny">
+          <div fxLayout="row">
+            <div *ngIf="showDenialReasons" class="reason-select-block">
+              <div class="overhead-label">
+                PRIMARY DENIAL REASON <span class="text-required">*</span>
+              </div>
+              <mat-select
+                healtheFormValidationExtractor
+                formControlName="primaryDenialReason"
+                placeholder="Select Denial Explanation"
+                class="reason-select-block-width"
+                [attr.data-index]="index"
+                [compareWith]="compareWithReason"
+                (click)="resetPaperFooter()"
+                (valueChange)="primaryDenialReasonValueChange($event)"
+                formLabel="Primary Denial Reason"
+              >
+                <mat-option
+                  *ngFor="let reason of (primaryDenialReasons$ | async)"
+                  [value]="reason.value"
+                  >{{ reason.label }}</mat-option
+                >
+              </mat-select>
+            </div>
+            <div
+              *ngIf="showSecondDenialReason && showDenialReasons && primaryDenialReasonSupportsSecondaryDenialReason"
+              class="reason-select-block"
+            >
+              <span
+                class="overhead-label"
+                id="secondary-denial-reason-label--{{ index }}"
+                >SECONDARY DENIAL REASON</span
+              >
+              <mat-select
+                formControlName="secondaryDenialReason"
+                placeholder="Select Denial Explanation"
+                class="reason-select-block-width"
+                [attr.data-index]="index"
+                [compareWith]="compareWithReason"
+                (click)="resetPaperFooter()"
+              >
+                <mat-option
+                  *ngFor="let reason of (secondaryDenialReasons$ | async)"
+                  [value]="reason.value"
+                  >{{ reason.label }}</mat-option
+                >
+              </mat-select>
+            </div>
+          </div>
+          <div
+            *ngIf="(showURLetterWarning$ | async)"
+            id="ur-letter-warning--{{ index }}"
+            class="text-warning"
+          >
+            The denial on Line Item {{ index + 1 }} reason results in a UR
+            letter being sent to the prescriber
+          </div>
+        </div>
+
+        <!-- Deny Action Period -->
+        <div
+          *ngIf="
+            formGroup.get('action').value === actionOption.deny &&
+            showAuthorizationPeriod
+          "
+        >
+          <div
+            id="auth-information-actions-option-label-denial-period-{{ index }}"
+            class="overhead-label"
+          >
+            DENIAL PERIOD <span class="text-required">*</span>
+          </div>
+          <mat-radio-group
+            id="auth-information-denial-period-radio-group-{{ index }}"
+            formControlName="denialPeriodType"
+            healtheFormValidationExtractor
+            formLabel="Denial Period"
+            style="margin-top: 7px"
+            [attr.data-index]="index"
+          >
+            <mat-radio-button
+              class="radio-spacing"
+              id="auth-information-denial-period-one-time-{{ index }}"
+              [value]="denialPeriodType.AUTH_INFO_DENIAL_PERIOD_ONE_TIME"
+              (click)="resetPaperFooter()"
+              >One-Time
+            </mat-radio-button>
+            <mat-radio-button
+              class="radio-spacing"
+              id="{{ index }}-auth-information-denial-period-date"
+              [value]="denialPeriodType.AUTH_INFO_DENIAL_PERIOD_DATE"
+              (click)="resetPaperFooter()"
+              >To Effective Date
+            </mat-radio-button>
+          </mat-radio-group>
+        </div>
+
+        <!-- Deny Indefinitely Actions -->
+        <healthe-authorization-action-deny-indefinitely
+          [index]="index"
+          [formGroup]="formGroup"
+          [showDenialReasons]="showDenialReasons"
+          [showSecondDenialReason]="showSecondDenialReason"
+          [primaryDenialReasons$]="primaryDenialReasons$"
+          [secondaryDenialReasons$]="secondaryDenialReasons$"
+        >
+        </healthe-authorization-action-deny-indefinitely>
+
+        <!-- Action Period -->
+        <div
+          class="approval-period-container"
+          style="margin-left: 88px"
+          *ngIf="
+            (((formGroup.get('action').value === actionOption.approve ||
+              formGroup.get('action')?.value ===
+                actionOption.recommendApprove) &&
+              formGroup.get('approvalPeriodType').value ===
+                approvalPeriodType.AUTH_INFO_APPROVAL_PERIOD_DATE) ||
+              (formGroup.get('action').value === actionOption.deny &&
+                formGroup.get('denialPeriodType').value ===
+                  denialPeriodType.AUTH_INFO_DENIAL_PERIOD_DATE &&
+                showAuthorizationPeriod)) &&
+            !isOneTimeOnly
+          "
+        >
+          <div
+            id="auth-information-actions-option-label-effective-to--{{ index }}"
+            class="overhead-label"
+          >
+            {{
+              formGroup.get('action').value === actionOption.approve ||
+              formGroup.get('action')?.value === actionOption.recommendApprove
+                ? formGroup.get('action').value === actionOption.approve
+                  ? 'APPROVED'
+                  : 'RECOMMEND APPROVE'
+                : 'DENIED'
+            }}
+            EFFECTIVE TO<span class="text-required">*</span>
+          </div>
+          <healthe-single-date-picker-control
+            *ngIf="dateConfigOptions"
+            formControlName="actionPeriodDate"
+            id="effective-to-date-picker--{{ index }}"
+            healtheFormValidationExtractor
+            formLabel="Effective To Date"
+            [options]="dateConfigOptions"
+            [attr.data-index]="index"
+            (click)="resetPaperFooter()"
+          >
+          </healthe-single-date-picker-control>
+
+          <mat-error
+            *ngIf="
+              formGroup.get('actionPeriodDate').getError('dateMustBeInFuture')
+            "
+            id="{{index}}-auth-information-pendReasonExpiresDate-all-datepicker-pastValidation"
+            >Please enter a date in the future.
+          </mat-error>
+          <mat-error
+            *ngIf="
+              formGroup.get('actionPeriodDate').getError('dateBeyondMaxDate')
+            "
+            id="{{index}}-auth-information-pendReasonExpiresDate-all-datepicker-pastValidation"
+            >Please enter an earlier date.
+          </mat-error>
+          <mat-error
+            *ngIf="
+              formGroup.get('actionPeriodDate').getError('required') &&
+              formGroup.get('actionPeriodDate').touched
+            "
+            id="{{index}}-auth-information-pendReasonExpiresDate-all-datepicker-requiredValidation"
+            >Please enter a date.
+          </mat-error>
+        </div>
+      </div>
+      <!-- LOMN -->
+      <div
+        fxLayout="row"
+        fxLayoutAlign="end end"
+        fxLayoutGap="35px"
+        *ngIf="!userIsInternal"
+      >
+        <span
+          class="lomnSent"
+          *ngIf="
+            pbmInfoAndActionsData.lomnActionDate &&
+            pbmInfoAndActionsData.lomnAction &&
+            !pbmInfoAndActionsData.lomnAction.equalsIgnoreCase('Not Sent')
+          "
+        >
+          LOMN {{ pbmInfoAndActionsData.lomnAction }} on
+          {{ pbmInfoAndActionsData.lomnActionDate }}
+        </span>
+        <button
+          *ngIf="pbmInfoAndActionsData.lomnSupported"
+          [routerLink]="'../createLomn/'.concat(lineItem.ndc)"
+          mat-flat-button
+          class="primary-button"
+        >
+          REQUEST LOMN
+        </button>
+      </div>
+      <!-- ByPass Prior Auth -->
+      <div
+        fxLayout="row"
+        fxLayoutAlign="end end"
+        fxLayoutGap="35px"
+        *ngIf="true === userIsInternal"
+      >
+        <button
+          *ngIf="showByPassPriorLoadButton"
+          mat-flat-button
+          class="primary-button"
+          (click)="submitByPassPriorAuthLoad()"
+        >
+          BYPASS PRIOR AUTH LOAD
+        </button>
+      </div>
+    </div>
+  </div>
+  <div
+    *ngIf="
+      hasDenialReason &&
+      mode === PbmAuthFormMode.ReadOnly &&
+      (formGroup.get('action').value === actionOption.deny ||
+        formGroup.get('action').value === actionOption.denyIndefinitely)
+    "
+  >
+    <b>Reason(s) for Denial:</b>
+    <ul>
+      <li *ngIf="formGroup.get('primaryDenialReason').value">
+        {{ getDenialReason(formGroup.get('primaryDenialReason').value) }}
+      </li>
+      <li *ngIf="formGroup.get('secondaryDenialReason').value">
+        {{ getDenialReason(formGroup.get('secondaryDenialReason').value) }}
+      </li>
+    </ul>
+  </div>
+  <hr *ngIf="!displayDoActions()" />
+  <!-- There nothing to action for the current user -->
+  <div *ngIf="!displayDoActions()">
+    <p>There are no available actions needed for this medication.</p>
+  </div>
+</div>
+<div class="spacersmall"></div>

@@ -1,0 +1,163 @@
+<div class="spacersmall"></div>
+<mat-card>
+  <mat-card-title id="icd-code-header">ICD Codes</mat-card-title>
+  <mat-card-content>
+    <div fxLayout="row wrap" class="eligibilityBox" fxLayoutGap="20px">
+      <div fxFlex="150px">
+        <div [id]="'injuryDate'" class="overhead-label">DATE OF INJURY</div>
+        <div [id]="'injuryDate-value'" class="standard-text ellipsis-text">
+          <span> {{ (eligibilityInfo$ | async).injuryDate }}</span>
+        </div>
+      </div>
+      <div fxFlex="300px">
+        <div [id]="'injuryDescription'" class="overhead-label">INJURY</div>
+        <div [id]="'injuryDescription-value'" class="standard-text">
+          <span> {{ (eligibilityInfo$ | async).injuryDescription }}</span>
+        </div>
+      </div>
+      <div>
+        <div [id]="'accidentDescription'" class="overhead-label">ACCIDENT</div>
+        <div [id]="'accidentDescription-value'" class="standard-text">
+          <span> {{ (eligibilityInfo$ | async).accidentDescription }}</span>
+        </div>
+      </div>
+    </div>
+
+    <div style="overflow-x: scroll; margin-top: 11px; z-index: 90;">
+      <table
+        mat-table
+        style="min-width: 1500px"
+        [dataSource]="(icdCodeSet$ | async)?.icds"
+      >
+        <ng-container matColumnDef="icdCode">
+          <th
+            mat-header-cell
+            id="icdTable-header-icdCode"
+            class="healthe-table-cell tableHeader"
+            *matHeaderCellDef
+            style="width: 75px;"
+          >
+            CODE
+          </th>
+          <td
+            #icdCode
+            mat-cell
+            class="healthe-table-cell tableHeader"
+            [id]="'icdTable-cell-icdCode-' + i"
+            *matCellDef="let data; let i = index"
+          >
+            <span [matTooltip]="data.icdCode"> {{ data.icdCode }} </span>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="icdVersion">
+          <th
+            mat-header-cell
+            id="icdTable-header-icdVersion"
+            class="healthe-table-cell tableHeader"
+            *matHeaderCellDef
+            style="width: 90px;"
+          >
+            VERSION
+          </th>
+          <td
+            #icdVersion
+            mat-cell
+            class="healthe-table-cell"
+            [id]="'icdTable-cell-icdVersion-' + i"
+            *matCellDef="let data; let i = index"
+          >
+            <span [matTooltip]="data.icdVersion"> {{ data.icdVersion }} </span>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="compensabilityDescription">
+          <th
+            mat-header-cell
+            id="icdTable-header-compensabilityDescription"
+            class="healthe-table-cell tableHeader"
+            *matHeaderCellDef
+            style="width: 250px;"
+          >
+            COMPENSABLE
+          </th>
+          <td
+            #compensabilityDescription
+            mat-cell
+            class="healthe-table-cell"
+            [id]="'icdTable-cell-compensabilityDescription-' + i"
+            *matCellDef="let data; let i = index"
+          >
+            <span [matTooltip]="data.compensabilityDescription">
+              {{ data.compensabilityDescription }}
+            </span>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="icdDescription">
+          <th
+            mat-header-cell
+            id="icdTable-header-icdDescription"
+            class="healthe-table-cell tableHeader"
+            *matHeaderCellDef
+          >
+            DESCRIPTION
+          </th>
+          <td
+            #icdDescription
+            mat-cell
+            class="healthe-table-cell"
+            [id]="'icdTable-cell-icdDescription-' + i"
+            *matCellDef="let data; let i = index"
+            style="white-space: normal;"
+          >
+            <span [matTooltip]="data.icdDescription">
+              {{ data.icdDescription }}
+            </span>
+          </td>
+        </ng-container>
+
+        <tr
+          mat-header-row
+          style="height: 50px !important;"
+          *matHeaderRowDef="tableColumns; sticky: true"
+        ></tr>
+        <tr
+          mat-row
+          [hidden]="isLoading$ | async"
+          *matRowDef="let row; columns: tableColumns; let i = index"
+        ></tr>
+      </table>
+    </div>
+    <div
+      id="icdCodesLoadingDataSpinner"
+      class="healthe-table--centered-container"
+      fxLayout="column"
+      fxLayoutAlign="center center"
+    >
+      <ng-container *ngIf="(isLoading$ | async)">
+        <mat-spinner [diameter]="55"></mat-spinner>
+        <h2>Loading results...</h2>
+      </ng-container>
+
+      <ng-container
+        *ngIf="
+          (icdCodeSet$ | async)?.icds.length === 0 && !(isLoading$ | async)
+        "
+      >
+        <img
+          style="margin-top: 25px;"
+          alt="No icd codes found for this claim"
+          src="assets/img/NoDataIcon.svg"
+        />
+        <p
+          class="standard-text"
+          style="text-align:center"
+          id="icd-codes-no-data"
+        >
+          No data available
+        </p></ng-container
+      >
+    </div>
+  </mat-card-content>
+</mat-card>

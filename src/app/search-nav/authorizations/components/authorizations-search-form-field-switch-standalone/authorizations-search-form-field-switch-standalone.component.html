@@ -1,0 +1,67 @@
+<ng-container *ngIf='searchFormFieldControl'>
+  <ng-container [ngSwitch]='searchFormFieldConfig.type'>
+  <span
+    class='overhead-label {{searchFormFieldConfig.formControlName}}-field--label'
+    id='{{searchFormFieldConfig.label}}-label'
+  >{{ searchFormFieldConfig.label }}
+  </span>
+    <div *ngSwitchCase='AuthorizationSearchFormFieldType.Select'>
+      <mat-form-field>
+        <mat-select
+          class='{{searchFormFieldConfig.formControlName}}-field--select'
+          panelClass="{{searchFormFieldConfig.options.length > 12 ? 'long-virtual-scroll' : '' }}"
+          style='width: 150px;'
+          [placeholder]='searchFormFieldConfig.placeholder'
+          [formControl]='searchFormFieldControl'
+          (openedChange)='selectOpenChange($event)'
+          (keydown)='selectKeyPressed($event)'
+          id='{{searchFormFieldConfig.label}}-selectValueList'
+        >
+          <cdk-virtual-scroll-viewport
+            [itemSize]='40'
+            [style.height.px]='searchFormFieldConfig.options.length * 40'
+            style='width: 375px;margin-right: -29px'
+          >
+            <mat-option
+              class='{{searchFormFieldConfig.formControlName}}-field--option'
+              *cdkVirtualFor='
+              let option of searchFormFieldConfig.options;
+              let i = index
+            '
+              value='{{option.value}}'
+              id='{{searchFormFieldConfig.label}}-selectValueListOption-{{i}}'
+            >{{ option.label }}</mat-option
+            >
+          </cdk-virtual-scroll-viewport>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div *ngSwitchCase='AuthorizationSearchFormFieldType.Text'>
+      <mat-form-field
+        class='{{searchFormFieldConfig.formControlName}}-field--form-field'
+      >
+        <input
+          class='{{searchFormFieldConfig.formControlName}}-field--input'
+          matInput
+          [formControl]='searchFormFieldControl'
+          placeholder='{{searchFormFieldConfig.placeholder}}'
+          id='{{searchFormFieldConfig.label}}-input'
+        />
+      </mat-form-field>
+    </div>
+    <!-- UNTESTED: Could be helpful for future searches using a date range parameter. Should
+     be tested with validations, presets, reset, and default value -->
+    <!--    <div *ngSwitchCase='AuthorizationSearchFormFieldType.DateRange'>-->
+    <!--      <healthe-daterange-->
+    <!--        class='{{searchFormFieldConfig.formControlName}}-field&#45;&#45;date-range'-->
+    <!--        [hasSubmit]='false'-->
+    <!--        [options]='-->
+    <!--        searchFormFieldConfig.componentConfig || defaultDateRangerPickerOptions-->
+    <!--      '-->
+    <!--        [formControl]='searchFormFieldControl'-->
+    <!--        id='{{searchFormFieldConfig.label}}-dateRange'-->
+    <!--      >-->
+    <!--      </healthe-daterange>-->
+    <!--    </div>-->
+  </ng-container>
+</ng-container>

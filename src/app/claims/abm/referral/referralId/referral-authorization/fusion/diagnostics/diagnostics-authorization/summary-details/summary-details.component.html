@@ -1,0 +1,40 @@
+<ng-container *ngIf="authNarrativeMode !== authNarrativeModePostSubmit">
+  <div fxLayout="row wrap" fxLayoutGap="35px">
+    <div fxFlex="0 0 calc(25% -35px)" fxFlex.sm="0 0 calc(50% -35px)">
+      <div
+        class="overhead-label"
+        id="diagnostics-summary-details-apptDate-label"
+      >
+        APPOINTMENT DATE
+      </div>
+      <div class="standard-text" id="diagnostics-summary-details-apptDate">
+        {{ fusionAuth ? serviceDate : '' }}
+      </div>
+    </div>
+    <div fxFlex="0 0 calc(25% -35px)" fxFlex.sm="0 0 calc(50% -35px)">
+      <div
+        class="overhead-label"
+        id="diagnostics-summary-details-authAmount-label"
+      >
+        AUTHORIZATION AMOUNT
+      </div>
+      <div class="standard-text" id="diagnostics-summary-details-authAmount">
+        {{
+          fusionAuth &&
+          fusionAuth.authorizationUnderReview.authorizationAmount != null
+            ? '$'.concat(
+                fusionAuth.authorizationUnderReview.authorizationAmount.toString()
+              )
+            : ''
+        }}
+      </div>
+    </div>
+  </div>
+  <div class="spacermedium"></div>
+</ng-container>
+
+<healthe-auth-icd-codes-display
+  [icdCodesFormControl]="icdCodesFormControl"
+  [authNarrativeMode]="authNarrativeMode"
+  [fusionAuth]="fusionAuth"
+></healthe-auth-icd-codes-display>

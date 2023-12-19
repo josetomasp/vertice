@@ -1,0 +1,72 @@
+@import 'variables';
+@import 'text';
+
+.form-group--wrapper {
+  background-color: $gray-50;
+  padding: 24px 11px 24px 11px;
+}
+.form-group--radio-group {
+  width: auto;
+  .mat-radio-button {
+    padding-right: 16px;
+  }
+}
+
+.sedan-icons {
+  @extend .inline-left-icon;
+  font-size: 1.33333em; // fa-2x
+  position: relative;
+  left: 3px;
+}
+
+.form-group--action-item {
+  height: 75px;
+  display: flex;
+  flex: 1 1 auto;
+  justify-content: center;
+  align-content: center;
+  align-items: center;
+}
+.form-group--datePicker_full-width {
+  & div.healthe-datepicker {
+    // The internal component uses inline  styles
+    // I have to use important here...
+    width: 100% !important;
+  }
+}
+
+.form-group-control-container {
+  input[type='number'] {
+    width: 100%;
+  }
+  input[type='number'].form-group--input_half {
+    width: 50%;
+  }
+
+  ::ng-deep .healthe-datepicker {
+    width: 100% !important;
+  }
+}
+
+.hcpcAndProductRadioButtons {
+  max-width: 250px;
+  min-width: 250px;
+}
+
+.tooltip-icon {
+  @extend .inline-left-icon;
+  font-size: 1.33333em; // fa-2x
+  position: relative;
+  left: 3px;
+}
+
+mat-radio-group {
+  margin-bottom: 15px;
+}
+.hideSpinner {
+  input::-webkit-outer-spin-button,
+  input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+}

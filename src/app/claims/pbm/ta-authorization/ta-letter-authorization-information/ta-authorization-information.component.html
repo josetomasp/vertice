@@ -1,0 +1,389 @@
+<div healtheServerErrorOverlayAnchor *ngrxLet="viewModel$; let viewModel">
+  <healthe-error-card
+    *ngIf="
+      (fve.errorMessages$ | async).length > 0 || viewModel.serverErrors.length > 0
+    "
+    [expanded]="true"
+  >
+    <fa-icon
+      style="
+        align-self: center;
+        color: white;
+        font-size: 18px;
+        padding-right: 8px;
+      "
+      [icon]="faExclamationTriangle"
+    >
+    </fa-icon>
+    <header><h2 style="color: white">Errors</h2></header>
+    <content>
+      <div *ngIf="(fve.errorMessages$ | async).length > 0">
+        <h4>Form Validations:</h4>
+        <ul>
+          <li *ngFor="let error of fve.errorMessages$ | async">
+            <a mat-button (click)="clickErrorLine(error)" class="">{{
+              error.message
+            }}</a>
+          </li>
+        </ul>
+      </div>
+
+      <div *ngIf="viewModel.serverErrors.length > 0">
+        <h4>Server Errors:</h4>
+        <ul>
+          <li *ngFor="let error of viewModel.serverErrors">
+            {{ error }}
+          </li>
+        </ul>
+      </div>
+    </content>
+  </healthe-error-card>
+  <div class="spacersmall"></div>
+  <mat-card
+    *ngIf="!viewModel.isTaAuthorizationLoading && viewModel.serverErrors.length === 0"
+    [formGroup]="taAuthFormGroup"
+  >
+    <mat-card-header>
+      <mat-card-title>Authorization Information</mat-card-title>
+    </mat-card-header>
+    <div *ngIf="viewModel.exParteMessage" class="ex-parte-alert--banner">
+      <fa-icon
+        class="locked-claim-alert--banner_icon"
+        [icon]="faFlag"
+      ></fa-icon>
+      <span class="standard-text">{{ viewModel.exParteMessage }}</span>
+    </div>
+    <div class="spacersmall"></div>
+
+    <mat-card-content *ngIf="!viewModel.isTaAuthorizationLoading">
+      <div
+        class="ta-letter-auth--action-card"
+        formGroupName="actionForm"
+        healtheFormValidationExtractor
+        formLabel="Action Form"
+      >
+        <!-- Row 1 -->
+        <div class="form-row">
+          <div>
+            <div class="overhead-label">
+              Action TA Letter Auth
+              <span class="required-text">*</span>
+            </div>
+            <mat-radio-group
+              formControlName="action"
+              healtheFormValidationExtractor
+              formLabel="TA Letter Auth Action"
+            >
+              <mat-radio-button value="Approve">Approve</mat-radio-button>
+              <mat-radio-button value="Deny">Deny</mat-radio-button>
+            </mat-radio-group>
+          </div>
+          <div class="label-value-group">
+            <div class="overhead-label">TYPE</div>
+            <div>{{ viewModel.taLetterFormState.actionForm.letterType }}</div>
+          </div>
+        </div>
+        <!-- Row 2 -->
+        <div class="form-row" *ngIf="viewModel.showDenialReasons">
+          <div>
+            <div class="overhead-label">
+              REASON <span class="required-text">*</span>
+            </div>
+            <mat-form-field>
+              <mat-select
+                healtheFormValidationExtractor
+                formLabel="Denial Reason"
+                placeholder="Select a Denial Reason"
+                formControlName="denialReason"
+              >
+                <mat-option
+                  *ngFor="let option of viewModel.denialReasons"
+                  [value]="option.value"
+                  >{{ option.label }}</mat-option
+                >
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div *ngIf="viewModel.showMiscellaneousReason">
+            <div class="overhead-label">
+              MISC REASON <span class="required-text">*</span>
+            </div>
+            <textarea
+              healtheFormValidationExtractor
+              formLabel="Miscellaneous Reason"
+              matInput
+              placeholder="Please enter a Miscellaneous Reason"
+              formControlName="miscellaneousReason"
+            ></textarea>
+            <p>
+              {{ viewModel.miscellaneousReasonCharactersLeft }}
+              characters left
+            </p>
+          </div>
+        </div>
+      </div>
+      <div
+        class="auth-info-form claimant-contact-form"
+        formGroupName="claimantContactInformationForm"
+        healtheFormValidationExtractor
+        formLabel="Claimant Contact Information"
+        *ngIf="viewModel.showContactForms"
+      >
+        <h3 class="primary">Claimant Contact Information</h3>
+
+        <div class="form-row">
+          <div>
+            <label class="overhead-label">CLAIMANT NAME</label>
+            <div>
+              {{
+                viewModel.taLetterFormState.claimantContactInformationForm.claimantName
+              }}
+            </div>
+          </div>
+          <div>
+            <label class="overhead-label"
+              >STREET ADDRESS <span class="required-text">*</span></label
+            >
+            <mat-form-field>
+              <input
+                healtheFormValidationExtractor
+                formLabel="Address Line 1"
+                formControlName="addressLine1"
+                type="address"
+                matInput
+                placeholder="Enter Street Address"
+              />
+            </mat-form-field>
+          </div>
+          <div>
+            <label class="overhead-label"
+              >STREET ADDRESS (APT. OR Suite #)</label
+            >
+            <mat-form-field>
+              <input
+                formControlName="addressLine2"
+                type="address"
+                matInput
+                placeholder="Enter Street Address (APT. OR Suite #)"
+              />
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="form-row">
+          <div>
+            <label class="overhead-label"
+              >City <span class="required-text">*</span></label
+            >
+            <mat-form-field>
+              <input
+                type="city"
+                formControlName="city"
+                matInput
+                placeholder="Enter City"
+                healtheFormValidationExtractor
+                formLabel="City"
+              />
+            </mat-form-field>
+          </div>
+          <div class="state-form-field">
+            <label class="overhead-label"
+              >STATE <span class="required-text">*</span></label
+            >
+            <mat-form-field>
+              <mat-select
+                healtheFormValidationExtractor
+                formLabel="State"
+                formControlName="state"
+                placeholder="Enter State"
+              >
+                <mat-option
+                  *ngFor="let option of viewModel.stateOptions"
+                  [value]="option.value"
+                  >{{ option.label }}</mat-option
+                >
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div>
+            <label class="overhead-label"
+              >ZIP CODE<span class="required-text">*</span></label
+            >
+            <mat-form-field>
+              <input
+                healtheFormValidationExtractor
+                formLabel="Zip Code"
+                type="zip"
+                formControlName="zipCode"
+                matInput
+                placeholder="Enter Zip Code"
+              />
+            </mat-form-field>
+          </div>
+          <div>
+            <label class="overhead-label">PHONE</label>
+            <mat-form-field>
+              <input
+                formControlName="phone"
+                type="phone"
+                matInput
+                placeholder="Enter Phone"
+              />
+            </mat-form-field>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="viewModel.showContactForms">
+        <div>
+          <label class="overhead-label">ATTORNEY INVOLVEMENT?</label>
+          <mat-radio-group formControlName="attorneyInvolvement">
+            <mat-radio-button [value]="true">Yes</mat-radio-button>
+            <mat-radio-button [value]="false">No</mat-radio-button>
+          </mat-radio-group>
+        </div>
+      </div>
+      <div
+        class="auth-info-form attorney-contact-form"
+        formGroupName="attorneyInformationForm"
+        healtheFormValidationExtractor
+        formLabel="Attorney Contact Information"
+        *ngIf="viewModel.showContactForms && viewModel.showAttorneyInformationForm"
+      >
+        <h3 class="primary">Attorney Contact Information</h3>
+
+        <div class="form-row">
+          <div>
+            <label class="overhead-label">ATTORNEY NAME</label>
+            <mat-form-field>
+              <input
+                type="text"
+                formControlName="attorneyName"
+                matInput
+                placeholder="Enter Attorney Name"
+              />
+            </mat-form-field>
+          </div>
+          <div>
+            <label class="overhead-label"
+              >STREET ADDRESS <span class="required-text">*</span></label
+            >
+            <mat-form-field>
+              <input
+                type="address"
+                formControlName="addressLine1"
+                matInput
+                placeholder="Enter Street Address"
+                healtheFormValidationExtractor
+                formLabel="Address Line 1"
+              />
+            </mat-form-field>
+          </div>
+          <div>
+            <label class="overhead-label"
+              >STREET ADDRESS (APT. OR Suite #)</label
+            >
+            <input
+              type="address"
+              formControlName="addressLine2"
+              matInput
+              placeholder="Enter Street Address (APT. OR Suite #)"
+            />
+          </div>
+          <div>
+            <label class="overhead-label"
+              >City <span class="required-text">*</span></label
+            >
+            <mat-form-field>
+              <input
+                healtheFormValidationExtractor
+                formLabel="City"
+                type="city"
+                formControlName="city"
+                matInput
+                placeholder="Enter City"
+              />
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="form-row">
+          <div>
+            <label class="overhead-label"
+              >STATE <span class="required-text">*</span></label
+            >
+            <mat-form-field>
+              <mat-select
+                healtheFormValidationExtractor
+                formLabel="State"
+                formControlName="state"
+                placeholder="Enter State"
+              >
+                <mat-option
+                  *ngFor="let option of viewModel.stateOptions"
+                  [value]="option.value"
+                  >{{ option.label }}</mat-option
+                >
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div>
+            <label class="overhead-label"
+              >ZIP CODE<span class="required-text">*</span></label
+            >
+            <mat-form-field>
+              <input
+                healtheFormValidationExtractor
+                formLabel="Zip Code"
+                formControlName="zipCode"
+                type="zip"
+                matInput
+                placeholder="Enter Zip Code"
+            /></mat-form-field>
+          </div>
+          <div>
+            <label class="overhead-label">EMAIL ADDRESS</label>
+            <mat-form-field>
+              <input
+                type="email"
+                formControlName="email"
+                matInput
+                placeholder="Enter Email"
+              />
+            </mat-form-field>
+          </div>
+          <div>
+            <label class="overhead-label">PHONE</label>
+            <mat-form-field>
+              <input
+                type="phone"
+                formControlName="phone"
+                matInput
+                placeholder="Enter Phone"
+              />
+            </mat-form-field>
+          </div>
+          <div>
+            <label class="overhead-label">FAX</label>
+            <mat-form-field>
+              <input
+                type="phone"
+                formControlName="fax"
+                matInput
+                placeholder="Enter Fax"
+              />
+            </mat-form-field>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <h3 class="primary">Prescribing Physicians</h3>
+      </div>
+      <div>
+        <h3 class="primary">Pharmacies</h3>
+      </div>
+      <div>
+        <!-- Is this needed? I don't remember this being in discussions in arch runway-->
+        <h3 class="primary">Transaction History</h3>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>

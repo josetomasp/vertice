@@ -1,0 +1,134 @@
+<!--
+  You might be wondering why there are useless divs and widths on things.  Two words: Internet Explorer
+-->
+<div fxLayout="row" fxLayoutAlign="space-between center">
+  <div
+    id="auth-information-transportation-actions-title-{{idIndex}}"
+    class="title"
+  >
+    <fa-icon
+      [icon]="referralAuthorizationItem.icon"
+      class="ieSvgFix"
+      style="margin-right: 10px; font-size: 22px"
+      id="auth-information-transportation-actions-title-icon-{{idIndex}}"
+    ></fa-icon>
+    <span *ngIf="referralAuthorizationItem.isAddedItem">(Added) </span>
+
+    {{ referralAuthorizationItem.title }}
+  </div>
+</div>
+<div class="spacersmall"></div>
+<ng-container *ngIf="referralAuthorizationItem.isAddedItem">
+  <div class="secondary" style="cursor: pointer" (click)="deleteThisItem()">
+    <fa-icon
+      [icon]="faTrashAlt"
+      style="margin-right: 10px; font-size: 16px;   font-weight: bold;"
+      id="auth-information-transportation-delete-button-icon-{{idIndex}}"
+    ></fa-icon>
+    Delete
+  </div>
+  <div class="spacersmall"></div>
+</ng-container>
+
+<ng-container *ngIf="false === referralAuthorizationItem.isAddedItem">
+  <healthe-referral-reason-for-review
+    [idIndex]="idIndex"
+    [reasons]="referralAuthorizationItem.reasonsReviewIsNeeded"
+  ></healthe-referral-reason-for-review>
+  <div class="spacersmall"></div>
+</ng-container>
+
+<div
+  fxLayout="row"
+  fxLayoutAlign="start start"
+  *ngIf="false === referralAuthorizationItem.isAddedItem"
+>
+  <div style="min-height: 60px">
+    <div
+      id="auth-information-transportation-actions-Radio-button-label-{{idIndex}}"
+      class="overhead-label"
+    >
+      ACTION<span
+        id="auth-information-transportation-actions-Radio-button-label-star-{{idIndex}}"
+        class="required-text"
+        >*</span
+      >
+    </div>
+
+    <mat-radio-group
+      [formControl]="formGroup.controls['AuthAction_ApprovalType']"
+      (change)="iWasTouchedRecently = true"
+    >
+      <mat-radio-button
+        [value]="AuthApprovalState.Approve"
+        class="radio-spacing"
+        id="auth-information-transportation-actions-Radio-button-Approve-{{idIndex}}"
+        >Approve</mat-radio-button
+      >
+      <mat-radio-button
+        [value]="AuthApprovalState.Deny"
+        class="radio-spacing"
+        id="auth-information-transportation-actions-Radio-button-deny-{{idIndex}}"
+      >
+        <healthe-customer-configs-label
+          defaultText="Deny"
+          elementName="deny"
+          [forcedCapitalization]="false"
+        ></healthe-customer-configs-label>
+      </mat-radio-button>
+      <mat-radio-button
+        [value]="AuthApprovalState.Pending"
+        class="radio-spacing"
+        id="auth-information-transportation-actions-Radio-button-pend-{{idIndex}}"
+        >Pend</mat-radio-button
+      >
+    </mat-radio-group>
+    <div
+      *ngIf="
+        formGroup.controls['AuthAction_ApprovalType'].invalid &&
+        formGroup.controls['AuthAction_ApprovalType'].touched
+      "
+      class="mat-error"
+      style="margin-top: 3px;margin-left: 15px;"
+    >
+      Select an action
+    </div>
+  </div>
+
+  <div *ngIf="actionReasonSelectSet" style="margin-left: 75px;">
+    <div
+      class="overhead-label"
+      id="auth-information-transportation-actions-select-label-{{idIndex}}"
+    >
+      {{ actionReasonSelectSet.selectLabel | uppercase }}
+      <span
+        id="auth-information-transportation-actions-select-reason-label-star-{{idIndex}}"
+        class="required-text"
+        >*</span
+      >
+    </div>
+    <mat-form-field>
+      <mat-select
+        [formControl]="formGroup.controls['AuthAction_ApprovalReason']"
+        [matTooltip]="formGroup.controls['AuthAction_ApprovalReason'].value"
+        [placeholder]="actionReasonSelectSet.selectPlaceholder"
+        id="auth-information-transportation-actions-select-{{idIndex}}"
+        style="width: 264px;"
+      >
+        <mat-option
+          *ngFor="
+            let reason of actionReasonSelectSet.selectReasons;
+            let i = index
+          "
+          [value]="reason"
+          id="auth-information-transportation-actions-select-option-{{i}}-{{idIndex}}"
+          >{{ reason }}</mat-option
+        >
+      </mat-select>
+      <mat-error>{{ actionReasonSelectSet.errorMessage }}</mat-error>
+    </mat-form-field>
+  </div>
+</div>
+
+<div class="spacertiny"></div>
+<mat-divider [inset]="true"></mat-divider>

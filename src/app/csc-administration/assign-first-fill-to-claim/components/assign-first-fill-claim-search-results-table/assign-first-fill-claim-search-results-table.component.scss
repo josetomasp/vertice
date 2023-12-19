@@ -1,0 +1,17 @@
+@import 'variables';
+
+// Style added to align "Items per page:" with the "{pageSize}" value which was messed up from the libraries' _matPaginator.scss
+::ng-deep
+  healthe-assign-first-fill-to-claim
+  .assign-first-fill-to-claim-wrapper
+  healthe-assign-first-fill-claim-search-results-table {
+  .mat-paginator-page-size-label {
+    position: inherit !important;
+    top: inherit !important;
+  }
+
+  .mat-radio-checked .mat-radio-outer-circle {
+    border-color: $secondary !important;
+    opacity: 1 !important;
+  }
+}

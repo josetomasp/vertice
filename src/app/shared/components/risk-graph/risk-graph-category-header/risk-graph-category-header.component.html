@@ -1,0 +1,34 @@
+<mat-card fxLayout="row wrap" fxLayoutGap="35px" id="riskMetric-container">
+  <div
+    class="category-metric"
+    fxLayoutGap="6px"
+    fxLayout="column"
+    *ngFor="let metric of (riskMetrics$ | async)"
+    [id]="'riskMetric-' + metric.name"
+  >
+    <a
+      (click)="metricClicked.emit(metric.name)"
+      [ngStyle]="{ color: ColorMap[metric.name] }"
+      mat-button
+      >{{ metric.name }}</a
+    >
+    <span [matTooltip]="'% Indicates change from previous month'">
+      <i
+        *ngIf="metric.riskIncreased != null"
+        class="far"
+        [ngClass]="{
+          'fa-arrow-up danger': metric.riskIncreased,
+          'fa-arrow-down success': !metric.riskIncreased
+        }"
+      ></i>
+      {{ metric.riskPercentage }}</span
+    >
+  </div>
+  <div fxLayout="column" fxLayoutAlign="center center">
+    <i
+      id="riskMetric-info-icon"
+      [matTooltip]="'% Indicates change from previous month'"
+      class="far fa-info-circle infoIcon"
+    ></i>
+  </div>
+</mat-card>

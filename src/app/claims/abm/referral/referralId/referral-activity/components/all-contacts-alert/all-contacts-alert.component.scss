@@ -1,0 +1,13 @@
+.all-contact-attempts-alert {
+  display: flex;
+  flex-direction: row;
+  padding-top: 15px;
+  padding-bottom: 15px;
+  & .button-link {
+    margin-left: 8px;
+    align-self: center;
+  }
+  & .sub-title {
+    font-style: italic;
+  }
+}

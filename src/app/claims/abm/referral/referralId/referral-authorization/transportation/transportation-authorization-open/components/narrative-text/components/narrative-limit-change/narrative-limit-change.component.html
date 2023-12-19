@@ -1,0 +1,130 @@
+<div
+  fxLayout="row wrap"
+  fxLayoutAlign="start center"
+  *ngIf="authNarrativeMode != 'PostSubmit'"
+>
+  <div
+    class="textLine"
+    style="margin-right: 10px;"
+    id="narrative-limit-change-startText"
+  >
+    You {{ narrativeTextItem.actionDescriptor }} an additional
+  </div>
+  <div style="width: 80px;margin-right: 10px;">
+    <mat-form-field
+      class="quantityInputLimitChange"
+      *ngIf="!authNarrativeConfig.quantity.useFormControl"
+    >
+      <input
+        matInput
+        [formControl]="tripsInputFC"
+        min="0"
+        type="number"
+        id="narrative-limit-change-trips-input"
+      />
+      <mat-error *ngIf="tripsInputFC.hasError('greaterThanZero')"
+        >Value entered must be greater than zero
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field
+      class="quantityInputLimitChange"
+      *ngIf="authNarrativeConfig.quantity.useFormControl"
+    >
+      <input
+        matInput
+        [formControl]="
+          this.formGroup.controls[this.authNarrativeConfig.quantity.controlName]
+        "
+        min="{{authNarrativeConfig.quantity.min}}"
+        type="number"
+        id="narrative-limit-change-input"
+      />
+
+      <mat-error
+        *ngIf="
+          this.formGroup.controls[
+            authNarrativeConfig.quantity.controlName
+          ].hasError('min')
+        "
+        id="narrative-limit-change-min-error"
+      >
+        Value entered cannot be less than
+        {{ this.authNarrativeConfig.quantity.min }}</mat-error
+      >
+    </mat-form-field>
+  </div>
+  <div
+    class="textLine"
+    id="narrative-limit-change-endText--{{i}}"
+    *ngFor="
+      let word of narrativeTextItem.quantityDescriptor.split(' ');
+      let i = index;
+      let last = last
+    "
+  >
+    <b>{{ word }}</b
+    ><span *ngIf="last">,</span>
+  </div>
+  <div class="textLine" id="narrative-limit-change-endText">for a total of</div>
+  <div class="textLine" id="narrative-limit-change-endText">
+    {{ newTotalDisplay }}
+  </div>
+  <div
+    class="textLine"
+    id="narrative-limit-change-endText--{{i}}"
+    *ngFor="
+      let word of narrativeTextItem.quantityDescriptor.split(' ');
+      let i = index;
+      let last = last
+    "
+  >
+    <b>{{ word }}</b
+    ><span *ngIf="last">.</span>
+  </div>
+</div>
+<div
+  fxLayout="row wrap"
+  fxLayoutAlign="start center"
+  *ngIf="authNarrativeMode === 'PostSubmit'"
+>
+  <div
+    class="textLine"
+    style="margin-right: 10px;"
+    id="narrative-limit-change-startText_post-submit"
+  >
+    You have {{ getFormattedAction() }} an additional
+  </div>
+  <div class="textLine" id="narrative-limit-change-endText_post-submit">
+    <b id="narrative-limit-change-trips-input_post-submit"
+      >{{ tripsInputFC.value }}
+    </b>
+  </div>
+  <div
+    class="textLine"
+    id="narrative-limit-change-endText--{{i}}"
+    *ngFor="
+      let word of narrativeTextItem.quantityDescriptor.split(' ');
+      let i = index;
+      let last = last
+    "
+  >
+    <b>{{ word }}</b
+    ><span *ngIf="last">,</span>
+  </div>
+  <div class="textLine" id="narrative-limit-change-endText">for a total of</div>
+  <div class="textLine" id="narrative-limit-change-endText">
+    {{ newTotalDisplay }}
+  </div>
+  <div
+    class="textLine"
+    id="narrative-limit-change-endText--{{i}}"
+    *ngFor="
+      let word of narrativeTextItem.quantityDescriptor.split(' ');
+      let i = index;
+      let last = last
+    "
+  >
+    <b>{{ word }}</b
+    ><span *ngIf="last">.</span>
+  </div>
+</div>

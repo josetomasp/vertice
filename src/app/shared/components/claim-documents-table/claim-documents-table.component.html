@@ -1,0 +1,117 @@
+<div *ngrxLet="viewModel$; let viewModel">
+
+<div class="spacersmall"></div>
+<mat-card>
+  <mat-card-title id="documents-title"
+    >Documents ({{ viewModel.numberOfDocuments}})
+  </mat-card-title>
+  <healthe-error-banner
+    [errorMessages]="viewModel.errors"
+    bannerTitle="Search Results Errors"
+  ></healthe-error-banner>
+  <div  *ngIf="viewModel.errors?.length > 0" class="spacersmall"></div>
+  <healthe-documents-filter-box></healthe-documents-filter-box>
+
+  <mat-paginator
+    [pageSize]="viewModel.pageSize"
+    [pageSizeOptions]="pagerSizeOptions"
+    #primaryPaginator
+  >
+  </mat-paginator>
+
+  <div
+    class="documentsView-table-scroll"
+    style="max-height: 500px; overflow: scroll"
+  >
+    <table
+      mat-table
+      matSort
+      [dataSource]="dataSource"
+      style="min-width: 1425px"
+    >
+      <ng-container
+        *ngFor="let column of documentsTableColumnsDef"
+        [matColumnDef]="column.name"
+      >
+        <th
+          mat-header-cell
+          *matHeaderCellDef
+          mat-sort-header
+          id="documents-resultsTable-{{column.name}}ColumnHeader"
+        >
+          {{ column.label | uppercase }}
+        </th>
+        <td
+          mat-cell
+          *matCellDef="let data; let rowIndex = index"
+          id="documents-resultsTable-{{column.name}}ColumnData-{{rowIndex}}"
+        >
+          <a
+            *ngIf="column.link && column.name === 'documentDescription'"
+            style="text-align: left;"
+            class="ie-ellipsis"
+            [href]="data.serviceType.includes('LOMN')?localizeURI(data.documentURI, customerId$ | async, claimNumber$ | async, data[column.name]):data.documentURI"
+            mat-button
+            target="_blank"
+            id="documents-resultsTable-{{column.name}}ColumnData-link{{rowIndex}}"
+          >
+            {{ data[column.name] }}
+          </a>
+          <a
+            *ngIf="column.link && column.name === 'documentSource'"
+            style="text-align: left;"
+            class="ie-ellipsis"
+            (click)="openDocumentRelatedTransURL(data)"
+            href="javascript:void(0)"
+            mat-button
+            id="documents-resultsTable-{{column.name}}ColumnData-link{{rowIndex}}"
+          >
+            {{ data[column.name] }}</a
+          >
+          <ng-container *ngIf="!column.link">
+            {{ data[column.name] }}
+          </ng-container>
+        </td>
+      </ng-container>
+
+      <tr
+        mat-header-row
+        *matHeaderRowDef="displayedDocumentColumnsNames; sticky: true"
+      ></tr>
+      <tr
+        mat-row
+        *matRowDef="let row; columns: displayedDocumentColumnsNames"
+        [hidden]="dataSource.filteredData.length === 0 && viewModel.isLoading"
+      ></tr>
+    </table>
+
+    <div
+      fxLayout="column"
+      fxLayoutAlign="center center"
+      style="margin-top: 10px;"
+    >
+      <ng-container
+        *ngIf="viewModel.numberOfDocuments === 0 && !viewModel.isLoading"
+      >
+        <img
+          alt="No documents found for this claim"
+          src="assets/img/NoDataIcon.svg"
+        />
+        <p class="standard-text">
+          {{ getNoDocumentsVerbiage() }}
+        </p></ng-container
+      >
+      <ng-container *ngIf="viewModel.isLoading">
+        <mat-spinner
+          [diameter]="55"
+          id="documents-resultsTable-loadingResultsSpinner"
+        ></mat-spinner>
+        <h2 id="documents-resultsTable-loadingResultsMessage">
+          Loading results...
+        </h2>
+      </ng-container>
+    </div>
+  </div>
+  <mat-paginator #secondaryPaginator></mat-paginator>
+</mat-card>
+</div>

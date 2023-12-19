@@ -1,0 +1,173 @@
+<div id="preferences-content">
+  <div class="preferences-wrapper">
+    <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap.lt-md="35px">
+      <span
+        fxFlex="50"
+        id="preferences-userPreferencesTitle"
+        class="header-bar-title"
+        >User Preferences</span
+      >
+
+      <!-- TODO - Hook Back button into routing -->
+      <div fxFlex="50" fxLayout="row" fxLayoutAlign="end center">
+        <button
+          mat-button
+          class="info-button-borderless"
+          onclick="history.back()"
+          id="preferences-header-back-button"
+        >
+          Back to Vertice
+        </button>
+      </div>
+    </div>
+
+    <div class="spacersmall"></div>
+
+    <mat-expansion-panel
+      id="generalPreference-expansionPanel"
+      #generalSettings="matExpansionPanel"
+      [expanded]="isGeneralSettingsExpanded$ | async"
+    >
+      <mat-expansion-panel-header
+        (click)="generalSettingsExpandToggle(generalSettings.expanded)"
+        collapsedHeight="20px"
+        expandedHeight="20px"
+      >
+        <mat-panel-title id="generalPreference-settingsTitle"
+          >General Settings
+        </mat-panel-title>
+        <span
+          class="expansion-panel--header-expandable--text"
+          id="generalPreference-expandText"
+          >{{ getActionText(generalSettings.expanded) }}</span
+        ></mat-expansion-panel-header
+      >
+      <div *matExpansionPanelContent>
+        <healthe-general-settings
+          #generalSettingsControls
+        ></healthe-general-settings>
+      </div>
+    </mat-expansion-panel>
+
+    <div class="spacersmall"></div>
+
+    <mat-expansion-panel
+      id="claimViewBannerPreferences-expansionPanel"
+      #claimViewBannerSettings="matExpansionPanel"
+      [expanded]="isClaimViewBannerExpanded$ | async"
+    >
+      <mat-expansion-panel-header
+        (click)="
+          claimViewBannerPreferencesExpandToggle(
+            claimViewBannerSettings.expanded
+          )
+        "
+        collapsedHeight="20px"
+        expandedHeight="20px"
+      >
+        <mat-panel-title id="claimViewBannerPreferences-settingsTitle"
+          >Claim View Banner
+        </mat-panel-title>
+        <span
+          class="expansion-panel--header-expandable--text"
+          id="claimViewBannerPrefernces-expandText"
+          >{{ getActionText(claimViewBannerSettings.expanded) }}</span
+        >
+      </mat-expansion-panel-header>
+      <div *matExpansionPanelContent>
+        <healthe-claim-view-banner-settings
+          #claimViewBannerControls
+        ></healthe-claim-view-banner-settings>
+      </div>
+    </mat-expansion-panel>
+
+    <div class="spacersmall"></div>
+
+    <mat-expansion-panel
+      id="claimTableListsPreference-expansionPanel"
+      #claimViewLists="matExpansionPanel"
+      [expanded]="isClaimViewListsExpanded$ | async"
+    >
+      <mat-expansion-panel-header
+        (click)="claimViewListsPreferencesExpandToggle(claimViewLists.expanded)"
+        collapsedHeight="20px"
+        expandedHeight="20px"
+      >
+        <mat-panel-title id="claimTableListsPreference-settingsTitle"
+          >Claim Table List<a name="claimtablelist"></a>
+        </mat-panel-title>
+        <span
+          class="expansion-panel--header-expandable--text"
+          id="claimViewListsPrefernces-expandText"
+          >{{ getActionText(claimViewLists.expanded) }}</span
+        >
+      </mat-expansion-panel-header>
+      <div *matExpansionPanelContent>
+        <healthe-claim-activity-table-lists
+          #claimTableListControls
+        ></healthe-claim-activity-table-lists>
+      </div>
+    </mat-expansion-panel>
+  </div>
+</div>
+
+<footer class="footer">
+  <mat-card
+    fxLayout="row"
+    fxLayoutAlign="space-between"
+    fxLayout.lt-sm="column"
+    fxLayoutGap.lt-sm="40px"
+  >
+    <div>
+      <div fxLayout="row" fxLayoutGap="20px">
+        <!-- TODO - Hook Back button into routing -->
+        <button
+          mat-stroked-button
+          class="info-button"
+          onclick="history.back()"
+          id="preferences-footer-back-button"
+        >
+          BACK
+        </button>
+        <button
+          mat-stroked-button
+          class="info-button"
+          [disabled]="
+            !(isClaimViewBannerDirty$ | async) &&
+            !(isClaimViewListsDirty$ | async) &&
+            !(isGeneralSettingsDirty$ | async)
+          "
+          (click)="cancel()"
+          id="preferencesControls-cancel"
+        >
+          CANCEL
+        </button>
+      </div>
+    </div>
+    <div>
+      <div fxLayout="row" fxLayoutGap="20px" fxLayoutAlign="end">
+        <button
+          mat-stroked-button
+          class="secondary-button"
+          (click)="reset()"
+          id="preferencesControls-reset"
+        >
+          RESET ALL TO DEFAULT SETTINGS
+        </button>
+        <button
+          mat-flat-button
+          class="primary-button"
+          (click)="saveAll()"
+          id="preferencesControls-save"
+          [disabled]="
+            !(isClaimViewBannerDirty$ | async) &&
+            !(isClaimViewListsDirty$ | async) &&
+            !(isGeneralSettingsDirty$ | async)
+          "
+        >
+          SAVE ALL
+        </button>
+      </div>
+    </div>
+  </mat-card>
+</footer>

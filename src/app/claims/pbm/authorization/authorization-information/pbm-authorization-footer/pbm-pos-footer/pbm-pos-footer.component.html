@@ -1,0 +1,159 @@
+<mat-card class="footer" [formGroup]="pbmAuthFooterConfig.pbmAuthformGroup">
+  <mat-card-content *ngIf="mode === pbmAuthFormMode.ReadWrite">
+    <div fxLayout="row" fxLayoutGap="35px" fxLayoutAlign="space-between start">
+      <button
+        mat-stroked-button
+        class="info-button actionBarButtonAdjust"
+        id="auth-info-cancel-button"
+        (click)="cancel()"
+      >
+        {{ cancelButtonLabel }}
+      </button>
+      <div fxLayout="row" fxLayoutGap="50px" fxLayoutAlign="start start">
+        <ng-container
+          *ngIf="
+            (pbmPOSAuthConfig.showRequestedCallbackFields && userIsInternal$
+              | async) &&
+              forInternalUsersShowCallBackAndInjuredWorkerOptions &&
+            !pbmAuthFooterConfig.pbmAuthformGroup?.get(
+              'isPatientWaitingFormControl'
+            )?.value
+          "
+        >
+          <div>
+            <div class="overhead-label">ADJUSTER REQUESTED CALLBACK</div>
+
+            <div
+              fxLayout="row"
+              fxLayoutAlign="start start"
+              fxLayoutGap="20px"
+              formGroupName="adjusterRequestCallbackFormGroup"
+              healtheFormValidationExtractor
+              formLabel="Adjuster Request Callback "
+            >
+              <div>
+                <mat-form-field>
+                  <healthe-datepicker
+                    id="auth-info-adjuster-callback-date"
+                    width="175px"
+                    formControlName="date"
+                    [min]="today"
+                    healtheFormValidationExtractor
+                    formLabel="Callback Date"
+                  ></healthe-datepicker>
+                  <mat-error
+                    id="auth-info-adjuster-callback-date-error-pastDate"
+                    *ngIf="
+                      getAdjusterRequestCallbackDateFormControl().hasError(
+                        'dateIsBeforeToday'
+                      )
+                    "
+                    >Past date not allowed
+                  </mat-error>
+                </mat-form-field>
+              </div>
+
+              <mat-select
+                placeholder="Select Time"
+                id="auth-info-adjuster-callback-select-time"
+                style="width: 100px;"
+                formControlName="time"
+              >
+                <mat-option
+                  *ngFor="let item of timeDropdownValues; let i = index"
+                  [value]="item.value"
+                  id="auth-info-adjuster-callback-select-time-option-{{i}}"
+                  >{{ item.label }}</mat-option
+                >
+              </mat-select>
+            </div>
+          </div>
+        </ng-container>
+
+        <div *ngIf="(userIsInternal$ | async) && isAwaitingDecision && forInternalUsersShowCallBackAndInjuredWorkerOptions">
+          <div class="overhead-label">INJURED WORKER WAITING AT PHARMACY?</div>
+          <mat-radio-group
+            style="margin-top: 6px;"
+            formControlName="isPatientWaitingFormControl"
+            [disabled]="pbmAuthFooterConfig.isCompletedAuthorization"
+          >
+            <mat-radio-button [value]="true" style="margin-right: 20px;"
+              >Yes
+            </mat-radio-button>
+            <mat-radio-button [value]="false">No</mat-radio-button>
+          </mat-radio-group>
+        </div>
+
+        <div
+          *ngIf="!removeSendNotificationToAdjuster"
+          [style.visibility]="
+            (userIsInternal$ | async) &&
+            isAwaitingDecision &&
+            showSendNotificationToAdjuster
+              ? 'visible'
+              : 'hidden'
+          "
+        >
+          <div class="overhead-label">SEND NOTIFICATION TO ADJUSTER?</div>
+          <mat-radio-group
+            style="margin-top: 6px;"
+            formControlName="sendNotificationToAdjuster"
+            [disabled]="pbmAuthFooterConfig.isCompletedAuthorization"
+          >
+            <mat-radio-button [value]="true" style="margin-right: 20px;"
+              >Yes
+            </mat-radio-button>
+            <mat-radio-button [value]="false">No</mat-radio-button>
+          </mat-radio-group>
+        </div>
+      </div>
+      <div fxLayout="row" fxLayoutAlign="end start" fxLayoutGap="20px">
+        <button
+          *ngIf="(userIsInternal$ | async)"
+          mat-stroked-button
+          class="secondary-button actionBarButtonAdjust"
+          id="auth-info-save-button"
+          (click)="save(true)"
+        >
+          SAVE
+        </button>
+
+        <button
+          mat-stroked-button
+          trackIgnoredFeatureTrigger="posAuthSubmitAttemptWithFeatures"
+          trackFormValidationExtractionTrigger="posAuthSubmitAttemptWithErrorMessages"
+          class="success-button actionBarButtonAdjust"
+          id="auth-info-saveAndSubmit-button"
+          (click)="saveAndSubmit('submit')"
+        >
+          {{ submitButtonLabel }}
+        </button>
+      </div>
+    </div>
+  </mat-card-content>
+  <mat-card-content *ngIf="mode === pbmAuthFormMode.ReadOnly">
+    <div fxLayout="row" fxLayoutGap="35px" fxLayoutAlign="space-between center">
+      <div>
+        <button
+          *ngIf="userIsInternal"
+          mat-stroked-button
+          class="info-button"
+          id="auth-info-send-tocomplete-queue-button"
+          (click)="sendToCompletedQueue()"
+        >
+          RETURN TO COMPLETE QUEUE
+        </button>
+      </div>
+      <div>
+        <button
+          mat-stroked-button
+          class="primary-button"
+          id="auth-info-return-auth-queue-button"
+          (click)="cancel()"
+        >
+          {{ returnToQueueLabel }}
+        </button>
+      </div>
+    </div>
+  </mat-card-content>
+</mat-card>

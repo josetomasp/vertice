@@ -1,0 +1,172 @@
+<mat-card [formGroup]="parentFormGroup"
+          healtheFormValidationExtractor
+          [parentPath]="parentPath">
+  <mat-card-content>
+    <div
+      class="card-title"
+      id="create-pos-auth-prescription-{{index}}-prescriber-info-title"
+      fxLayoutAlign="start start"
+      fxLayoutGap="35px"
+    >
+      Prescriber Information
+    </div>
+    <div class="spacersmall"></div>
+    <div
+      fxLayout="row"
+      fxLayoutAlign="start stretch"
+      fxLayoutGap="35px"
+      style="width: 100%"
+    >
+      <div>
+        <div
+          class="overhead-label"
+          id="create-pos-auth-prescription-{{index}}-prescriber-prescriberId-label"
+        >
+          DEA/NPI<span class="required-text">*</span>
+        </div>
+        <mat-form-field style="height: 38px" *ngIf="!readonly">
+          <input
+            matInput
+            placeholder="Enter License Number"
+            formControlName="prescriberId"
+            healtheFormValidationExtractor
+            formLabel="Prescriber DEA/NPI"
+            id="create-pos-auth-prescription-{{index}}-prescriber-prescriberId"
+          />
+          <mat-error
+            *ngIf="
+                  parentFormGroup.get('prescriberId')?.touched &&
+                  parentFormGroup.get('prescriberId')?.hasError('required')
+                "
+          >Please enter a prescriber ID
+          </mat-error>
+        </mat-form-field>
+        <span style="height: 38px" *ngIf="readonly">
+              {{ prescriberValues.prescriberId }}</span
+        >
+      </div>
+      <div>
+        <div
+          class="overhead-label"
+          id="create-pos-auth-prescription-{{index}}-prescriber-firstName-label"
+        >
+          PRESCRIBER FIRST NAME<span *ngIf="!readonly"
+                                     class="required-text">*</span>
+        </div>
+        <mat-form-field *ngIf="!readonly">
+          <input
+            matInput
+            placeholder="Enter First Name"
+            healtheFormValidationExtractor
+            formLabel="Prescriber First Name"
+            formControlName="prescriberFirstName"
+            id="create-pos-auth-prescription-{{index}}-prescriber-firstName"
+          />
+          <mat-error
+            *ngIf="
+                  parentFormGroup.get('prescriberFirstName')?.touched &&
+                  parentFormGroup.get('prescriberFirstName')?.hasError('required')
+                "
+          >Please enter the prescriber's first name
+          </mat-error>
+        </mat-form-field>
+        <span style="height: 38px" *ngIf="readonly">
+              {{ prescriberValues.prescriberFirstName }}</span
+        >
+      </div>
+
+      <div>
+        <div
+          class="overhead-label"
+          id="create-pos-auth-prescription-{{index}}-prescriber-lastName-label"
+        >
+          PRESCRIBER LAST NAME<span *ngIf="!readonly"
+                                    class="required-text">*</span>
+        </div>
+        <mat-form-field *ngIf="!readonly">
+          <input
+            matInput
+            placeholder="Enter Last Name"
+            healtheFormValidationExtractor
+            formLabel="Prescriber Last Name"
+            formControlName="prescriberLastName"
+            id="create-pos-auth-prescription-{{index}}-prescriber-lastName"
+          />
+          <mat-error
+            *ngIf="
+                 parentFormGroup.get('prescriberLastName')?.touched &&
+                 parentFormGroup.get('prescriberLastName')?.hasError('required')
+                "
+          >Please enter the prescriber's last name
+          </mat-error>
+        </mat-form-field>
+        <span style="height: 38px" *ngIf="readonly">
+              {{ prescriberValues.prescriberLastName }}</span
+        >
+      </div>
+
+      <div *ngIf="!readonly">
+        <div class="overhead-label">&nbsp;</div>
+        <button
+          mat-flat-button
+          class="secondary-button"
+          id="create-pos-auth-prescription-{{index}}-prescriber-find-button"
+          (click)="openPrescriberModal()"
+        >
+          FIND
+        </button>
+      </div>
+
+      <div>
+        <div
+          class="overhead-label"
+          id="create-pos-auth-prescription-{{index}}-prescriber-phone-label"
+        >
+          PRESCRIBER PHONE<span class="required-text">*</span>
+        </div>
+        <mat-form-field>
+          <input
+            matInput
+            formControlName="prescriberPhone"
+            healtheFormValidationExtractor
+            id="create-pos-auth-prescription-{{index}}-prescriber-phone"
+            placeholder="(xxx) xxx-xxxx"
+            formLabel="Prescriber Phone"
+            mask="(000) 000-0000"
+          />
+          <mat-error
+            *ngIf="
+                  parentFormGroup.get('prescriberPhone')?.touched &&
+                  parentFormGroup.get('prescriberPhone')?.hasError('invalidPhoneNumber')
+                "
+          >A valid phone number is required.
+          </mat-error>
+        </mat-form-field>
+
+      </div>
+    </div>
+    <div
+      fxLayout="row"
+      fxLayoutAlign="start start"
+      fxLayoutGap="35px"
+      style="width: 100%"
+    >
+      <div  *ngIf="
+              !readonly &&
+              parentFormGroup.get('prescriberId')?.value &&
+              ( parentFormGroup.get('prescriberFirstName')?.value ||
+                parentFormGroup.get('prescriberLastName')?.value)
+            ">
+        <div class="spacersmall"></div>
+      <div
+
+        class="overhead-label"
+        id="create-pos-auth-disclaimer-{{index}}-label"
+      >
+        *If searching by both NPI and prescriber name, prescriber name will
+        be ignored.
+      </div>
+      </div>
+    </div>
+  </mat-card-content>
+</mat-card>

@@ -1,0 +1,41 @@
+@import 'variables';
+
+@media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+  .ieFixNumberOfGuests {
+    width: 91px;
+  }
+
+  .ieFixNumberOfRooms {
+    width: 91px;
+  }
+
+  .ieFixPriceOfRooms {
+    width: 145px;
+  }
+}
+
+.errorBox {
+  border: 2px $pink solid;
+  padding: 4px;
+  margin-bottom: 4px;
+  margin-top: -7px;
+}
+
+.noError {
+  padding: 6px;
+  margin-bottom: 4px;
+  margin-top: -7px;
+}
+
+.clearAppointments {
+  margin-top: 28px;
+  cursor: pointer;
+}
+
+.appointmentErrorMessage {
+  margin-top: -35px;
+}
+
+.appointmentDate {
+  width: 250px;
+}

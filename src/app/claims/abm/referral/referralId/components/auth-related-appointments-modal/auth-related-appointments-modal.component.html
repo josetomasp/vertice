@@ -1,0 +1,79 @@
+<div style="height: 460px">
+  <div
+    fxLayout="row"
+    fxLayoutAlign="space-between center"
+    mat-dialog-title
+    style="height: 60px;"
+  >
+    <span id="authRelatedAppointments--title">Related Appointments</span>
+    <button
+      mat-icon-button
+      mat-dialog-close
+      id="authRelatedAppointments--header-widget"
+    >
+      <i class="fal fa-times modal-close-widget"></i>
+    </button>
+  </div>
+
+  <div
+    style="height: 330px;overflow-x: hidden; margin-bottom: 0; margin-top: 0;"
+    mat-dialog-content
+  >
+    <div class="spacermedium"></div>
+    <ng-container *ngFor="let appointment of modalData; let i = index">
+      <div fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="35px">
+        <div fxFlex="calc(20% - 35px)">
+          <div
+            class="overhead-label"
+            id="authRelatedAppointments-apptDateTime-label-{{ i }}"
+          >
+            APPT. DATE & TIME
+          </div>
+          <div id="authRelatedAppointments-apptDate-{{ i }}">
+            {{ appointment.appointmentDate }}
+          </div>
+          <div id="authRelatedAppointments-apptTime-{{ i }}">
+            {{ appointment.appointmentTime }}
+          </div>
+        </div>
+
+        <div fxFlex="calc(20% - 35px)">
+          <div
+            class="overhead-label"
+            id="authRelatedAppointments-type-label-{{ i }}"
+          >
+            APPOINTMENT TYPE
+          </div>
+          <div id="authRelatedAppointments-type-{{ i }}">
+            {{ appointment.appointmentType }}
+          </div>
+        </div>
+
+        <div fxFlex="calc(20% - 35px)">
+          <div
+            class="overhead-label"
+            id="authRelatedAppointments-apptDateTime-doctorNameSpecialty-{{ i }}"
+          >
+            DOCTOR NAME & SPECIALTY
+          </div>
+          <div id="authRelatedAppointments-doctorNameSpecialty-{{ i }}">
+            {{ appointment.doctorNameAndSpecialty }}
+          </div>
+        </div>
+      </div>
+
+      <div class="spacermedium"></div>
+    </ng-container>
+  </div>
+  <mat-dialog-actions style="margin-top: 10px; padding-right: 20px;">
+    <div fxFlex="row" fxLayoutAlign="end center">
+      <button
+        id="authRelatedAppointments-closeButton"
+        class="info-button mat-flat-button"
+        [mat-dialog-close]="true"
+      >
+        OKAY
+      </button>
+    </div>
+  </mat-dialog-actions>
+</div>

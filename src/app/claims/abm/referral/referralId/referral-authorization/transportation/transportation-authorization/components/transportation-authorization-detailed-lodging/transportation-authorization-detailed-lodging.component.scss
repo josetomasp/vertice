@@ -1,0 +1,15 @@
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.detailed-lodging {
+  &--select-width {
+    width: 110px;
+  }
+}
+
+.appointmentInfo {
+  margin-bottom: 15px;
+}

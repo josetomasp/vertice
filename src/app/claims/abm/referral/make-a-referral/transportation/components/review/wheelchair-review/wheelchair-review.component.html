@@ -1,0 +1,25 @@
+<healthe-dates-and-range-composite-review
+  [usingReturnedFormState]="usingReturnedFormState"
+  [step]="TRANSPORTATION_WHEELCHAIR_SUPPORT_STEP_NAME"
+  [sectionTitle]="sectionTitle"
+></healthe-dates-and-range-composite-review>
+<div class="spacersmall"></div>
+<div fxLayout="row" fxLayoutGap="35px">
+  <div fxFlex="0 0 calc({{columnSpacing}}% -35px)">
+    <div class="overhead-label" id="wheelchair-review-stairs-label">
+      STAIRS/STEPS
+    </div>
+    <div class="standard-text" id="wheelchair-review-stairs">
+      {{ displayData['steps'] }}
+    </div>
+  </div>
+
+  <div fxFlex="0 0 calc({{columnSpacing}}% -35px)">
+    <div class="overhead-label" id="wheelchair-review-wheelchairType-label">
+      WHEELCHAIR TYPE
+    </div>
+    <div class="standard-text" id="wheelchair-review-wheelchairType">
+      {{ displayData['wheelchairType'] }}
+    </div>
+  </div>
+</div>

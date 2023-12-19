@@ -1,0 +1,24 @@
+<div
+  fxLayout="row"
+  fxLayoutAlign="space-between center"
+  mat-dialog-title
+  style="height: 60px;"
+>
+  <span id="reasons--title">Reason(s) Review is Needed</span>
+  <button mat-icon-button mat-dialog-close id="reasons--header-widget">
+    <i class="fal fa-times modal-close-widget"></i>
+  </button>
+</div>
+<div mat-dialog-content>
+  <ol class="reasons--list">
+    <li class="reasons--list--item" *ngFor="let reason of reasons">
+      {{ reason }}
+    </li>
+  </ol>
+
+  <div fxLayout="row" fxLayoutAlign="end">
+    <button mat-stroked-button class="info-button" mat-dialog-close>
+      OKAY
+    </button>
+  </div>
+</div>

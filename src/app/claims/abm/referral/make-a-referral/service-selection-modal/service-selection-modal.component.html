@@ -1,0 +1,58 @@
+<div class='service-selection-modal'>
+  <div
+    class='service-selection-modal__title'
+    mat-dialog-title
+  >
+    <span id='AddAService--title'>Add a Service</span>
+    <button mat-icon-button mat-dialog-close
+            id='AddAService--header-closeButton'>
+      <i class='fal fa-times modal-close-widget'></i>
+    </button>
+  </div>
+  <mat-dialog-content class='service-selection-modal__content'>
+    <div class='spacersmall'></div>
+    <p>Check the additional services you wish to add to this referral.</p>
+    <div class='spacersmall'></div>
+
+    <ng-container *ngIf='formGroup'>
+      <div
+        [formGroup]='formGroup'
+        class='service-selection-modal__content__form'
+      >
+        <div *ngFor='let option of serviceOptions'
+             class='service-selection-modal__content__form__option'>
+          <mat-checkbox
+            [formControlName]='option.name'
+            [disabled]='option.isDisabled'
+            id='AddAService-serviceSelection-{{option.name}}-checkbox'
+          ><span id='AddAService-serviceSelection-{{option.name}}-label'
+          >{{ option.name }}
+          </span>
+          </mat-checkbox>
+        </div>
+      </div>
+    </ng-container>
+  </mat-dialog-content>
+  <mat-dialog-actions
+    class='service-selection-modal__actions'
+  >
+    <button
+      id='bottomCancel-button'
+      class='info-button service-selection-modal__actions__item'
+      mat-stroked-button
+      [mat-dialog-close]='true'
+    >
+      CANCEL
+    </button>
+
+    <button
+      id='bottomAdd-button'
+      class='primary-button mat-flat-button mat-primary service-selection-modal__actions__item'
+      mat-button
+      [disabled]='!isAddServiceEnabled()'
+      (click)='addServices()'
+    >
+      ADD
+    </button>
+  </mat-dialog-actions>
+</div>

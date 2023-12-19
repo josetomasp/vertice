@@ -1,0 +1,123 @@
+<div [formGroup]="parentFormGroup">
+  <div fxLayout="row wrap" fxLayoutAlign="start start" fxLayoutGap="20px">
+    <div class="ieDatePickerFix">
+      <span
+        class="overhead-label"
+        id="{{idPrefix}}-wizard-date-range-startDateField-label"
+        >START DATE<span class="required-text">*</span></span
+      >
+      <mat-form-field class="show-one-error">
+        <healthe-datepicker
+          formControlName="startDate"
+          id="{{idPrefix}}-wizard-date-range-startDateField-input"
+        >
+        </healthe-datepicker>
+        <mat-error
+          *ngIf="parentFormGroup.get('startDate').getError('required')"
+          id="{{idPrefix}}-wizard-date-range-startDate-required-error"
+          >Select a start date
+        </mat-error>
+        <mat-error
+          *ngIf="parentFormGroup.get('startDate').getError('invalidDate')"
+          id="{{idPrefix}}-wizard-date-range-startDate-invalid-error"
+          >The date entered is invalid
+        </mat-error>
+        <mat-error
+          *ngIf="parentFormGroup.get('startDate').getError('invalidDateRange')"
+          id="{{idPrefix}}-wizard-date-range-startDate-invalidrange-error"
+          >End Date cannot be before Start Date
+        </mat-error>
+      </mat-form-field>
+    </div>
+    <div class="ieDatePickerFix">
+      <span
+        class="overhead-label"
+        id="{{idPrefix}}-wizard-date-range-endDateField-label"
+        >END DATE<span class="required-text">*</span></span
+      >
+      <mat-form-field class="show-one-error">
+        <healthe-datepicker
+          formControlName="endDate"
+          id="{{idPrefix}}-wizard-date-range-endDateField-input"
+        >
+        </healthe-datepicker>
+        <mat-error
+          *ngIf="parentFormGroup.get('endDate').getError('required')"
+          id="{{idPrefix}}-wizard-date-range-endDate-required-error"
+          >Select an end date
+        </mat-error>
+        <mat-error
+          *ngIf="parentFormGroup.get('endDate').getError('invalidDate')"
+          id="{{idPrefix}}-wizard-date-range-endDate-invalid-error"
+          >The date entered is invalid
+        </mat-error>
+        <mat-error
+          *ngIf="parentFormGroup.get('endDate').getError('invalidDateRange')"
+          id="{{idPrefix}}-wizard-date-range-endDate-invalidrange-error"
+          >End Date cannot be before Start Date
+        </mat-error>
+      </mat-form-field>
+    </div>
+    <div>
+      <span
+        class="overhead-label"
+        id="{{idPrefix}}-wizard-date-range-tripsAuthorized-label"
+        ># OF TRIPS AUTHORIZED<span class="required-text">*</span></span
+      >
+      <mat-form-field
+        ><input
+          matInput
+          formControlName="tripsAuthorized"
+          id="{{idPrefix}}-wizard-date-range-tripsAuthorized-input"
+          (blur)="validateTrips()"
+        />
+        <mat-error
+          id="{{idPrefix}}-wizard-date-range-tripsAuthorized-error-required"
+          *ngIf="
+            parentFormGroup.controls['tripsAuthorized'].hasError(
+              'tripsOrUnlimited'
+            )
+          "
+        >
+          Please enter a number of trips or choose 'Unlimited # of trips'.
+        </mat-error>
+      </mat-form-field>
+    </div>
+    <div>
+      <span
+        class="overhead-label"
+        id="{{idPrefix}}-wizard-date-range-unlimitedTrips-label"
+        style="padding-bottom: 4px"
+        >UNLIMITED # OF TRIPS?<span class="required-text">*</span></span
+      >
+
+      <mat-checkbox
+        id="{{idPrefix}}-wizard-date-range-unlimitedTrips-input"
+        formControlName="unlimitedTrips"
+        (change)="unlimitedTripsUpdated($event)"
+      >
+      </mat-checkbox>
+    </div>
+  </div>
+  <div class="spacersmall"></div>
+  <healthe-approved-locations-form
+    [idPrefix]="idPrefix"
+    [parentFormGroup]="parentFormGroup"
+    [serviceActionType]="serviceActionType"
+    [withTwoLocations]="withTwoLocations"
+  ></healthe-approved-locations-form>
+  <div class="spacersmall"></div>
+  <div>
+    <span class="overhead-label" id="{{idPrefix}}-wizard-date-range-notes-label"
+      >NOTES (optional)</span
+    >
+    <mat-form-field>
+      <textarea
+        matInput
+        placeholder="Enter notes"
+        formControlName="notes"
+        id="{{idPrefix}}-wizard-date-range-notes-input"
+      ></textarea>
+    </mat-form-field>
+  </div>
+</div>

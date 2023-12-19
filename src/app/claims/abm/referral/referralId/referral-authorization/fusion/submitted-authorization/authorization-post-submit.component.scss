@@ -1,0 +1,10 @@
+@import 'variables';
+
+.submitted-banner {
+  background-color: $gray-200;
+  color: $secondary;
+  border-radius: 2px;
+  fa-icon {
+    margin-right: 16px;
+  }
+}

@@ -1,0 +1,7 @@
+.mat-expansion-panel-header[aria-disabled='true'] {
+  color: inherit;
+}
+
+::ng-deep .mat-expansion-panel-body {
+  padding: 15px !important;
+}

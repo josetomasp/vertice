@@ -1,0 +1,4 @@
+<a *ngIf="isLinkEnabled"  [attr.data-testid]="pendoID" style="cursor: pointer" (click)="showModal($event)">
+  {{ displayText }}
+</a>
+<span *ngIf="!isLinkEnabled"> {{ displayText }}</span>

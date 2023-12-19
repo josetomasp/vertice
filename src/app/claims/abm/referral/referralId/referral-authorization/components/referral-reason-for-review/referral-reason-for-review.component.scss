@@ -1,0 +1,12 @@
+@import 'variables';
+
+.authReasonsBox {
+  border: $secondary solid 1px;
+}
+
+.reasonCount {
+  background-color: $secondary;
+  margin-left: 10px;
+  position: relative;
+  top: -2px;
+}

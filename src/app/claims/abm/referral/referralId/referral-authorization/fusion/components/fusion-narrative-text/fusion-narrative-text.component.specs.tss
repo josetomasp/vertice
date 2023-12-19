@@ -1,0 +1,23 @@
+import { render } from '@testing-library/angular';
+import { FusionNarrativeTextComponent } from './fusion-narrative-text.component';
+import { NarrativeTextComponent } from '../../../transportation/transportation-authorization-open/components/narrative-text/narrative-text.component';
+import { HttpClientModule } from '@angular/common/http';
+import { provideMockStore } from '@ngrx/store/testing';
+import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
+
+describe('FusionNarrativeTextComponent', function () {
+  async function setup() {
+    return render(FusionNarrativeTextComponent, {
+      componentProperties: {
+        narrativeTextFormGroup: new FormGroup({})
+      },
+      imports: [HttpClientModule, ReactiveFormsModule, FormsModule],
+      declarations: [NarrativeTextComponent],
+      providers: [provideMockStore({ initialState: { claimview: {} } })]
+    });
+  }
+
+  test('init', async () => {
+    await setup();
+  });
+});

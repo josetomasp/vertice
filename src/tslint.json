@@ -1,0 +1,13 @@
+{
+  "extends": "../tslint.json",
+  "rules": {
+    "no-redundant-jsdoc": false,
+    "directive-selector": [true, "attribute", "healthe", "camelCase"],
+    "component-selector": [true, "element", "healthe", "kebab-case"],
+    "whitespace": false,
+    "max-line-length": [false],
+    "quotemark": {
+      "options": ["single", "avoid-escape"]
+    }
+  }
+}

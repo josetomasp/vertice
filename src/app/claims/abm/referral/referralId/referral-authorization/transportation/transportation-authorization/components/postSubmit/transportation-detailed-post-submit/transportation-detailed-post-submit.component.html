@@ -1,0 +1,87 @@
+<mat-card>
+  <mat-card-title>
+    <div fxLayout="row" fxLayoutAlign="space-between">
+      <h3 style="margin-top: 0">Authorization Submitted</h3>
+      <button
+        mat-flat-button
+        class="primary-button"
+        id="referral-auth-review-copyToClipboard-button"
+        (click)="copyToClipboard()"
+      >
+        COPY AUTHORIZATION TO CLIPBOARD
+      </button>
+    </div>
+  </mat-card-title>
+  <mat-card-content id="referral-auth-review-section-copy-section">
+    <div class="inset-card secondary">
+      <fa-icon
+        [icon]="faCheck"
+        id="referral-auth-review-success-check-icon"
+        size="lg"
+        style="margin-right: 20px"
+      ></fa-icon
+      ><b id="referral-auth-review-success-note"
+        >You have successfully actioned this authorization.</b
+      >
+    </div>
+    <div class="spacersmall"></div>
+    <mat-card>
+      <mat-card-title>
+        <h3 style="margin: 0" id="referral-auth-review-transportation-title">
+          Transportation Authorization
+        </h3></mat-card-title
+      >
+    </mat-card>
+    <div class="spacertiny"></div>
+    <h3 id="referral-auth-review-itinerary">Itinerary</h3>
+
+    <div class="spacersmall"></div>
+    <ng-container
+      *ngFor="let authItem of formValues['authItems']; let i = index"
+    >
+      <div class="inset-card">
+        <healthe-transportation-detailed-post-submit-header
+          [authItem]="authItem"
+          [index]="i"
+        ></healthe-transportation-detailed-post-submit-header>
+        <ng-container [ngSwitch]="authItem['authorizationTypeCode']">
+          <healthe-transportation-detailed-post-submit-sedan-like
+            *ngSwitchDefault
+            [authItem]="authItem"
+          ></healthe-transportation-detailed-post-submit-sedan-like>
+          <healthe-transportation-detailed-post-submit-flight
+            *ngSwitchCase="ReferralAuthorizationTypeCode.DETAILED_FLIGHT"
+            [authItem]="authItem"
+          ></healthe-transportation-detailed-post-submit-flight>
+          <healthe-transportation-detailed-post-submit-lodging
+            *ngSwitchCase="ReferralAuthorizationTypeCode.DETAILED_LODGING"
+            [authItem]="authItem"
+          ></healthe-transportation-detailed-post-submit-lodging>
+        </ng-container>
+      </div>
+      <div class="spacersmall"></div>
+    </ng-container>
+
+    <div fxLayout="column" fxLayoutAlign="start start" fxLayoutGap="5px">
+      <div class="overhead-label" id="referral-auth-review-notes-label">
+        NOTES
+      </div>
+      <div id="referral-auth-notes-additionalNotes" class="standard-text">
+        {{ formValues['additionalNotes'] }}
+      </div>
+    </div>
+
+    <div class="spacersmall"></div>
+    <mat-divider [inset]="true"></mat-divider>
+    <div class="spacersmall"></div>
+    <div fxLayout="row" fxLayoutAlign="end start">
+      <button
+        mat-flat-button
+        class="primary-button"
+        id="referral-auth-review-returnToAuthQueue-button"
+      >
+        RETURN TO AUTHORIZATION QUEUE
+      </button>
+    </div>
+  </mat-card-content>
+</mat-card>

@@ -1,0 +1,25 @@
+<div
+  fxLayout="row"
+  fxLayoutAlign="space-between center"
+  mat-dialog-title
+  style="height: 57px;"
+>
+  <span></span>
+  <button
+    mat-icon-button
+    mat-dialog-close
+    id="external-link-modal--header-closeButton"
+  >
+    <i class="fal fa-times modal-close-widget"></i>
+  </button>
+</div>
+<mat-dialog-content
+  style="margin: 0; padding: 0; display: flex; justify-content: center; align-items: center; max-height: 82vh;"
+>
+  <iframe
+    [src]="link | safe"
+    width="100%"
+    height="750px"
+    frameborder="none"
+  ></iframe>
+</mat-dialog-content>

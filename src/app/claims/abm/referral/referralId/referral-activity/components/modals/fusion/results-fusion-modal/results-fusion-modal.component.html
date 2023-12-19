@@ -1,0 +1,212 @@
+<div fxLayout="row" fxLayoutAlign="space-between center" mat-dialog-title>
+  <span id="referralResultsModal--title">{{ modalData.title }}</span>
+  <button
+    mat-icon-button
+    mat-dialog-close
+    id="referralResultsModal--header-closeButton"
+  >
+    <i class="fal fa-times modal-close-widget"></i>
+  </button>
+</div>
+<div
+  class="view-auth-banner"
+  fxLayout="row"
+  fxLayoutAlign="space-between center"
+>
+  <span id="AuthOverview-label" class="sectionLabel"
+    >Authorization Overview</span
+  >
+</div>
+<div mat-dialog-content>
+  <div
+    fxLayout="row wrap"
+    fxLayoutAlign="space-between center"
+    class="summaryBox"
+    fxLayoutGap="20px"
+  >
+    <div>
+      <div id="referralId-label" class="overhead-label">REFERRAL ID</div>
+      <div id="referralId-value" class="standard-text ellipsis-text">
+        <span> {{ modalData.referralId }}</span>
+      </div>
+    </div>
+    <div>
+      <div id="createDate-label" class="overhead-label">SERVICE DATE</div>
+      <div id="createDate-value" class="standard-text ellipsis-text">
+        <span> {{ modalData.serviceDate }}</span>
+      </div>
+    </div>
+
+    <div>
+      <div id="status-label" class="overhead-label">STATUS</div>
+      <div id="status-value" class="standard-text ellipsis-text">
+        <span> {{ modalData.status }}</span>
+      </div>
+    </div>
+
+    <div>
+      <div id="vendorName-label" class="overhead-label">VENDOR</div>
+      <div id="vendorName-value" class="standard-text ellipsis-text">
+        <span> {{ modalData.vendorName }}</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="spacersmall"></div>
+
+  <div *ngFor="let detail of modalData.details">
+    <span id="serviceDetailType-label" class="sectionLabel">{{
+      detail.serviceDetailType
+    }}</span>
+    <div class="spacertiny"></div>
+    <div>
+      <div id="itemDescription-label" class="overhead-label">
+        ITEM DESCRIPTION
+      </div>
+
+      <div id="itemDescription-value" class="standard-text">
+        <span> {{ detail.itemDescription }}</span>
+      </div>
+    </div>
+    <div class="spacersmall"></div>
+    <div
+      fxLayout="row wrap"
+      fxLayoutAlign="space-between start"
+      fxLayoutGap="35px grid"
+    >
+      <div>
+        <div id="destination-label" class="overhead-label">DESTINATION</div>
+
+        <div id="destination-value" class="standard-text ellipsis-text">
+          <span> {{ detail.destination }}</span>
+        </div>
+      </div>
+
+      <div>
+        <div id="quantity-label" class="overhead-label">QUANTITY</div>
+
+        <div id="quantity-value" class="standard-text ellipsis-text">
+          <span> {{ detail.quantity }}</span>
+        </div>
+      </div>
+
+      <div>
+        <div id="cost-label" class="overhead-label">COST</div>
+
+        <div id="cost-value" class="standard-text ellipsis-text">
+          <span>{{ detail.cost }}</span>
+        </div>
+      </div>
+    </div>
+    <div class="spacersmall"></div>
+    <div
+      fxLayout="row wrap"
+      fxLayoutAlign="space-between start"
+      fxLayoutGap="35px grid"
+    >
+      <div>
+        <div id="fromAddr-label" class="overhead-label">FROM ADDRESS</div>
+        <div
+          *ngIf="detail.fromAddress"
+          id="fromAddr-value"
+          class="standard-text ellipsis-text"
+        >
+          <ul class="addressList">
+            <li>{{ detail.fromAddress.name }}</li>
+            <li>{{ detail.fromAddress.addressLine1 }}</li>
+            <li *ngIf="detail.fromAddress.addressLine2">
+              {{ detail.fromAddress.addressLine2 }}
+            </li>
+            <li>
+              {{ detail.fromAddress.city }}, {{ detail.fromAddress.state }}
+              {{ detail.fromAddress.zip }}
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div>
+        <div id="toAddr-label" class="overhead-label">TO ADDRESS</div>
+        <div
+          *ngIf="detail.toAddress"
+          id="toAddr-value"
+          class="standard-text ellipsis-text"
+        >
+          <ul class="addressList">
+            <li>{{ detail.toAddress.name }}</li>
+            <li>{{ detail.toAddress.addressLine1 }}</li>
+            <li *ngIf="detail.toAddress.addressLine2">
+              {{ detail.toAddress.addressLine2 }}
+            </li>
+            <li>
+              {{ detail.toAddress.city }}, {{ detail.toAddress.state }}
+              {{ detail.toAddress.zip }}
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="spacermedium"></div>
+  </div>
+  <hr style="opacity: 0.5; margin-top: 20px" />
+  <div class="spacertiny"></div>
+  <healthe-referral-notes-widget></healthe-referral-notes-widget>
+</div>
+<div mat-dialog-actions fxLayout="row" fxLayoutAlign="space-between center">
+  <button
+    class="info-button"
+    mat-stroked-button
+    (click)="closeModal()"
+    id="referralResultsModal--close-button"
+  >
+    CLOSE
+  </button>
+  <button
+    mat-button
+    class="primary-button actionButton"
+    (click)="createIncidentReport()"
+    id="referralResultsModal--create-indicent-button"
+  >
+    CREATE INCIDENT REPORT
+  </button>
+  <div>
+    <button
+      (menuClosed)="requestForInformationMenuOpened = false"
+      (menuOpened)="requestForInformationMenuOpened = true"
+      [mat-menu-trigger-for]="informationRequestMenu"
+      class="primary-button export-button"
+      id="referralResultsModal-requestForInformationButton"
+      mat-flat-button
+      style="width: 120px"
+    >
+      REQUEST
+      <i
+        class="inline-right-icon far"
+        [ngClass]="{
+          'fa-chevron-up': requestForInformationMenuOpened,
+          'fa-chevron-down': !requestForInformationMenuOpened
+        }"
+      ></i>
+    </button>
+    <mat-menu
+      #informationRequestMenu="matMenu"
+      [overlapTrigger]="false"
+      yPosition="below"
+    >
+      <button
+        *ngFor="
+          let InformationRequestOption of requestForInformationMenuOptions
+        "
+        mat-menu-item
+        [id]="
+          'referralResultsModal-requestForInformationButton-Option-'.concat(
+            InformationRequestOption.label
+          )
+        "
+        (click)="doInformationRequest(InformationRequestOption.request)"
+      >
+        {{ InformationRequestOption.label }}
+      </button>
+    </mat-menu>
+  </div>
+</div>

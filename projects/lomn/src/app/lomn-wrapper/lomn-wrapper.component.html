@@ -1,0 +1,5 @@
+<healthe-lomn-wizard *ngIf="!(isLoading$ | async)"></healthe-lomn-wizard>
+<div class="lomn-overlay" [@fade]="overlayState$ | async">
+  <h1>Loading LOMN...</h1>
+  <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
+</div>

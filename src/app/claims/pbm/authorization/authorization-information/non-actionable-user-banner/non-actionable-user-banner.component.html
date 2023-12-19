@@ -1,0 +1,17 @@
+<div
+  class="non-actionable-user-alert--banner"
+  fxLayout="row"
+  fxLayoutAlign="start center"
+  fxLayoutGap="35px"
+>
+  <div>
+    <span class="standard-text">
+      There are no available actions needed for this authorization.
+    </span>
+  </div>
+  <div class="action-button" *ngIf="!hideGoBackButton">
+    <button mat-stroked-button class="warning-button" (click)="goBack()">
+      GO BACK
+    </button>
+  </div>
+</div>

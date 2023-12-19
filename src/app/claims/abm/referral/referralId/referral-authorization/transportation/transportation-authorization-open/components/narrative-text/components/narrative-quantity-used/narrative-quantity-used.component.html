@@ -1,0 +1,19 @@
+<span
+  id="narrative-quantity-used-text"
+  *ngIf="authNarrativeMode !== 'PostSubmit'"
+  >The Injured Worker has {{ narrativeTextItem.actionDescriptor }}
+  <b>{{ limitValue }} {{ narrativeTextItem.quantityDescriptor }}</b> out of a
+  total
+  <b> {{ quantityUsed }} approved {{ narrativeTextItem.quantityDescriptor }}</b
+  >.
+</span>
+<span
+  id="narrative-quantity-used-text_post-submit"
+  *ngIf="authNarrativeMode === 'PostSubmit'"
+  >The Injured Worker has {{ narrativeTextItem.actionDescriptor }}
+  <b>{{ limitValue }} {{ narrativeTextItem.quantityDescriptor }}</b> out of a
+  total
+  <b> {{ quantityUsed }} approved {{ narrativeTextItem.quantityDescriptor }}</b
+  >.
+</span>
+<div class="spacersmall"></div>

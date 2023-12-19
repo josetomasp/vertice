@@ -1,0 +1,5 @@
+@import 'variables';
+.disable-documents-upload {
+  color: $gray-400;
+  pointer-events: none;
+}

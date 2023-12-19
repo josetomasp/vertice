@@ -1,0 +1,166 @@
+<mat-card>
+  <mat-card-header> <healthe-filter-box></healthe-filter-box> </mat-card-header>
+  <mat-card-content style="overflow-x: scroll">
+    <mat-paginator
+      #primaryPaginator
+      [pageSizeOptions]="pageSizeOptions"
+      [pageSize]="pageSize$ | async"
+    ></mat-paginator>
+    <table
+      mat-table
+      matSort
+      matSortActive="date"
+      matSortDirection="desc"
+      [dataSource]="dataSource"
+    >
+      <!-- Date -->
+      <ng-container matColumnDef="date">
+        <th
+          mat-header-cell
+          mat-sort-header
+          *matHeaderCellDef
+          id="referralActivityTable-DATEHeader"
+          style="width: 100px;"
+        >
+          DATE
+        </th>
+        <td
+          mat-cell
+          *matCellDef="let element; index as $index"
+          [id]="'referralActivityTable-dateCell-' + $index"
+        >
+          {{ element.tableRow.date }}
+        </td>
+      </ng-container>
+      <!-- Stage -->
+      <ng-container matColumnDef="stage">
+        <th
+          mat-header-cell
+          *matHeaderCellDef
+          id="referralActivityTable-STAGEHeader"
+          style="width: 145px;"
+        >
+          STAGE
+        </th>
+        <td
+          mat-cell
+          *matCellDef="let element; index as $index"
+          [id]="'referralActivityTable-stageCell-' + $index"
+        >
+          {{ ReferralStageUtil.toString(element.tableRow.stage) }}
+        </td>
+      </ng-container>
+      <!-- Action/Detail -->
+      <ng-container matColumnDef="actionDetail">
+        <th
+          mat-header-cell
+          *matHeaderCellDef
+          id="referralActivityTable-ACTION / DETAILHeader"
+          style="width: 750px;"
+        >
+          ACTION / DETAIL
+        </th>
+        <td
+          mat-cell
+          *matCellDef="let element; index as $index"
+          style="white-space: pre-wrap"
+          class="columnPadding"
+          [id]="'referralActivityTable-actionDetail-' + $index"
+        >
+          {{ element.tableRow.actionDetail }}
+        </td>
+      </ng-container>
+      <!-- Notes -->
+      <ng-container matColumnDef="notes">
+        <th
+          mat-header-cell
+          *matHeaderCellDef
+          id="referralActivityTable-NOTESHeader"
+          style="width: 300px;"
+        >
+          NOTES
+        </th>
+        <td
+          mat-cell
+          *matCellDef="let element; index as $index"
+          [id]="'referralActivityTable-notesCell-' + $index"
+          style="white-space: pre-wrap"
+        >
+          <div #notesDisplay [matTooltip]="element.tableRow.notes">
+            <div *ngIf="element.tableRow.hasAddNoteButton">
+              <button
+                (click)="openSendANote(element.tableRow.date)"
+                mat-stroked-button
+                style="max-width: 140px; height: 30px;"
+                class="secondary-button"
+              >
+                SEND A NOTE
+              </button>
+            </div>
+            <div
+              *ngIf="!element.tableRow.hasAddNoteButton"
+              class="columnPadding"
+            >
+              {{ element.tableRow.notes }}
+            </div>
+          </div>
+        </td>
+      </ng-container>
+      <!-- Status -->
+      <ng-container matColumnDef="status">
+        <th
+          mat-header-cell
+          *matHeaderCellDef
+          id="referralActivityTable-STATUSHeader"
+          style="width: 250px;"
+        >
+          STATUS
+        </th>
+        <td
+          mat-cell
+          *matCellDef="let element; index as $index"
+          [id]="'referralActivityTable-statusCell-' + $index"
+        >
+          <div
+            class="ellipsis-text"
+            [matTooltip]="element.tableRow.status"
+            #statusDisplay
+            [ngClass]="element.tableRow.failureStatus ? 'failureStatus' : ''"
+          >
+            {{ element.tableRow.status }}
+          </div>
+        </td>
+      </ng-container>
+      <!-- Action -->
+      <ng-container matColumnDef="action">
+        <th
+          mat-header-cell
+          *matHeaderCellDef
+          id="referralActivityTable-ActionHeader"
+        ></th>
+        <td mat-cell *matCellDef="let element; index as $index"></td>
+      </ng-container>
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr
+        mat-row
+        [ngClass]="{ clickable: row.modalData }"
+        *matRowDef="let row; columns: displayedColumns"
+        (click)="openDialog(row)"
+      ></tr>
+    </table>
+
+    <div
+      id="referralActivityNoData"
+      *ngIf="dataSource.filteredData.length === 0"
+      class="healthe-table--centered-container"
+      fxLayout="column"
+      fxLayoutAlign="center center"
+    >
+      <img src="assets/img/NoDataIcon.svg" />
+      <p class="standard-text" id="tableVerbiage">
+        {{ getVerbiage(tableCondition.NoDataForQuery) }}
+      </p>
+    </div>
+    <mat-paginator #secondaryPaginator></mat-paginator>
+  </mat-card-content>
+</mat-card>

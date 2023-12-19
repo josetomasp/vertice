@@ -1,0 +1,19 @@
+@import 'variables';
+
+::ng-deep mat-tab-header.mat-tab-header {
+  border-bottom: black solid 0;
+}
+
+::ng-deep .mat-tab-disabled {
+  &:hover {
+    & > .mat-tab-label-content {
+      color: $gray-300;
+    }
+  }
+  & > .mat-tab-label-content {
+    color: $gray-300;
+    &:hover {
+      color: $gray-300;
+    }
+  }
+}

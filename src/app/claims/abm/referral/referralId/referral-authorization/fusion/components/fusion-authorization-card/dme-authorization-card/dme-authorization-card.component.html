@@ -1,0 +1,61 @@
+<mat-card>
+  <div class="authorization--card--inset">
+    <header
+      class="authorization--card--inset--header"
+      fxLayout="row"
+      fxLayoutAlign="space-between"
+    >
+      <h3
+        class="text-primary"
+        id="authorization--card--inset--header--title--{{ $index }}"
+      >
+        {{ dmeAuthTitle }}
+      </h3>
+      <button
+        [disabled]="detailNoteFormControl.disabled"
+        (click)="
+          viewNotes(
+            authorization.authorizationUnderReview?.noteList,
+            authorization
+          )
+        "
+        class="secondary-button"
+        id="authorization--card--inset--header--viewNotes--{{ $index }}"
+        mat-stroked-button
+      >
+        <fa-icon [icon]="faStickyNote" style="padding-right: 5px"></fa-icon>
+        VIEW/EDIT NOTES
+      </button>
+    </header>
+    <p *ngIf="substitutionMessage">
+      <strong>{{ substitutionMessage }}</strong>
+    </p>
+    <healthe-alert-info-banner [clinicalAlerts]="clinicalAlerts">
+    </healthe-alert-info-banner>
+    <healthe-reasons-banner
+      [reasons]="authorization.reasonsReviewNeeded"
+    ></healthe-reasons-banner>
+    <healthe-action-form
+      *ngIf="showActionsForCard()"
+      [formGroup]="actionFormGroup"
+      [fusionAuth]="authorization"
+      [fusionAuthorizationReasons$]="fusionAuthorizationReasons$"
+      [index]="$index"
+    ></healthe-action-form>
+    <div class="spacersmall"></div>
+    <healthe-dme-authorization-data
+      [formGroup]="authInformationFormGroup"
+      [fusionAuth]="authorization"
+      [index]="$index"
+      [minQuantity]="minQuantity"
+      [narrativeMode]="getNarrativeMode()"
+      [isSubstitutionCard]="isSubstitutionCard"
+    ></healthe-dme-authorization-data>
+  </div>
+  <div class="spacersmall"></div>
+  <!-- Details Table -->
+  <healthe-auth-details-table
+    [columnDefinitions]="columnDefinitions$ | async"
+    [tableDataSoruce]="tableDataSource$ | async"
+  ></healthe-auth-details-table>
+</mat-card>

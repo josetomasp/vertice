@@ -1,0 +1,76 @@
+<div [formGroup]="authBodyPartsFormGroup">
+  <div *ngFor="let bodyPart of bodyPartList; let bpi = index">
+    <div fxLayout="row wrap" fxLayoutGap="35px" class="bodyPartSection">
+      <div fxFlex="0 0 calc(25% - 35px)" fxFlex.sm="0 0 calc(33.33% -35px)">
+        <div
+          class="overhead-label"
+          id="diagnostics-bodyPart-desc-label-{{authId}}-{{bodyPart.id}}"
+        >
+          BODY PART
+        </div>
+        <div
+          class="standard-text"
+          id="diagnostics-bodyPart-desc-{{authId}}-{{bodyPart.id}}"
+        >
+          {{ getBodyPartDisplayName(bodyPart) }}
+        </div>
+      </div>
+
+      <div fxFlex="0 0 calc(25% - 35px)" fxFlex.sm="0 0 calc(33.33% -35px)">
+        <div
+          class="overhead-label"
+          id="diagnostics-bodyPart-lastAction-label-{{authId}}-{{bodyPart.id}}"
+        >
+          LAST ACTION DATE
+        </div>
+        <div
+          class="standard-text"
+          id="diagnostics-bodyPart-lastAction-{{authId}}-{{bodyPart.id}}"
+        >
+          {{ bodyPart.lastActionDate }}
+        </div>
+      </div>
+
+      <div fxFlex="0 0 calc(25% - 35px)" fxFlex.sm="0 0 calc(33.33% -35px)">
+        <div
+          class="overhead-label"
+          id="diagnostics-bodyPart-status-label-{{authId}}-{{bodyPart.id}}"
+        >
+          STATUS
+        </div>
+        <div
+          class="standard-text"
+          id="diagnostics-bodyPart-status-{{authId}}-{{bodyPart.id}}"
+        >
+          <div *ngIf="!isReadOnly">
+            <mat-form-field style="max-width: 250px">
+              <mat-select
+                id="diagnostics-bodyPart-status-select-{{authId}}-{{bodyPart.id}}"
+                [formControl]="authBodyPartsFormArray.controls[bpi]"
+              >
+                <mat-option
+                  *ngFor="let option of bodyPartApprovalOptions; let i = index"
+                  [value]="option.value"
+                  id="diagnostics-bodyPart-status-select-option-{{i}}-{{authId}}-{{bodyPart.id}}"
+                >
+                  {{ option.label }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <ng-container *ngIf="isReadOnly">
+            <ng-container [ngSwitch]="bodyPart.status">
+              <ng-container *ngSwitchCase="'Approved'">
+                <span style="color: green">Approved</span>
+              </ng-container>
+              <ng-container *ngSwitchCase="'Denied'">
+                <span style="color: red">Denied</span>
+              </ng-container>
+            </ng-container></ng-container
+          >
+        </div>
+      </div>
+    </div>
+    <div class="spacersmall"></div>
+  </div>
+</div>

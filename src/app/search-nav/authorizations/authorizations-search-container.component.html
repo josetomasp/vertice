@@ -1,0 +1,19 @@
+<div class="authorizations-wrapper">
+  <healthe-header-bar title="Authorizations"></healthe-header-bar>
+  <div class="spacertiny"></div>
+  <nav mat-tab-nav-bar id="referral-activity--tab-bar" class="tab-group">
+    <ng-container *ngFor="let tab of tabs">
+      <a
+        mat-tab-link
+        (click)="gotoLink(tab)"
+        [active]="linkIsActive(tab)"
+        [id]="'authorization--tab-bar--' + tab.label"
+        *healtheRemoveElementIfTrue="'sideNav'; elementName: tab.elementName"
+      >
+        {{ tab.label }}
+      </a>
+    </ng-container>
+  </nav>
+  <div class="spacersmall"></div>
+  <router-outlet></router-outlet>
+</div>

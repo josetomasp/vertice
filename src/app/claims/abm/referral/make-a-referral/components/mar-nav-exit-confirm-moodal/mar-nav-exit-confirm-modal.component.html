@@ -1,0 +1,13 @@
+<h2 mat-dialog-title>Leave This Referral?</h2>
+<div mat-dialog-content class="modal-content">
+  If you leave now your referral will not be saved. Please select from the
+  options below:
+</div>
+<div mat-dialog-actions class="modal-actions">
+  <button mat-stroked-button class="info-button" [mat-dialog-close]="'leave'">
+    LEAVE WITHOUT SAVING
+  </button>
+  <button mat-flat-button class="primary-button" [mat-dialog-close]="false">
+    RETURN TO THIS REFERRAL
+  </button>
+</div>

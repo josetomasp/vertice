@@ -1,0 +1,33 @@
+<div fxLayout="column" fxLayoutAlign="space-between" style="height: 93%">
+  <div
+    fxLayout="row"
+    fxLayoutAlign="space-between center"
+    mat-dialog-title
+    style="padding: 30px;"
+  >
+    <span id="authorization-alert-title">Additional Alert Information</span>
+    <button
+      mat-icon-button
+      mat-dialog-close
+      id="authorization-alert--header-widget"
+    >
+      <i class="fal fa-times modal-close-widget"></i>
+    </button>
+  </div>
+  <div fxFlex="1 1 auto" style="padding: 20px">
+    <div><div [innerHtml]="data"></div></div>
+  </div>
+  <mat-dialog-actions style="padding: 12px;">
+    <div fxFlex="row" fxLayoutAlign="end center" fxLayoutGap="20px">
+      <button
+        id="authorization-alert--okay-button"
+        mat-raised-button
+        mat-dialog-close
+        class="secondary-button"
+        style="font-size: 11px; font-weight: bold"
+      >
+        OKAY
+      </button>
+    </div>
+  </mat-dialog-actions>
+</div>

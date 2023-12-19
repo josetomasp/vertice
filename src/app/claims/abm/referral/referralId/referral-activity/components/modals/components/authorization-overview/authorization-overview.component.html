@@ -1,0 +1,12 @@
+<div fxLayout="row" fxLayoutGap="35px" class="inset-card">
+  <div *ngFor="let field of fieldsMap.keys()">
+    <span
+      class="overhead-label"
+      id="authorization-overview-field-label-{{field}}"
+      >{{ field }}</span
+    >
+    <div id="authorization-overview-field-value-{{field}}">
+      {{ fieldsMap.get(field) }}
+    </div>
+  </div>
+</div>

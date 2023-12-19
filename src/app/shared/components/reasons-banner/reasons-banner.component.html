@@ -1,0 +1,28 @@
+<mat-expansion-panel #banner class="reasons-expansion-panel">
+  <mat-expansion-panel-header
+    [collapsedHeight]="''"
+    [expandedHeight]="''"
+    class="reasons-expansion-panel--header"
+  >
+    <mat-panel-title class="reasons-expansion-panel--header--title">
+      <fa-icon
+        class="reasons-expansion-panel_icon"
+        [icon]="clipboard"
+      ></fa-icon>
+      There {{ reasons?.length > 1 ? 'are' : 'is' }}
+      {{ reasons?.length }} reason{{ reasons?.length > 1 ? 's' : '' }} that
+      require{{ reasons?.length == 1 ? 's' : '' }} your review in order to
+      authorize. Click to {{ banner.expanded ? 'collapse' : 'expand' }}.
+    </mat-panel-title>
+    <span class="text-secondary reasons-expansion-panel--see-reasons">{{
+      banner.expanded
+        ? 'Close Reasons for Review'
+        : 'See All Reasons for Review'
+    }}</span>
+    <span class="tag tag-secondary">{{ reasons.length }}</span>
+  </mat-expansion-panel-header>
+
+  <ul>
+    <li *ngFor="let reason of reasons">{{ reason }}</li>
+  </ul>
+</mat-expansion-panel>

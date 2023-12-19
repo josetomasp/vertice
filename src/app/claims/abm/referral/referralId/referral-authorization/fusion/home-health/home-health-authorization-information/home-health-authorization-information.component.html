@@ -1,0 +1,48 @@
+<mat-card *ngIf="(authorizations$ | async)?.length > 0">
+  <mat-card-header fxLayoutGap="32px">
+    <div
+      mat-card-title
+      fxLayout="row"
+      fxLayoutAlign="start center"
+      fxLayoutGap="32px"
+    >
+      <h5>Authorization Information</h5>
+      <span
+        *ngIf="(rush$ | async)"
+        class="text-danger authorization--header_icon"
+      >
+        <fa-icon [icon]="faExclamationTriangle"></fa-icon> Rush
+      </span>
+    </div>
+  </mat-card-header>
+  <mat-card-content fxLayout="column" fxLayoutGap="32px">
+    <healthe-fusion-authorization-card
+      [authorizations$]="authorizations$"
+      [fusionAuthorizationReasons$]="fusionAuthorizationReasons$"
+      [formArray]="formArray"
+      [archeType]="archetype"
+    >
+    </healthe-fusion-authorization-card>
+    <div class="authorization--notes--wrapper">
+      <label class="overhead-label"
+        >NOTES <span class="text-hint">(optional)</span></label
+      >
+
+      <healthe-auth-notes-list [notes$]="notes$"></healthe-auth-notes-list>
+
+      <div class="spacersmall"></div>
+      <mat-form-field>
+        <textarea
+          [formControl]="notesFormControl"
+          matInput
+          placeholder="Enter Additional Notes"
+        ></textarea>
+      </mat-form-field>
+    </div>
+  </mat-card-content>
+  <div class="spacersmall"></div>
+  <healthe-fusion-referral-activity-footer
+    [fusionAuthorizationReasons$]="fusionAuthorizationReasons$"
+    [formArray]="formArray"
+  ></healthe-fusion-referral-activity-footer>
+</mat-card>

@@ -1,0 +1,8 @@
+::ng-deep mat-horizontal-stepper .mat-horizontal-stepper-header-container {
+  overflow-x: auto;
+
+  mat-step-header {
+    overflow: visible !important;
+    padding: 0 20px;
+  }
+}

@@ -1,0 +1,30 @@
+@import 'variables';
+
+.activity-tab-bar {
+  &--no-padding {
+    padding: 0;
+  }
+}
+::ng-deep mat-tab-header.mat-tab-header {
+  border-bottom: black solid 0;
+}
+
+.reportIncident {
+  padding-right: 20px;
+  font-size: 13px;
+  font-weight: bold;
+}
+
+::ng-deep .mat-tab-disabled {
+  &:hover {
+    & > .mat-tab-label-content {
+      color: $gray-300;
+    }
+  }
+  & > .mat-tab-label-content {
+    color: $gray-300;
+    &:hover {
+      color: $gray-300;
+    }
+  }
+}

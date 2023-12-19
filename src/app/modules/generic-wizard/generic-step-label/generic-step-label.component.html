@@ -1,0 +1,27 @@
+<div>
+  <span
+    id="{{ serviceName }}-stepper-step-{{ step.label }}"
+    class="step--{{ labelClass }}"
+  >
+    {{ step.label }}</span
+  >
+  <fa-icon
+    *ngIf="iconClass === 'valid'"
+    class="step__icon step--{{ iconClass }}"
+    [icon]="icon"
+    id="step-icon-{{ serviceName }}-{{ step.label }}"
+  ></fa-icon>
+
+  <fa-icon
+    *ngIf="iconClass === 'invalid' || iconClass === 'default'"
+    healtheTooltipAdvanced
+    [healtheTooltipAdvancedPosition]="HealtheTooltipAdvancedPosition.Top"
+    [healtheTooltipAdvancedYOffset]="-20"
+    healtheTooltipAdvancedTitle="Incomplete Section"
+    healtheTooltipAdvancedContent="This section has not been visited or has not been completed. You will need to complete before submitting."
+    width="260px"
+    class="step__icon step--{{ iconClass }}"
+    [icon]="icon"
+    id="step-icon-{{ serviceName }}-{{ step.label }}"
+  ></fa-icon>
+</div>

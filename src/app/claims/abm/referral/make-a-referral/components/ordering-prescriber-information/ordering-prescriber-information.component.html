@@ -1,0 +1,50 @@
+<h3 class="text-primary text-bold">Ordering Prescriber Information</h3>
+<div fxLayout="row wrap" fxLayoutGap="30px" [formGroup]="parentFormGroup">
+  <div fxFlex="33%">
+    <span class="overhead-label"
+      >Ordering Prescriber Name<span class="required-text">*</span></span
+    >
+    <mat-form-field>
+      <input
+        type="text"
+        matInput
+        placeholder="Enter Prescriber Name"
+        formControlName="prescriberName"
+        [value]="parentFormGroup.get('prescriberName').value"
+      />
+      <mat-error>Enter an ordering prescriber name</mat-error>
+    </mat-form-field>
+  </div>
+
+  <div fxFlex="33%">
+    <span class="overhead-label"
+      >Ordering Prescriber Phone<span class="required-text">*</span></span
+    >
+    <mat-form-field>
+      <input
+        matInput
+        placeholder="Enter Prescriber Phone"
+        formControlName="prescriberPhone"
+        type="tel"
+        mask="(000) 000-0000"
+        [value]="
+          parentFormGroup.get('prescriberPhone').value | mask: '(000) 000-0000'
+        "
+      />
+      <mat-error>Enter an ordering prescriber phone</mat-error>
+    </mat-form-field>
+  </div>
+
+  <div fxFlex="33%">
+    <span class="overhead-label">Ordering Prescriber Address</span>
+    <mat-form-field>
+      <input
+        type="text"
+        matInput
+        placeholder="Enter Prescriber Address"
+        formControlName="prescriberAddress"
+        [value]="parentFormGroup.get('prescriberAddress').value"
+      />
+    </mat-form-field>
+  </div>
+</div>

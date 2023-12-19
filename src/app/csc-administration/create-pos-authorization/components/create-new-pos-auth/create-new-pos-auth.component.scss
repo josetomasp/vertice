@@ -1,0 +1,55 @@
+@import 'variables';
+
+.note-icon {
+  color: $secondary;
+  font-size: 18px;
+  margin-right: 5px;
+}
+
+.authorizationNotesBox {
+  border: solid 2px $secondary;
+}
+
+.disabledRowText {
+  color: $gray-300;
+}
+
+textarea {
+  resize: none;
+  width: 100%;
+  padding: 10px;
+}
+
+.existing-auth-header {
+  background-color: $gray-300 !important;
+  cursor: auto;
+  padding-top: 20px !important;
+  padding-bottom: 20px !important;
+}
+.existing-auth-header :hover {
+  background-color: $gray-300 !important;
+}
+.existing-auth-expansion-panel--header--title {
+  height: 47px !important;
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  display: flex;
+  align-items: center;
+  margin-right: 15px;
+}
+.text-blue {
+  color: $primary;
+}
+.locked-pbm-auth-alert--banner {
+  background-color: $warning;
+  border-radius: 4px;
+  padding: 15px;
+  width: 100%;
+  height: 50px;
+  &_icon {
+    font-size: 24px;
+  }
+}
+.healthe-header-bar-title {
+  color: #00b3e3 !important;
+}

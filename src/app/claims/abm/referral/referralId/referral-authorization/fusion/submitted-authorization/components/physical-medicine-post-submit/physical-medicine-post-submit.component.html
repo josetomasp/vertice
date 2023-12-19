@@ -1,0 +1,75 @@
+<mat-card
+  *ngFor="
+    let authorization of (fusionReferralAuthorizations$ | async);
+    index as $index
+  "
+  style="margin-bottom: 16px;"
+>
+  <div class="authorization--card--inset">
+    <header
+      class="authorization--card--inset--header"
+      fxLayout="row"
+      fxLayoutAlign="space-between"
+    >
+      <h3
+        class="text-primary"
+        id="authorization--card--inset--header--title--{{$index}}"
+      >
+        <ng-container
+          [ngSwitch]="authorization.authorizationUnderReview.categoryDesc"
+        >
+          <img
+            *ngSwitchCase="'Physical Therapy'"
+            class="pm-icon"
+            src="assets\img\make-a-referral\physical-medicine\physical_therapy.png"
+          />
+          <img
+            *ngSwitchCase="'Occupational Therapy'"
+            class="pm-icon"
+            src="assets\img\make-a-referral\physical-medicine\occupational_therapy.png"
+          />
+        </ng-container>
+
+        {{ authorization.authorizationUnderReview.categoryDesc }}
+      </h3>
+      <button
+        class="secondary-button"
+        mat-stroked-button
+        (click)="viewNotes(authorization)"
+      >
+        VIEW NOTES
+      </button>
+    </header>
+    <healthe-reasons-banner
+      [reasons]="authorization.reasonsReviewNeeded"
+    ></healthe-reasons-banner>
+    <div class="spacer-small"></div>
+    <healthe-action-reason-display
+      [approvalType]="authorization.action"
+      [reason]="authorization.reasonForAction"
+    >
+    </healthe-action-reason-display>
+    <mat-divider></mat-divider>
+    <healthe-fusion-narrative-text
+      [authNarrativeConfig]="authNarrativeConfig"
+      [authNarrativeMode]="narrativeMode"
+      [fusionAuth]="authorization"
+      [narrativeTextFormGroup]="narrativeTextFormGroup"
+    ></healthe-fusion-narrative-text>
+    <div class="spacersmall"></div>
+    <healthe-summary-details
+      [authNarrativeMode]="narrativeMode"
+      [fusionAuth]="authorization"
+      [icdCodesFormControl]="icdCodesFormControl"
+    >
+    </healthe-summary-details>
+  </div>
+  <div class="spacersmall"></div>
+  <!-- Body Parts -->
+  <healthe-auth-body-parts
+    [authBodyPartsFormArray]="authBodyPartsFormArray"
+    [authNarrativeMode]="narrativeMode"
+    [fusionAuthIndex]="$index"
+    [fusionAuth]="authorization"
+  ></healthe-auth-body-parts>
+</mat-card>

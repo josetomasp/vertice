@@ -1,0 +1,25 @@
+<span #resultsCardListInterventions>
+  <ng-container *ngIf="claim.snoozed">
+    <div fxLayout="row">
+      <fa-icon [icon]="faClock" class="snoozed"></fa-icon>&nbsp;
+      <div [matTooltip]="'Re-evaluate\nAfter ' + claim.snoozedUntilDate">
+        Re-evaluate <br />
+        After {{ claim.snoozedUntilDate }}
+      </div>
+    </div>
+  </ng-container>
+
+  <ng-container *ngIf="claim.actionOccurred && !claim.snoozed">
+    <div fxLayout="row">
+      <fa-icon [icon]="faCheck" class="actioned"></fa-icon>&nbsp;
+      <div [matTooltip]="'Last Actioned\nOn ' + claim.latestActionDate">
+        Last Actioned <br />
+        On {{ claim.latestActionDate }}
+      </div>
+    </div>
+  </ng-container>
+
+  <ng-container *ngIf="!claim.actionOccurred && !claim.snoozed">
+    <div [matTooltip]="interventionText">{{ interventionText }}</div>
+  </ng-container>
+</span>

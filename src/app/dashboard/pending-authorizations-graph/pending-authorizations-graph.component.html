@@ -1,0 +1,101 @@
+<mat-card class="dashboard-chart">
+  <mat-card-header>
+    <mat-card-title>Pending Authorizations</mat-card-title>
+    <mat-card-subtitle style="font-weight: 600"
+      >Last updated:
+      <span id="pendingAuthorizations-updatedDateTimeStamp">{{
+        lastUpdatedDateTimeString
+      }}</span>
+    </mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-content fxLayout="column" fxLayoutGap="20px">
+    <div *ngIf="!assignedAdjusters">
+      <div class="spacersmall"></div>
+      <healthe-loading-spinner
+        loadingVerbiage="Loading Assigned Adjusters..."
+      ></healthe-loading-spinner>
+    </div>
+    <div *ngIf="assignedAdjusters">
+      <label class="overhead-label">ASSIGNED ADJUSTER</label>
+      <mat-select
+        (selectionChange)="updateAdjusterSelection($event)"
+        style="width: 200px;"
+        id="pendingAuthorizations-assignedAdjusterSelect"
+        placeholder="Choose assigned adjuster"
+      >
+        <mat-option
+          *ngFor="let adjusterOption of assignedAdjusters; index as index"
+          [value]="adjusterOption.value"
+          id="pendingAuthorizations-assignedAdjusterSelect-option-{{index}}"
+        >
+          {{ adjusterOption.label }}
+        </mat-option>
+      </mat-select>
+    </div>
+
+    <div *ngIf="isResultLoading">
+      <div class="spacersmall"></div>
+      <healthe-loading-spinner
+        loadingVerbiage="Loading Pending Authorization Data..."
+      ></healthe-loading-spinner>
+    </div>
+    <ng-container *ngIf="!isResultLoading">
+      <div
+        *ngIf="verticalBarChartData.length > 0"
+        style="height: 500px; margin-bottom: 30px; padding-top: 25px"
+      >
+        <ngx-charts-bar-vertical-2d
+          #barChart
+          [view]=""
+          [results]="verticalBarChartData"
+          xAxis="true"
+          yAxis="true"
+          legend="true"
+          legendTitle=""
+          legendPosition="below"
+          showXAxisLabel="true"
+          showYAxisLabel="true"
+          showGridLines="true"
+          xAxisLabel="AUTHORIZATION TYPE"
+          yAxisLabel="# OF AUTHORIZATIONS"
+          [customColors]="getCustomColor"
+        >
+        </ngx-charts-bar-vertical-2d>
+      </div>
+      <div
+        fxLayout="column"
+        fxLayoutAlign="center center"
+        *ngIf="verticalBarChartData.length === 0"
+      >
+        <img src="assets/img/NoDataIcon.svg" />
+        <p
+          class="standard-text"
+          id="pendingAuthorizations-noPendingAuthorizationDataVerbiage"
+        >
+          {{ getVerbiage(tableCondition.NoPendingAuthorizationData) }}
+        </p>
+      </div>
+    </ng-container>
+
+    <a
+      mat-button
+      (click)="goToAuthSearch(true)"
+      *healtheRemoveElementIfTrue="
+        componentGroupName;
+        elementName: 'view_all_authorizations'
+      "
+      id="pendingAuthorizations-viewAllAuthorizationsLink"
+      >View Authorizations<i class="far fa-chevron-right"></i
+    ></a>
+    <a
+      mat-button
+      (click)="goToAuthSearch(false)"
+      *healtheRemoveElementIfTrue="
+        componentGroupName;
+        elementName: 'view_referral_authorizations'
+      "
+      id="pendingAuthorizations-viewReferralAuthorizationsLink"
+      >View Authorizations<i class="far fa-chevron-right"></i
+    ></a>
+  </mat-card-content>
+</mat-card>

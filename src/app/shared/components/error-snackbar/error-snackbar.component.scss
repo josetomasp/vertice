@@ -1,0 +1,17 @@
+.error-snackbar {
+  &__list {
+    &--undecorated {
+      list-style: none;
+    }
+
+    &__item {
+    }
+  }
+
+  &__button {
+    color: white;
+    background-color: transparent;
+    font-size: 16px;
+    font-weight: bold;
+  }
+}

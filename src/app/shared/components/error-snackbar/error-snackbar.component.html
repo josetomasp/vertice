@@ -1,0 +1,22 @@
+<div class="error-snackbar" fxLayout="row" fxLayoutAlign="start center">
+  <ul
+    class="error-snackbar__list"
+    [ngClass]="{
+      'error-snackbar__list--undecorated': config.errors.length === 1
+    }"
+    fxFlex="1 1 90%"
+    fxLayout="column"
+  >
+    <li class="error-snackbar__list__item" *ngFor="let error of config.errors">
+      {{ error }}
+    </li>
+  </ul>
+  <button
+    (click)="close()"
+    class="error-snackbar__button"
+    fxFlex="0 0 10%"
+    mat-flat-button
+  >
+    {{ config.action }}
+  </button>
+</div>

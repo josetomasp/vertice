@@ -1,0 +1,432 @@
+<div class="main-nav-wrapper">
+  <healthe-header-bar title="Real Time Rejects Queue"></healthe-header-bar>
+
+  <div class="spacersmall"></div>
+
+  <mat-card>
+    <mat-card-content>
+      <div fxLayout="row" fxLayoutAlign="space-between center">
+        <a
+          mat-button
+          (click)="refreshQueue()"
+          id="realTimeRejectsQueue-refreshButton"
+        >
+          <fa-icon class="refresh-queue-icon" [icon]="faSyncAlt"></fa-icon>
+          Refresh Queue</a
+        >
+        <button
+          mat-stroked-button
+          class="secondary-button"
+          (click)="addNewAuth()"
+          id="realTimeRejectsQueue-addNewAuthButton"
+        >
+          + ADD NEW AUTH
+        </button>
+      </div>
+    </mat-card-content>
+  </mat-card>
+  <healthe-error-banner
+    *ngIf="queueResultsErrors && queueResultsErrors.length > 0"
+    id="real-time-reject-queue-ErrorsBanner"
+    [errorMessages]="queueResultsErrors"
+    bannerTitle="Error while loading authorization data:"
+  ></healthe-error-banner>
+  <div class="spacersmall" #errorBannerSpacer></div>
+  <mat-card>
+    <mat-card-title id="realTimeRejectsQueue-resultTableTitle">
+      <div fxLayout="row" fxLayoutAlign="space-between">
+        <div>
+          Attention Required
+          <span
+            class="tag activity attention-required-count-tag"
+            id="realTimeRejectsQueue-attentionRequiredCount"
+          >
+            {{ resultsData?.length > 0? resultsData.length : 0}}
+          </span>
+        </div>
+        <div fxLayout="row" fxLayoutAlign="space-between" fxLayoutGap="20px">
+          <div>
+            <div
+              class="overhead-label"
+              id="realTimeRejectsQueue-SearchFilter-label"
+            >
+              SEARCH
+            </div>
+            <mat-form-field style="width: 300px">
+              <input matInput type="text" placeholder="Enter text to search for" [formControl]="searchFilter" id="realTimeRejectsQueue-SearchFilter-input" />
+            </mat-form-field>
+          </div>
+
+          <div>
+            <div
+              class="overhead-label"
+              id="realTimeRejectsQueue-rejectCodeFilter-label"
+            >
+              REJECT CODE
+            </div>
+            <mat-form-field class="pharmacy-field">
+              <mat-select
+                id="realTimeRejectsQueue-rejectCodeFilter-select"
+                [value]="rejectCodeFilterOptions[0]?.value"
+                (selectionChange)="setFilteredData()"
+                #rejectCodeFilterSelect
+              >
+                <mat-option
+                  *ngFor="let rejectCodeFilterOption of rejectCodeFilterOptions"
+                  [value]="rejectCodeFilterOption.value"
+                  id="realTimeRejectsQueue-rejectCodeFilter-option-{{rejectCodeFilterOption.label}}"
+                >
+                  {{ rejectCodeFilterOption.label }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+
+          <div>
+            <div
+              class="overhead-label"
+              id="realTimeRejectsQueue-pharmacyFilter-label"
+            >
+              PHARMACY TYPES
+            </div>
+            <mat-form-field class="pharmacy-field">
+              <mat-select
+                id="realTimeRejectsQueue-pharmacyFilter-select"
+                [value]="pharmacyFilterOptions[1]?.value"
+                (selectionChange)="setFilteredData()"
+                #pharmacyFilterSelect
+              >
+                <mat-option
+                  *ngFor="let pharmacyFilterOption of pharmacyFilterOptions"
+                  [value]="pharmacyFilterOption.value"
+                  id="realTimeRejectsQueue-pharmacyFilter-option-{{pharmacyFilterOption.label}}"
+                >
+                  {{ pharmacyFilterOption.label }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+
+          <div>
+            <div
+              class="overhead-label"
+              id="realTimeRejectsQueue-columnPicker-label"
+            >
+              COLUMNS
+            </div>
+            <mat-form-field class="column-picker">
+              <fa-icon [icon]="faThList" class="list-icon"></fa-icon>
+              <mat-select
+                class="column-select"
+                [(ngModel)]="outerTableColumnList"
+                multiple
+                id="realTimeRejectsQueue-columnPicker-select"
+                [panelClass]="'column-panel-size'"
+                #columnSelect
+              >
+                <mat-select-trigger></mat-select-trigger>
+                <div class="select-menu">
+                  <healthe-select-all-option
+                    id="realTimeRejectsQueue-columnPicker-option-selectAll"
+                    [select]="columnSelect"
+                    >All columns
+                  </healthe-select-all-option>
+
+                  <mat-divider></mat-divider>
+                  <mat-option
+                    *ngFor="let option of outerTableColumnDropdownList"
+                    value="{{option.value}}"
+                    [id]="
+                      'realTimeRejectsQueue-columnPicker-option-' + option.value
+                    "
+                    >{{ option.label }}</mat-option
+                  >
+                </div>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </div>
+      </div>
+    </mat-card-title>
+    <mat-card-content>
+      <div class="spacermedium"></div>
+        <div fxLayout="row" fxLayoutAlign="end center">
+          <button
+            mat-flat-button
+            style="width: 120px;"
+            id="tableCard-header-exportButton"
+            class="primary-button"
+            (click)="setOpenUntilClose(exportMenu)"
+            [mat-menu-trigger-for]="exportMenu"
+          >
+            EXPORT
+            <fa-icon
+              class="inline-right-icon"
+              [icon]="exportMenuIcon"
+            ></fa-icon>
+          </button>
+          <mat-menu #exportMenu [overlapTrigger]="false" yPosition="below">
+            <button
+              *ngFor="let exportOption of exportDropdownOptions"
+              mat-menu-item
+              [id]="'tableCard-header-exportOptions-' + exportOption"
+              (click)="doExport(exportOption)"
+            >
+              {{ exportOption }}
+            </button>
+          </mat-menu>
+        </div>
+
+      <mat-paginator
+        id="dataTable-topPaginator"
+        [pageSize]="pageSize"
+        [pageSizeOptions]="pageSizeOptions"
+        #topPaginator
+        showFirstLastButtons="true"
+      >
+      </mat-paginator>
+      <table mat-table matSort [dataSource]="tableDataSource">
+        <ng-container matColumnDef="memberId">
+          <th
+            mat-header-cell
+            mat-sort-header
+            *matHeaderCellDef
+            style="width: 150px"
+            id="realTimeRejectsQueue-outerTable-header-memberId"
+          >
+            MEMBER ID
+          </th>
+          <td
+            mat-cell
+            *matCellDef="let element; let outerIx = index"
+            class="standard-text ellipsis-text cell-underline"
+            id="realTimeRejectsQueue-outerTable-cellData-memberId-{{outerIx}}"
+          >
+            <a [href]="element | generateUrl">
+              {{ element.memberId }}
+            </a>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="claimantLastName">
+          <th
+            mat-header-cell
+            mat-sort-header
+            *matHeaderCellDef
+            style="width: 150px;"
+            id="realTimeRejectsQueue-outerTable-header-claimant"
+          >
+            CLAIMANT
+          </th>
+          <td
+            mat-cell
+            *matCellDef="let element; let outerIx = index"
+            id="realTimeRejectsQueue-outerTable-cellData-claimant-{{outerIx}}"
+          >
+            {{ element.claimant }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="lockedBy">
+          <th
+            mat-header-cell
+            mat-sort-header
+            *matHeaderCellDef
+            style="width: 150px;"
+            id="realTimeRejectsQueue-outerTable-header-lockedBy"
+          >
+            LOCKED BY
+          </th>
+          <td
+            mat-cell
+            *matCellDef="let element; let outerIx = index"
+            id="realTimeRejectsQueue-outerTable-cellData-lockedBy-{{outerIx}}"
+          >
+            {{ element.lockedBy }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="stateOfVenue">
+          <th
+            mat-header-cell
+            mat-sort-header
+            *matHeaderCellDef
+            style="width: 75px;"
+            id="realTimeRejectsQueue-outerTable-header-stateOfVenue"
+          >
+            STATE OF VENUE
+          </th>
+          <td
+            mat-cell
+            *matCellDef="let element; let outerIx = index"
+            id="realTimeRejectsQueue-outerTable-cellData-stateOfVenue-{{outerIx}}"
+          >
+            {{ element.stateOfVenue }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="pharmacyTimeZone">
+          <th
+            mat-header-cell
+            mat-sort-header
+            *matHeaderCellDef
+            id="realTimeRejectsQueue-outerTable-header-pharmacyTimeZone"
+            style="width: 100px; "
+          >
+            PHARMACY TIME ZONE
+          </th>
+          <td
+            mat-cell
+            *matCellDef="let element; let outerIx = index"
+            [matTooltip]="element.pharmacyTimeZone"
+            id="realTimeRejectsQueue-outerTable-{{outerIx}}-cellData-pharmacyTimeZone"
+          >
+            {{ element.pharmacyTimeZone }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="prescriptionInfo">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            id="realTimeRejectsQueue-outerTable-header-pharmacyLineItems"
+          >
+            PHARMACY & PRESCRIPTION INFORMATION
+          </th>
+          <td
+            mat-cell
+            *matCellDef="let element; let outerIx = index"
+            id="realTimeRejectsQueue-outerTable-cellData-pharmacyLineItems-{{outerIx}}"
+          >
+            <div style="padding-bottom: 6px;padding-top: 6px">
+              <table
+                mat-table
+                [dataSource]="element.pharmacyLineItems"
+                class="innerTable"
+              >
+                <ng-container matColumnDef="pharmacyName">
+                  <th
+                    mat-header-cell
+                    *matHeaderCellDef
+                    id="realTimeRejectsQueue-innerTable-{{outerIx}}-header-pharmacyName"
+                  >
+                    PHARMACY NAME
+                  </th>
+                  <td
+                    mat-cell
+                    *matCellDef="let element; let innerIx = index"
+                    [matTooltip]="element.pharmacyName"
+                    id="realTimeRejectsQueue-innerTable-{{outerIx}}-cellData-pharmacyName-{{innerIx}}"
+                  >
+                    {{ element.pharmacyName }}
+                  </td>
+                </ng-container>
+                <ng-container matColumnDef="rejects">
+                  <th
+                    mat-header-cell
+                    *matHeaderCellDef
+                    id="realTimeRejectsQueue-innerTable-{{outerIx}}-header-rejects"
+                  >
+                    REJECTS
+                  </th>
+                  <td
+                    mat-cell
+                    *matCellDef="let element; let innerIx = index"
+                    [matTooltip]="element.rejects"
+                    id="realTimeRejectsQueue-innerTable-{{outerIx}}-cellData-rejects-{{innerIx}}"
+                  >
+                    {{ element.rejects }}
+                  </td>
+                </ng-container>
+                <ng-container matColumnDef="prescriptionName">
+                  <th
+                    mat-header-cell
+                    *matHeaderCellDef
+                    id="realTimeRejectsQueue-innerTable-{{outerIx}}-header-prescriptionName"
+                  >
+                    PRESCRIPTION NAME
+                  </th>
+                  <td
+                    mat-cell
+                    *matCellDef="let element; let innerIx = index"
+                    [matTooltip]="element.prescriptionName"
+                    id="realTimeRejectsQueue-innerTable-{{outerIx}}-cellData-prescriptionName-{{innerIx}}"
+                  >
+                    {{ element.prescriptionName }}
+                  </td>
+                </ng-container>
+                <ng-container matColumnDef="dateFilled">
+                  <th
+                    mat-header-cell
+                    *matHeaderCellDef
+                    id="realTimeRejectsQueue-innerTable-{{outerIx}}-header-dateFilled"
+                  >
+                    DATE FILLED
+                  </th>
+                  <td
+                    mat-cell
+                    *matCellDef="let element; let innerIx = index"
+                    [matTooltip]="element.dateFilled"
+                    id="realTimeRejectsQueue-innerTable-{{outerIx}}-cellData-dateFilled-{{innerIx}}"
+                  >
+                    {{ element.dateFilled }}
+                  </td>
+                </ng-container>
+                <ng-container matColumnDef="timeAdded">
+                  <th
+                    mat-header-cell
+                    *matHeaderCellDef
+                    id="realTimeRejectsQueue-innerTable-{{outerIx}}-header-timeAdded"
+                  >
+                    TIME ADDED
+                  </th>
+                  <td
+                    mat-cell
+                    *matCellDef="let element; let innerIx = index"
+                    [matTooltip]="element.timeAdded"
+                    id="realTimeRejectsQueue-innerTable-{{outerIx}}-cellData-timeAdded-{{innerIx}}"
+                  >
+                    {{ element.timeAdded }}
+                  </td>
+                </ng-container>
+
+
+                <tr mat-header-row *matHeaderRowDef="innerTableColumnList"></tr>
+                <tr
+                  mat-row
+                  *matRowDef="let row; columns: innerTableColumnList"
+                ></tr>
+              </table>
+            </div>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="outerTableColumnList"></tr>
+        <tr mat-row *matRowDef="let row; columns: outerTableColumnList"></tr>
+      </table>
+
+      <div *ngIf="isResultLoading">
+        <div class="spacersmall"></div>
+        <healthe-loading-spinner
+          loadingVerbiage="Loading Queue Data..."
+        ></healthe-loading-spinner>
+      </div>
+      <div
+        *ngIf="!isResultLoading && (filteredData$ | async)?.length === 0"
+        id="realTimeRejectsQueue-noData"
+        fxLayout="column"
+        fxLayoutAlign="center center"
+      >
+        <div class="spacersmall"></div>
+        <img alt="No Data Indicator" src="assets/img/NoDataIcon.svg" />
+        <p class="standard-text">There are no rejects at this time.</p>
+      </div>
+
+      <mat-paginator
+        id="dataTable-bottomPaginator"
+        #bottomPaginator
+        showFirstLastButtons="true"
+      ></mat-paginator>
+    </mat-card-content>
+  </mat-card>
+</div>

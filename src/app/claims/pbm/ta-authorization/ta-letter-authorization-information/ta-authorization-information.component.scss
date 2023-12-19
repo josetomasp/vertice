@@ -1,0 +1,47 @@
+@import 'variables';
+
+:host {
+  height: 100%;
+
+  ::ng-deep {
+    mat-radio-button:not(:first-child) {
+      margin-left: 16px;
+    }
+  }
+}
+
+.ex-parte-alert--banner {
+  fa-icon {
+    padding-right: 16px;
+  }
+  background-color: $warning;
+  border-radius: 4px;
+  padding: 15px;
+}
+
+.form-row {
+  display: flex;
+  flex-direction: row;
+  & > div:not(:first-child) {
+    margin-left: 16px;
+  }
+  margin-bottom: 16px;
+}
+.ta-letter-auth--action-card {
+  background-color: $gray-600;
+  color: white;
+  padding: 16px;
+  & .overhead-label {
+    color: $gray-100 !important;
+  }
+
+  ::ng-deep {
+    .mat-radio-label-content {
+      color: white;
+    }
+    .mat-radio-group .mat-radio-button .mat-radio-outer-circle {
+      background-color: white;
+      opacity: 1;
+    }
+  }
+}

@@ -1,0 +1,34 @@
+<input
+  type="text"
+  role="searchbox"
+  [formControl]="searchInputControl"
+  [placeholder]="placeholder"
+  [style]="style"
+  (focus)="onFocus()"
+  (blur)="onBlur($event)"
+  cdkOverlayOrigin
+  #origin="cdkOverlayOrigin"
+/>
+<ng-template
+  cdkConnectedOverlay
+  [cdkConnectedOverlayOrigin]="origin"
+  [cdkConnectedOverlayOpen]="overlayOpen"
+>
+  <div
+    #panel
+    class="healthe-autocomplete-panel"
+    style="--panel-height: {{ panelHeight }}px;"
+  >
+    <cdk-virtual-scroll-viewport
+      [itemSize]="20"
+      class="healthe-autocomplete-panel_virtual-scroll-viewport"
+    >
+      <mat-option
+        *cdkVirtualFor="let option of filteredOptions$ | async"
+        [value]="option.value"
+        (click)="selectValue($event, option.value)"
+        >{{ option.label }}</mat-option
+      >
+    </cdk-virtual-scroll-viewport>
+  </div>
+</ng-template>

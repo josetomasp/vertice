@@ -1,0 +1,52 @@
+<ng-container *ngIf="isVisible">
+  <mat-card
+    [id]="getID('alertBody')"
+    [style.background-color]="alertStyle.background_color"
+    class="healthe-confirmation-banner"
+  >
+    <div [style.color]="alertStyle.text_color" fxLayout="row">
+      <div
+        fxFlex="34px"
+        class="alert-icon"
+        [style.font-size]="alertStyle.icon_size"
+      >
+        <fa-icon
+          [id]="getID('alertIcon')"
+          [icon]="alertStyle.icon"
+          class="fa"
+        ></fa-icon>
+      </div>
+
+      <div fxFlex [id]="getID('alertTitle')">{{ title }}</div>
+
+      <span
+        [id]="getID('closeWidget')"
+        class="close-widget"
+        (click)="hide()"
+        *ngIf="showCloseButton"
+      >
+        <fa-icon [icon]="faTimes" [id]="getID('closeWidget--icon')"></fa-icon>
+      </span>
+    </div>
+
+    <ng-container *ngIf="bodyList">
+      <mat-card-content>
+        <div fxLayout="row" [style.color]="alertStyle.text_color">
+          <div fxFlex="13px"></div>
+          <ul
+            fxFlex
+            [id]="getID('bodyList')"
+            style="margin-top: 0; margin-bottom: 0"
+          >
+            <li
+              *ngFor="let item of bodyList; let i = index"
+              [id]="getID('bodyList--item' + i)"
+            >
+              {{ item }}
+            </li>
+          </ul>
+        </div>
+      </mat-card-content>
+    </ng-container>
+  </mat-card>
+</ng-container>

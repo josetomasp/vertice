@@ -1,0 +1,249 @@
+<div class="modal" [formGroup]="reassignSearchFormGroup">
+  <div
+    fxLayout="row"
+    class="title-container"
+    fxLayoutAlign="space-between center"
+    mat-dialog-title
+  >
+    <span id="reassignClaim-modal-title">Reassign to Another Claim</span>
+    <button mat-icon-button mat-dialog-close id="close-modal-button">
+      <i class="fal fa-times modal-close-widget"></i>
+    </button>
+  </div>
+
+  <div mat-dialog-content>
+    <div class="modal--margin-bottom">
+      <p>Fill out any combination of fields below to narrow your search</p>
+      <p
+        *ngIf="reassignSearchFormGroup.invalid && searchClickedOnce"
+        class="mat-error"
+      >
+        {{ ERROR_MESSAGES.someSearchFieldsRequired }}
+      </p>
+    </div>
+    <div flex fxLayout="row">
+      <div fxFlex="25" class="modal__inputInit">
+        <mat-label class="overhead-label">CLAIM NUMBER</mat-label>
+        <mat-form-field>
+          <input
+            matInput
+            formControlName="claimNumber"
+            type="text"
+            id="number-input"
+            placeholder="Enter number"
+          />
+          <mat-error>{{ ERROR_MESSAGES.claimNumberMustBe3Digits }}</mat-error>
+        </mat-form-field>
+      </div>
+      <div fxFlex="25" class="modal__input">
+        <mat-label class="overhead-label">CLAIMANT FIRST NAME</mat-label>
+        <mat-form-field>
+          <input
+            matInput
+            type="text"
+            id="first-name-input"
+            formControlName="claimantFirstName"
+            placeholder="Enter Name"
+          />
+        </mat-form-field>
+      </div>
+      <div fxFlex="25" class="modal__input">
+        <mat-label class="overhead-label">CLAIMANT LAST NAME</mat-label>
+        <mat-form-field>
+          <input
+            matInput
+            type="text"
+            id="last-name-input"
+            formControlName="claimantLastName"
+            placeholder="Enter Name"
+          />
+          <mat-error>{{
+            ERROR_MESSAGES.lastNameRequiredIfFirstName
+          }}</mat-error>
+        </mat-form-field>
+      </div>
+      <div
+        fxFlex="auto"
+        fxLayout="row"
+        fxLayoutAlign="end center"
+        fxLayoutGap="20px"
+        class="modal__buttons"
+      >
+        <button
+          (click)="reset()"
+          id="reset-button"
+          class="secondary-button"
+          mat-stroked-button
+        >
+          RESET
+        </button>
+        <button
+          class="primary-button"
+          (click)="searchForClaims()"
+          mat-flat-button
+          id="search-button"
+        >
+          SEARCH
+        </button>
+      </div>
+    </div>
+    <div fxLayout="row" fxLayoutAlign="end">
+      <div class="modal__advanced-search">
+        <a
+          mat-button
+          id="advanced-search-button"
+          (click)="showAdvancedSearch = !showAdvancedSearch"
+        >
+          Advanced Search
+          <i
+            [ngClass]="{
+              'fa-chevron-down': !showAdvancedSearch,
+              'fa-chevron-up': showAdvancedSearch
+            }"
+            class="far"
+          ></i>
+        </a>
+      </div>
+    </div>
+
+    <div flex fxLayout="row" *ngIf="showAdvancedSearch">
+      <div fxFlex="25" class="modal__inputInit">
+        <mat-label class="overhead-label">CLAIMANT SSN</mat-label>
+        <mat-form-field>
+          <input
+            matInput
+            type="text"
+            formControlName="claimantSsn"
+            id="ssn-input"
+            placeholder="Enter SSN"
+          />
+          <mat-error>{{ ERROR_MESSAGES.ssnMustBe5Digits }}</mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+
+    <table
+      mat-table
+      [dataSource]="dataSource"
+      matSort
+      #matSort="matSort"
+      class="modal__table"
+      id="modal-table"
+    >
+      <ng-container>
+        <ng-container
+          [matColumnDef]="column.name"
+          *ngFor="let column of displayColumns; let i = index"
+        >
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            mat-sort-header
+            id="table-{{column.name}}-header"
+          >
+            {{ column.label }}
+          </th>
+          <td mat-cell *matCellDef="let row" id="row-{{i}}-{{column.name}}" [matTooltip]="row[column.name]">
+            {{ row[column.name] }}
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="select">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            id="table-select-header"
+            mat-sort-header
+          >
+            SELECT
+          </th>
+          <td mat-cell *matCellDef="let row">
+            <mat-radio-button
+              id="row-{{row.claimNumber}}-select"
+              [value]="row.claimNumber"
+              name="selected"
+              class="modal--padding-left"
+              (change)="setSelected(row.claimNumber, row.phiMemberId)"
+              [checked]="row.claimNumber === this.selectedID"
+              *ngIf="data.originalClaimNumber != row.claimNumber"
+            ></mat-radio-button>
+          </td>
+        </ng-container>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="headerTable"></tr>
+      <tr mat-row *matRowDef="let row; columns: headerTable"></tr>
+    </table>
+
+    <!-- Searching Spinner -->
+    <mat-card
+      *ngIf="
+        (isSearchingClaims$ | async) ||
+        (!(isSearchingClaims$ | async) &&
+          (searchClaimsResult$ | async)?.length == 0)
+      "
+    >
+      <div
+        id="reassignClaimSearchSpinner"
+        *ngIf="(isSearchingClaims$ | async)"
+        fxLayout="column"
+        fxLayoutAlign="center center"
+      >
+        <mat-spinner [diameter]="55"></mat-spinner>
+        <h2>Loading results...</h2>
+      </div>
+
+      <!-- No results or initial empty array -->
+      <div fxLayout="column" fxLayoutAlign="center center">
+        <ng-container
+          *ngIf="
+            !(isSearchingClaims$ | async) &&
+            (searchClaimsResult$ | async)?.length == 0
+          "
+        >
+          <img alt="No Data Indicator" src="assets/img/NoDataIcon.svg" />
+          <p
+            *ngIf="dataSource.filteredData?.length == 0"
+            class="standard-text"
+            id="searchResults-noDataForQuery"
+          >
+            {{ noDataForQueryVerbiage }}
+          </p>
+        </ng-container>
+      </div>
+    </mat-card>
+
+    <mat-paginator
+      id="table-paginator"
+      #paginator
+      [pageSize]="8"
+      [pageSizeOptions]="[8, 20]"
+      [length]="dataSource.data?.length"
+    ></mat-paginator>
+  </div>
+
+  <div
+    mat-dialog-actions
+    fxLayout="row"
+    fxLayoutAlign="end start"
+    fxLayoutGap="20px"
+    class="modal__footer"
+  >
+    <button
+      mat-flat-button
+      mat-dialog-close
+      class="info-button"
+      id="modal-cancel-button"
+    >
+      CANCEL
+    </button>
+    <button
+      mat-flat-button
+      class="primary-button"
+      id="modal-submit-button"
+      (click)="submit()"
+      [disabled]="!selectedID"
+    >
+      SUBMIT
+    </button>
+  </div>
+</div>

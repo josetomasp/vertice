@@ -1,0 +1,125 @@
+<div fxLayout="row" fxLayoutAlign="space-between center" mat-dialog-title>
+  <h1 id="compound-modal-title">Compound Information</h1>
+  <button
+    mat-icon-button
+    mat-dialog-close
+    id="compound-modal--header-closeButton"
+  >
+    <i class="fal fa-times modal-close-widget"></i>
+  </button>
+</div>
+<mat-dialog-content id="compound-modal-body" class="compound-modal-bodyClass">
+  <div class="compound-modal-title">Fees and Misc. Charges</div>
+  <div class="overhead-label" id="compound-modal-fees-label">
+    DISPENSE FEE(S)
+  </div>
+  <div>{{ displayFees() }}</div>
+
+  <div class="spacermedium"></div>
+
+  <div class="compound-modal-title">Ingredients</div>
+
+  <table mat-table [dataSource]="data.ingredients">
+    <ng-container matColumnDef="drugName">
+      <th
+        mat-header-cell
+        id="compound-modal-body-header-drugName"
+        class="healthe-table-cell tableHeader"
+        *matHeaderCellDef
+      >
+        DRUG NAME
+      </th>
+      <td
+        mat-cell
+        class="healthe-table-cell"
+        [id]="'compound-modal-body-item-drugName-' + i"
+        *matCellDef="let data; let i = index"
+      >
+        <healthe-info-lookup-launcher
+          *ngIf="data.canItOpenLookupModal"
+          [displayText]="data.drugName"
+          [drugLookup]="{
+            drugID: data.ndc,
+            quantity: data.quantity,
+            drugDate: data.createdDate
+          }"
+        ></healthe-info-lookup-launcher>
+        <span
+          *ngIf="!data.canItOpenLookupModal"
+          [matTooltip]="data.drugName"
+          >{{ data.drugName }}</span
+        >
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="quantity">
+      <th
+        mat-header-cell
+        id="compound-modal-body-header-quantity"
+        class="healthe-table-cell tableHeader width-100px"
+        *matHeaderCellDef
+      >
+        QUANTITY
+      </th>
+      <td
+        mat-cell
+        class="healthe-table-cell"
+        [id]="'compound-modal-body-item-quantity-' + i"
+        *matCellDef="let data; let i = index"
+      >
+        <span [matTooltip]="data.quantity">{{ data.quantity }}</span>
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="rejectCode">
+      <th
+        mat-header-cell
+        id="compound-modal-body-header-rejectCode"
+        class="healthe-table-cell tableHeader width-100px "
+        *matHeaderCellDef
+      >
+        REJECT CODE
+      </th>
+      <td
+        mat-cell
+        class="healthe-table-cell"
+        [id]="'compound-modal-body-item-rejectCode-' + i"
+        *matCellDef="let data; let i = index"
+      >
+        <span>{{ data.rejectCode }}</span>
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="rejectrReason">
+      <th
+        mat-header-cell
+        id="compound-modal-body-header-rejectrReason"
+        class="healthe-table-cell tableHeader"
+        *matHeaderCellDef
+      >
+        REJECT REASON
+      </th>
+      <td
+        mat-cell
+        class="healthe-table-cell"
+        [id]="'compound-modal-body-item-rejectrReason-' + i"
+        *matCellDef="let data; let i = index"
+      >
+        <span [matTooltip]="data.rejectReason.description">{{
+          data.rejectReason.description
+        }}</span>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="tableColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: tableColumns"></tr>
+  </table>
+</mat-dialog-content>
+<div mat-dialog-actions fxLayout="row" class="compound-modal-actions" dir="rtl">
+  <button
+    id="compound-modal-okay-button"
+    mat-raised-button
+    class="primary-button"
+    [mat-dialog-close]="false"
+  >
+    OKAY
+  </button>
+</div>

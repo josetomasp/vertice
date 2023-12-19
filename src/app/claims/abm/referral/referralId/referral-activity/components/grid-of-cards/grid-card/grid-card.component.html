@@ -1,0 +1,161 @@
+<mat-card
+  [id]="this.idPrefix"
+  (click)="onClick()"
+  [ngClass]="{ clickable: clickable && cardState.modalData }"
+>
+  <mat-card-header>
+    <mat-card-title [id]="this.idPrefix + 'Title'">{{
+      cardState.title
+    }}</mat-card-title>
+  </mat-card-header>
+  <mat-card-content
+    style="margin-top:6px;"
+    fxLayout="column"
+    fxLayoutGap="15px"
+  >
+    <div
+      *ngIf="cardIcon"
+      fxLayout="row"
+      fxLayoutGap="10px"
+      fxLayoutAlign="start center"
+    >
+      <span
+        [id]="this.idPrefix + 'serviceIcon'"
+        *ngIf="cardIcon.iconClass"
+        [ngClass]="cardIcon.iconClass"
+      ></span>
+      <img
+        *ngIf="cardIcon.image"
+        src="{{cardIcon.image}}"
+        width="50px"
+        height="30px"
+      />
+      <span [id]="this.idPrefix + 'serviceName'" *ngIf="cardIcon.iconText">{{
+        cardIcon.iconText
+      }}</span>
+    </div>
+
+    <header
+      class="standard-text"
+      fxLayout="column"
+      *ngIf="cardState.stage !== ReferralStage.BILLING || isCore"
+    >
+      <!--
+        To explain this logic, basically for stages SERVICE_SCHEDULED or RESULTS, if its a LODGING card, we do not want to display the date line at all.
+      -->
+      <ng-container
+        *ngIf="
+          false ===
+          ((cardState.stage === ReferralStage.SERVICE_SCHEDULED ||
+            cardState.stage === ReferralStage.RESULTS) &&
+            cardState.serviceType === ServiceType.LODGING)
+        "
+      >
+        <span
+          *ngIf="cardState.date"
+          [id]="this.idPrefix + 'DateTime'"
+          style="font-weight: 600"
+          ><ng-container
+            *ngIf="cardState.stage === ReferralStage.SERVICE_SCHEDULED"
+          >
+            Sched. DOS: </ng-container
+          ><ng-container
+            *ngIf="
+              cardState.stage === ReferralStage.RESULTS ||
+              cardState.stage === ReferralStage.BILLING
+            "
+          >
+            DOS:
+          </ng-container>
+          {{ cardState.date
+          }}<i class="vertical-rule" *ngIf="cardState.time"></i
+          >{{ cardState.time }}</span
+        >
+      </ng-container>
+
+      <ng-container *ngIf="cardState.subText">
+        <span
+          [id]="this.idPrefix + 'SubTextLine' + $index"
+          *ngFor="let line of cardState.subText; index as $index"
+          >{{ line }}</span
+        >
+      </ng-container>
+    </header>
+    <main
+      class="standard-text"
+      *ngIf="cardState.body"
+      [id]="this.idPrefix + 'Body'"
+    >
+      <div
+        fxLayout="column"
+        fxLayoutGap="4px"
+        *ngFor="let group of cardState.body; index as $groupIndex"
+        [id]="this.idPrefix + 'BodyGroup' + $groupIndex"
+      >
+        <ul style="list-style: none;margin: 0;padding: 0;">
+          <li
+            *ngFor="let line of group; index as $lineIndex"
+            [id]="
+              this.idPrefix + 'BodyGroup' + $groupIndex + 'Line' + $lineIndex
+            "
+          >
+            <span>{{ line }}</span>
+          </li>
+        </ul>
+      </div>
+    </main>
+    <button
+      *ngIf="
+        cardState.footer.color === FooterColor.SUCCESS &&
+        cardState.stage === ReferralStage.VENDOR_ASSIGNMENT
+      "
+      (click)="openSendANote()"
+      mat-stroked-button
+      style="max-width: 140px; height: 30px;"
+      class="secondary-button"
+    >
+      SEND A NOTE
+    </button>
+    <footer
+      *ngIf="cardState.footer"
+      [id]="this.idPrefix + 'Footer'"
+      fxLayout="column"
+      fxLayoutGap="4px"
+    >
+      <span
+        *ngIf="cardState.footer.text"
+        [ngClass]="cardState.footer.color"
+        [id]="this.idPrefix + 'FooterText'"
+      >
+        <i
+          [id]="this.idPrefix + 'FooterIcon'"
+          class="far"
+          [ngClass]="getIcon(cardState.footer.color)"
+        ></i>
+        {{ cardState.footer.text }}</span
+      >
+      <ng-container
+        *ngIf="cardState.footer.subText"
+        [ngSwitch]="cardState.footer.color"
+      >
+        <span
+          [id]="this.idPrefix + 'FooterSubText'"
+          *ngSwitchCase="FooterColor.SUCCESS"
+          class="success"
+          >{{ cardState.footer.subText }}</span
+        >
+        <span
+          [id]="this.idPrefix + 'FooterSubText'"
+          *ngSwitchCase="FooterColor.NEUTRAL"
+          >{{ cardState.footer.subText }}</span
+        >
+        <span
+          [id]="this.idPrefix + 'FooterSubText'"
+          *ngSwitchCase="FooterColor.FAIL"
+          class="danger"
+          >{{ cardState.footer.subText }}</span
+        >
+      </ng-container>
+    </footer>
+  </mat-card-content>
+</mat-card>

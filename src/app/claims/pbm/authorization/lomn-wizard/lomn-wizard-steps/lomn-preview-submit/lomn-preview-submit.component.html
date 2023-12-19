@@ -1,0 +1,26 @@
+<ng-container
+  *ngFor="
+    let medicationFormGroup of medicationListFormArray
+      ? medicationListFormArray.controls
+      : [];
+    index as $index
+  "
+>
+  <healthe-lomn-medication-preview-card
+    [$index]="$index"
+    [letterType]="getLetterTypeByNDC(medicationFormGroup.get('ndc').value)"
+    [medicationFormGroup]="medicationFormGroup"
+    [lineItem]="ndcToLineItemMap[medicationFormGroup.get('ndc').value]"
+    (previewLOMN)="previewLOMN($event)"
+  ></healthe-lomn-medication-preview-card> </ng-container
+><ng-container>
+  <div
+    *ngIf="
+      !medicationListFormArray ||
+      !medicationListFormArray?.controls ||
+      medicationListFormArray?.controls.length === 0
+    "
+  >
+    <p class="danger">Please select a prescription in the first step.</p>
+  </div>
+</ng-container>

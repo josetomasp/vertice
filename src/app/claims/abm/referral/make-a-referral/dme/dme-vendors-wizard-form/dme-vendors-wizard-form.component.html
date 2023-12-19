@@ -1,0 +1,20 @@
+<ng-container *ngFor="let item of formGroupItems">
+  <h3 [id]="sectionName + '-vendor-select-' + item.name" class="text-primary">
+    Vendor Selection
+  </h3>
+  <span class="note-text">{{ vendorsText }}</span>
+  <p class="spacersmall">
+    <mat-error
+      *ngIf="stepForm.controls[item.name].hasError('noneSelected')"
+      id="add-location-type-required"
+    >
+      Select at least one vendor
+    </mat-error>
+  </p>
+  <healthe-vendors-selector
+    [formControl]="item.control"
+    [sectionName]="sectionName"
+    [serviceType]="serviceType"
+  ></healthe-vendors-selector>
+  <div class="spacersmall"></div>
+</ng-container>

@@ -1,0 +1,167 @@
+<div class="spacertiny"></div>
+<div fxLayout="row" fxLayoutAlign="space-between">
+  <div>
+    <label class="label">Search Filters:&nbsp;</label>
+    <span id="searchFilterSummary">{{ filterSummaryText }}</span>
+  </div>
+  <healthe-search-results-count
+    [resultsCount]="(resultsData$ | async).totalNumberOfResults"
+    resultsCountLimitErrorThreshold="200"
+    [searchIsRecordCountLimited]="(resultsData$ | async).searchIsRecordCountLimited"
+  ></healthe-search-results-count>
+</div>
+<div class="spacertiny"></div>
+
+<mat-card>
+  <mat-card-content>
+    <div fxLayout="column" fxLayoutAlign="start start">
+      <div
+        fxLayout="row"
+        fxLayoutAlign="space-between start"
+        style="width: 100%"
+      >
+        <div
+          style="font-weight: 600; font-size: 22px"
+          id="searchResultsTableTitle"
+        >
+          Search Results
+        </div>
+
+        <div *ngIf="showExportButton">
+          <div>
+            <button
+              mat-flat-button
+              style="width: 120px;"
+              id="tableCard-header-exportButton"
+              class="primary-button"
+              (click)="setOpenUntilClose(exportMenu)"
+              [mat-menu-trigger-for]="exportMenu"
+            >
+              EXPORT
+              <fa-icon
+                class="inline-right-icon"
+                [icon]="exportMenuIcon"
+              ></fa-icon>
+            </button>
+            <mat-menu #exportMenu [overlapTrigger]="false" yPosition="below">
+              <button
+                *ngFor="let exportOption of exportDropdownOptions"
+                mat-menu-item
+                [id]="'tableCard-header-exportOptions-' + exportOption"
+                (click)="doExport.emit(exportOption)"
+              >
+                {{ exportOption }}
+              </button>
+            </mat-menu>
+          </div>
+        </div>
+      </div>
+
+      <div
+        fxLayout="row"
+        fxLayoutAlign="space-between center"
+        style="width: 100%"
+      >
+        <div></div>
+        <healthe-component-grid
+          style="padding-top: 10px"
+          *ngIf="actionsConfig && actionsConfig.grid.length > 0"
+          [componentConfig]="actionsConfig"
+        ></healthe-component-grid>
+        <mat-paginator
+          fxFlex="1 1 400px"
+          id="searchResultsTopPaginator"
+          [pageSize]="pageSize$ | async"
+          [pageSizeOptions]="pageSizeOptions"
+          #topPaginator
+        >
+        </mat-paginator>
+      </div>
+    </div>
+
+    <table mat-table [dataSource]="tableDataSource" matSort #matSort="matSort">
+      <ng-container
+        *ngFor="
+          let columnConfig of resultsColumnsConfig;
+          let i = index;
+          trackBy: trackByMethod
+        "
+        [matColumnDef]="columnConfig.name"
+      >
+        <th
+          id="searchResults{{columnConfig.name}}ColumnHeader"
+          mat-header-cell
+          *matHeaderCellDef
+          [disabled]="!columnConfig.comparator"
+          [mat-sort-header]="columnConfig.name"
+          [ngStyle]="columnConfig.headerStyles"
+          [matTooltip]="columnConfig.headerToolTip"
+          matTooltipPosition="above"
+        >
+          {{ columnConfig.label }}
+        </th>
+        <td
+          mat-cell
+          style="text-overflow: clip !important;"
+          [ngStyle]="columnConfig.cellStyles"
+          *matCellDef="let resultRow"
+        >
+          <healthe-authorizations-search-results-cell
+            [resultsColumnsConfig]="columnConfig"
+            [rowData]="resultRow"
+          ></healthe-authorizations-search-results-cell>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="columnNames; sticky: true"></tr>
+      <tr
+        mat-row
+        [hidden]="isResultLoading$ | async"
+        *matRowDef="let row; columns: columnNames"
+      ></tr>
+    </table>
+
+    <mat-card
+      *ngIf="
+        (isResultLoading$ | async) || tableDataSource.filteredData.length == 0
+      "
+    >
+      <div
+        id="searchResultsNoData"
+        fxLayout="column"
+        fxLayoutAlign="center center"
+      >
+        <div
+          id="searchResultsLoadingDataSpinner"
+          *ngIf="(isResultLoading$ | async)"
+          fxLayout="column"
+          fxLayoutAlign="center center"
+        >
+          <mat-spinner diameter="55"></mat-spinner>
+          <h2>Loading results...</h2>
+        </div>
+
+        <ng-container
+          *ngIf="
+            !(isResultLoading$ | async) &&
+            tableDataSource.filteredData.length == 0
+          "
+        >
+          <img alt="No Data Indicator" src="assets/img/NoDataIcon.svg" />
+          <p
+            *ngIf="tableDataSource.filteredData.length == 0"
+            class="standard-text"
+            id="searchResults-noDataForQuery"
+          >
+            {{ noDataForQueryVerbiage }}
+          </p>
+        </ng-container>
+      </div>
+    </mat-card>
+
+    <mat-paginator
+      id="searchResultsBottomPaginator"
+      #bottomPaginator
+    ></mat-paginator>
+  </mat-card-content>
+</mat-card>

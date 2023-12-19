@@ -1,0 +1,19 @@
+@import 'variables';
+
+.fatal-server-error {
+  &--backdrop {
+    z-index: 999;
+
+    background-color: $gray-200;
+    position: relative;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+
+    > div > fa-icon {
+      font-size: 64px;
+      color: $secondary;
+    }
+  }
+}

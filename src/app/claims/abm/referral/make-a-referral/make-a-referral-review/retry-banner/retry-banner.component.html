@@ -1,0 +1,16 @@
+<div fxLayout="row" class="retry">
+  <div class="retry__column1">
+    <i
+      id="timeoutContent--exclamation"
+      class="fal fa-exclamation-triangle retry__triangle-icon retry--white"
+    ></i>
+  </div>
+  <div class="retry__column2 retry--white retry__message">
+    <a (click)="doRetry()" class="retry__action retry--white">RETRY</a> to start
+    a new referral for
+    <p *ngIf="errorsLength > 1">the portions that were not</p>
+    <p *ngIf="errorsLength === 1">the portion that was not</p>
+    successfully submitted.
+  </div>
+  <div fxFlex="15%" fxLayoutAlign="end"></div>
+</div>

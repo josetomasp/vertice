@@ -1,0 +1,17 @@
+@import 'variables';
+
+.errorBox {
+  border: 2px $pink solid;
+  padding: 4px;
+  margin-bottom: 4px;
+}
+
+.noError {
+  padding: 6px;
+  margin-bottom: 4px;
+}
+
+.clearAppointments {
+  margin-top: 28px;
+  cursor: pointer;
+}

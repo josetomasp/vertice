@@ -1,0 +1,48 @@
+<mat-expansion-panel
+  class="risk-info-expansion-panel"
+  hideToggle="true"
+  #expansionPanel
+  disabled
+>
+  <mat-expansion-panel-header>
+    <div fxLayout="column" style="width: 100%;">
+      <h3 class="text-primary risk-info-title">Risk Information</h3>
+      <section
+        class="risk-info-value-section"
+        fxLayoutGap="30px"
+        fxLayout="row"
+        fxLayoutAlign="start center"
+      >
+        <div
+          *ngFor="let field of (topInfoFields$ | async)"
+          [id]="'risk-info-value-group--' + field.name"
+          class="risk-info-value-group"
+          fxLayout="column"
+        >
+          <div class="overhead-label" [id]="'risk-info-label--' + field.name">
+            <healthe-customer-configs-label
+              [defaultText]="field.label"
+              [elementName]="field.name"
+            ></healthe-customer-configs-label>
+          </div>
+          <div class="standard-text" [id]="'risk-info-value--' + field.name">
+            {{ field.value || field.fallback }}
+          </div>
+        </div>
+      </section>
+    </div>
+    <div fxLayout="column" fxLayoutAlign="center end" style="width: 80%;">
+      <div matTooltip="Enabled in VER-1298" matTooltipPosition="above">
+        <a
+          mat-button
+          class="text-secondary"
+          (click)="expansionPanel.open()"
+          disabled
+        >
+          {{ expansionPanel.expanded ? 'Less' : 'More' }}
+        </a>
+      </div>
+    </div>
+  </mat-expansion-panel-header>
+  <!-- TODO: Expansion fields are in VER-1298 -->
+</mat-expansion-panel>

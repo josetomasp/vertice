@@ -1,0 +1,16 @@
+<div class="helpContainerBox">
+  <iframe
+    *ngIf="isExpanded"
+    [src]="srcLink"
+    style="height: 100%;float: right; z-index: 1000; position:relative;pointer-events: all"
+    [ngStyle]="helpPanelWidth"
+  ></iframe>
+  <button
+    class="verticeHelpButton"
+    (click)="clickHelp()"
+    [id]="verticeHelpButtonID"
+  >
+    <fa-icon [icon]="faQuestionCircle" style="margin-right: 3px"></fa-icon>
+    Help
+  </button>
+</div>

@@ -1,0 +1,33 @@
+@import 'variables';
+
+.flightInfo {
+  color: $primary;
+  font-weight: bold;
+}
+
+input {
+  width: 80%;
+}
+
+::ng-deep .section-autocomplete-panel.mat-menu-panel {
+  max-width: 100% !important;
+  max-height: 250px !important;
+}
+
+.errorBox {
+  border: 2px $pink solid;
+  padding: 4px;
+  margin-bottom: 4px;
+  margin-top: -7px;
+}
+
+.noError {
+  padding: 6px;
+  margin-bottom: 4px;
+  margin-top: -7px;
+}
+
+.clearAppointments {
+  margin-top: 4px;
+  cursor: pointer;
+}

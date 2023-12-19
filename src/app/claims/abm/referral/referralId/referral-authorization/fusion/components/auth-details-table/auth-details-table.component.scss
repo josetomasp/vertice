@@ -1,0 +1,69 @@
+:host {
+  padding-bottom: 16px;
+}
+
+.auth-details-expansion-panel {
+  & > .view-reasons_icon {
+    font-size: 18px;
+  }
+
+  &--header_view-details {
+    font-size: 14px !important;
+  }
+
+  ::ng-deep.mat-expansion-panel-body {
+    overflow-x: auto;
+  }
+
+  td.mat-cell,
+  td.mat-footer-cell,
+  th.mat-header-cell {
+    padding: 0 8px 0 8px;
+  }
+
+  .auth-table {
+    width: initial;
+
+    &_header {
+      //padding: 0 16px 0 16px !important;
+      white-space: nowrap;
+    }
+
+    &_cell {
+      word-break: initial;
+      padding: 10px !important;
+      white-space: nowrap !important;
+      width: fit-content;
+      text-overflow: initial;
+    }
+
+    &--dateOfService {
+      &_header {
+        text-align: left;
+      }
+
+      &_cell {
+        word-break: initial;
+        white-space: nowrap;
+        width: max-content;
+      }
+    }
+
+    &--description,
+    &--requestorName {
+      &_header {
+        text-align: left;
+      }
+
+      &_cell {
+        word-break: initial;
+        white-space: pre-wrap !important;
+        max-width: 250px;
+      }
+    }
+  }
+
+  ::ng-deep.mat-table {
+    width: initial !important;
+  }
+}

@@ -1,0 +1,47 @@
+@import 'variables';
+
+.mat-column-evaluationDescription {
+  width: 15%;
+  word-wrap: break-word !important;
+  white-space: pre-line;
+}
+
+.clinical-history-detail {
+  &--bodyParts {
+    background-color: white;
+    padding: 20px;
+    margin: 0 -20px -20px;
+    overflow-x: scroll;
+    &--sub-title {
+      font-size: 12px;
+    }
+    &--column-header {
+      white-space: pre-line;
+      word-break: break-all;
+    }
+    &--table-row {
+      height: 50px !important;
+      & > td {
+        white-space: pre-line;
+        padding-right: 5px;
+      }
+    }
+  }
+  &--inset {
+    background-color: $gray-100;
+
+    &--title {
+      padding-top: 30px;
+      color: $primary !important;
+      & > span {
+        padding-left: 16px;
+      }
+    }
+  }
+  &--table {
+    &--header-row {
+      height: 28px !important;
+    }
+    background-color: transparent !important;
+  }
+}

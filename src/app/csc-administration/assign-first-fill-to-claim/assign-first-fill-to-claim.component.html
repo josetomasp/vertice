@@ -1,0 +1,148 @@
+<div class="assign-first-fill-to-claim-wrapper">
+  <healthe-header-bar title="Assign First Fill to a Claim"></healthe-header-bar>
+  <div class="spacertiny"></div>
+  <!--
+    if we go forward with showing claim search form validation errors here we'll need to update the below *ngIf
+  -->
+  <div #errorBannerSpacer>
+    <healthe-error-card [expanded]="true" *ngIf="(haveServerErrors$ | async)">
+      <fa-icon
+        style="align-self: center; color:white; font-size: 18px; padding-right: 8px"
+        [icon]="faExclamationTriangle"
+      ></fa-icon>
+      <header>
+        <h2 style="color: white" id="assignFirstFill-allErrors-header">
+          Errors
+        </h2>
+      </header>
+      <content>
+        <ng-container
+          *ngIf="
+            (loadingFirstFillLinesToAssignServerErrors$ | async).length > 0
+          "
+        >
+          <h4 id="assignFirstFill-gettingFirstFillLinesErrors-header">
+            Errors while getting first fill line items to assign:
+          </h4>
+          <ul>
+            <li
+              id="assignFirstFill-gettingFirstFillLinesErrors-error-{{index}}"
+              *ngFor="
+                let error of (loadingFirstFillLinesToAssignServerErrors$
+                  | async);
+                let index = index
+              "
+            >
+              {{ error }}
+            </li>
+          </ul>
+        </ng-container>
+        <ng-container
+          *ngIf="(firstFillSaveNoteOrMoveQueueServerErrors$ | async).length > 0"
+        >
+          <h4 id="assignFirstFill-savingNotesOrMovingQueueErrors-header">
+            Errors while saving notes or moving to next queue:
+          </h4>
+          <ul>
+            <li
+              id="assignFirstFill-savingNotesOrMovingQueueErrors-error-{{index}}"
+              *ngFor="
+                let error of (firstFillSaveNoteOrMoveQueueServerErrors$
+                  | async);
+                let index = index
+              "
+            >
+              {{ error }}
+            </li>
+          </ul>
+        </ng-container>
+        <ng-container
+          *ngIf="(firstFillClaimSearchServerErrors$ | async).length > 0"
+        >
+          <h4 id="assignFirstFill-claimSearchErrors-header">
+            Errors while searching for claims:
+          </h4>
+          <ul>
+            <li
+              id="assignFirstFill-claimSearchErrors-error-{{index}}"
+              *ngFor="
+                let error of (firstFillClaimSearchServerErrors$ | async);
+                let index = index
+              "
+            >
+              {{ error }}
+            </li>
+          </ul>
+        </ng-container>
+        <ng-container
+          ><!-- claim search results errors go here
+        --></ng-container>
+        <ng-container
+          *ngIf="(firstFillAssignToClaimServerErrors$ | async).length > 0"
+        >
+          <h4 id="assignFirstFill-claimAssignment-header">
+            Errors while assigning to the new Claim:
+          </h4>
+          <ul>
+            <li
+              id="assignFirstFill-claimAssignment-error-{{index}}"
+              *ngFor="
+                let error of (firstFillAssignToClaimServerErrors$ | async);
+                let index = index
+              "
+            >
+              {{ error }}
+            </li>
+          </ul>
+        </ng-container>
+      </content>
+    </healthe-error-card>
+  </div>
+  <div class="spacertiny"></div>
+  <mat-card>
+    <mat-card-title id="assignFirstFill-lineItemDetails-header"
+      >First Fill Line Item Details
+    </mat-card-title>
+    <mat-card-content>
+      <healthe-assign-first-fill-medication-history-table
+        [isLoadingFirstFillLinesToAssign$]="isLoadingFirstFillLinesToAssign$"
+        [lineItemDetailsList$]="lineItemDetailsList$"
+      ></healthe-assign-first-fill-medication-history-table>
+      <div class="spacertiny"></div>
+
+      <ng-container *ngIf="!(isLoadingFirstFillLinesToAssign$ | async)">
+        <healthe-assign-first-fill-notes-and-move
+          *ngIf="(lineItemDetailsList$ | async).length > 0"
+          [initialNote$]="webUserNotes$"
+          (saveNotesClick)="saveNotesClick($event)"
+          (moveToNextQueueClick)="moveToNextQueueClick()"
+          (saveNotesAndMoveToNextQueueClick)="
+            saveNotesAndMoveToNextQueueClick($event)
+          "
+        ></healthe-assign-first-fill-notes-and-move>
+        <div class="spacertiny"></div>
+
+        <healthe-assign-first-fill-claim-search-filter-box
+          [defaultSearchFormValues$]="firstFillInitialClaimSearchFormValues$"
+          (executeSearch)="executeSearch($event)"
+        ></healthe-assign-first-fill-claim-search-filter-box>
+        <div class="spacertiny"></div>
+
+        <healthe-assign-first-fill-claim-search-results-table
+          [isLoadingClaimSearchResults$]="isLoadingFirstFillClaimSearchResults$"
+          [firstFillClaimSearchResults$]="firstFillClaimSearchResults$"
+          (claimSelected$)="
+            saveSelectedClaim($event.claimNumber, $event.customer)
+          "
+        ></healthe-assign-first-fill-claim-search-results-table>
+      </ng-container>
+    </mat-card-content>
+  </mat-card>
+  <div class="spacertiny"></div>
+  <healthe-assign-first-fill-footer
+    [selectedClaimAndCustomerFromSearch]="
+      (claimAssignmentInformation$ | async).selectedCustomerAndClaim
+    "
+    (assignToClaimClick)="assignToClaimClick()"
+  ></healthe-assign-first-fill-footer>
+</div>

@@ -1,0 +1,593 @@
+<healthe-error-banner
+  *ngIf="bannerErrors.length > 0"
+  [errorMessages]="bannerErrors"
+  bannerTitle="Something went wrong. Please try again or contact Healthesystems for assistance."
+></healthe-error-banner>
+
+<div #healtheErrorCardScrollElement></div>
+<healthe-error-card
+  [expanded]="true"
+  *ngIf="
+    createAuthorizationClickedOnce && (fVES.errorMessages$ | async)?.length > 0
+  "
+>
+  <fa-icon
+    style="align-self: center; color:white; font-size: 18px; padding-right: 8px"
+    [icon]="faExclamationTriangle"
+  ></fa-icon>
+  <header><h2 style="color: white">Validation Errors</h2></header>
+  <content>
+    <ul>
+      <li *ngFor="let error of (fVES.errorMessages$ | async)">
+        <a mat-button (click)="goToElement(error.for)">{{ error.message }}</a>
+      </li>
+    </ul>
+  </content>
+</healthe-error-card>
+<ng-container *ngIf="isAnExistingAuth">
+  <div class="spacersmall"></div>
+  <div
+    class="locked-pbm-auth-alert--banner"
+    fxLayout="row"
+    fxLayoutAlign="start center"
+    fxLayoutGap="15px"
+  >
+    <fa-icon
+      class="locked-pbm-auth-alert--banner_icon"
+      [icon]="faExclamationCircle"
+    ></fa-icon>
+    <span class="standard-text"
+      >There is an existing POS (ePAQ) authorization for this member ID at this
+      pharmacy</span
+    >
+  </div>
+</ng-container>
+<div [formGroup]="createNewAuthorizationFormGroup">
+  <mat-card>
+    <mat-card-title>
+      <div fxLayout="row" fxLayoutAlign="space-between start">
+        <div id="createPosAuth-title">Pharmacy Information</div>
+        <div fxLayout="row" fxLayoutAlign="end start" fxLayoutGap="20px">
+          <button
+            mat-stroked-button
+            class="secondary-button"
+            (click)="doPhiHistoryRefresh()"
+            id="createPosAuth-refresh-button"
+          >
+            REFRESH
+          </button>
+          <button
+            mat-stroked-button
+            class="secondary-button"
+            (click)="redoMemberSearch()"
+            id="createPosAuth-reassign-button"
+          >
+            REDO MEMBER SEARCH
+          </button>
+        </div>
+      </div>
+    </mat-card-title>
+    <mat-card-content>
+      <div class="spacersmall"></div>
+      <healthe-confirmation-banner
+        *ngIf="alertText"
+        [id]="'createPosAuth-findPharmacyError'"
+        [alertType]="alertType.DANGER"
+        [title]="alertText"
+        [isVisible]="true"
+        [showCloseButton]="true"
+      ></healthe-confirmation-banner>
+      <div fxLayout="row" fxLayoutGap="35px" fxLayoutAlign="start start">
+        <div fxLayout="column">
+          <div class="overhead-label" id="createPosAuth-pharmacy-nabp-label">
+            PHARMACY NCPDP<span class="required-text">*</span>
+          </div>
+          <mat-form-field>
+            <input
+              matInput
+              formControlName="pharmacyNabp"
+              placeholder="Enter NCPDP"
+              healtheFormValidationExtractor
+              formLabel="Pharmacy NCPDP"
+              id="createPosAuth-pharmacy-nabp-input"
+              [attr.disabled]="addedRowWorkingPharmacyNabp"
+            />
+            <mat-error
+              *ngIf="
+                getPharmacyNabpFormControl().touched &&
+                (getPharmacyNabpFormControl().hasError('minlength') ||
+                  getPharmacyNabpFormControl().hasError('required'))
+              "
+              >Please enter at least 7 characters
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div>
+          <button
+            mat-stroked-button
+            style="margin-top: 19px;"
+            class="secondary-button"
+            [disabled]="
+              getPharmacyNabpFormControl().touched &&
+              getPharmacyNabpFormControl().invalid
+            "
+            (click)="doPharmacyFind(true)"
+            id="createPosAuth-pharmacyFind-button"
+          >
+            FIND
+          </button>
+        </div>
+        <div>
+          <div class="overhead-label" id="createPosAuth-pharmacy-name-label">
+            PHARMACY NAME
+          </div>
+          <div id="createPosAuth-pharmacy-name-value" style="margin-top: 14px;">
+            {{ pharmacyName }}
+          </div>
+        </div>
+
+        <div fxFlex="0 0 150px">
+          <div class="overhead-label" id="createPosAuth-caller-phone-label">
+            CALLER PHONE
+          </div>
+          <mat-form-field>
+            <input
+              matInput
+              formControlName="callerPhone"
+              healtheFormValidationExtractor
+              formLabel="Caller Phone"
+              id="createPosAuth-pharmacy-phone-input"
+              placeholder="(xxx) xxx-xxxx"
+              mask="(000) 000-0000"
+            />
+            <mat-error
+              *ngIf="
+                getCallerPhoneFormControl().touched &&
+                getCallerPhoneFormControl().hasError('mask')
+              "
+              >If entering a phone number it must contain 10 digits
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div fxLayout="column">
+          <div class="overhead-label" id="createPosAuth-caller-name-label">
+            CALLER NAME<span class="required-text">*</span>
+          </div>
+          <mat-form-field>
+            <input
+              matInput
+              formControlName="callerName"
+              healtheFormValidationExtractor
+              formLabel="Caller Name"
+              placeholder="Enter Caller Name"
+              id="createPosAuth-caller-name-input"
+            />
+            <mat-error
+              *ngIf="
+                getCallerNameFormControl().touched &&
+                getCallerNameFormControl().hasError('required')
+              "
+              >Please enter a caller name
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="spacersmall"></div>
+
+      <h2>Rx History From PHI - 7 Days</h2>
+      <table mat-table [dataSource]="rxHistoryRows">
+        <ng-container matColumnDef="selectedFC">
+          <th
+            mat-header-cell
+            id="createPosAuth-table-header-selectedFC"
+            class="healthe-table-cell tableHeader"
+            *matHeaderCellDef
+          >
+            SELECT
+          </th>
+          <td
+            mat-cell
+            class="healthe-table-cell tableHeader"
+            [id]="'createPosAuth-table-cell-selectedFC-' + i"
+            *matCellDef="let data; let i = index"
+          >
+            <mat-checkbox
+              [formControl]="data.selectedFC"
+              style="margin-left: 15px;"
+            ></mat-checkbox>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="prescriptionDescription">
+          <th
+            mat-header-cell
+            id="createPosAuth-table-header-prescriptionDescription"
+            class="healthe-table-cell tableHeader"
+            *matHeaderCellDef
+          >
+            PRESCRIPTION
+          </th>
+          <td
+            mat-cell
+            class="healthe-table-cell tableHeader"
+            [id]="'createPosAuth-table-cell-prescriptionDescription-' + i"
+            *matCellDef="let data; let i = index"
+          >
+            <healthe-info-lookup-launcher
+              [ngClass]="{ disabledRowText: data.disabled }"
+              [matTooltip]="data.summary.prescriptionName"
+              [displayText]="data.detail.prescriptionName"
+              [drugLookup]="getDrugLookupParameters(data)"
+              [compoundDetails]="getCompoundModalDetails(data)"
+            ></healthe-info-lookup-launcher>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="daysSupply">
+          <th
+            mat-header-cell
+            id="createPosAuth-table-header-daysSupply"
+            class="healthe-table-cell tableHeader"
+            *matHeaderCellDef
+          >
+            DAYS SUPPLY
+          </th>
+          <td
+            mat-cell
+            class="healthe-table-cell tableHeader"
+            [id]="'createPosAuth-table-cell-daysSupply-' + i"
+            *matCellDef="let data; let i = index"
+          >
+            <span
+              [matTooltip]="data.summary.daysSupply"
+              [ngClass]="{ disabledRowText: data.disabled }"
+            >
+              {{ data.summary.daysSupply }}
+            </span>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="quantity">
+          <th
+            mat-header-cell
+            id="createPosAuth-table-header-quantity"
+            class="healthe-table-cell tableHeader"
+            *matHeaderCellDef
+          >
+            QTY
+          </th>
+          <td
+            mat-cell
+            class="healthe-table-cell tableHeader"
+            [id]="'createPosAuth-table-cell-quantity-' + i"
+            *matCellDef="let data; let i = index"
+          >
+            <span
+              [matTooltip]="data.summary.quantity"
+              [ngClass]="{ disabledRowText: data.disabled }"
+            >
+              {{ data.summary.quantity }}
+            </span>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="ndc">
+          <th
+            mat-header-cell
+            id="createPosAuth-table-header-ndc"
+            class="healthe-table-cell tableHeader"
+            *matHeaderCellDef
+          >
+            NDC
+          </th>
+          <td
+            mat-cell
+            class="healthe-table-cell tableHeader"
+            [id]="'createPosAuth-table-cell-ndc-' + i"
+            *matCellDef="let data; let i = index"
+          >
+            <span
+              [matTooltip]="data.detail.ndc"
+              [ngClass]="{ disabledRowText: data.disabled }"
+            >
+              {{ data.detail.ndc }}
+            </span>
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="dea">
+          <th
+            mat-header-cell
+            id="createPosAuth-table-header-dea"
+            class="healthe-table-cell tableHeader"
+            *matHeaderCellDef
+          >
+            DEA
+          </th>
+          <td
+            mat-cell
+            class="healthe-table-cell tableHeader"
+            [id]="'createPosAuth-table-cell-dea-' + i"
+            *matCellDef="let data; let i = index"
+          >
+            <span
+              [matTooltip]="data.summary.deaNumber"
+              [ngClass]="{ disabledRowText: data.disabled }"
+            >
+              {{ data.summary.deaNumber }}
+            </span>
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="rejectCodes">
+          <th
+            mat-header-cell
+            id="createPosAuth-table-header-rejectCodes"
+            class="healthe-table-cell tableHeader"
+            *matHeaderCellDef
+          >
+            REJECT CODE(S)
+          </th>
+          <td
+            mat-cell
+            class="healthe-table-cell tableHeader"
+            [id]="'createPosAuth-table-cell-rejectCodes-' + i"
+            *matCellDef="let data; let i = index"
+          >
+            <span
+              [matTooltip]="
+                data.detail.secondaryRejectCode
+                  ? data.detail.primaryRejectCode +
+                    ', ' +
+                    data.detail.secondaryRejectCode
+                  : data.detail.primaryRejectCode
+              "
+              [ngClass]="{ disabledRowText: data.disabled }"
+            >
+              {{
+                data.detail.secondaryRejectCode
+                  ? data.detail.primaryRejectCode +
+                    ', ' +
+                    data.detail.secondaryRejectCode
+                  : data.detail.primaryRejectCode
+              }}
+            </span>
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="dateFilled">
+          <th
+            mat-header-cell
+            id="createPosAuth-table-header-dateFilled"
+            class="healthe-table-cell tableHeader"
+            *matHeaderCellDef
+          >
+            DATE FILLED
+          </th>
+          <td
+            mat-cell
+            class="healthe-table-cell tableHeader"
+            [id]="'createPosAuth-table-cell-dateFilled-' + i"
+            *matCellDef="let data; let i = index"
+          >
+            <span
+              [matTooltip]="data.summary.dateFilled"
+              [ngClass]="{ disabledRowText: data.disabled }"
+            >
+              {{ data.summary.dateFilled }}
+            </span>
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="nabp">
+          <th
+            mat-header-cell
+            id="createPosAuth-table-header-nabp"
+            class="healthe-table-cell tableHeader"
+            *matHeaderCellDef
+          >
+            NCPDP
+          </th>
+          <td
+            mat-cell
+            class="healthe-table-cell tableHeader"
+            [id]="'createPosAuth-table-cell-nabp-' + i"
+            *matCellDef="let data; let i = index"
+          >
+            <span
+              [matTooltip]="data.summary.nabp"
+              [ngClass]="{ disabledRowText: data.disabled }"
+            >
+              {{ data.summary.nabp }}
+            </span>
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="dateSubmitted">
+          <th
+            mat-header-cell
+            id="createPosAuth-table-header-dateSubmitted"
+            class="healthe-table-cell tableHeader"
+            *matHeaderCellDef
+          >
+            DATE SUBMITTED
+          </th>
+          <td
+            mat-cell
+            class="healthe-table-cell tableHeader"
+            [id]="'createPosAuth-table-cell-dateSubmitted-' + i"
+            *matCellDef="let data; let i = index"
+          >
+            <span
+              [matTooltip]="data.summary.dateSubmitted"
+              [ngClass]="{ disabledRowText: data.disabled }"
+            >
+              {{ data.summary.dateSubmitted }}
+            </span>
+          </td>
+        </ng-container>
+
+        <tr
+          mat-header-row
+          *matHeaderRowDef="rxHistoryTableColumns; sticky: true"
+        ></tr>
+        <tr
+          mat-row
+          [hidden]="isLoading"
+          *matRowDef="let row; columns: rxHistoryTableColumns; let i = index"
+        ></tr>
+      </table>
+
+      <div *ngIf="isLoading" fxLayout="column" fxLayoutAlign="center center">
+        <div class="spacersmall"></div>
+        <mat-spinner
+          id="createPosAuth-table-loading-spinner"
+          [diameter]="55"
+        ></mat-spinner>
+        <h2 id="createPosAuth-table-loading-text">Loading results...</h2>
+      </div>
+      <div
+        *ngIf="!isLoading && rxHistoryRows.length === 0"
+        fxLayout="column"
+        fxLayoutAlign="center center"
+      >
+        <div class="spacersmall"></div>
+        <img alt="No Data Indicator" src="assets/img/NoDataIcon.svg" />
+        <p id="createPosAuth-table-no-data-text">No Rx History From PHI</p>
+      </div>
+
+      <div class="spacersmall"></div>
+      <div fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="35px">
+        <button
+          mat-flat-button
+          class="primary-button"
+          [disabled]="rxHistoryRows.length === 0"
+          (click)="doAutoSelectedPrescriptionsFill()"
+          id="createPosAuth-autofill-button"
+        >
+          AUTOFILL SELECTED PRESCRIPTIONS
+        </button>
+        <button
+          mat-flat-button
+          class="secondary-button"
+          (click)="doSearchForOtherMedication()"
+          id="createPosAuth-searchForMedication-button"
+        >
+          SEARCH FOR OTHER MEDICATION
+        </button>
+      </div>
+
+      <div class="spacersmall"></div>
+
+      <healthe-notes
+        sectionTitle="Healthe CSC Internal Notes"
+        textAreaPlaceholder="Enter Healthe Notes"
+        formControlName="authorizationLevelNotes"
+      ></healthe-notes>
+
+      <div class="spacersmall"></div>
+
+      <ng-container
+        *ngIf="isAnExistingAuth"
+        ngFor="let row of addedPrescriptionsDetails; let i = index"
+      >
+        <mat-expansion-panel #matExpansionPanel [expanded]="false">
+          <mat-expansion-panel-header class="existing-auth-header">
+            <mat-panel-title
+              class="notes-expansion-panel--header--title text-secondary"
+            >
+              <span class="text-blue"> Existing {{displayedExistingAuthStatusTitle}}</span>
+            </mat-panel-title>
+            <span
+              class="text-secondary existing-auth-expansion-panel--header--title"
+              >{{
+                matExpansionPanel.expanded
+                  ? 'Collapse Existing Authorization'
+                  : 'Expand Existing Authorization'
+              }}</span
+            >
+            <div></div>
+          </mat-expansion-panel-header>
+
+          <ng-container
+            *ngFor="let row of existingPrescriptionsDetails; let i = index"
+          >
+            <healthe-create-pos-auth-prescription
+              [row]="row"
+              [readonly]="true"
+              [rejectCodeOptions]="rejectCodeOptions"
+              [index]="i"
+              (remove)="removeIndividualPrescriptionDetailForm($event)"
+            ></healthe-create-pos-auth-prescription>
+            <div class="spacersmall"></div>
+          </ng-container>
+        </mat-expansion-panel>
+
+        <div class="spacersmall"></div>
+      </ng-container>
+
+      <ng-container
+        *ngFor="let row of addedPrescriptionsDetails; let i = index"
+      >
+        <healthe-create-pos-auth-prescription
+          [row]="row"
+          [rejectCodeOptions]="rejectCodeOptions"
+          [index]="i"
+          (remove)="removeIndividualPrescriptionDetailForm($event)"
+        ></healthe-create-pos-auth-prescription>
+        <div class="spacersmall"></div>
+      </ng-container>
+    </mat-card-content>
+  </mat-card>
+
+  <div class="spacersmall"></div>
+
+  <mat-card>
+    <mat-card-content fxLayout="row" fxLayoutAlign="space-between start">
+      <button
+        mat-flat-button
+        class="info-button"
+        (click)="doGoBack()"
+        id="createPosAuth-goBack-button"
+      >
+        GO BACK
+      </button>
+      <div>
+        <div
+          class="overhead-label"
+          id="createPosAuth-injuredWorkerWaiting-label"
+        >
+          INJURED WORKER WAITING AT PHARMACY?
+        </div>
+        <mat-radio-group formControlName="injuredWorkerWaiting">
+          <mat-radio-button
+            [value]="true"
+            id="createPosAuth-injuredWorker-yes-button"
+            >Yes
+          </mat-radio-button>
+          <mat-radio-button
+            style="margin-left: 20px;"
+            [value]="false"
+            id="createPosAuth-injuredWorker-no-button"
+            >No
+          </mat-radio-button>
+        </mat-radio-group>
+      </div>
+      <div fxLayout="row" fxLayoutAlign="end start" fxLayoutGap="35px">
+        <button
+          *ngIf="isAnExistingAuth"
+          mat-flat-button
+          class="primary-button"
+          (click)="addExistingLine()"
+          id="createPosAuth-add-line-items-button"
+        >
+          ADD LINE ITEMS TO EXISTING AUTH (EPAQ)
+        </button>
+        <button
+          mat-flat-button
+          class="success-button"
+          (click)="createAuthClicked()"
+          id="createPosAuth-createNewAuth-button"
+        >
+          CREATE NEW AUTHORIZATION (EPAQ)
+        </button>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>

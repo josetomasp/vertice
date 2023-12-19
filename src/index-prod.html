@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Vertice 3.0</title>
+    <base href="/" />
+    <meta content="width=device-width, initial-scale=1" name="viewport" />
+    <meta content="" name="version" />
+    <meta http-equiv="Cache-control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <link href="favicon.ico" rel="icon" type="image/x-icon" />
+    <link
+      href="https://fonts.googleapis.com/css?family=Roboto:300,400,500"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet"
+    />
+    <script>
+      var req = new XMLHttpRequest();
+      req.addEventListener('load', function() {
+        if (this.responseText.indexOf('<!DOCTYPE html>') > -1) {
+          window.location.href = '/timeout/index.html';
+        }
+      });
+      req.open('GET', '/vertice/assets/img/E.svg', false);
+      req.send();
+    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCJyy2aINnuPX51AwseKodUK_fpqPt_oMw&libraries=places"></script>
+    <script src="https://code.jquery.com/jquery-latest.js"></script>
+    <script src="https://jira.healthesystems.com/plugins/servlet/issueCollectorBootstrap.js?collectorId=48312f78&locale=en_US"></script>
+    <script>
+      (function(apiKey) {
+        (function(p, e, n, d, o) {
+          var v, w, x, y, z;
+          o = p[d] = p[d] || {};
+          o._q = o._q || [];
+          v = ['initialize', 'identify', 'updateOptions', 'pageLoad', 'track'];
+          for (w = 0, x = v.length; w < x; ++w)
+            (function(m) {
+              o[m] =
+                o[m] ||
+                function() {
+                  o._q[m === v[0] ? 'unshift' : 'push'](
+                    [m].concat([].slice.call(arguments, 0))
+                  );
+                };
+            })(v[w]);
+          y = e.createElement(n);
+          y.async = !0;
+          y.src = 'https://cdn.pendo.io/agent/static/' + apiKey + '/pendo.js';
+          z = e.getElementsByTagName(n)[0];
+          z.parentNode.insertBefore(y, z);
+        })(window, document, 'script', 'pendo');
+      })('fd8e58a7-efa9-4745-53d2-bf047e859d5b');
+    </script>
+  </head>
+
+  <body>
+    <healthe-router></healthe-router>
+  </body>
+</html>

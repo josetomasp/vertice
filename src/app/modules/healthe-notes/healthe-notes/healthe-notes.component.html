@@ -1,0 +1,63 @@
+<mat-expansion-panel #banner class="notes-expansion-panel">
+  <mat-expansion-panel-header>
+    <mat-panel-title class="notes-expansion-panel--header--title">
+      <fa-icon [icon]="faFile" class="notes-expansion-panel_icon"></fa-icon>
+      {{ sectionTitle }}
+    </mat-panel-title>
+    <span class="text-secondary notes-expansion-panel--see-notes">{{
+      banner.expanded ? 'Collapse Notes' : 'View/Edit Notes'
+    }}</span>
+    <span class="tag tag-secondary" *ngIf="existingNotes.length > 0">{{
+      existingNotes.length
+    }}</span>
+  </mat-expansion-panel-header>
+  <ng-container *ngIf="existingNotes">
+    <div *ngFor="let note of existingNotes; let index = index">
+      <div fxLayout="column">
+        <div class="spacersmall"></div>
+        <div class="overhead-label" fxLayout="row" fxLayoutGap="6px">
+          <span
+            class="standard-text"
+            [id]="index + '-notes--' + note.noteId + '-userCreated-' + index"
+            >{{ note.userId }}</span
+          >
+          <span> - </span>
+          <span
+            class="standard-text"
+            [id]="index + '-notes--' + note.noteId + '-timeCreated-' + index"
+            >{{ note.dateTimeCreated }}</span
+          >
+        </div>
+        <div
+          class="standard-text"
+          style="max-width: 50%"
+          [id]="index + '-notes--' + note.noteId + '-note-' + index"
+        >
+          {{ note.comment }}
+        </div>
+      </div>
+    </div>
+  </ng-container>
+
+  <div class="spacersmall"></div>
+  <mat-form-field>
+    <textarea
+      matInput
+      id="{{htmlIdIndex}}-notes-input"
+      rows="3"
+      [formControl]="newNotesFormControl"
+      [placeholder]="textAreaPlaceholder"
+    ></textarea>
+  </mat-form-field>
+  <div class="spacersmall"></div>
+  <div
+    *ngIf="showSubmitButton"
+    fxLayout="row"
+    fxLayoutGap="6px"
+    fxLayoutAlign="end end"
+  >
+    <button mat-flat-button class="primary-button" (click)="submit()">
+      {{ submitButtonLabel }}
+    </button>
+  </div>
+</mat-expansion-panel>

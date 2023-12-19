@@ -1,0 +1,591 @@
+<div class="main-nav-wrapper">
+  <healthe-header-bar title="Add First Fill"></healthe-header-bar>
+  <div #firstFillErrorBanner>
+    <healthe-error-banner
+      [errorMessages]="addFirstfillErrors"
+      bannerTitle="The first fill member submission has failed with the following errors. Please try again or contact Healthesystems for assistance."
+    ></healthe-error-banner>
+  </div>
+  <mat-card>
+    <mat-card-title>First Fill Information</mat-card-title>
+    <mat-card-content>
+      <div fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="35px">
+        <div #customerIdDropDown>
+          <div class="overhead-label" id="addFirstFill-customerId-label">
+            CUSTOMER ID <span class="required-text">*</span>
+          </div>
+
+          <mat-form-field>
+            <mat-select
+              #customerIdDropDown
+              placeholder="Select a customer"
+              [formControl]="formGroup.controls['customerId']"
+              id="addFirstFill-customerId-select"
+            >
+              <mat-option
+                *ngFor="
+                  let option of referenceData.customerSpecificReferenceData
+                "
+                id="addFirstFill-customerId-option-{{option.customerId}}"
+                [value]="option"
+                >{{ option.customerId }}</mat-option
+              >
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <div *ngIf="currentCustomerReferenceData">
+          <div class="overhead-label" id="addFirstFill-claimantSSN-label">
+            CLAIMANT SSN
+          </div>
+          <mat-form-field>
+            <input
+              matInput
+              type="number"
+              [formControl]="formGroup.controls['claimantSSN']"
+              placeholder="Social Security #"
+              id="addFirstFill-claimantSSN-input"
+            />
+            <mat-error
+              id="addFirstFill-claimantSSN-input-error-ssnMemberId"
+              *ngIf="formGroup.controls['claimantSSN'].hasError('ssnMemberId')"
+              >Social security number required to generate member ID
+            </mat-error>
+            <mat-error
+              id="addFirstFill-claimantSSN-input-error-zeroOrNine"
+              *ngIf="formGroup.controls['claimantSSN'].hasError('zeroOrNine')"
+              >SSN must be 0 or 9 digits
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div *ngIf="currentCustomerReferenceData">
+          <div class="overhead-label" id="addFirstFill-dateOfInjury-label">
+            DATE OF INJURY <span class="required-text">*</span>
+          </div>
+          <mat-form-field>
+            <healthe-datepicker
+              [formControl]="formGroup.controls['dateOfInjury']"
+              id="addFirstFill-dateOfInjury-datepicker"
+              width="165px"
+            >
+            </healthe-datepicker>
+            <mat-error
+              id="addFirstFill-dateOfInjury-error-required"
+              *ngIf="formGroup.controls['dateOfInjury'].hasError('required')"
+              >Date of Injury cannot be empty
+            </mat-error>
+            <mat-error
+              id="addFirstFill-dateOfInjury-error-dateOfInjuryDays"
+              *ngIf="
+                formGroup.controls['dateOfInjury'].hasError('dateOfInjuryDays')
+              "
+            >
+              {{ dateOfInjuryErrorText }}
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <!-- Hidden section for when there isn't a customer -->
+      <div
+        [ngStyle]="{
+          visibility:
+            null == currentCustomerReferenceData ? 'hidden' : 'initial'
+        }"
+      >
+        <div class="spacermedium"></div>
+        <div fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="35px">
+          <div>
+            <div class="overhead-label" id="addFirstFill-15DigitId-label">
+              UNABLE TO ENTER 15 DIGIT ID?
+            </div>
+            <mat-checkbox
+              [formControl]="formGroup.controls['unableToEnter15DigitId']"
+              id="addFirstFill-15DigitId-checkbox"
+              >Check if Unable to Enter</mat-checkbox
+            >
+          </div>
+
+          <div>
+            <div class="overhead-label" id="addFirstFill-tempClaimaintID-label">
+              TEMP CLAIMANT ID
+            </div>
+            <div id="addFirstFill-tempClaimaintID-value">
+              {{ formGroup.controls['tempMemberId'].value }}
+            </div>
+          </div>
+        </div>
+        <div class="spacersmall"></div>
+        <mat-divider inset="true"></mat-divider>
+        <div class="spacermedium"></div>
+        <mat-card-title style="margin-bottom: 10px;"
+          >Claimant Information</mat-card-title
+        >
+        <div fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="35px">
+          <div fxFlex="20">
+            <div
+              class="overhead-label"
+              id="addFirstFill-claimantFirstname-label"
+            >
+              FIRST NAME <span class="required-text">*</span>
+            </div>
+            <mat-form-field>
+              <input
+                matInput
+                placeholder="Enter First Name"
+                [formControl]="formGroup.controls['claimantFirstname']"
+                id="addFirstFill-claimantFirstname-input"
+              />
+              <mat-error
+                id="addFirstFill-claimantFirstname-error-required"
+                *ngIf="
+                  formGroup.controls['claimantFirstname'].hasError('required')
+                "
+                >First Name cannot be empty
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+          <div fxFlex="20">
+            <div
+              class="overhead-label"
+              id="addFirstFill-claimantLastname-label"
+            >
+              LAST NAME <span class="required-text">*</span>
+            </div>
+            <mat-form-field>
+              <input
+                matInput
+                placeholder="Enter Last Name"
+                [formControl]="formGroup.controls['claimantLastname']"
+                id="addFirstFill-claimantLastname-input"
+              />
+              <mat-error
+                id="addFirstFill-claimantLastname-error-required"
+                *ngIf="
+                  formGroup.controls['claimantLastname'].hasError('required')
+                "
+                >Last Name cannot be empty
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+          <div>
+            <div class="overhead-label" id="addFirstFill-dateOfBirth-label">
+              DATE OF BIRTH <span class="required-text">*</span>
+            </div>
+            <mat-form-field>
+              <healthe-datepicker
+                [formControl]="formGroup.controls['claimantDateOfBirth']"
+                id="addFirstFill-dateOfBirth-datepicker"
+                width="165px"
+              >
+              </healthe-datepicker>
+              <mat-error
+                id="addFirstFill-claimantDateOfBirth-error-required"
+                *ngIf="
+                  formGroup.controls['claimantDateOfBirth'].hasError('required')
+                "
+                >Date of Birth cannot be empty
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+          <div>
+            <div class="overhead-label" id="addFirstFill-claimantGender-label">
+              GENDER <span class="required-text">*</span>
+            </div>
+
+            <mat-form-field>
+              <mat-select
+                placeholder="Select Gender"
+                [formControl]="formGroup.controls['claimantGender']"
+                id="addFirstFill-claimantGender-select"
+              >
+                <mat-option
+                  *ngFor="let option of genders"
+                  id="addFirstFill-claimantGender-option-{{option}}"
+                  [value]="option"
+                  >{{ option }}</mat-option
+                >
+              </mat-select>
+              <mat-error
+                id="addFirstFill-claimantGender-error-required"
+                *ngIf="
+                  formGroup.controls['claimantGender'].hasError('required')
+                "
+                >Select a Gender
+              </mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="spacertiny"></div>
+        <div fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="35px">
+          <div fxFlex="20">
+            <div
+              class="overhead-label"
+              id="addFirstFill-claimantStreetAddr1-label"
+            >
+              STREET ADDRESS
+            </div>
+            <mat-form-field>
+              <input
+                matInput
+                placeholder="Enter Street Address"
+                [formControl]="formGroup.controls['claimantStreetAddr1']"
+                id="addFirstFill-claimantStreetAddr1-input"
+              />
+            </mat-form-field>
+          </div>
+          <div fxFlex="20">
+            <div
+              class="overhead-label"
+              id="addFirstFill-claimantStreetAddr2-label"
+            >
+              STREET ADDRESS 2
+            </div>
+            <mat-form-field>
+              <input
+                matInput
+                placeholder="Enter Street Address 2"
+                [formControl]="formGroup.controls['claimantStreetAddr2']"
+                id="addFirstFill-claimantStreetAddr2-input"
+              />
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="spacertiny"></div>
+        <div fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="35px">
+          <div fxFlex="20">
+            <div class="overhead-label" id="addFirstFill-claimantCity-label">
+              CITY
+            </div>
+            <mat-form-field>
+              <input
+                matInput
+                placeholder="Enter City"
+                [formControl]="formGroup.controls['claimantCity']"
+                id="addFirstFill-claimantCity-input"
+              />
+            </mat-form-field>
+          </div>
+
+          <div>
+            <div class="overhead-label" id="addFirstFill-claimantState-label">
+              STATE
+            </div>
+
+            <mat-form-field>
+              <mat-select
+                placeholder="Select State"
+                [formControl]="formGroup.controls['claimantState']"
+                id="addFirstFill-claimantState-select"
+              >
+                <mat-option
+                  *ngFor="let option of referenceData.states"
+                  id="addFirstFill-claimantState-option-{{option}}"
+                  [value]="option"
+                  >{{ option }}</mat-option
+                >
+              </mat-select>
+            </mat-form-field>
+          </div>
+
+          <div>
+            <div class="overhead-label" id="addFirstFill-claimantZip-label">
+              ZIP CODE
+            </div>
+            <mat-form-field>
+              <input
+                matInput
+                placeholder="Enter Zip"
+                [formControl]="formGroup.controls['claimantZip']"
+                id="addFirstFill-claimantZip-input"
+              />
+            </mat-form-field>
+          </div>
+
+          <div>
+            <div class="overhead-label" id="addFirstFill-claimantPhone-label">
+              PHONE NUMBER
+            </div>
+            <mat-form-field>
+              <input
+                matInput
+                placeholder="Enter Phone #"
+                [formControl]="formGroup.controls['claimantPhone']"
+                id="addFirstFill-claimantPhone-input"
+                placeholder="(xxx) xxx-xxxx"
+                mask="(000) 000-0000"
+              />
+              <mat-error
+                id="addFirstFill-claimantPhone-error-label"
+                *ngIf="formGroup.controls['claimantPhone'].hasError('mask')"
+                >Please enter a valid phone number: Ex. (xxx) xxx-xxxx
+              </mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div class="spacersmall"></div>
+        <mat-divider inset="true"></mat-divider>
+        <div class="spacermedium"></div>
+        <mat-card-title style="margin-bottom: 10px;"
+          >Employer Information</mat-card-title
+        >
+
+        <div fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="35px">
+          <div fxFlex="20">
+            <div class="overhead-label" id="addFirstFill-employerName-label">
+              EMPLOYER NAME <span class="required-text">*</span>
+            </div>
+            <mat-form-field>
+              <input
+                matInput
+                placeholder="Enter Employer Name"
+                [formControl]="formGroup.controls['employerName']"
+                id="addFirstFill-employerName-input"
+              />
+              <mat-error
+                id="addFirstFill-employerName-error-required"
+                *ngIf="formGroup.controls['employerName'].hasError('required')"
+                >Employer Name cannot be empty
+              </mat-error>
+            </mat-form-field>
+            <div
+              *ngIf="
+                nonParticipatingMatches && nonParticipatingMatches.length > 0
+              "
+              class="non-participant-box"
+              id="addFirstFill-non-participant-box"
+            >
+              Warning: possible non-participanting employer
+              <span
+                *ngFor="
+                  let nonParticipants of (nonParticipatingMatches | slice: 0:5)
+                "
+                >{{ nonParticipants }}</span
+              >
+            </div>
+          </div>
+          <div
+            class="non-participant-button"
+            [matTooltip]="
+              isViewNonParticipatingListDisabled()
+                ? 'The selected customer has no non-participating employers'
+                : ''
+            "
+          >
+            <button
+              mat-flat-button
+              class="primary-button"
+              id="addFirstFill-viewNonParticipatingList-button"
+              (click)="viewNonParticipatingList()"
+              [disabled]="isViewNonParticipatingListDisabled()"
+            >
+              VIEW NON-PARTICIPATING LIST
+            </button>
+          </div>
+        </div>
+        <div class="spacertiny"></div>
+        <div fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="35px">
+          <div fxFlex="20">
+            <div
+              class="overhead-label"
+              id="addFirstFill-employerStreetAddr1-label"
+            >
+              STREET ADDRESS
+            </div>
+            <mat-form-field>
+              <input
+                matInput
+                placeholder="Enter Street Address"
+                [formControl]="formGroup.controls['employerStreetAddr1']"
+                id="addFirstFill-employerStreetAddr1-input"
+              />
+            </mat-form-field>
+          </div>
+          <div fxFlex="20">
+            <div
+              class="overhead-label"
+              id="addFirstFill-employerStreetAddr2-label"
+            >
+              STREET ADDRESS 2
+            </div>
+            <mat-form-field>
+              <input
+                matInput
+                placeholder="Enter Street Address 2"
+                [formControl]="formGroup.controls['employerStreetAddr2']"
+                id="addFirstFill-employerStreetAddr2-input"
+              />
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="spacertiny"></div>
+        <div fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="35px">
+          <div fxFlex="20">
+            <div class="overhead-label" id="addFirstFill-employerCity-label">
+              CITY
+            </div>
+            <mat-form-field>
+              <input
+                matInput
+                placeholder="Enter City"
+                [formControl]="formGroup.controls['employerCity']"
+                id="addFirstFill-employerCity-input"
+              />
+            </mat-form-field>
+          </div>
+
+          <div>
+            <div class="overhead-label" id="addFirstFill-employerState-label">
+              STATE
+            </div>
+
+            <mat-form-field>
+              <mat-select
+                placeholder="Select State"
+                [formControl]="formGroup.controls['employerState']"
+                id="addFirstFill-employerState-select"
+              >
+                <mat-option
+                  *ngFor="let option of referenceData.states"
+                  id="addFirstFill-employerState-option-{{option}}"
+                  [value]="option"
+                  >{{ option }}</mat-option
+                >
+              </mat-select>
+              <div
+                class="stateErrorText"
+                id="addFirstFill-employerState-error-forbiddenStates"
+                *ngIf="showForbiddenStatesMessage"
+              >
+                First Fill not supported in
+                {{ formGroup.controls['employerState'].value }}.
+              </div>
+            </mat-form-field>
+          </div>
+
+          <div>
+            <div class="overhead-label" id="addFirstFill-employerZip-label">
+              ZIP CODE
+            </div>
+            <mat-form-field>
+              <input
+                matInput
+                placeholder="Enter Zip"
+                [formControl]="formGroup.controls['employerZip']"
+                id="addFirstFill-employerZip-input"
+              />
+            </mat-form-field>
+          </div>
+
+          <div>
+            <div class="overhead-label" id="addFirstFill-employerPhone-label">
+              PHONE NUMBER
+            </div>
+            <mat-form-field>
+              <input
+                matInput
+                [formControl]="formGroup.controls['employerPhone']"
+                id="addFirstFill-employerPhone-input"
+                placeholder="(xxx) xxx-xxxx"
+                mask="(000) 000-0000"
+              />
+              <mat-error
+                id="addFirstFill-employerPhone-error-label"
+                *ngIf="formGroup.controls['employerPhone'].hasError('mask')"
+                >Please enter a valid phone number: Ex. (xxx) xxx-xxxx
+              </mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div class="spacersmall"></div>
+        <mat-divider inset="true"></mat-divider>
+        <div class="spacermedium"></div>
+        <mat-card-title style="margin-bottom: 10px;"
+          >Caller Information</mat-card-title
+        >
+        <div fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="35px">
+          <div>
+            <div
+              class="overhead-label"
+              id="addFirstFill-callerRelationship-label"
+            >
+              CALLER RELATIONSHIP <span class="required-text">*</span>
+            </div>
+
+            <mat-form-field>
+              <mat-select
+                placeholder="Select Relationship"
+                [formControl]="formGroup.controls['callerRelationship']"
+                id="addFirstFill-callerRelationship-select"
+              >
+                <mat-option
+                  *ngFor="let option of referenceData.relationships"
+                  id="addFirstFill-callerRelationship-option-{{option}}"
+                  [value]="option"
+                  >{{ option }}</mat-option
+                >
+              </mat-select>
+              <mat-error
+                id="addFirstFill-callerRelationship-error-required"
+                *ngIf="
+                  formGroup.controls['callerRelationship'].hasError('required')
+                "
+                >Caller Relationship cannot be empty
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div>
+            <div
+              class="overhead-label"
+              id="addFirstFill-callerAllowDateOfInjuryOverride-label"
+            >
+              ALLOW DATE OF INJURY OVERRIDE
+            </div>
+            <mat-checkbox
+              [formControl]="
+                formGroup.controls['callerAllowDateOfInjuryOverride']
+              "
+              id="addFirstFill-callerAllowDateOfInjuryOverride-checkbox"
+              >Allow Older Date of Injury</mat-checkbox
+            >
+          </div>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+  <div class="spacermedium"></div>
+  <mat-card class="sticky-footer">
+    <mat-card-content>
+      <div
+        fxLayout="row"
+        fxLayoutAlign="space-between center"
+        fxLayoutGap="35px"
+      >
+        <button
+          mat-stroked-button
+          class="info-button"
+          id="addFirstFill-goBack-button"
+          (click)="goBackButton()"
+        >
+          GO BACK
+        </button>
+        <div fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="35px">
+          <button
+            mat-flat-button
+            class="success-button"
+            id="addFirstFill-saveFirstFill-button"
+            (click)="saveFirstFill()"
+            [disabled]="!isSaveFirstFillButtonEnabled()"
+          >
+            SAVE FIRST FILL
+          </button>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>

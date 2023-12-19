@@ -1,0 +1,103 @@
+@import 'variables';
+
+.healthe {
+  // Special widths for particular columns
+  &-table {
+    &-column {
+      &_paidAmount {
+        max-width: 79px !important;
+      }
+
+      &_modifiedByUser {
+        max-width: 118px !important;
+      }
+
+      &_dateWidth {
+        width: 90px !important;
+      }
+    }
+
+    // Styles for advanced filters' summary
+    &-header {
+      &--advancedFilter {
+        &--summaryBox {
+          margin-bottom: 17px;
+        }
+
+        &--label {
+          line-height: 15px;
+          font-weight: 500;
+          font-size: 12px;
+          opacity: 0.5;
+          color: $text-muted;
+        }
+
+        &--summary {
+          color: $text-muted;
+          font-size: 14px;
+          font-weight: 500;
+          line-height: 18px;
+        }
+      }
+    }
+
+    &--centered-container {
+      height: 250px;
+
+      & p {
+        white-space: pre-line;
+        text-align: center;
+      }
+    }
+  }
+}
+
+::ng-deep {
+  .billing-table-scroll {
+    width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+  }
+
+  .billing-table-wrapText {
+    white-space: normal !important;
+  }
+
+  td.billing-table-truncateText {
+    white-space: nowrap !important;
+  }
+
+  .ie-overflow button {
+    overflow: visible;
+  }
+}
+
+.column-panel-button {
+  margin: 20px 15px 20px 15px;
+  width: auto;
+}
+
+// For some reason this has to be outside ::ng-content
+.billing-table-fitColumnToData {
+  table-layout: auto;
+}
+
+@media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+  .ie-ellipsis {
+    overflow-x: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    min-width: auto;
+    float: left;
+    max-width: 90%;
+  }
+}
+
+// I tried ::ng-deep'ing this in styles.scss, but for whatever reason it wouldn't apply
+.mat-header-cell {
+  border-bottom-width: 2px !important;
+}
+
+tr.mat-header-row {
+  height: 58px;
+}

@@ -1,0 +1,163 @@
+<div>
+  <div class="overhead-label" id="{{step}}-review-specifiedLocations-label">
+    SPECIFIED LOCATIONS
+  </div>
+  <div
+    *ngFor="let location of displayData['specifiedLocations']; let i = index"
+    class="standard-text"
+    id="{{step}}-review-specifiedLocation-{{i}}"
+  >
+    {{ location }}
+  </div>
+  <div class="spacersmall"></div>
+</div>
+
+<ng-container *ngFor="let item of displayData['schedulingForm']; let i = index">
+  <div fxLayout="row" fxLayoutGap="35px">
+    <div fxFlex="0 0 calc({{columnSpacing}}% -35px)" fxLayout="column">
+      <div
+        *ngIf="i === 0"
+        class="overhead-label"
+        id="{{step}}-review-pickupDate-label"
+      >
+        PICKUP DATE
+      </div>
+      <div *ngIf="i > 0" class="hide-text">PICKUP DATE</div>
+      <div class="standard-text" id="{{step}}-review-pickupDate-{{i}}">
+        {{ item['specificDate'] }}
+      </div>
+    </div>
+
+    <div fxFlex="0 0 calc({{columnSpacing}}% -35px)" fxLayout="column">
+      <div
+        *ngIf="i === 0"
+        class="overhead-label"
+        id="{{step}}-review-pickupTime-label"
+      >
+        PICKUP TIME
+      </div>
+      <div *ngIf="i > 0" class="hide-text">PICKUP TIME</div>
+      <div class="standard-text" id="{{step}}-review-pickupTime-{{i}}">
+        {{ item['pickupTime'] }}
+      </div>
+    </div>
+
+    <div fxFlex="0 0 calc({{columnSpacing}}% -35px)" fxLayout="column">
+      <div
+        *ngIf="i === 0"
+        class="overhead-label"
+        id="{{step}}-review-appointmentType-label"
+      >
+        APPOINTMENT TYPE
+      </div>
+      <div *ngIf="i > 0" class="hide-text">APPOINTMENT TYPE</div>
+      <div class="standard-text" id="{{step}}-review-appointmentType-{{i}}">
+        {{ item['appointmentType'] }}
+      </div>
+    </div>
+
+    <div fxFlex="0 0 calc({{columnSpacing}}% -35px)" fxLayout="column">
+      <div
+        *ngIf="i === 0"
+        class="overhead-label"
+        id="{{step}}-review-appointmentTime-label"
+      >
+        APPOINTMENT TIME
+      </div>
+      <div *ngIf="i > 0" class="hide-text">APPOINTMENT TIME</div>
+      <div class="standard-text" id="{{step}}-review-appointmentTime-{{i}}">
+        {{ item['appointmentTime'] }}
+      </div>
+    </div>
+
+    <div fxFlex="0 0 calc({{columnSpacing}}% -35px)" fxLayout="column">
+      <div
+        *ngIf="i === 0"
+        class="overhead-label"
+        id="{{step}}-review-fromAddress-label"
+      >
+        FROM ADDRESS
+      </div>
+      <div *ngIf="i > 0" class="hide-text">FROM ADDRESS</div>
+      <div class="standard-text" id="{{step}}-review-fromAddress-{{i}}">
+        {{ item['fromAddress']['columnText'] }}
+        <fa-icon
+          [icon]="faInfoCircle"
+          class="review-icons"
+          [matTooltip]="item['fromAddress']['tooltip']"
+        >
+        </fa-icon>
+      </div>
+    </div>
+
+    <div fxFlex="0 0 calc({{columnSpacing}}% -35px)" fxLayout="column">
+      <div
+        *ngIf="i === 0"
+        class="overhead-label"
+        id="{{step}}-review-toAddress-label"
+      >
+        TO ADDRESS
+      </div>
+      <div *ngIf="i > 0" class="hide-text">TO ADDRESS</div>
+      <div class="standard-text" id="{{step}}-review-toAddress-{{i}}">
+        {{ item['toAddress']['columnText'] }}
+        <fa-icon
+          [icon]="faInfoCircle"
+          class="review-icons"
+          [matTooltip]="item['toAddress']['tooltip']"
+        >
+        </fa-icon>
+      </div>
+    </div>
+
+    <div fxFlex="0 0 calc({{columnSpacing}}% -35px)" fxLayout="column">
+      <div
+        *ngIf="i === 0"
+        class="overhead-label"
+        id="{{step}}-review-notes-label"
+      >
+        NOTES
+      </div>
+      <div *ngIf="i > 0" class="hide-text">NOTES</div>
+      <div class="standard-text" id="{{step}}-review-notes-{{i}}">
+        <span class="editNotes" (click)="addNotes(i, item['notes'])"
+          ><fa-icon [icon]="faStickyNote"></fa-icon>
+          <span *ngIf="true === usingReturnedFormState"> View Notes</span
+          ><span *ngIf="false === usingReturnedFormState">
+            View/Edit Notes</span
+          ></span
+        >
+      </div>
+    </div>
+  </div>
+  <div class="spacertiny"></div>
+</ng-container>
+
+<div fxLayout="row" fxLayoutGap="35px">
+  <div fxFlex="0 0 calc({{columnSpacing}}% -35px)">
+    <div class="overhead-label" id="{{step}}--review-driverLanguage-label">
+      DRIVER LANGUAGE
+    </div>
+    <div class="standard-text" id="{{step}}--review-driverLanguage">
+      {{ displayData['driverLanguage'] }}
+    </div>
+  </div>
+
+  <div fxFlex="0 0 calc({{columnSpacing*2}}% -35px)">
+    <div class="overhead-label" id="{{step}}--review-rushService-label">
+      RUSH SERVICE (NEEDED WITHIN 24 HOURS)?
+    </div>
+    <div class="standard-text" id="{{step}}--review-rushService">
+      {{ displayData['rushServiceNeeded'] }}
+    </div>
+  </div>
+
+  <div fxFlex="0 0 calc({{columnSpacing*2}}% -35px)">
+    <div class="overhead-label" id="{{step}}--review-paidAsExpense-label">
+      WILL THIS BE PAID AS EXPENSE?
+    </div>
+    <div class="standard-text" id="{{step}}--review-paidAsExpense">
+      {{ displayData['paidAsExpense'] }}
+    </div>
+  </div>
+</div>

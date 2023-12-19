@@ -1,0 +1,218 @@
+<healthe-confirmation-banner
+  *ngIf="!stepperCompleted && !inReferralReviewMode"
+  [id]="'diagnostics-review-wizard-fail'"
+  [alertType]="alertType.DANGER"
+  [title]="
+    'You have incompleted tabs in this section. Review incomplete tabs for this referral, complete another section, or make changes.'
+  "
+  [isVisible]="true"
+></healthe-confirmation-banner>
+<healthe-confirmation-banner
+  *ngIf="stepperCompleted && !inReferralReviewMode"
+  [id]="'diagnostics-review-wizard-success'"
+  [alertType]="alertType.SUCCESS"
+  [title]="
+    'You have completed this section. Review and submit the referral, complete another section, or make changes.'
+  "
+  [isVisible]="true"
+  [showCloseButton]="false"
+></healthe-confirmation-banner>
+
+<!-- Each Step Section -->
+<div
+  *ngFor="
+    let selectedServiceDetailTypes of (selectedServiceDetailTypes$ | async)
+  "
+>
+  <div class="spacersmall"></div>
+  <ng-container [ngSwitch]="selectedServiceDetailTypes">
+    <div *ngSwitchCase="mriStepName">
+      <healthe-diagnostics-review
+        [inReferralReviewMode]="inReferralReviewMode"
+        [stepName]="mriStepName"
+        [stepNameForId]="mriStepName"
+        [stepNameSpelledOut]="'MRI'"
+        [subServiceLabel]="'MRI Services'"
+        [sharedForm]="sharedForm"
+      ></healthe-diagnostics-review>
+    </div>
+    <div *ngSwitchCase="emgStepName">
+      <healthe-diagnostics-review
+        [inReferralReviewMode]="inReferralReviewMode"
+        [stepName]="emgStepName"
+        [stepNameForId]="emgStepName"
+        [stepNameSpelledOut]="'EMG/NCS'"
+        [subServiceLabel]="'EMG/NCS Services'"
+        [sharedForm]="sharedForm"
+      ></healthe-diagnostics-review>
+    </div>
+    <div *ngSwitchCase="xRayStepName">
+      <healthe-diagnostics-review
+        [inReferralReviewMode]="inReferralReviewMode"
+        [stepName]="xRayStepName"
+        [stepNameForId]="xRayStepName"
+        [stepNameSpelledOut]="'X-Ray'"
+        [subServiceLabel]="'X-Ray Services'"
+        [sharedForm]="sharedForm"
+      ></healthe-diagnostics-review>
+    </div>
+    <div *ngSwitchCase="ctScanStepName">
+      <healthe-diagnostics-review
+        [inReferralReviewMode]="inReferralReviewMode"
+        [stepName]="ctScanStepName"
+        [stepNameForId]="ctScanStepName"
+        [stepNameSpelledOut]="'CT Scan'"
+        [subServiceLabel]="'CT Scan Services'"
+        [sharedForm]="sharedForm"
+      ></healthe-diagnostics-review>
+    </div>
+    <div *ngSwitchCase="ultrasoundStepName">
+      <healthe-diagnostics-review
+        [inReferralReviewMode]="inReferralReviewMode"
+        [stepName]="ultrasoundStepName"
+        [stepNameForId]="ultrasoundStepName"
+        [stepNameSpelledOut]="'Ultrasound'"
+        [subServiceLabel]="'Ultrasound Services'"
+        [sharedForm]="sharedForm"
+      ></healthe-diagnostics-review>
+    </div>
+    <div *ngSwitchCase="otherStepName">
+      <healthe-diagnostics-review
+        [inReferralReviewMode]="inReferralReviewMode"
+        [stepName]="otherStepName"
+        [stepNameForId]="otherStepName"
+        [stepNameSpelledOut]="'Other'"
+        [subServiceLabel]="'Other Services'"
+        [sharedForm]="sharedForm"
+      ></healthe-diagnostics-review>
+    </div>
+  </ng-container>
+  <div class="spacersmall"></div>
+  <mat-divider [inset]="true"></mat-divider>
+</div>
+
+<div class="spacersmall"></div>
+
+<!-- PRESCRIBER INFO -->
+<div fxLayout="row" fxLayoutGap="35px">
+  <div fxFlex="0 0 calc(33.33% -35px)">
+    <div class="overhead-label" id="{{stepName}}--review-prescriberName-label">
+      ORDERING PRESCRIBER NAME
+    </div>
+    <div class="standard-text" id="{{stepName}}--review-postSurgical">
+      {{ sharedForm.controls['prescriberName'].value }}
+    </div>
+  </div>
+  <div fxFlex="0 0 calc(33.33% -35px)">
+    <div class="overhead-label" id="{{stepName}}-review-prescriberPhone-label">
+      ORDERING PRESCRIBER PHONE
+    </div>
+    <div class="standard-text" id="{{stepName}}--review-prescriberPhone">
+      {{ sharedForm.controls['prescriberPhone'].value }}
+    </div>
+  </div>
+  <div fxFlex="0 0 calc(33.33% -35px)">
+    <div
+      class="overhead-label"
+      id="{{stepName}}-review-prescriberAddress-label"
+    >
+      ORDERING PRESCRIBER ADDRESS
+    </div>
+    <div class="standard-text" id="{{stepName}}--review-prescriberAddress">
+      {{ sharedForm.controls['prescriberAddress'].value }}
+    </div>
+  </div>
+</div>
+
+<div class="spacersmall"></div>
+
+<!-- ICD CODES -->
+<div fxLayout="row" fxLayoutGap="35px">
+  <div fxFlex="0 0 calc(100% -35px)">
+    <div class="overhead-label" id="{{stepName}}-review-diagnosisCodes-label">
+      ICD CODES
+    </div>
+    <div class="standard-text" id="{{stepName}}--review-diagnosisCodes">
+      {{ icdCodesDisplay }}
+    </div>
+  </div>
+</div>
+
+<div class="spacersmall"></div>
+<mat-divider [inset]="true"></mat-divider>
+<div class="spacersmall"></div>
+
+<!-- VENDOR SECTION -->
+<healthe-review-section-header
+  sectionTitle="Vendor Information"
+  [sectionName]="sectionName"
+  columnCount="5"
+  [step]="stepName"
+  [offsetForNonSelectedServiceDetailTypes]="0"
+></healthe-review-section-header>
+<div fxLayout="row wrap" fxLayoutGap="30px grid">
+  <div *ngFor="let vendorsByType of (vendorFormValues$ | async | keyvalue)">
+    <span
+      class="overhead-label"
+      id="{{stepName}}-review-{{vendorsByType.key}}-label"
+    >
+      VENDORS</span
+    >
+    <div *ngFor="let vendorName of vendorsByType.value; let index$ = index">
+      <span id="{{stepName}}-review-{{vendorsByType.key}}-value-{{index$}}"
+        >{{ index$ + 1 }} - {{ vendorName.name }}</span
+      >
+    </div>
+  </div>
+</div>
+
+<div class="spacersmall"></div>
+
+<!-- Documents Section -->
+<p style="margin: 0;">
+  <healthe-review-section-header
+    columnCount="5"
+    [step]="documentsStepName"
+    [sectionTitle]="'Documents'"
+    [sectionName]="sectionName"
+    [offsetForNonSelectedServiceDetailTypes]="1"
+  ></healthe-review-section-header>
+</p>
+<div
+  *ngFor="
+    let document of (selectedDocuments$ | async)['documents'];
+    index as index
+  "
+  id="{{sectionName}}-review-documents-{{index}}-link"
+>
+  {{ document.fileName }}
+</div>
+
+<div class="spacermedium"></div>
+
+<!-- NOTES -->
+<div *ngIf="inReferralReviewMode === false">
+  <span class="overhead-label" id="{{stepName}}-review-wizard-notes-label"
+    >NOTES (optional)</span
+  >
+  <mat-form-field>
+    <textarea
+      matInput
+      placeholder="Enter notes"
+      id="{{stepName}}-review-wizard-notes-input"
+      [formControl]="notesForm"
+    >{{referralLevelNotes$ | async}}</textarea>
+  </mat-form-field>
+</div>
+<div *ngIf="inReferralReviewMode === true">
+  <p
+    style="margin: 0;"
+    id="language-review-note-label"
+    class="overhead-label"
+  >
+    NOTES
+  </p>
+  <div id="language-review-note" class="standard-text">
+    {{ referralLevelNotes$ | async }}
+  </div>
+</div>

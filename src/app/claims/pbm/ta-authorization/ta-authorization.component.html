@@ -1,0 +1,77 @@
+<ng-container *ngrxLet="viewModel$; let viewModel">
+  <healthe-header-bar
+    [title]="'Claim #' + viewModel.decodedClaimNumber"
+    [link]="viewModel.claimViewLink"
+    gapSize="20"
+  >
+    <healthe-status-tag
+      *healtheRemoveElementIfTrue="'banner'; elementName: 'pbmActivePill'"
+      statusType="pbm"
+      [claimStatus]="viewModel.pbmClaimStatus"
+    ></healthe-status-tag>
+    <healthe-status-tag
+      *healtheRemoveElementIfTrue="'banner'; elementName: 'abmActivePill'"
+      statusType="abm"
+      [claimStatus]="viewModel.abmClaimStatus"
+    ></healthe-status-tag>
+    <div *healtheRemoveElementIfTrue="'banner'; elementName: 'riskWidget'">
+      <healthe-risk-level-indicator
+        *ngIf="viewModel.riskLevelNumber !== 0"
+        [riskLevel]="viewModel.riskLevel"
+        [riskLevelNumber]="viewModel.riskLevelNumber"
+        [claimNumber]="viewModel.decodedClaimNumber"
+        [uppyDownyEnabled]="false"
+      >
+      </healthe-risk-level-indicator>
+    </div>
+    <div class="header-separator"></div>
+    <span class="header-bar-title">Therapeutic Alert Letter Auth</span>
+  </healthe-header-bar>
+  <div class="spacersmall"></div>
+  <healthe-claim-overview-bar></healthe-claim-overview-bar>
+  <div class="spacersmall"></div>
+  <mat-tab-group
+    class="ta-tab-group"
+    [selectedIndex]="viewModel.selectedTabIndex"
+    (selectedTabChange)="taLetterStore.updateSelectedTab($event)"
+  >
+    <mat-tab
+      label="Authorization Information"
+      [routerLink]="'/authorizationInformation'"
+    >
+      <healthe-ta-authorization-information
+      ></healthe-ta-authorization-information>
+    </mat-tab>
+    <mat-tab label="Prescription History" [routerLink]="'/prescriptionHistory'">
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title>Prescription History</mat-card-title>
+        </mat-card-header>
+      </mat-card>
+    </mat-tab>
+    <mat-tab label="Clinical History" [routerLink]="'/clinicalHistory'">
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title>Clinical History</mat-card-title>
+        </mat-card-header>
+      </mat-card>
+    </mat-tab>
+    <mat-tab label="Documents">
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title>Documents</mat-card-title>
+        </mat-card-header>
+      </mat-card>
+    </mat-tab>
+  </mat-tab-group>
+  <mat-card class="ta-footer" *ngIf="viewModel.showFooter"
+    ><button mat-stroked-button class="info-button">CANCEL</button
+    ><button
+      mat-flat-button
+      class="success-button"
+      (click)="taLetterStore.submit()"
+    >
+      SUBMIT
+    </button></mat-card
+  >
+</ng-container>

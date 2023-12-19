@@ -1,0 +1,25 @@
+<ng-container *ngIf="dateMode === specificDate">
+  <healthe-review-section-header
+    columnCount="7"
+    [step]="step"
+    [sectionTitle]="sectionTitle"
+    [sectionName]="sectionName"
+  ></healthe-review-section-header>
+  <healthe-specific-date-review
+    [usingReturnedFormState]="usingReturnedFormState"
+    [values$]="values$"
+    [step]="step"
+  ></healthe-specific-date-review>
+</ng-container>
+<ng-container *ngIf="dateMode === dateRange">
+  <healthe-review-section-header
+    columnCount="3"
+    [step]="step"
+    [sectionTitle]="sectionTitle"
+    [sectionName]="sectionName"
+  ></healthe-review-section-header>
+  <healthe-date-range-review
+    [values$]="values$"
+    [step]="step"
+  ></healthe-date-range-review>
+</ng-container>

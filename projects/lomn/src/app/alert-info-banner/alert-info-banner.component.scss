@@ -1,0 +1,59 @@
+@import 'variables';
+
+// All the !important-s are needed because whoever originally did the expansion panel styling must have had a bad day and
+// just wanted to get things over with...
+
+::ng-deep .alerts-expansion-panel {
+  border: 1px solid $danger;
+  mat-expansion-panel-header.alerts-expansion-panel--header {
+    padding: 0 15px 0 15px !important;
+    height: 47px;
+    display: flex;
+    align-items: center;
+    color: $danger;
+  }
+  .mat-expansion-indicator::after {
+    color: $danger;
+  }
+  mat-panel-title.alerts-expansion-panel--header--title {
+    height: 47px !important;
+    font-size: 14px !important;
+    font-weight: 600 !important;
+    display: flex;
+    align-items: center;
+    color: $danger;
+  }
+  .alerts-expansion-panel-content {
+    color: $danger;
+
+    .alerts-expansion-panel-content-alert {
+      margin-bottom: 5px;
+
+      .alerts-expansion-panel-content-alert-openModalBtn {
+        color: $danger;
+      }
+    }
+  }
+  fa-icon.alerts-expansion-panel_icon {
+    font-size: 24px !important;
+    padding-right: 10px;
+    color: $danger;
+  }
+
+  &--see-alerts {
+    margin-right: 15px;
+    font-weight: 600;
+    align-self: center;
+  }
+}
+
+.tag-secondary {
+  background-color: $danger;
+  height: 10px;
+  margin-right: 15px;
+  align-self: center;
+}
+
+.alerts-expansion-panel--see-alerts {
+  color: $danger;
+}

@@ -1,0 +1,168 @@
+<div class="spacersmall"></div>
+<div [formGroup]="_formGroup" fxLayout="row wrap" fxLayoutGap="20px" fxLayoutAlign="start start">
+  <div
+    fxLayout="column"
+    fxLayoutGap="10px"
+    fxLayoutAlign="start start"
+    style="width: 250px"
+  >
+    <div id="auth-info-action-label-{{index}}">ACTION</div>
+    <mat-radio-group
+    formLabel="REFERRAL ACTION"
+    healtheFormValidationExtractor
+    formControlName="action"
+    [attr.data-index]="index"
+    >
+      <mat-radio-button
+        [value]="AUTH_INFO_ACTION_TYPE_APPROVE"
+        style="margin-bottom: 34px;"
+        id="auth-info-approve-button-{{index}}"
+        [disabled]="
+          disabledActionOnPend &&
+          _formGroup.controls['action'].value === AUTH_INFO_ACTION_TYPE_PEND
+        "
+        >Approve
+      </mat-radio-button>
+      <mat-radio-button
+        [value]="AUTH_INFO_ACTION_TYPE_DENY"
+        style="margin-left: 10px"
+        id="auth-info-deny-button-{{index}}"
+        [disabled]="
+          disabledActionOnPend &&
+          _formGroup.controls['action'].value === AUTH_INFO_ACTION_TYPE_PEND
+        "
+        ><healthe-customer-configs-label
+          defaultText="Deny"
+          elementName="deny"
+          [forcedCapitalization]="false"
+        ></healthe-customer-configs-label>
+      </mat-radio-button>
+      <mat-radio-button
+        [value]="AUTH_INFO_ACTION_TYPE_PEND"
+        style="margin-left: 10px"
+        id="auth-info-reeval-button-{{index}}"
+        [disabled]="
+          disabledActionOnPend &&
+          _formGroup.controls['action'].value === AUTH_INFO_ACTION_TYPE_PEND
+        "
+        *ngIf="showPendAction"
+        >Pend
+      </mat-radio-button>
+    </mat-radio-group>
+  </div>
+  <div style="width: 350px" fxLayout="row" fxLayoutGap="10px">
+    <ng-container
+      *ngIf="
+        _formGroup.controls['action'].value === AUTH_INFO_ACTION_TYPE_APPROVE &&
+        showApprovedReasons
+      "
+    >
+      <div fxLayout="column" fxLayoutGap="10px" fxLayoutAlign="start start">
+        <div id="auth-info-approvalReason-label-{{index}}">APPROVAL REASON</div>
+        <div>
+          <mat-form-field style="width: 250px">
+            <mat-select
+              id="auth-info-approvalReason-select-{{index}}"
+              placeholder="Select Approval Reason"
+              formLabel="APPROVAL REASON"
+              healtheFormValidationExtractor
+              formControlName="approvalReason"
+              [attr.data-index]="index"
+            >
+              <mat-option
+                *ngFor="let option of (approvalReasons$ | async); let i = index"
+                [value]="option"
+                id="auth-info-approvalReason-option-{{i}}-{{index}}"
+              >
+                {{ option.explanationDescription.replace(' All', '') }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-error
+            id="reason-approved-error-required"
+            *ngIf="_formGroup.controls['approvalReason'].hasError('required')"
+          >
+            Please select a reason.
+          </mat-error>
+        </div>
+      </div>
+    </ng-container>
+    <ng-container
+      *ngIf="_formGroup.controls['action'].value === AUTH_INFO_ACTION_TYPE_DENY"
+    >
+      <div fxLayout="column" fxLayoutGap="10px" fxLayoutAlign="start start">
+        <div id="auth-info-denialReason-label-{{index}}">
+          <healthe-customer-configs-label
+            #customerConfigDenyLabel
+            defaultText="DENIAL"
+            elementName="denial"
+            [forcedCapitalization]="true"
+          ></healthe-customer-configs-label>
+          REASON
+        </div>
+        <div>
+          <mat-form-field style="width: 250px">
+            <mat-select
+              id="auth-info-denialReason-select-{{index}}"
+              formLabel="{{customerConfigDenyLabel.labelValue | uppercase}} REASON"
+              healtheFormValidationExtractor
+              formControlName="denialReason"
+              [placeholder]="denialReasonSelectionPlaceholder"
+              [attr.data-index]="index"
+            >
+              <mat-option
+                *ngFor="let option of (denialReasons$ | async); let i = index"
+                [value]="option"
+                id="auth-info-denialReason-option-{{i}}-{{index}}"
+              >
+                {{ option.explanationDescription.replace(' All', '') }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-error
+            id="reason-denied-error-required"
+            *ngIf="_formGroup.controls['denialReason'].hasError('required')"
+          >
+            Please select a reason.
+          </mat-error>
+        </div>
+      </div>
+    </ng-container>
+    <ng-container
+      *ngIf="
+        _formGroup.controls['action'].value === AUTH_INFO_ACTION_TYPE_PEND &&
+        showPendAction
+      "
+    >
+      <div fxLayout="column" fxLayoutGap="10px" fxLayoutAlign="start start">
+        <div id="auth-info-pendReason-label-{{index}}">PEND REASON</div>
+        <div>
+          <mat-form-field style="width: 250px">
+            <mat-select
+              id="auth-info-pendReason-select-{{index}}"
+              healtheFormValidationExtractor
+              formControlName="pendReason"
+              formLabel="PEND REASON"
+              placeholder="Select Pend Reason"
+              [attr.data-index]="index"
+            >
+              <mat-option
+                *ngFor="let option of (pendReasons$ | async); let i = index"
+                [value]="option"
+                id="auth-info-pendReason-option-{{i}}-{{index}}"
+              >
+                {{ option.actionDescription.replace(' All', '') }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-error
+            id="reason-pending-error-required"
+            *ngIf="_formGroup.controls['pendReason'].hasError('required')"
+          >
+            Please select a reason.
+          </mat-error>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+</div>

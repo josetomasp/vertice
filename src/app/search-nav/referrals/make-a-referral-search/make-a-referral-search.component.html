@@ -1,0 +1,39 @@
+<!-- Header -->
+<div fxLayout="row" fxLayoutAlign="space-between center">
+  <h1 id="make-a-referral-search-title" class="make-a-referral__header">
+    {{ searchName }}
+  </h1>
+  <healthe-user-menu
+    id="userMenu"
+    style="padding-right: 1.5rem;"
+  ></healthe-user-menu>
+</div>
+<div class="spacertiny"></div>
+<div class="make-a-referral__search-box">
+  <healthe-error-banner
+    bannerTitle="Search Results Errors"
+    [errorMessages]="serverErrors$ | async"
+  ></healthe-error-banner>
+  <healthe-make-a-referral-search-box
+    [customers$]="customers$"
+    [claimsResults$]="claimsResults$"
+    [isInternal]="isInternal"
+    [defaultCustomerCode]="defaultCustomerCode"
+    [defaultStateOfVenue]="defaultStateOfVenue"
+    [savedForm]="savedForm$ | async"
+    [stateOfVenue$]="stateOfVenue$"
+    (searchForm)="search($event)"
+  ></healthe-make-a-referral-search-box>
+  <div class="spacertiny"></div>
+  <healthe-search-results-count
+    [resultsCount]="(claimsResults$ | async).length"
+    resultsCountLimitErrorThreshold="200"
+  ></healthe-search-results-count>
+  <div class="spacertiny"></div>
+  <healthe-make-a-referral-table
+    *ngIf="isInitialized"
+    [claimResults]="claimsResults$ | async"
+    [isLoading$]="isResultsLoading$"
+    [searchTableConfig]="searchTableConfig"
+  ></healthe-make-a-referral-table>
+</div>

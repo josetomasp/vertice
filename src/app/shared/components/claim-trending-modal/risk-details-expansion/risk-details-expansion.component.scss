@@ -1,0 +1,45 @@
+@import 'variables';
+
+.risk-trending--details {
+  box-shadow: none !important;
+
+  ::ng-deep {
+    .mat-content,
+    .mat-expansion-indicator,
+    &--top-section {
+      background-color: $gray-100 !important;
+
+      &:hover {
+        background-color: $gray-100 !important;
+      }
+    }
+  }
+
+  & > * {
+    background-color: $gray-100 !important;
+
+    &:hover {
+      background-color: $gray-100 !important;
+    }
+  }
+}
+
+::ng-deep .risk-trending--details .mat-expansion-panel-body {
+  background-color: $gray-100;
+}
+
+::ng-deep #riskTrending--body-claimantDetails .mat-content {
+  background-color: $gray-100;
+}
+
+.danger {
+  color: $danger;
+}
+
+.success {
+  color: $success;
+}
+
+.tag {
+  font-style: normal;
+}

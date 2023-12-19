@@ -1,0 +1,79 @@
+<div
+  [formGroup]="formGroup"
+  fxLayout="row wrap"
+  fxLayoutAlign="start center"
+  fxLayoutGap="10px"
+>
+  <div>The authorized date range is from</div>
+  <mat-form-field class="show-one-error" style="width: 160px">
+    <healthe-datepicker
+      [formControlName]="authNarrativeConfig.startDate.controlName"
+      id="narrative-authorizedDates-startDate"
+      [disabled]="
+        authNarrativeMode !== AuthNarrativeModeEnum.EditNarrative ||
+        authNarrativeConfig.startDate.isDisabled
+      "
+    ></healthe-datepicker>
+
+    <mat-error
+      id="narrative-authorizedDates-startDate-error-startDateMustBeBeforeEndDate"
+      *ngIf="
+        formGroup.controls[authNarrativeConfig.startDate.controlName].hasError(
+          'startDateMustBeBeforeEndDate'
+        ) ||
+        formGroup.controls[authNarrativeConfig.startDate.controlName].hasError(
+          'invalidDateRange'
+        )
+      "
+      >End date cannot be before start date
+    </mat-error>
+    <mat-error
+      id="narrative-authorizedDates-startDate-error-required"
+      *ngIf="
+        formGroup.controls[authNarrativeConfig.startDate.controlName].hasError(
+          'required'
+        )
+      "
+      >Please enter a valid date
+    </mat-error>
+    <mat-error
+      id="narrative-authorizedDates-startDate-error-fromDateEqualsEndDate"
+      *ngIf="
+        formGroup.controls[authNarrativeConfig.startDate.controlName].hasError(
+          'fromDateEqualsEndDate'
+        )
+      "
+      >Start date must not be equal to the end date
+    </mat-error>
+  </mat-form-field>
+  <div>to</div>
+  <mat-form-field class="show-one-error" style="width: 160px">
+    <healthe-datepicker
+      [formControlName]="authNarrativeConfig.endDate.controlName"
+      id="narrative-authorizedDates-endDate"
+      [disabled]="
+        authNarrativeMode !== AuthNarrativeModeEnum.EditNarrative ||
+        authNarrativeConfig.endDate.isDisabled
+      "
+    ></healthe-datepicker>
+
+    <mat-error
+      id="narrative-authorizedDates-end-error-required"
+      *ngIf="
+        formGroup.controls[authNarrativeConfig.endDate.controlName].hasError(
+          'required'
+        )
+      "
+      >Please enter a valid date
+    </mat-error>
+    <mat-error
+      id="narrative-authorizedDates-end-error-invalid-date range"
+      *ngIf="
+        formGroup.controls[authNarrativeConfig.endDate.controlName].hasError(
+          'invalidDateRange'
+        )
+      "
+      >To Date must be set to a value after the From Date
+    </mat-error>
+  </mat-form-field>
+</div>

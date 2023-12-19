@@ -1,0 +1,60 @@
+<div style="height: 350px">
+  <div fxLayout="row" fxLayoutAlign="space-between center" mat-dialog-title>
+    <span id="pharmacyLookupModal--title"
+      >Pharmacy - {{ pharmacyData.pharmacy.name }} #{{
+        pharmacyData.pharmacy.nabp
+      }}</span
+    >
+    <button
+      mat-icon-button
+      mat-dialog-close
+      id="pharmacyLookupModal--header-widget"
+    >
+      <i class="fal fa-times modal-close-widget"></i>
+    </button>
+  </div>
+
+  <div
+    style="height: 219px;overflow-x: hidden; margin-bottom: 0"
+    mat-dialog-content
+  >
+    <div fxLayout="row wrap" fxLayoutGap="35px grid">
+      <ng-container *ngFor="let item of pharmacyInfo">
+        <div fxFlex="calc(33.33% - 35px)" fxFlex.lt-lg="calc(50% - 35px)">
+          <div
+            [id]="'pharmacyLookupModal-' + item.label + '-label'"
+            class="overhead-label"
+          >
+            <healthe-customer-configs-label
+              [defaultText]="item.label"
+              [elementName]="item.fieldName"
+            ></healthe-customer-configs-label>
+          </div>
+          <div
+            #idDetail
+            [id]="'pharmacyLookupModal-' + item.label + '-value'"
+            class="standard-text"
+          >
+            <ng-container *ngIf="item.isArray">
+              <div *ngFor="let value of item.fieldValue">{{ value }}</div>
+            </ng-container>
+            <ng-container *ngIf="!item.isArray">
+              {{ item.fieldValue }}
+            </ng-container>
+          </div>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+  <mat-dialog-actions style="padding-right: 20px;">
+    <div fxFlex="row" fxLayoutAlign="end center">
+      <button
+        id="pharmacyLookupModal-closeButton"
+        class="primary-button mat-flat-button mat-primary"
+        [mat-dialog-close]="true"
+      >
+        CLOSE
+      </button>
+    </div>
+  </mat-dialog-actions>
+</div>

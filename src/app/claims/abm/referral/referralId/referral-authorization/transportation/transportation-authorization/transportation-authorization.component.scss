@@ -1,0 +1,15 @@
+@import 'variables';
+@import 'text';
+
+.rushIcon {
+  @extend .inline-left-icon;
+  @extend .text-danger;
+  position: relative;
+  top: -2px;
+  margin-left: 20px;
+}
+
+.rushIcon-text {
+  @extend .text-danger;
+  font-size: 14px;
+}

@@ -1,0 +1,30 @@
+<mat-form-field style="min-width: 300px">
+  <input
+    matInput
+    type="text"
+    class="mat-input-element"
+    [formControl]="formControl"
+    [placeholder]="placeholder"
+    [id]="id + '-placesInput'"
+    (blur)="onBlur()"
+  />
+  <div
+    [matMenuTriggerFor]="placesAutoCompleteMenu"
+    #placesMenuAutocompleteTrigger="matMenuTrigger"
+  ></div>
+  <mat-menu #placesAutoCompleteMenu class="section-autocomplete-panel">
+    <mat-option
+      [value]="option.value"
+      [id]="'placesSuggestion' + i"
+      (click)="selectOption(option.value, placesAutocompleteTrigger)"
+      *ngFor="let option of (placesSuggestions$ | async); let i = index"
+    >
+      <fa-icon
+        class="text-secondary"
+        style="font-size: 16px; margin-right: 10px"
+        [icon]="option.icon"
+      ></fa-icon>
+      {{ option.value }}
+    </mat-option>
+  </mat-menu>
+</mat-form-field>

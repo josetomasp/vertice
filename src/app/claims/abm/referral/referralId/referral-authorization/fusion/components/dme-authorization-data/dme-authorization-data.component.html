@@ -1,0 +1,66 @@
+<div fxLayout="row wrap" fxLayoutGap="35px">
+  <div fxFlex="0 0 auto">
+    <healthe-dme-edit-date
+      [formGroup]="formGroup"
+      [fusionAuth]="fusionAuth"
+      [index]="index"
+      [narrativeMode]="narrativeMode"
+      [isSubstitutionCard]="isSubstitutionCard"
+    ></healthe-dme-edit-date>
+  </div>
+
+  <div fxFlex="0 0 auto">
+    <div class="overhead-label" id="{{index}}-qty-label">QTY</div>
+    <div
+      class="standard-text"
+      id="{{index}}--qty"
+      *ngIf="narrativeMode !== 'PostSubmit'"
+    >
+      <input
+        [formControl]="formGroup.get('authMaxQty')"
+        class="quantity--input"
+        id="{{index}}--qty-input"
+        matInput
+        min="{{minQuantity}}"
+        type="number"
+      />
+
+      <mat-error
+        *ngIf="this.formGroup.get('authMaxQty').hasError('min')"
+        id="narrative-limit-change-min-error"
+      >
+        Value entered cannot be less than {{ minQuantity }}</mat-error
+      >
+
+      <mat-error
+        *ngIf="this.formGroup.get('authMaxQty').hasError('required')"
+        id="narrative-limit-change-min-error"
+      >
+        Qty value required
+      </mat-error>
+    </div>
+    <div
+      class="standard-text"
+      id="{{index}}--qty--diplay"
+      *ngIf="narrativeMode === 'PostSubmit'"
+    >
+      {{ authMaxQty }}
+    </div>
+  </div>
+  <div fxFlex="0 0 auto">
+    <div class="overhead-label" id="{{index}}-authorization-amount-label">
+      AUTHORIZATION AMOUNT
+    </div>
+    <div class="standard-text" id="{{index}}--authorization-amount">
+      {{ authorizedPrice | currency }}
+    </div>
+  </div>
+  <div fxFlex="0 0 auto">
+    <div class="overhead-label" id="{{index}}-fee-ucr-amount-label">
+      FEE/UCR AMOUNT
+    </div>
+    <div class="standard-text" id="{{index}}--fee-ucr-amount">
+      {{ feeUcrAmt | currency }}
+    </div>
+  </div>
+</div>

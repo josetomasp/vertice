@@ -1,0 +1,228 @@
+<div class="modal-flight">
+  <div id="open-add-flight-actions-title" class="add-flight__title">
+    <fa-icon
+      [icon]="faPlaneDeparture"
+      class="ieSvgFix add-logding__icon"
+      id="open-add-flight-actions-title-icon"
+    ></fa-icon>
+    Flight Transportation
+  </div>
+
+  <div class="spacersmall"></div>
+  <div [formGroup]="formGroup" class="matFormFieldWidthFix">
+    <!-- Row 1 -->
+    <div fxLayout="row" fxLayoutGap="30px">
+      <!-- Flying From -->
+      <div fxFlex="50">
+        <div
+          class="overhead-label"
+          id="open-add-flight-flyingFrom-autocomplete-input-label"
+        >
+          FLYING FROM<span class="required-text">*</span>
+        </div>
+        <mat-form-field class="show-one-error">
+          <input
+            matInput
+            type="text"
+            class="mat-input-element"
+            formControlName="flyingFrom"
+            placeholder="Airport"
+            id="open-add-flight-flyingFrom-autocomplete-input"
+            style="width: 100%"
+          />
+          <div
+            [matMenuTriggerFor]="flyingFromAutoCompleteMenu"
+            #flyingFromMenuAutocompleteTrigger="matMenuTrigger"
+          ></div>
+          <mat-menu
+            #flyingFromAutoCompleteMenu
+            class="section-autocomplete-panel"
+          >
+            <mat-option
+              [value]="option.value"
+              [id]="'open-add-flying-from-placesSuggestion' + i"
+              (click)="
+                selectOption(
+                  option.value,
+                  flyingFromAutocompleteTrigger,
+                  'flyingFrom'
+                )
+              "
+              *ngFor="
+                let option of (flyingFromSuggestions$ | async);
+                let i = index
+              "
+            >
+              <fa-icon
+                class="text-secondary"
+                style="font-size: 16px; margin-right: 10px"
+                [icon]="option.icon"
+              ></fa-icon>
+              {{ option.value }}
+            </mat-option>
+          </mat-menu>
+          <mat-error
+            id="open-add-flight-flyingFrom-autocomplete-error-required"
+            *ngIf="formGroup.controls['flyingFrom'].hasError('required')"
+            >Flying From cannot be empty
+          </mat-error>
+          <mat-error
+            id="open-add-flight-flyingFrom-autocomplete-error-wasValuePicked"
+            *ngIf="formGroup.controls['flyingFrom'].hasError('wasValuePicked')"
+            >No airports matched your search
+          </mat-error>
+          <mat-error
+            id="open-add-flight-flyingFrom-autocomplete-error-duplicate"
+            *ngIf="formGroup.controls['flyingFrom'].hasError('duplicate')"
+            >Flying From and Flying To cannot be the same airport
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <!-- Flying To -->
+      <div fxFlex="50">
+        <div
+          class="overhead-label"
+          id="open-add-flight-flyingTo-autocomplete-input-label"
+        >
+          FLYING TO<span class="required-text">*</span>
+        </div>
+        <mat-form-field class="show-one-error" style="min-width: 300px">
+          <input
+            matInput
+            type="text"
+            class="mat-input-element"
+            formControlName="flyingTo"
+            placeholder="Airport"
+            id="open-add-flight-flyingTo-autocomplete-input"
+            style="width: 100%"
+          />
+          <div
+            [matMenuTriggerFor]="flyingToAutoCompleteMenu"
+            #flyingToMenuAutocompleteTrigger="matMenuTrigger"
+          ></div>
+          <mat-menu
+            #flyingToAutoCompleteMenu
+            class="section-autocomplete-panel"
+          >
+            <mat-option
+              [value]="option.value"
+              [id]="'open-add-flying-to-placesSuggestion' + i"
+              (click)="
+                selectOption(
+                  option.value,
+                  flyingToAutocompleteTrigger,
+                  'flyingTo'
+                )
+              "
+              *ngFor="
+                let option of (flyingToSuggestions$ | async);
+                let i = index
+              "
+            >
+              <fa-icon
+                class="text-secondary"
+                style="font-size: 16px; margin-right: 10px"
+                [icon]="option.icon"
+              ></fa-icon>
+              {{ option.value }}
+            </mat-option>
+          </mat-menu>
+
+          <mat-error
+            id="open-add-flight-flyingTo-autocomplete-error-required"
+            *ngIf="formGroup.controls['flyingTo'].hasError('required')"
+            >Flying To cannot be empty
+          </mat-error>
+
+          <mat-error
+            id="open-add-flight-flyingTo-autocomplete-error-wasValuePicked"
+            *ngIf="formGroup.controls['flyingTo'].hasError('wasValuePicked')"
+            >No airports matched your search
+          </mat-error>
+
+          <mat-error
+            id="open-add-flight-flyingTo-autocomplete-error-duplicate"
+            *ngIf="formGroup.controls['flyingTo'].hasError('duplicate')"
+            >Flying From and Flying To cannot be the same airport
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="spacersmall"></div>
+    <!-- Row 2 -->
+    <div fxLayout="row" fxLayoutGap="30px">
+      <!-- Departure Date -->
+      <div fxLayout="column" fxFlex="32%">
+        <div class="overhead-label" id="open-add-flight-departureDate-label">
+          DEPARTURE DATE<span class="required-text">*</span>
+        </div>
+        <mat-form-field class="show-one-error">
+          <healthe-datepicker
+            [id]="'open-add-flight-departuredate-datepicker'"
+            formControlName="departureDate"
+          ></healthe-datepicker>
+          <mat-error
+            id="open-add-flight-departure-datepicker-error-required"
+            *ngIf="formGroup.controls['departureDate'].hasError('required')"
+          >
+            Departure Date cannot be empty
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <!-- Return Date -->
+      <div fxLayout="column" fxFlex="33%">
+        <div class="overhead-label" id="open-add-flight-returnDate-label">
+          RETURN DATE
+        </div>
+        <mat-form-field class="show-one-error">
+          <healthe-datepicker
+            [id]="'open-add-flight-return-datepicker'"
+            formControlName="returnDate"
+          ></healthe-datepicker>
+
+          <mat-error
+            id="open-add-flight-return-datepicker-error-departureBeforeReturn"
+            *ngIf="
+              formGroup.controls['returnDate'].hasError('departureBeforeReturn')
+            "
+          >
+            Return Date must be later than or equal to Departure Date
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <!-- # Of Travelers -->
+      <div fxLayout="column" fxFlex="20%">
+        <div
+          class="overhead-label"
+          id="open-add-flight-numberOfTravelers-input-label"
+        >
+          # OF TRAVELERS<span class="required-text">*</span>
+        </div>
+        <mat-form-field>
+          <mat-select
+            formControlName="numberOfTravelers"
+            id="open-add-lodging-numberOfTravelers-select"
+          >
+            <mat-option
+              *ngFor="let option of numberOfTravelersOptions"
+              [value]="option"
+              id="open-add-flight-numberOfTravelers-option-{{option}}"
+              >{{ option }}</mat-option
+            >
+          </mat-select>
+          <mat-error
+            id="open-add-flight-numberOfTravelers-error-required"
+            *ngIf="formGroup.controls['numberOfTravelers'].hasError('required')"
+            >Number of Travelers cannot be empty
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="spacersmall"></div>
+    <!-- Row 3 -->
+    <healthe-create-new-authorization-appointment
+      [referralAuthorizationItem]="referralAuthorizationItem"
+      [dialogData]="dialogData"
+    ></healthe-create-new-authorization-appointment>
+  </div>
+</div>

@@ -1,0 +1,131 @@
+<div fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="35px">
+  <div fxLayout="column" fxLayoutAlign="start start" fxLayoutGap="5px">
+    <div
+      class="overhead-label"
+      id="referral-auth-review-{{typeCode}}-destination-label"
+    >
+      DESTINATION
+    </div>
+    <div
+      id="referral-auth-review-{{typeCode}}-destination"
+      class="standard-text"
+    >
+      {{ authItem['destination'] }}
+    </div>
+  </div>
+
+  <div fxLayout="column" fxLayoutAlign="start start" fxLayoutGap="5px">
+    <div
+      class="overhead-label"
+      id="referral-auth-review-{{typeCode}}-numberOfGuests-label"
+    >
+      # OF TRAVELERS
+    </div>
+    <div
+      id="referral-auth-review-{{typeCode}}-numberOfGuests"
+      class="standard-text"
+    >
+      {{ authItem['numberOfGuests'] }}
+    </div>
+  </div>
+
+  <div fxLayout="column" fxLayoutAlign="start start" fxLayoutGap="5px">
+    <div
+      class="overhead-label"
+      id="referral-auth-review-{{typeCode}}-numberOfRooms-label"
+    >
+      # OF ROOMS
+    </div>
+    <div
+      id="referral-auth-review-{{typeCode}}-numberOfRooms"
+      class="standard-text"
+    >
+      {{ authItem['numberOfRooms'] }}
+    </div>
+  </div>
+
+  <div fxLayout="column" fxLayoutAlign="start start" fxLayoutGap="5px">
+    <div
+      class="overhead-label"
+      id="referral-auth-review-{{typeCode}}-priceOfRoom-label"
+    >
+      PRICE OF ROOM
+    </div>
+    <div
+      id="referral-auth-review-{{typeCode}}-priceOfRoom"
+      class="standard-text"
+    >
+      {{ authItem['priceOfRoom'] }}
+    </div>
+  </div>
+</div>
+<div class="spacersmall"></div>
+<div fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="35px">
+  <div fxLayout="column" fxLayoutAlign="start start" fxLayoutGap="5px">
+    <div
+      class="overhead-label"
+      id="referral-auth-review-{{typeCode}}-checkInDate-label"
+    >
+      CHECK IN DATE
+    </div>
+    <div
+      id="referral-auth-review-{{typeCode}}-checkInDate"
+      class="standard-text"
+    >
+      {{ authItem['checkInDate'] | date: 'MM/dd/yyyy' }}
+    </div>
+  </div>
+
+  <div fxLayout="column" fxLayoutAlign="start start" fxLayoutGap="5px">
+    <div
+      class="overhead-label"
+      id="referral-auth-review-{{typeCode}}-checkOutDate-label"
+    >
+      CHECK OUT DATE
+    </div>
+    <div
+      id="referral-auth-review-{{typeCode}}-checkOutDate"
+      class="standard-text"
+    >
+      {{ authItem['checkOutDate'] | date: 'MM/dd/yyyy' }}
+    </div>
+  </div>
+
+  <div fxLayout="column" fxLayoutAlign="start start" fxLayoutGap="5px">
+    <div
+      class="overhead-label"
+      id="referral-auth-review-{{typeCode}}-numberOfNights-label"
+    >
+      NUMBER OF NIGHTS
+    </div>
+    <div
+      id="referral-auth-review-{{typeCode}}-numberOfNights"
+      class="standard-text"
+    >
+      {{ authItem['numberOfNights'] }}
+    </div>
+  </div>
+</div>
+<div class="spacersmall"></div>
+<div fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="35px">
+  <healthe-appointment-info
+    [appointmentData]="authItem['authData']"
+    sectionName="{{typeCode}}"
+  ></healthe-appointment-info>
+
+  <div
+    class="secondary"
+    style="cursor: pointer"
+    id="referral-auth-review-{{typeCode}}-relatedAppointments-button"
+    fxLayout="row"
+    fxLayoutAlign="start center"
+    (click)="viewRelatedAppointments()"
+  >
+    <fa-icon
+      [icon]="faNotesMedical"
+      style="margin-right: 10px; font-size: 22px"
+      id="referral-auth-review-{{typeCode}}-relatedAppointments-button-icon"
+    ></fa-icon>
+    <div>View Related<br />Appointments</div>
+  </div>
+</div>

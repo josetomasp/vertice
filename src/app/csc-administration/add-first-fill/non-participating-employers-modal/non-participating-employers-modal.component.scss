@@ -1,0 +1,10 @@
+@import 'variables';
+
+a {
+  min-width: unset !important;
+}
+
+.selectedFilterRange {
+  border-radius: 5px;
+  border: 1px solid $primary;
+}

@@ -1,0 +1,249 @@
+<div
+  style="height: 90%"
+  fxLayout="column"
+  fxLayoutAlign="space-between"
+  class="other-medication-search-modal"
+>
+  <div>
+    <h2
+      mat-dialog-title
+      fxLayoutAlign="space-between center"
+      id="otherMedicationSearchModal-title"
+    >
+      Search For Other Medication
+      <button
+        mat-icon-button
+        [mat-dialog-close]="undefined"
+        id="otherMedicationSearchModal-xCloseButton"
+      >
+        <i class="fal fa-times modal-close-widget"></i>
+      </button>
+    </h2>
+    <mat-dialog-content>
+      <div class="modal-padding">
+        <div
+          style="padding-top:20px"
+          id="otherMedicationSearchModal-searchInstructions1"
+        >
+          Please enter an NDC or drug name. NDCs must match exactly and drug
+          names will be checked to start with the entered name.
+        </div>
+        <div id="otherMedicationSearchModal-searchInstructions2">
+          Drug name will be ignored if an NDC is entered.
+        </div>
+        <div class="spacersmall"></div>
+        <div
+          fxLayout="row"
+          fxLayoutAlign="space-between"
+          [formGroup]="otherMedicationFormGroup"
+        >
+          <div
+            fxLayout="row"
+            fxLayoutAlign="space-between end"
+            fxLayoutGap="20px"
+          >
+            <div>
+              <div
+                class="overhead-label"
+                id="otherMedicationSearchModal-searchNdcLabel"
+              >
+                NDC
+              </div>
+              <mat-form-field>
+                <input
+                  formControlName="drugNdc"
+                  matInput
+                  placeholder="Enter NDC"
+                  cdkFocusInitial
+                  id="otherMedicationSearchModal-searchNdcInput"
+                />
+              </mat-form-field>
+            </div>
+            <div>
+              <div
+                class="overhead-label"
+                id="otherMedicationSearchModal-searchDrugNameLabel"
+              >
+                DRUG NAME
+              </div>
+              <mat-form-field>
+                <input
+                  formControlName="drugName"
+                  matInput
+                  placeholder="Enter Drug Name"
+                  id="otherMedicationSearchModal-searchDrugNameInput"
+                />
+              </mat-form-field>
+            </div>
+            <mat-error
+              [ngStyle]="{
+                visibility:
+                  otherMedicationFormGroup.touched &&
+                  otherMedicationFormGroup.hasError('hasNoValues')
+                    ? 'visible'
+                    : 'hidden'
+              }"
+              style="padding-bottom: 30px"
+              id="otherMedicationSearchModal-searchValidationError"
+            >
+              Please enter an NDC or a drug name
+            </mat-error>
+          </div>
+          <button
+            mat-flat-button
+            class="primary-button"
+            style="margin-top: 20px"
+            [disabled]="disableSearchButton()"
+            (click)="searchForPrescriptions()"
+            id="otherMedicationSearchModal-searchButton"
+          >
+            SEARCH
+          </button>
+        </div>
+      </div>
+      <mat-divider></mat-divider>
+      <div
+        class="modal-padding"
+        fxLayoutAlign="center center"
+        style="padding-top: 20px"
+      >
+        <table
+          *ngIf="dataSource.data.length > 0"
+          mat-table
+          [dataSource]="dataSource"
+        >
+          <!-- Radio button column -->
+          <ng-container matColumnDef="select">
+            <th
+              mat-header-cell
+              *matHeaderCellDef
+              id="otherMedicationSearchModal-searchResults-selectColumnHeader"
+            >
+              SELECT
+            </th>
+            <td
+              mat-cell
+              *matCellDef="let row"
+              id="otherMedicationSearchModal-searchResults-selectColumnCell"
+            >
+              <mat-radio-button
+                (click)="$event.stopPropagation()"
+                (change)="$event ? selectedPrescription.toggle(row) : null"
+                [checked]="selectedPrescription.isSelected(row)"
+              >
+              </mat-radio-button>
+            </td>
+          </ng-container>
+
+          <!-- NDC column -->
+          <ng-container matColumnDef="ndc">
+            <th
+              mat-header-cell
+              *matHeaderCellDef
+              id="otherMedicationSearchModal-searchResults-ndcColumnHeader"
+            >
+              NDC
+            </th>
+            <td
+              mat-cell
+              *matCellDef="let prescriptionSearchResult"
+              id="otherMedicationSearchModal-searchResults-ndcColumnCell"
+            >
+              {{ prescriptionSearchResult.ndc }}
+            </td>
+          </ng-container>
+
+          <!-- Prescription (name) column -->
+          <ng-container matColumnDef="prescriptionName">
+            <th
+              mat-header-cell
+              *matHeaderCellDef
+              id="otherMedicationSearchModal-searchResults-prescriptionColumnHeader"
+            >
+              PRESCRIPTION
+            </th>
+            <td
+              mat-cell
+              *matCellDef="let prescriptionSearchResult"
+              id="otherMedicationSearchModal-searchResults-prescriptionColumnCell"
+            >
+              {{ prescriptionSearchResult.prescriptionName }}
+            </td>
+          </ng-container>
+
+          <!-- (Prescription) strength column -->
+          <ng-container matColumnDef="strength">
+            <th
+              mat-header-cell
+              *matHeaderCellDef
+              id="otherMedicationSearchModal-searchResults-strengthColumnHeader"
+            >
+              STRENGTH
+            </th>
+            <td
+              mat-cell
+              *matCellDef="let prescriptionSearchResult"
+              id="otherMedicationSearchModal-searchResults-strengthColumnCell"
+            >
+              {{ prescriptionSearchResult.strength }}
+            </td>
+          </ng-container>
+
+          <tr
+            mat-header-row
+            *matHeaderRowDef="displayedColumns; sticky: true"
+          ></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+        </table>
+
+        <ng-container *ngIf="dataSource.data.length === 0 && !isLoading">
+          <img alt="No Data Indicator" src="assets/img/NoDataIcon.svg" />
+          <p
+            class="standard-text"
+            id="otherMedicationSearchModal-searchResults-noDataMessage"
+          >
+            {{ noDataForQueryVerbiage }}
+          </p>
+        </ng-container>
+
+        <ng-container *ngIf="isLoading">
+          <div class="spacersmall"></div>
+          <div
+            fxLayout="column"
+            fxLayoutAlign="center center"
+            fxLayoutGap="35px"
+            id="otherMedicationSearchModal-searchResults-loadingIndicators"
+          >
+            <mat-spinner [diameter]="55"></mat-spinner>
+            <h2>Loading Prescriptions...</h2>
+          </div>
+        </ng-container>
+      </div>
+    </mat-dialog-content>
+  </div>
+
+<mat-dialog-actions
+  fxLayoutAlign="end"
+  fxLayoutGap="20px"
+  class="modal-padding"
+  style="margin-bottom: 20px"
+>
+  <button
+    class="info-button"
+    mat-stroked-button
+    [mat-dialog-close]="undefined"
+    id="otherMedicationSearchModal-actionCloseButton"
+  >
+    CANCEL
+  </button>
+  <button
+    mat-flat-button
+    class="primary-button"
+    [disabled]="selectedPrescription.selected.length === 0"
+    [mat-dialog-close]="selectedPrescription.selected[0]"
+    id="otherMedicationSearchModal-addMedicationButton"
+  >
+    ADD THIS MEDICATION
+  </button>
+</mat-dialog-actions>
+</div>

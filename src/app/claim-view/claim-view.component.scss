@@ -1,0 +1,11 @@
+@import 'variables';
+
+.claim-view-wrapper {
+  padding: 30px 20px 0 20px;
+  height: 100%;
+}
+
+.mat-tab-label-active .tag.activity {
+  color: $primary;
+  background-color: $white;
+}

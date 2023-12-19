@@ -1,0 +1,222 @@
+<mat-paginator
+  #topPaginator
+  [pageSize]="10"
+  showFirstLastButtons="true"
+  id="assignFirstFill-claimSearchResults-topPaginator"
+>
+</mat-paginator>
+<table
+  mat-table
+  matSort
+  [dataSource]="dataSource"
+  id="assignFirstFill-claimSearchResults-table"
+>
+  <!-- Radio button column to select a claim -->
+  <ng-container matColumnDef="selectedClaim">
+    <th
+      mat-header-cell
+      *matHeaderCellDef
+      id="assignFirstFill-claimSearchResults-table-selectClaim-columnHeader"
+      style="width: 75px;"
+    >
+      SELECT
+    </th>
+    <td
+      mat-cell
+      *matCellDef="let row; let index = index"
+      id="assignFirstFill-claimSearchResults-table-selectClaim-radioButton-{{index}}"
+    >
+      <mat-radio-button
+        (click)="$event.stopPropagation(); selectClaim(row)"
+        (change)="$event ? selectedClaim.toggle(row) : null"
+        [checked]="selectedClaim.isSelected(row)"
+        style="margin-left: 13px"
+      >
+      </mat-radio-button>
+    </td>
+  </ng-container>
+
+  <!-- Member ID column -->
+  <ng-container matColumnDef="memberId">
+    <th
+      mat-header-cell
+      *matHeaderCellDef
+      id="assignFirstFill-claimSearchResults-table-memberId-columnHeader"
+    >
+      MEMBER ID
+    </th>
+    <td
+      mat-cell
+      *matCellDef="let row; let index = index"
+      [matTooltip]="row.memberId"
+      id="assignFirstFill-claimSearchResults-table-memberId-value-{{index}}"
+    >
+      {{ row.memberId }}
+    </td>
+  </ng-container>
+
+  <!-- Claim number column -->
+  <ng-container matColumnDef="claimNumber">
+    <th
+      mat-header-cell
+      *matHeaderCellDef
+      id="assignFirstFill-claimSearchResults-table-claimNumber-columnHeader"
+    >
+      CLAIM NUMBER
+    </th>
+    <td
+      mat-cell
+      *matCellDef="let row; let index = index"
+      [matTooltip]="row.claimNumber"
+      id="assignFirstFill-claimSearchResults-table-claimNumber-value-{{index}}"
+    >
+      <a mat-button style="text-align: left" (click)="goToClaimView(row)">{{
+        row.claimNumber
+      }}</a>
+    </td>
+  </ng-container>
+
+  <!-- Claimant name column -->
+  <ng-container matColumnDef="claimant">
+    <th
+      mat-header-cell
+      *matHeaderCellDef
+      id="assignFirstFill-claimSearchResults-table-claimant-columnHeader"
+    >
+      CLAIMANT
+    </th>
+    <td
+      mat-cell
+      *matCellDef="let row; let index = index"
+      [matTooltip]="row.claimant"
+      id="assignFirstFill-claimSearchResults-table-claimant-value-{{index}}"
+    >
+      {{ row.claimant }}
+    </td>
+  </ng-container>
+
+  <!-- SSN column -->
+  <ng-container matColumnDef="ssn">
+    <th
+      mat-header-cell
+      *matHeaderCellDef
+      id="assignFirstFill-claimSearchResults-table-ssn-columnHeader"
+      style="width: 110px"
+    >
+      SSN
+    </th>
+    <td
+      mat-cell
+      *matCellDef="let row; let index = index"
+      [matTooltip]="row.ssn"
+      id="assignFirstFill-claimSearchResults-table-ssn-value-{{index}}"
+    >
+      {{ row.ssn }}
+    </td>
+  </ng-container>
+
+  <!-- Date of injury column -->
+  <ng-container
+    matColumnDef="dateOfInjury"
+    id="assignFirstFill-claimSearchResults-table-dateOfInjury-columnHeader"
+  >
+    <th mat-header-cell mat-sort-header *matHeaderCellDef style="width: 125px">
+      DATE OF INJURY
+    </th>
+    <td
+      mat-cell
+      *matCellDef="let row; let index = index"
+      [matTooltip]="row.dateOfInjury"
+      id="assignFirstFill-claimSearchResults-table-dateOfInjury-value-{{index}}"
+    >
+      {{ row.dateOfInjury }}
+    </td>
+  </ng-container>
+
+  <!-- Customer ID/name column -->
+  <ng-container matColumnDef="customer">
+    <th
+      mat-header-cell
+      *matHeaderCellDef
+      id="assignFirstFill-claimSearchResults-table-customer-columnHeader"
+    >
+      CUSTOMER
+    </th>
+    <td
+      mat-cell
+      *matCellDef="let row; let index = index"
+      [matTooltip]="row.customer"
+      id="assignFirstFill-claimSearchResults-table-customer-value-{{index}}"
+    >
+      {{ row.customer }}
+    </td>
+  </ng-container>
+
+  <!-- State of venue column -->
+  <ng-container matColumnDef="stateOfVenue">
+    <th
+      mat-header-cell
+      *matHeaderCellDef
+      style="width: 50px; text-align: center;"
+      id="assignFirstFill-claimSearchResults-table-stateOfVenue-columnHeader"
+    >
+      STATE OF VENUE
+    </th>
+    <td
+      mat-cell
+      *matCellDef="let row; let index = index"
+      [matTooltip]="row.stateOfVenue"
+      id="assignFirstFill-claimSearchResults-table-stateOfVenue-value-{{index}}"
+    >
+      <span style="margin-left: 16px;">{{ row.stateOfVenue }}</span>
+    </td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="tableColumns"></tr>
+  <tr
+    mat-row
+    *matRowDef="let row; columns: tableColumns; let index = index"
+  ></tr>
+</table>
+
+<mat-paginator
+  #bottomPaginator
+  showFirstLastButtons="true"
+  id="assignFirstFill-claimSearchResults-bottomPaginator"
+></mat-paginator>
+
+<ng-container *ngIf="(isLoadingClaimSearchResults$ | async)">
+  <div
+    fxLayout="column"
+    fxLayoutAlign="center center"
+    fxLayoutGap="35px"
+    class="loader"
+  >
+    <mat-spinner
+      [diameter]="55"
+      id="assignFirstFill-claimSearchResults-table-loadingSpinner"
+    ></mat-spinner>
+    <h2 id="assignFirstFill-claimSearchResults-table-loadingMessage">
+      Loading claim search results...
+    </h2>
+  </div>
+</ng-container>
+
+<div
+  *ngIf="
+    !(isLoadingClaimSearchResults$ | async) &&
+    (firstFillClaimSearchResults$ | async).length === 0
+  "
+  fxLayout="column"
+  fxLayoutAlign="center center"
+>
+  <div class="spacersmall"></div>
+  <img
+    alt="No Data Indicator"
+    src="assets/img/NoDataIcon.svg"
+    id="assignFirstFill-claimSearchResults-table-noDataAvailableIcon"
+  />
+  <p id="assignFirstFill-claimSearchResults-table-noDataAvailableMessage">
+    No claims found. Please try another search.
+  </p>
+</div>

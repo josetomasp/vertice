@@ -1,0 +1,128 @@
+<healthe-search-results-count
+  [resultsCount]="results.length"
+  resultsCountLimitErrorThreshold="200"
+></healthe-search-results-count>
+
+<div class="spacertiny"></div>
+
+<mat-card>
+  <mat-card-content>
+    <div fxLayout="row" fxLayoutAlign="space-between">
+      <span
+        style="font-weight: 600; font-size: 22px"
+        id="searchResultsTableTitle"
+        >Search Results</span
+      >
+      <!-- First Paginator -->
+      <mat-paginator
+        id="nav-search-table-paginator-one"
+        data-testid="data-nav-search-table-paginator-one"
+        [pageSize]="searchTableConfig.pageSize"
+        [pageSizeOptions]="searchTableConfig.pagerSizeOptions"
+        #primaryPaginator
+      >
+      </mat-paginator>
+    </div>
+
+    <!-- Table -->
+    <table
+      mat-table
+      [dataSource]="tableDataSource"
+      matSort
+      #matSort="matSort"
+      class="card-list-container"
+      id="nav-search-table-data"
+    >
+      <ng-container
+        *ngFor="let column of columns; let i = index; trackBy: trackByMethod"
+        [matColumnDef]="column.name"
+      >
+        <th
+          mat-header-cell
+          *matHeaderCellDef
+          [disabled]="!column.comparator"
+          [mat-sort-header]="column.name"
+          class="healthe-card-list-header-text"
+          id="results-card-list-header-{{ column.name }}-{{i}}"
+        >
+          {{ column.label }}
+        </th>
+        <td
+          mat-cell
+          *matCellDef="let referal"
+          class="card-list-cell"
+          id="results-card-list-td-{{ column.name }}-{{i}}"
+        >
+          <healthe-referral-table-cell-switch
+            [element]="referal"
+            [name]="column.name"
+            [index]="i"
+            [customerID]="searchTableConfig.customerID"
+          ></healthe-referral-table-cell-switch>
+        </td>
+      </ng-container>
+
+      <tr
+        mat-header-row
+        class="healthe-card-list-header"
+        *matHeaderRowDef="defaultColumns; sticky: true"
+      ></tr>
+      <tr
+        class="card-list-row"
+        mat-row
+        [hidden]="
+          (isLoading$ | async) || tableDataSource.filteredData.length == 0
+        "
+        *matRowDef="let row; columns: defaultColumns"
+      ></tr>
+    </table>
+
+    <!-- loading / Empty Results -->
+    <mat-card
+      *ngIf="(isLoading$ | async) || tableDataSource.filteredData.length == 0"
+      class="nav-search-table__loading-wrapper"
+    >
+      <div
+        id="noData"
+        class="healthe-table--centered-container"
+        fxLayout="column"
+        fxLayoutAlign="center center"
+      >
+        <div
+          id="loadingDataSpinner"
+          *ngIf="(isLoading$ | async)"
+          fxLayout="column"
+          fxLayoutAlign="center center"
+        >
+          <mat-spinner diameter="55"></mat-spinner>
+          <h2>Loading results...</h2>
+        </div>
+
+        <ng-container
+          *ngIf="
+            !(isLoading$ | async) && tableDataSource.filteredData.length == 0
+          "
+        >
+          <img alt="No Data Indicator" src="assets/img/NoDataIcon.svg" />
+          <p
+            *ngIf="tableDataSource.filteredData.length == 0 && !clickForResult"
+            class="standard-text"
+            id="tableVerbiage-noDataForQuery"
+          >
+            {{ searchTableConfig.noDataForQuery }}
+          </p>
+          <p
+            *ngIf="tableDataSource.filteredData.length == 0 && clickForResult"
+            class="standard-text"
+            id="tableVerbiage-noSearchPerformed"
+          >
+            {{ searchTableConfig.noSearchPerformedText }}
+          </p>
+        </ng-container>
+      </div>
+    </mat-card>
+
+    <!-- Second Paginator -->
+    <mat-paginator #secondaryPaginator></mat-paginator>
+  </mat-card-content>
+</mat-card>

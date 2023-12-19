@@ -1,0 +1,6 @@
+<span *ngIf="formattedCellData !== null">{{ formattedCellData }}</span>
+<div *ngIf="fontAwesomeClass && iconLink" style="text-align: center">
+  <a [href]="iconLink" target="_blank">
+    <i style="font-size: 20px" [ngClass]="fontAwesomeClass"></i
+  ></a>
+</div>

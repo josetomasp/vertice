@@ -1,0 +1,316 @@
+<mat-sidenav-container hasBackdrop="false" autosize>
+  <mat-sidenav
+    opened
+    mode="side"
+    [ngClass]="
+      isNavExpanded ? 'healthe-sidenav-expanded' : 'healthe-sidenav-collapsed'
+    "
+    disableClose
+  >
+    <div
+      class="sidenav-left-container"
+      fxLayout="column"
+      style="overflow-y: auto"
+    >
+      <div fxFlex="0 0 71px" fxLayoutAlign="start center" class="bottom-border">
+        <img
+          src="././assets/img/vertice_icon_v_only.svg"
+          class="vertice-nav-logo_round"
+        />
+
+        <img
+          *ngIf="isNavExpanded"
+          src="./assets/img/vertice_no_v.svg"
+          style="height: 30px; width: 100px"
+        />
+      </div>
+
+      <div
+        fxFlex="0 0 auto"
+        fxLayoutAlign="start center"
+        (click)="toggleNavExpanded()"
+        [matTooltip]="'Expand Navigation'"
+        [matTooltipDisabled]="isNavExpanded"
+        [matTooltipShowDelay]="600"
+        matTooltipPosition="after"
+        class="bottom-border hover-pointer healthe-nav-row-top"
+      >
+        <div class="collapse-icon-border" fxLayoutAlign="center center">
+          <i *ngIf="!isNavExpanded" [ngClass]="['fas', 'fa-chevron-right']"></i>
+          <i *ngIf="isNavExpanded" [ngClass]="['fas', 'fa-chevron-left']"></i>
+        </div>
+        <span *ngIf="isNavExpanded">Collapse</span>
+      </div>
+
+      <ng-container *ngFor="let navItem of navItems">
+        <div
+          class="hover-pointer healthe-nav-row"
+          fxLayout="column"
+          style="cursor: default"
+        >
+          <!-- BEGIN  Children on a collapsed nav -->
+          <ng-container *ngIf="navItem.children && !isNavExpanded">
+            <ng-container
+              *healtheRemoveElementIfTrue="
+                componentGroupName;
+                elementName: navItem.elementName
+              "
+            >
+              <mat-list-item
+                healtheDisableElementIfTrue
+                [componentGroupName]="this.componentGroupName"
+                [elementName]="navItem.elementName"
+                classToAdd="mat-list-item-disabled"
+                [matTooltip]="determineTooltip(navItem)"
+                [matTooltipDisabled]="
+                  isNavExpanded
+                    ? !isElementDisabled(navItem.elementName)
+                    : false
+                "
+                [matTooltipShowDelay]="600"
+                matTooltipPosition="after"
+                fxFlex="1 1 auto"
+                fxLayoutAlign="start center"
+                style="height: 50px"
+                [ngClass]="getMenuStateClass(navItem)"
+                (click)="onItemSelected(navItem, popupTrigger)"
+                [matMenuTriggerFor]="navListPopup"
+                #popupTrigger="matMenuTrigger"
+                id="side-nav-parent-{{ navItem.displayName }}"
+              >
+                <div
+                  *ngIf="navItem.icon"
+                  class="icon-wrapper"
+                  fxFlex="0 0"
+                  fxLayoutAlign="center center"
+                >
+                  <fa-icon [icon]="navItem.icon"></fa-icon>
+                </div>
+                <div
+                  *ngIf="navItem.image"
+                  class="icon-wrapper"
+                  fxFlex="0 0"
+                  fxLayoutAlign="center center"
+                >
+                  <img
+                    alt=""
+                    height="20"
+                    src="{{ navItem.image }}"
+                    width="20"
+                  />
+                </div>
+                <span fxFlex="1 1 auto" fxLayoutAlign="center center"
+                  >{{ navItem.displayName }}
+                </span>
+              </mat-list-item>
+            </ng-container>
+          </ng-container>
+          <!-- END  Children  AND collapsed nav -->
+
+          <!-- BEGIN  No Children OR an Expanded nav -->
+          <ng-container *ngIf="!navItem.children || isNavExpanded">
+            <ng-container
+              *healtheRemoveElementIfTrue="
+                componentGroupName;
+                elementName: navItem.elementName
+              "
+            >
+              <mat-list-item
+                healtheDisableElementIfTrue
+                [componentGroupName]="this.componentGroupName"
+                [elementName]="navItem.elementName"
+                classToAdd="mat-list-item-disabled"
+                [matTooltip]="determineTooltip(navItem)"
+                [matTooltipDisabled]="
+                  isNavExpanded
+                    ? !isElementDisabled(navItem.elementName)
+                    : false
+                "
+                [matTooltipShowDelay]="600"
+                matTooltipPosition="after"
+                [ngClass]="getMenuStateClass(navItem)"
+                (click)="onItemSelected(navItem)"
+                id="side-nav-parent-{{ navItem.displayName }}"
+                *ngIf='!navItem.hide$ || !(navItem.hide$ | async)'
+              >
+                <div
+                  fxLayout="row"
+                  fxLayoutAlign="space-between center"
+                  style="height: 50px"
+                >
+                  <div fxLayout="row" fxLayoutAlign="center center">
+                    <div
+                      *ngIf="navItem.icon"
+                      class="icon-wrapper"
+                      fxFlex="0 0"
+                      fxLayoutAlign="center center"
+                    >
+                      <fa-icon [icon]="navItem.icon"></fa-icon>
+                    </div>
+                    <div
+                      *ngIf="navItem.image"
+                      class="icon-wrapper"
+                      fxFlex="0 0"
+                      fxLayoutAlign="center center"
+                    >
+                      <img
+                        alt=""
+                        height="20"
+                        src="{{ navItem.image }}"
+                        width="20"
+                      />
+                    </div>
+                    <span fxFlex="1 1 auto" fxLayoutAlign="center center">{{
+                      navItem.displayName
+                    }}</span>
+                  </div>
+
+                  <div
+                    *ngIf="navItem.children"
+                    fxLayout="row"
+                    fxLayoutAlign="end center"
+                    style="margin-right: 20px"
+                  >
+                    <fa-icon
+                      *ngIf="subMenuExpansionMap[navItem.displayName]"
+                      [icon]="faChevronUp"
+                    ></fa-icon>
+                    <fa-icon
+                      *ngIf="!subMenuExpansionMap[navItem.displayName]"
+                      [icon]="faChevronDown"
+                    ></fa-icon>
+                  </div>
+                </div>
+              </mat-list-item>
+            </ng-container>
+          </ng-container>
+          <!-- END NO Children on a Expanded nav -->
+
+          <!-- BEGIN Children on a Expanded nav -->
+          <mat-list
+            class="nav-sub-list"
+            *ngIf="isNavExpanded && subMenuExpansionMap[navItem.displayName]"
+          >
+            <ng-container *ngFor="let subItem of navItem.children">
+              <ng-container
+                *ngIf="shouldShowElementWithSSOStatusInMind(subItem)"
+              >
+                <ng-container
+                  *healtheRemoveElementIfTrue="
+                    componentGroupName;
+                    elementName: subItem.elementName
+                  "
+                >
+                  <mat-list-item
+                    healtheDisableElementIfTrue
+                    [componentGroupName]="this.componentGroupName"
+                    [elementName]="subItem.elementName"
+                    classToAdd="nav-item-disabled"
+                    class="list-sub-item"
+                    (click)="onItemSelected(subItem)"
+                    [matTooltip]="determineTooltip(subItem)"
+                    matTooltipPosition="after"
+                    [matTooltipDisabled]="
+                      !isElementDisabled(subItem.elementName)
+                    "
+                    [matTooltipShowDelay]="600"
+                    [ngClass]="getMenuStateClass(subItem)"
+                    id="side-nav-child-{{ subItem.displayName }}"
+                  >
+                    {{ subItem.displayName }}
+                  </mat-list-item>
+                </ng-container>
+              </ng-container>
+            </ng-container>
+          </mat-list>
+          <!-- END Children on a Expanded nav -->
+        </div>
+      </ng-container>
+
+      <div fxFlex="1 1"></div>
+      <div *ngIf="!isNavExpanded" class="sidenav-footer">
+        <img
+          src="./assets/img/E.svg"
+          class="collapsed-healthe-logo"
+          style="margin-left: 3px"
+        />
+      </div>
+      <div
+        *ngIf="isNavExpanded"
+        class="sidenav-footer"
+        style="margin-top: 20px"
+      >
+        <img
+          src="./assets/img/healthesystems-logo-KO-notag-INVERSE.svg"
+          style="width: 204px; height: 40px; margin-left: -16px"
+        />
+        <div class="privacy-link-text">
+          <span
+            >Copyright &copy; {{ getYear() }} Healthesystems, LLC. All rights
+            reserved.&nbsp;</span
+          >
+          <a
+            href="https://www.healthesystems.com/privacy-terms-of-use"
+            target="_blank"
+            >Privacy Statement & Terms of Use</a
+          >
+        </div>
+      </div>
+    </div>
+  </mat-sidenav>
+
+  <mat-sidenav-content fxLayout="column">
+    <healthe-vertice-help
+      *healtheRemoveElementIfTrue="
+        componentGroupName;
+        elementName: 'verticeHelp'
+      "
+    ></healthe-vertice-help>
+    <router-outlet></router-outlet>
+  </mat-sidenav-content>
+</mat-sidenav-container>
+
+<mat-menu class="nav-popup-menu sideNavMenus" #navListPopup="matMenu">
+  <ng-container *ngIf="!isElementDisabled(highlightedNav.elementName)">
+    <mat-nav-list disableRipple>
+      <mat-list-item
+        style="height: 50px"
+        [ngClass]="getMenuStateClass(highlightedNav)"
+      >
+        {{ highlightedNav.displayName }}
+      </mat-list-item>
+    </mat-nav-list>
+    <mat-nav-list disableRipple>
+      <ng-container *ngFor="let navItemChild of highlightedNav.children">
+        <ng-container
+          *ngIf="shouldShowElementWithSSOStatusInMind(navItemChild)"
+        >
+          <ng-container
+            *healtheRemoveElementIfTrue="
+              componentGroupName;
+              elementName: navItemChild.elementName
+            "
+          >
+            <mat-list-item
+              healtheDisableElementIfTrue
+              [componentGroupName]="this.componentGroupName"
+              [elementName]="navItemChild.elementName"
+              classToAdd="nav-item-disabled"
+              class="list-sub-item"
+              [matTooltip]="determineTooltip(navItemChild)"
+              [matTooltipDisabled]="
+                !isElementDisabled(navItemChild.elementName)
+              "
+              [matTooltipShowDelay]="600"
+              matTooltipPosition="after"
+              [ngClass]="getMenuStateClass(navItemChild)"
+              (click)="selectItemAndRoute(navItemChild)"
+            >
+              {{ navItemChild.displayName }}
+            </mat-list-item>
+          </ng-container>
+        </ng-container>
+      </ng-container>
+    </mat-nav-list>
+  </ng-container>
+</mat-menu>

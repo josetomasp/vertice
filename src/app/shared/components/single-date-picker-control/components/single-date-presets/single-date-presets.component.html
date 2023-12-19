@@ -1,0 +1,11 @@
+<div>
+  <ul class="single-date-presets-list">
+    <li
+      (click)="setPresetPeriod(preset)"
+      *ngFor="let preset of presets"
+      [id]="getID(toCamelCase(preset.presetLabel))"
+    >
+      {{ preset.presetLabel }}
+    </li>
+  </ul>
+</div>

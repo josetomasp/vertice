@@ -1,0 +1,11 @@
+:host {
+  margin: 0 16px 16px 16px;
+  .healthe-generic-wizard-footer {
+    display: flex;
+    flex-direction: row;
+    justify-content: end;
+    & > button {
+      margin-left: 16px;
+    }
+  }
+}

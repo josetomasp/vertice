@@ -1,0 +1,29 @@
+<ng-container [ngSwitch]="name">
+  <span *ngSwitchCase="'claimNumber'" class="standard-text ellipsis-text"
+    ><a
+      id="claimNumber-button--{{index}}"
+      mat-button
+      class="standard-text ellipsis-text"
+      [matTooltip]="element[name]"
+      (click)="goToClaimView(element)"
+      >{{ element[name] }}</a
+    >
+  </span>
+  <span *ngSwitchCase="'referralId'" class="standard-text ellipsis-text"
+    ><a
+      id="referralId-button--{{index}}"
+      mat-button
+      class="standard-text ellipsis-text"
+      [matTooltip]="element[name]"
+      (click)="referralClickNavigation(element)"
+      >{{ element[name] }} <ng-container *ngIf="element.isRFS"> - RFS</ng-container></a
+    >
+  </span>
+  <p
+    *ngSwitchDefault
+    class="standard-text ellipsis-text"
+    [matTooltip]="element[name]"
+  >
+    {{ element[name] }}
+  </p>
+</ng-container>

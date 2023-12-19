@@ -1,0 +1,108 @@
+<div fxLayout="column" fxLayoutGap="40px">
+  <div>
+    <mat-card id="claimActivityTableLists-navigationTabs" class="tab-card">
+      <nav mat-tab-nav-bar>
+        <ng-container *ngFor="let link of navigationTabs">
+          <a
+            mat-tab-link
+            *healtheRemoveElementIfTrue="
+              componentGroupName;
+              elementName: link.elementName
+            "
+            [active]="activeTab === link.name"
+            id="claimActivityTableLists-navigationTabs-tabGroup-activityTab-label-{{ link.name }}"
+            (click)="selectTab(link.name)"
+          >
+            <healthe-customer-configs-label
+              [defaultText]="link.label"
+              [elementName]="link.elementName"
+              [forcedCapitalization]="false"
+            ></healthe-customer-configs-label>
+          </a>
+        </ng-container>
+      </nav>
+    </mat-card>
+  </div>
+
+  <div>
+    <div
+      class="overhead-label"
+      id="claimActivityTableList-columnsToDisplayLabel"
+    >
+      COLUMNS TO DISPLAY
+    </div>
+
+    <div
+      fxLayout="row"
+      fxLayout.lt-md="column"
+      fxLayoutGap.lt-md="40px"
+      fxLayoutAlign="space-between"
+      style="margin-bottom: 40px;"
+    >
+      <span
+        style="position: relative; top: 7px; height: 20px;"
+        id="columnsToDisplaySummary"
+      >
+        The order of selection will determine the order of the columns from left
+        to right
+      </span>
+      <div fxLayout="row" fxLayoutAlign="end center">
+        <a mat-button (click)="clearColumns()" id="claimTableListsClearButton"
+          >Clear columns</a
+        >
+        <button
+          mat-stroked-button
+          class="secondary-button"
+          (click)="resetActiveTabColumns()"
+          id="claimTableListsResetButton"
+        >
+          RESET TO DEFAULT SETTINGS
+        </button>
+      </div>
+    </div>
+
+    <div fxLayout="row wrap" fxLayoutGap="20px grid">
+      <div fxFlex="200px" *ngFor="let column of getColumns()">
+        <mat-checkbox
+          id="claimActivityTableLists-columnSelection-{{ column.name }}-checkbox"
+          (ngModelChange)="updateColumnList(column.name, $event)"
+          [ngModel]="isSelected(column)"
+          ><span
+            id="claimActivityTableLists-columnSelection-{{ column.name }}-label"
+            >{{ column.label }}</span
+          ></mat-checkbox
+        >
+      </div>
+    </div>
+    <div class="spacersmall"></div>
+  </div>
+
+  <div>
+    <div id="claimActivityTableLists-previewList" class="section-title">
+      Preview of Column Display
+    </div>
+    <mat-card style="overflow-x: auto; padding: 20px 0 20px 20px;">
+      <ul
+        class="healthe-column-selection-preview"
+        fxLayout="row"
+        [fxLayoutAlign]="isInternetExplorer ? 'center' : 'space-between'"
+      >
+        <li
+          [fxFlex]="isInternetExplorer ? '180px' : 'auto'"
+          fxLayout="row"
+          fxLayoutAlign="center"
+          draggable="true"
+          [ngClass]="{ darken: isDarkened(column) }"
+          (dragend)="dragEnd()"
+          (dragstart)="dragStart($event, column)"
+          (dragover)="allowDrop($event)"
+          (drop)="drop($event, column)"
+          id="{{ column.label }}-column"
+          *ngFor="let column of getDisplayedColumns()"
+        >
+          {{ column.label | uppercase }}
+        </li>
+      </ul>
+    </mat-card>
+  </div>
+</div>

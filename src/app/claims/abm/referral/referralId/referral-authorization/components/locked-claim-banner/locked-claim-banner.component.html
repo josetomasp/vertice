@@ -1,0 +1,14 @@
+<div
+  class="locked-claim-alert--banner"
+  fxLayout="row"
+  fxLayoutAlign="start center"
+  fxLayoutGap="15px"
+>
+  <fa-icon class="locked-claim-alert--banner_icon" [icon]="faLock"></fa-icon>
+  <!--
+    We need to add the user who locked the claim but at this point I don't know where to get that
+  -->
+  <span class="standard-text"
+    >Note: this claim is locked {{ lockedBy ? 'by ' + lockedBy : '' }}</span
+  >
+</div>

@@ -1,0 +1,21 @@
+<div class="spacersmall"></div>
+<div [formGroup]="formGroup" class="matFormFieldWidthFix">
+  <div fxLayout="row wrap" fxLayoutAlign="start start" fxLayoutGap="35px grid">
+    <div style="width: 200px">
+      <div
+        class="overhead-label"
+        id="auth-other-date-typeOfTransportation-label-{{idIndex}}"
+      >
+        TYPE OF TRANSPORTATION
+      </div>
+      <div>{{ authData.typeOfTransportation }}</div>
+    </div>
+  </div>
+  <div class="spacersmall"></div>
+  <healthe-transportation-authorization-detailed-base
+    [referralAuthorizationItem]="referralAuthorizationItem"
+    [idIndex]="idIndex"
+    idBase="other-{{referralAuthorizationItem.authData.typeOfTransportation}}"
+    [timeDropdownValues]="timeDropdownValues"
+  ></healthe-transportation-authorization-detailed-base>
+</div>

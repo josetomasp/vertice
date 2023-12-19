@@ -1,0 +1,50 @@
+<div class="main-nav-wrapper">
+  <healthe-header-bar title="First Fills"></healthe-header-bar>
+
+  <div class="spacersmall"></div>
+  <mat-card>
+    <mat-card-content
+      ><a
+        mat-button
+        (click)="refreshQueue()"
+        id="firstFillsQueue-refreshButton"
+      >
+        <fa-icon
+          style="position: relative;left: -5px;"
+          [icon]="faSyncAlt"
+        ></fa-icon>
+        Refresh Queue</a
+      ></mat-card-content
+    >
+  </mat-card>
+  <div class="spacersmall"></div>
+  <mat-tab-group
+    (selectedTabChange)="changeTab($event)"
+    style="background-color: white"
+  >
+    <mat-tab *ngFor="let tab of tabNames" [label]="tab"></mat-tab>
+  </mat-tab-group>
+
+  <div class="spacersmall"></div>
+  <mat-card>
+    <mat-card-title id="firstFillsQueue-resultTableTitle"
+      >First Fill Web Queue
+    </mat-card-title>
+    <mat-card-content>
+        <healthe-error-banner
+          *ngIf="serverErrors?.length > 0"
+          [errorMessages]="serverErrors"
+          bannerTitle="Data Retrieval Error"
+        ></healthe-error-banner>
+
+      <healthe-data-table
+        [displayedColumnNames]="getDisplayedColumnNames()"
+        [resultsColumnsConfig]="resultsColumnsConfig"
+        [resultsData]="getFilteredData()"
+        [resultsDefaultSort]="resultsDefaultSort"
+        [isResultLoading]="isResultLoading"
+      >
+      </healthe-data-table>
+    </mat-card-content>
+  </mat-card>
+</div>

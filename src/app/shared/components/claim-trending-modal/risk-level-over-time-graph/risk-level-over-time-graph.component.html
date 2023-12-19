@@ -1,0 +1,66 @@
+<header
+  style="height: 34px; margin-bottom: 10px"
+  fxLayout="row"
+  fxLayoutAlign="space-between center"
+>
+  <h3 id="riskTrending--graph--toggleHeader">Risk Level Over Time</h3>
+  <mat-button-toggle-group>
+    <mat-button-toggle
+      #monthlyIntervalButton
+      [value]="'monthly'"
+      checked
+      style="margin-right: 0;"
+      id="riskTrending--graph--monthlyToggle"
+      >Monthly
+    </mat-button-toggle>
+    <mat-button-toggle
+      *ngIf="false"
+      #quarterlyIntervalButton
+      [value]="'quarterly'"
+      id="riskTrending--graph--quarterlyToggle"
+      >Quarterly
+    </mat-button-toggle>
+  </mat-button-toggle-group>
+</header>
+<div>
+  <ngx-charts-line-chart
+    id="riskTrending--graph"
+    [results]="riskGraphData$ | async"
+    [view]="[845, 300]"
+    #lineChart
+    yAxis="true"
+    xAxis="true"
+    [yAxisTickFormatting]="yAxisFormatting"
+    showXAxisLabel="true"
+    yAxisLabel="RISK LEVEL"
+    xAxisLabel="MONTH / YEAR"
+    yScaleMin="0"
+    yScaleMax="5"
+    [customColors]="customColors"
+    showYAxisLabel="true"
+    autoScale="true"
+    roundDomains="true"
+  ></ngx-charts-line-chart>
+</div>
+<ng-template #template let-model="model">
+  <div
+    id="graphTooltip"
+    style="margin: 10px"
+    fxLayout="column center"
+    fxLayoutGap="4px"
+  >
+    <span id="graphTooltip-title">{{ model.name }}</span>
+    <span id="graphTooltip-value">{{ yAxisFormatting(model.value) }}</span>
+  </div>
+</ng-template>
+<ng-template #seriesTemplate let-model="model">
+  <div
+    id="seriesTooltip"
+    style="margin: 10px"
+    fxLayout="column center"
+    fxLayoutGap="4px"
+  >
+    <span id="seriesTooltip-title">{{ model[0]?.name }}</span>
+    <span id="seriesTooltip-value">{{ yAxisFormatting(model[0]?.value) }}</span>
+  </div>
+</ng-template>

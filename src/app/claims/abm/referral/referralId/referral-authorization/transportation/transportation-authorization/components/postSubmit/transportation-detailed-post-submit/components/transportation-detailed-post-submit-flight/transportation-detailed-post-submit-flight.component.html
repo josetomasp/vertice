@@ -1,0 +1,97 @@
+<div fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="35px">
+  <div fxLayout="column" fxLayoutAlign="start start" fxLayoutGap="5px">
+    <div
+      class="overhead-label"
+      id="referral-auth-review-{{typeCode}}-flyingFrom-label"
+    >
+      FLYING FROM
+    </div>
+    <div
+      id="referral-auth-review-{{typeCode}}-flyingFrom"
+      class="standard-text"
+    >
+      {{ authItem['flyingFrom'] }}
+    </div>
+  </div>
+
+  <div fxLayout="column" fxLayoutAlign="start start" fxLayoutGap="5px">
+    <div
+      class="overhead-label"
+      id="referral-auth-review-{{typeCode}}-flyingTo-label"
+    >
+      FLYING TO
+    </div>
+    <div id="referral-auth-review-{{typeCode}}-flyingTo" class="standard-text">
+      {{ authItem['flyingTo'] }}
+    </div>
+  </div>
+
+  <div fxLayout="column" fxLayoutAlign="start start" fxLayoutGap="5px">
+    <div
+      class="overhead-label"
+      id="referral-auth-review-{{typeCode}}-numberOfTravelers-label"
+    >
+      # OF TRAVELERS
+    </div>
+    <div
+      id="referral-auth-review-{{typeCode}}-numberOfTravelers"
+      class="standard-text"
+    >
+      {{ authItem['numberOfTravelers'] }}
+    </div>
+  </div>
+</div>
+
+<div class="spacersmall"></div>
+<div fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="35px">
+  <div fxLayout="column" fxLayoutAlign="start start" fxLayoutGap="5px">
+    <div
+      class="overhead-label"
+      id="referral-auth-review-{{typeCode}}-departureDate-label"
+    >
+      DEPARTURE DATE
+    </div>
+    <div
+      id="referral-auth-review-{{typeCode}}-departureDate"
+      class="standard-text"
+    >
+      {{ authItem['departureDate'] | date: 'MM/dd/yyyy' }}
+    </div>
+  </div>
+
+  <div fxLayout="column" fxLayoutAlign="start start" fxLayoutGap="5px">
+    <div
+      class="overhead-label"
+      id="referral-auth-review-{{typeCode}}-returnDate-label"
+    >
+      RETURN DATE
+    </div>
+    <div
+      id="referral-auth-review-{{typeCode}}-returnDate"
+      class="standard-text"
+    >
+      {{ authItem['returnDate'] | date: 'MM/dd/yyyy' }}
+    </div>
+  </div>
+
+  <healthe-appointment-info
+    [appointmentData]="authItem['authData']"
+    sectionName="{{typeCode}}"
+  ></healthe-appointment-info>
+
+  <div
+    class="secondary"
+    style="cursor: pointer"
+    id="referral-auth-review-{{typeCode}}-relatedAppointments-button"
+    fxLayout="row"
+    fxLayoutAlign="start center"
+    (click)="viewRelatedAppointments()"
+  >
+    <fa-icon
+      [icon]="faNotesMedical"
+      style="margin-right: 10px; font-size: 22px"
+      id="referral-auth-review-{{typeCode}}-relatedAppointments-button-icon"
+    ></fa-icon>
+    <div>View Related<br />Appointments</div>
+  </div>
+</div>

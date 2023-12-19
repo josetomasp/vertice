@@ -1,0 +1,149 @@
+<div [formGroup]="stepForm">
+  <span
+    class="overhead-label"
+    id="wheelchair-wizard-authorizationDateType-label"
+    >TYPE OF AUTHORIZATION</span
+  >
+  <mat-radio-group fxLayout="row" fxLayoutGap="15px" [value]="dateMode">
+    <mat-radio-button
+      *ngFor="let type of authorizationDateTypes"
+      id="wheelchair-wizard-authorizationDateType-{{type}}"
+      [value]="type"
+      (click)="dateModeSwitch($event, type)"
+      >{{ type }}</mat-radio-button
+    >
+  </mat-radio-group>
+  <div class="spacersmall"></div>
+  <healthe-specific-date-form-array
+    [formArray]="stepForm.get('schedulingForm')"
+    [config]="specificDateConfig"
+    *ngIf="dateMode === authorizationDateTypes[0]"
+  ></healthe-specific-date-form-array>
+  <healthe-date-range-form
+    [idPrefix]="stepName"
+    [serviceActionType]="'wheelchair'"
+    [parentFormGroup]="stepForm.get('schedulingForm')"
+    *ngIf="dateMode === authorizationDateTypes[1]"
+    withTwoLocations="true"
+  ></healthe-date-range-form>
+
+  <div class="spacermedium"></div>
+  <div fxLayout="row wrap" fxLayoutGap="30px">
+    <div>
+      <span class="overhead-label" id="wheelchair-wizard-driverLanguage-label"
+        >DRIVER LANGUAGE</span
+      >
+      <mat-form-field>
+        <mat-select
+          healtheSelect
+          placeholder="Choose language"
+          [formControl]="stepForm.get('driverLanguage')"
+          id="wheelchair-wizard-driverLanguage-select"
+        >
+          <mat-option
+            *ngFor="let language of _languages; index as $driverLanguageIndex"
+            id="wheelchair-wizard-driverLanguage-option-{{$driverLanguageIndex}}"
+            [value]="language"
+            >{{ language }}</mat-option
+          >
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div>
+      <span
+        class="overhead-label"
+        id="wheelchair-wizard-rushServiceNeeded-label"
+        >RUSH SERVICE (NEEDED WITHIN 24 HOURS)?</span
+      >
+      <mat-radio-group
+        fxLayout="row"
+        fxLayoutGap="15px"
+        [formControl]="stepForm.get('rushServiceNeeded')"
+      >
+        <mat-radio-button
+          *ngFor="let value of booleanRadioValues"
+          id="wheelchair-wizard-rushServiceNeeded-option-{{value}}"
+          [value]="value"
+          >{{ value }}</mat-radio-button
+        >
+      </mat-radio-group>
+    </div>
+    <div>
+      <span class="overhead-label" id="wheelchair-wizard-paidAsExpense-label"
+        >WILL THIS BE PAID AS EXPENSE?
+        <fa-icon
+          [icon]="faInfoCircle"
+          class="wheelchair-icons"
+          matTooltip="Only select yes if this service is not related to medical and needs to be paid off the claim as expense related"
+        >
+        </fa-icon>
+      </span>
+      <mat-radio-group
+        fxLayout="row"
+        fxLayoutGap="15px"
+        [formControl]="stepForm.get('paidAsExpense')"
+      >
+        <mat-radio-button
+          *ngFor="let value of booleanRadioValues"
+          id="wheelchair-wizard-paidAsExpense-option-{{value}}"
+          [value]="value"
+          >{{ value }}</mat-radio-button
+        >
+      </mat-radio-group>
+    </div>
+  </div>
+  <div class="spacersmall"></div>
+  <div fxLayout="row wrap" fxLayoutGap="30px">
+    <div fxLayout="column" fxLayoutAlign="center">
+      <span class="overhead-label" id="wheelchair-wizard-starissteps-label"
+        >STAIRS/STEPS</span
+      >
+      <mat-form-field>
+        <input
+          matInput
+          placeholder=""
+          [formControl]="stepForm.get('steps')"
+          id="wheelchair-wizard-steps-input"
+          type="number"
+        />
+      </mat-form-field>
+    </div>
+    <div fxLayout="column" fxLayoutAlign="center">
+      <span
+        class="input-information-text"
+        id="wheelchair-wizard-starissteps-info-label"
+        >If there are stairs/steps, please provide the estimate number of
+        steps.</span
+      >
+    </div>
+  </div>
+  <div class="spacersmall"></div>
+  <div fxLayout="row wrap" fxLayoutGap="30px">
+    <div>
+      <span class="overhead-label" id="wheelchair-wizard-wheelchair-label"
+        >WHEELCHAIR TYPE<span class="required-text">*</span></span
+      >
+      <mat-form-field>
+        <mat-select
+          healtheSelect
+          placeholder="Choose Wheelchair"
+          [formControl]="stepForm.get('wheelchairType')"
+          id="wheelchair-wizard-wheelchairType-select"
+        >
+          <mat-option
+            *ngFor="
+              let wheelchairOpt of wheelchairTypes;
+              index as $wheelchairIndex
+            "
+            id="wheelchair-wizard-wheelchair-option-{{$wheelchairIndex}}"
+            [value]="wheelchairOpt"
+            >{{ wheelchairOpt }}</mat-option
+          >
+        </mat-select>
+        <mat-error id="wheelchair-wizard-wheelchairType-error"
+          >Select an option for 'Wheelchair'
+        </mat-error>
+      </mat-form-field>
+    </div>
+  </div>
+</div>

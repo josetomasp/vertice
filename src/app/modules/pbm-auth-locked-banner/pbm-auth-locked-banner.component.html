@@ -1,0 +1,25 @@
+<div
+  class="locked-pbm-auth-alert--banner"
+  fxLayout="row"
+  fxLayoutAlign="start center"
+  fxLayoutGap="15px"
+>
+  <fa-icon class="locked-pbm-auth-alert--banner_icon" [icon]="faLock"></fa-icon>
+  <span class="standard-text">
+    {{ lockedMessage ? lockedMessage : 'this authorization is locked.' }}</span
+  >
+
+  <button
+    *ngIf="isUserInternal"
+    mat-stroked-button
+    class="unlockButton"
+    (click)="unlock.emit()"
+  >
+    UNLOCK
+  </button>
+  <div
+    *ngIf="isUnlocking"
+    fxLayout="row"
+        fxLayoutAlign="start center"
+  ><mat-spinner [diameter]="20"></mat-spinner><div style="margin-left: 10px">Unlocking ...</div></div>
+</div>

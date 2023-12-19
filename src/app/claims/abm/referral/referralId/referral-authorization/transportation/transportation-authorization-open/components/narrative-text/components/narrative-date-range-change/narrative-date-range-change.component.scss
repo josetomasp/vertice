@@ -1,0 +1,17 @@
+.datePickerDateRangeChange {
+  width: 160px;
+  margin-top: 10px;
+  margin-right: 5px;
+}
+
+.textAlignmentDateRangeChange {
+  white-space: nowrap;
+  margin-right: 5px;
+  margin-top: 10px;
+}
+
+::ng-deep.mat-form-field,
+::ng-deep.mat-form-field .mat-form-field-wrapper,
+::ng-deep.mat-form-field .mat-form-field-wrapper .mat-form-field-flex {
+  height: initial;
+}

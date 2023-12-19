@@ -1,0 +1,121 @@
+<ng-container *ngIf="typeCode === ReferralAuthorizationTypeCode.DETAILED_OTHER">
+  <div fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="35px">
+    <div fxLayout="column" fxLayoutAlign="start start" fxLayoutGap="5px">
+      <div
+        class="overhead-label"
+        id="referral-auth-review-{{typeCode}}-typeOfTransportation-label"
+      >
+        TYPE OF TRANSPORTATION
+      </div>
+      <div
+        id="referral-auth-review-{{typeCode}}-typeOfTransportation"
+        class="standard-text"
+      >
+        {{ authItem['typeOfTransportation'] }}
+      </div>
+    </div>
+  </div>
+  <div class="spacersmall"></div>
+</ng-container>
+
+<div fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="35px">
+  <div fxLayout="column" fxLayoutAlign="start start" fxLayoutGap="5px">
+    <div
+      class="overhead-label"
+      id="referral-auth-review-{{typeCode}}-fromAddress-label"
+    >
+      FROM ADDRESS
+    </div>
+    <div
+      id="referral-auth-review-{{typeCode}}-fromAddress"
+      class="standard-text"
+    >
+      {{ fromAddress }}
+    </div>
+  </div>
+
+  <div fxLayout="column" fxLayoutAlign="start start" fxLayoutGap="5px">
+    <div
+      class="overhead-label"
+      id="referral-auth-review-{{typeCode}}-toAddress-label"
+    >
+      TO ADDRESS
+    </div>
+    <div id="referral-auth-review-{{typeCode}}-toAddress" class="standard-text">
+      {{ toAddress }}
+    </div>
+  </div>
+</div>
+<div class="spacersmall"></div>
+<div fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="35px">
+  <div fxLayout="column" fxLayoutAlign="start start" fxLayoutGap="5px">
+    <div
+      class="overhead-label"
+      id="referral-auth-review-{{typeCode}}-pickupDate-label"
+    >
+      PICKUP DATE
+    </div>
+    <div
+      id="referral-auth-review-{{typeCode}}-pickupDate"
+      class="standard-text"
+    >
+      {{ authItem['pickupDate'] | date: 'MM/dd/yyyy' }}
+    </div>
+  </div>
+
+  <div fxLayout="column" fxLayoutAlign="start start" fxLayoutGap="5px">
+    <div
+      class="overhead-label"
+      id="referral-auth-review-{{typeCode}}-pickupTime-label"
+    >
+      PICKUP TIME
+    </div>
+    <div
+      id="referral-auth-review-{{typeCode}}-pickupTime"
+      class="standard-text"
+    >
+      <span *ngIf="authItem['pickupTime'] !== 'Unknown'">{{
+        '01/01/2020 ' + authItem['pickupTime'] | date: 'shortTime'
+      }}</span>
+      <span *ngIf="authItem['pickupTime'] === 'Unknown'">Unknown</span>
+    </div>
+  </div>
+
+  <healthe-appointment-info
+    [appointmentData]="authItem['authData']"
+    sectionName="{{typeCode}}"
+  ></healthe-appointment-info>
+</div>
+<ng-container
+  *ngIf="typeCode === ReferralAuthorizationTypeCode.DETAILED_WHEELCHAIR"
+>
+  <div class="spacersmall"></div>
+  <div fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="35px">
+    <div fxLayout="column" fxLayoutAlign="start start" fxLayoutGap="5px">
+      <div
+        class="overhead-label"
+        id="referral-auth-review-{{typeCode}}-wheelchairType-label"
+      >
+        WHEELCHAIR TYPE
+      </div>
+      <div
+        id="referral-auth-review-{{typeCode}}-wheelchairType"
+        class="standard-text"
+      >
+        {{ authItem['wheelchairType'] }}
+      </div>
+    </div>
+
+    <div fxLayout="column" fxLayoutAlign="start start" fxLayoutGap="5px">
+      <div
+        class="overhead-label"
+        id="referral-auth-review-{{typeCode}}-steps-label"
+      >
+        STAIRS/STEPS
+      </div>
+      <div id="referral-auth-review-{{typeCode}}-steps" class="standard-text">
+        {{ authItem['steps'] }}
+      </div>
+    </div>
+  </div>
+</ng-container>

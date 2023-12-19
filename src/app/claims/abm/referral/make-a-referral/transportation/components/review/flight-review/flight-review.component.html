@@ -1,0 +1,75 @@
+<healthe-review-section-header
+  [sectionTitle]="sectionTitle"
+  [sectionName]="sectionName"
+  [columnCount]="columnCount"
+  [step]="stepName"
+></healthe-review-section-header>
+<div fxLayout="row" fxLayoutGap="35px">
+  <div fxFlex="0 0 calc({{columnSpacing}}% -35px)">
+    <div class="overhead-label" id="flight-review-origin-label">
+      FLYING FROM
+    </div>
+    <div class="standard-text" id="flight-review-origin">
+      {{ displayData['flyingFrom'] }}
+    </div>
+  </div>
+  <div fxFlex="0 0 calc({{columnSpacing}}% -35px)">
+    <div class="overhead-label" id="flight-review-destination-label">
+      FLYING TO
+    </div>
+    <div class="standard-text" id="flight-review-destination">
+      {{ displayData['flyingTo'] }}
+    </div>
+  </div>
+
+  <div fxFlex="0 0 calc({{columnSpacing}}% -35px)">
+    <div class="overhead-label" id="flight-review-departure-label">
+      DEPARTURE DATE
+    </div>
+    <div class="standard-text" id="flight-review-departure">
+      {{ displayData['departureDate'] }}
+    </div>
+  </div>
+
+  <div fxFlex="0 0 calc({{columnSpacing}}% -35px)">
+    <div class="overhead-label" id="flight-review-return-label">
+      RETURN DATE
+    </div>
+    <div class="standard-text" id="flight-review-return">
+      {{ displayData['returnDate'] }}
+    </div>
+  </div>
+
+  <div fxFlex="0 0 calc({{columnSpacing}}% -35px)">
+    <div class="overhead-label" id="flight-review-apptType-label">
+      APPOINTMENT TYPE
+    </div>
+    <div class="standard-text" id="flight-review-apptType">
+      {{ displayData['appointmentType'] }}
+    </div>
+  </div>
+
+  <div fxFlex="0 0 calc({{columnSpacing}}% -35px)">
+    <div class="overhead-label" id="flight-review-apptDate-label">
+      APPOINTMENT DATE
+    </div>
+    <div class="standard-text" id="flight-review-apptDate">
+      {{ displayData['appointmentDate'] }}
+    </div>
+  </div>
+
+  <div fxFlex="0 0 calc({{columnSpacing}}% -35px)">
+    <div class="overhead-label" id="flight-review-apptTime-label">
+      APPOINTMENT TIME
+    </div>
+    <div class="standard-text" id="flight-review-apptTime">
+      {{ displayData['appointmentTime'] }}
+    </div>
+  </div>
+</div>
+
+<div class="spacersmall"></div>
+<div class="overhead-label" id="flight-review-notes-label">NOTES</div>
+<div class="standard-text" id="flight-review-notes">
+  {{ displayData['notes'] }}
+</div>

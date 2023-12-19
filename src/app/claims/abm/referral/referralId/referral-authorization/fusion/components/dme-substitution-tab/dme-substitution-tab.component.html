@@ -1,0 +1,39 @@
+<healthe-dme-authorization-card
+  *ngIf="!authorization?.authorizationUnderReview?.isSubstitution"
+  [$index]="$index"
+  [authorization]="authorization"
+  [clinicalAlerts]="clinicalAlerts"
+  [formArray]="formArray"
+  [fusionAuthorizationReasons$]="fusionAuthorizationReasons$"
+>
+</healthe-dme-authorization-card>
+
+<mat-tab-group
+  class="tab-group"
+  *ngIf="authorization?.authorizationUnderReview?.isSubstitution"
+  [selectedIndex]="selectedTab"
+>
+  <mat-tab label="Original">
+    <healthe-dme-authorization-card
+      [$index]="$index"
+      [authorization]="authorization"
+      [clinicalAlerts]="clinicalAlerts"
+      [formArray]="formArray"
+      [fusionAuthorizationReasons$]="fusionAuthorizationReasons$"
+      [isSubstitutionCard]="false"
+    >
+    </healthe-dme-authorization-card>
+  </mat-tab>
+
+  <mat-tab label="Substitution">
+    <healthe-dme-authorization-card
+      [$index]="$index"
+      [authorization]="authorization"
+      [clinicalAlerts]="clinicalAlerts"
+      [formArray]="formArray"
+      [fusionAuthorizationReasons$]="fusionAuthorizationReasons$"
+      [isSubstitutionCard]="true"
+    >
+    </healthe-dme-authorization-card>
+  </mat-tab>
+</mat-tab-group>

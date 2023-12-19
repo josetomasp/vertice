@@ -1,0 +1,9 @@
+<mat-expansion-panel role='alert' aria-label='Error Card' class="error-card" [expanded]="expanded">
+  <mat-expansion-panel-header class="error-card--expansion-header">
+    <div fxLayout="row" class="error-card__title">
+      <ng-content select="fa-icon"></ng-content>
+      <ng-content select="header"></ng-content>
+    </div>
+  </mat-expansion-panel-header>
+  <ng-content select="content"></ng-content>
+</mat-expansion-panel>

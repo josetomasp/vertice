@@ -1,0 +1,14 @@
+@import 'variables';
+
+.arrow {
+  color: $secondary;
+  cursor: pointer;
+}
+
+.arrowDisabled {
+  color: $gray-400;
+}
+
+.listItem {
+  margin-bottom: 15px;
+}

@@ -1,0 +1,33 @@
+<footer id="assign-first-fill-footer-wrapper" class="footer">
+  <mat-card
+    fxLayout="row"
+    fxLayoutAlign="space-between"
+    fxLayout.lt-sm="column"
+    fxLayoutGap.lt-sm="40px"
+  >
+    <div fxLayout="row" fxLayoutGap="20px">
+      <button
+        id="assign-first-fill-footer-back-btn"
+        mat-stroked-button
+        class="info-button"
+        onclick="history.back()"
+      >
+        GO BACK
+      </button>
+    </div>
+    <div fxLayout="row" fxLayoutGap="20px">
+      <button
+        id="assign-first-fill-footer-assign-btn"
+        [disabled]="
+          !selectedClaimAndCustomerFromSearch ||
+          !selectedClaimAndCustomerFromSearch.selectedClaimNumber
+        "
+        (click)="assignToClaimClick.emit()"
+        mat-flat-button
+        class="success-button"
+      >
+        ASSIGN TO SELECTED CLAIM
+      </button>
+    </div>
+  </mat-card>
+</footer>

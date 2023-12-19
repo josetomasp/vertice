@@ -1,0 +1,10 @@
+<healthe-confirmation-banner
+  *ngIf="showImportantNote"
+  [id]="'authorization-important-notice-warning'"
+  [alertType]="alertType"
+  [title]="
+    'Important Note: Based on the claim file indicators, please review the claim carefully when authorizing services.'
+  "
+  [isVisible]="true"
+  [showCloseButton]="false"
+></healthe-confirmation-banner>

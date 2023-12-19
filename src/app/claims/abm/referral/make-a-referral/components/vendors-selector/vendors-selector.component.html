@@ -1,0 +1,58 @@
+<div style="width: 300px;">
+  <ng-container *ngIf="(vendorSelectionMode$ | async) !== READ_ONLY">
+    <div
+      fxLayout="row"
+      fxLayoutAlign="space-between start"
+      class="listItem"
+      *ngFor="let option of checkedList; let i = index"
+    >
+      <mat-checkbox
+        *ngIf="(vendorSelectionMode$ | async) === REORDER_SELECT"
+        [formControl]="option.checkbox"
+        id="{{sectionName}}-vendor-selector-{{instanceID}}-{{i}}-checkbox"
+      >
+        <span
+          id="{{sectionName}}-vendor-selector-{{instanceID}}-{{i}}-item-name"
+          >{{ option.value.name }}</span
+        ></mat-checkbox
+      >
+      <div *ngIf="(vendorSelectionMode$ | async) !== REORDER_SELECT">
+        <span
+          id="{{sectionName}}-vendor-selector-{{instanceID}}-{{i}}-item-name"
+          >{{ option.value.name }}</span
+        >
+      </div>
+      <div>
+        <fa-icon
+          [icon]="faChevronUp"
+          class="arrow"
+          (click)="moveUp(i)"
+          style="margin-right: 20px;"
+          id="{{sectionName}}-vendor-selector-{{instanceID}}-{{i}}-up"
+          [ngClass]="{ arrowDisabled: i === 0 }"
+        ></fa-icon>
+        <fa-icon
+          [icon]="faChevronDown"
+          class="arrow"
+          (click)="moveDown(i)"
+          [ngClass]="{ arrowDisabled: i === checkedList.length - 1 }"
+          id="vendor-selector-{{instanceID}}-{{i}}-down"
+        ></fa-icon>
+      </div>
+    </div>
+  </ng-container>
+  <ng-container *ngIf="(vendorSelectionMode$ | async) === READ_ONLY">
+    <ol>
+      <li
+        *ngFor="let option of checkedList; let i = index"
+        class="listItem"
+        id="{{sectionName}}-vendor-selector-{{instanceID}}-{{i}}-item"
+      >
+        <span
+          id="{{sectionName}}-vendor-selector-{{instanceID}}-{{i}}-item-name"
+          >{{ option.value.name }}</span
+        >
+      </li>
+    </ol>
+  </ng-container>
+</div>

@@ -1,0 +1,39 @@
+<mat-expansion-panel [expanded]="false" class="auth-details-expansion-panel">
+  <mat-expansion-panel-header
+    [collapsedHeight]="''"
+    [expandedHeight]="''"
+    class="auth-details-expansion-panel--header"
+  >
+    <mat-panel-title
+      class="auth-details-expansion-panel--header--title"
+      fxLayout="row"
+    >
+      <div fxFlex="1 1 auto"></div>
+      <span
+        class="auth-details-expansion-panel--header_view-details text-secondary"
+        >VIEW DETAILS</span
+      >
+    </mat-panel-title>
+  </mat-expansion-panel-header>
+  <table mat-table [dataSource]="tableDataSoruce">
+    <ng-container
+      *ngFor="let cDef of columnDefinitions"
+      [matColumnDef]="cDef.name"
+    >
+      <ng-container [ngSwitch]="cDef.name">
+        <ng-container *ngSwitchDefault>
+          <th [ngClass]="cDef.headerClasses" mat-header-cell *matHeaderCellDef>
+            {{ cDef.label }}
+          </th>
+          <td mat-cell [ngClass]="cDef.cellClasses" *matCellDef="let data">
+            {{ data[cDef.name] }}
+          </td>
+        </ng-container>
+      </ng-container>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+  </table>
+</mat-expansion-panel>
+<div class="spacersmall"></div>

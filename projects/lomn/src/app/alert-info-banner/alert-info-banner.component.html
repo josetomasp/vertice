@@ -1,0 +1,39 @@
+<ng-container *ngIf="clinicalAlerts && clinicalAlerts.length > 0">
+  <mat-expansion-panel #banner class="alerts-expansion-panel">
+    <mat-expansion-panel-header
+      [collapsedHeight]="''"
+      [expandedHeight]="''"
+      class="alerts-expansion-panel--header"
+    >
+      <mat-panel-title class="alerts-expansion-panel--header--title">
+        <fa-icon
+          class="alerts-expansion-panel_icon"
+          [icon]="warningIcon"
+        ></fa-icon>
+        {{ getBannerText() }} Click to
+        {{ banner.expanded ? 'collapse' : 'expand' }}.
+      </mat-panel-title>
+      <span class="text-secondary alerts-expansion-panel--see-alerts"
+        >{{ banner.expanded ? 'Close' : 'See All' }} Alerts</span
+      >
+      <span class="tag tag-secondary">{{ clinicalAlerts.length }}</span>
+    </mat-expansion-panel-header>
+
+    <ul class="alerts-expansion-panel-content">
+      <li
+        class="alerts-expansion-panel-content-alert"
+        *ngFor="let alert of clinicalAlerts"
+      >
+        {{ alert.name }}.
+        <a
+          mat-button
+          (click)="openAlertModal(alert)"
+          class="alerts-expansion-panel-content-alert-openModalBtn"
+        >
+          Read More.
+        </a>
+      </li>
+    </ul>
+  </mat-expansion-panel>
+  <div class="spacersmall"></div>
+</ng-container>

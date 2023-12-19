@@ -1,0 +1,14 @@
+<div class="fatal-server-error--backdrop">
+  <div class="fatal-server-error--content">
+    <fa-icon [icon]="faAlert"></fa-icon>
+    <h3>Server Error</h3>
+    <p>{{ data.errorMessage }}</p>
+    <button
+      mat-stroked-button
+      class="secondary-button"
+      (click)="data.retryCallback()"
+    >
+      RETRY
+    </button>
+  </div>
+</div>

@@ -1,0 +1,23 @@
+<healthe-review-section-header
+  sectionTitle="Vendor Information"
+  [sectionName]="sectionName"
+  columnCount="5"
+  [step]="stepName"
+  [offsetForNonSelectedServiceDetailTypes]="0"
+></healthe-review-section-header>
+
+<div fxLayout="row wrap" fxLayoutGap="30px grid">
+  <div *ngFor="let vendorsByType of (vendorFormValues$ | async | keyvalue)">
+    <span
+      class="overhead-label"
+      id="{{stepName}}-review-{{vendorsByType.key}}-label"
+    >
+      {{ translateServiceName(vendorsByType.key) | uppercase }} VENDORS</span
+    >
+    <div *ngFor="let vendorName of vendorsByType.value; let index$ = index">
+      <span id="{{stepName}}-review-{{vendorsByType.key}}-value-{{index$}}"
+        >{{ index$ + 1 }} - {{ vendorName.name }}</span
+      >
+    </div>
+  </div>
+</div>
